@@ -17,28 +17,36 @@
     .sdca-link:focus-visible { outline: 2px solid #1955b5; outline-offset: 4px; }
     #error { display: none; position: absolute; z-index: 5; left: 15px; right: 15px; top: 15px; padding: 12px; color: #631e15; background: #fff4f1; border: 1px solid #e1a398; border-radius: 8px; font: 14px Arial, sans-serif; }
 
-    /* Branding overlay; keep the PNG transparent. */
-    #lu-logo {
+    /* University branding, title and map key appear together in the top left. */
+    #sdca-branding {
       position: absolute;
       z-index: 10;
       top: 20px;
       left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: calc(100vw - 40px);
+      pointer-events: none;
+    }
+    #lu-logo {
       width: 180px;
       max-width: 40vw;
       height: auto;
       box-sizing: border-box;
       padding: 14px;
       background: transparent;
-      border-radius: 10px;
       pointer-events: none;
     }
-
-    /* Legend sits just beneath the university logo. */
+    #sdca-page-title {
+      margin: 4px 0 12px 14px;
+      max-width: 280px;
+      color: #fff;
+      font: 700 16px/1.3 Arial, Helvetica, sans-serif;
+      text-shadow: 0 1px 5px rgba(0,0,0,.45);
+    }
     #sdca-legend {
-      position: absolute;
-      z-index: 10;
-      top: 97px;
-      left: 34px;
+      margin-left: 14px;
       box-sizing: border-box;
       max-width: calc(100vw - 64px);
       padding: 11px 14px 12px;
@@ -65,18 +73,22 @@
     .sdca-legend-exchange { background: #2D0153; }
     @media (max-width: 480px) {
       #lu-logo { width: 158px; }
-      #sdca-legend { left: 34px; top: 88px; font-size: 12px; padding: 9px 11px; }
+      #sdca-page-title { max-width: 215px; font-size: 14px; margin-bottom: 10px; }
+      #sdca-legend { font-size: 12px; padding: 9px 11px; }
     }
   </style>
 </head>
 <body>
   <div id="map" aria-label="Interactive SDCA Global Engagement Map"></div>
-  <img id="lu-logo" src="LU-logo-white.png" alt="Loughborough University logo">
-  <aside id="sdca-legend" aria-label="Map key">
-    <div class="sdca-legend-title">Map key</div>
-    <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-placement" aria-hidden="true"></span><span>Student Placements</span></div>
-    <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-exchange" aria-hidden="true"></span><span>Exchange Programmes</span></div>
-  </aside>
+  <div id="sdca-branding">
+    <img id="lu-logo" src="LU-logo-white.png" alt="Loughborough University logo">
+    <h1 id="sdca-page-title">School of Design and Creative Arts</h1>
+    <aside id="sdca-legend" aria-label="Map key">
+      <div class="sdca-legend-title">Map key</div>
+      <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-placement" aria-hidden="true"></span><span>Student Placements</span></div>
+      <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-exchange" aria-hidden="true"></span><span>Exchange Programmes</span></div>
+    </aside>
+  </div>
   <div id="error" role="alert"></div>
   <script>
   (() => {
