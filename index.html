@@ -2,274 +2,1545 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SDCA Global Engagement Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#15171D">
+  <title>Global Engagement Map | School of Design and Creative Arts</title>
+  <meta name="description" content="Explore international exchange programmes and student placements at Loughborough University's School of Design and Creative Arts.">
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
   <style>
-    html, body { height: 100%; margin: 0; }
-    #map { height: 100%; width: 100%; min-height: 350px; }
-    .mapboxgl-popup-content { border-radius: 12px; padding: 18px 20px; box-shadow: 0 5px 22px rgba(0,0,0,.20); font: 14px/1.5 Arial, Helvetica, sans-serif; }
-    .sdca-title { margin: 0 22px 2px 0; font-size: 18px; line-height: 1.35; color: #17252e; }
-    .sdca-group { color: #6d547c; font-size: 12px; font-weight: 600; margin: 0 0 12px; }
-    .sdca-description { color: #34434a; margin: 8px 0 12px; white-space: pre-wrap; }
-    .sdca-link { display: inline-block; margin-top: 2px; color: #1955b5; font-weight: 700; text-decoration: underline; }
-    .sdca-link:focus-visible { outline: 2px solid #1955b5; outline-offset: 4px; }
-    #error { display: none; position: absolute; z-index: 5; left: 15px; right: 15px; top: 15px; padding: 12px; color: #631e15; background: #fff4f1; border: 1px solid #e1a398; border-radius: 8px; font: 14px Arial, sans-serif; }
 
-    /* University branding, title and map key appear together in the top left. */
-    #sdca-branding {
-      position: absolute;
-      z-index: 10;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      max-width: calc(100vw - 40px);
-      pointer-events: none;
+    /* SDCA design system: calm, layered, accessible, and responsive. */
+    :root {
+      color-scheme: light;
+      --placement: #F0047F;
+      --exchange: #2D0153;
+      --ink: #17202B;
+      --ink-subtle: #4D5966;
+      --panel: rgba(21, 23, 29, .96);
+      --panel-line: rgba(255, 255, 255, .16);
+      --panel-text: #FFFFFF;
+      --panel-subtle: #D9DEE8;
+      --surface: #FFFFFF;
+      --surface-muted: #F5F6F9;
+      --stroke: #CFD5DF;
+      --focus: #FFD76A;
+      --shadow-panel: 0 20px 65px rgba(0, 0, 0, .31), 0 2px 8px rgba(0,0,0,.12);
+      --shadow-floating: 0 10px 30px rgba(0,0,0,.21), 0 1px 5px rgba(0,0,0,.12);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Arial, sans-serif;
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
     }
-    #lu-logo {
-      width: 180px;
-      max-width: 40vw;
-      height: auto;
-      box-sizing: border-box;
-      padding: 14px;
-      background: transparent;
-      pointer-events: none;
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; }
+    body { overflow: hidden; background: #303135; color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    #map { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 350px; }
+    button, input { font: inherit; }
+    button { cursor: pointer; touch-action: manipulation; }
+    .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; clip-path: inset(50%); }
+    .skip-link { position: absolute; top: 12px; left: 12px; z-index: 50; padding: 12px 17px; transform: translateY(-160%); background: #fff; color: #20152c; border-radius: 13px; box-shadow: var(--shadow-floating); font-weight: 700; text-decoration: none; }
+    .skip-link:focus { transform: none; }
+    :is(button, a, summary, input, .mapboxgl-popup-close-button, .mapboxgl-ctrl button):focus-visible {
+      outline: 3px solid var(--focus) !important; outline-offset: 3px !important;
     }
-    #sdca-page-title {
-      margin: 4px 0 12px 14px;
-      max-width: 280px;
-      color: #fff;
-      font: 700 16px/1.3 Arial, Helvetica, sans-serif;
-      text-shadow: 0 1px 5px rgba(0,0,0,.45);
+
+    /* Floating university identity and discovery panel. */
+    #sdca-panel {
+      position: absolute; z-index: 5;
+      top: 24px; left: 24px; width: 356px;
+      max-width: calc(100vw - 114px); max-height: calc(100dvh - 48px);
+      padding: 25px 25px 22px; overflow-y: auto; overscroll-behavior: contain;
+      color: var(--panel-text); background: var(--panel);
+      border: 1px solid var(--panel-line); border-radius: 23px;
+      box-shadow: var(--shadow-panel);
+      -webkit-backdrop-filter: saturate(120%) blur(26px); backdrop-filter: saturate(120%) blur(26px);
+      scrollbar-width: thin; scrollbar-color: #747884 transparent;
     }
-    #sdca-legend {
-      margin-left: 14px;
-      box-sizing: border-box;
-      max-width: calc(100vw - 64px);
-      padding: 11px 14px 12px;
-      border-radius: 9px;
-      color: #fff;
-      background: rgba(35,35,35,.75);
-      box-shadow: 0 3px 12px rgba(0,0,0,.12);
-      font: 13px/1.4 Arial, Helvetica, sans-serif;
-      pointer-events: none;
+    #lu-logo { display: block; width: 182px; max-width: 100%; height: auto; background: transparent; padding: 0; }
+    #school-label {
+      margin: 24px 0 8px; color: var(--panel-subtle);
+      font-size: 11px; line-height: 1.5; font-weight: 750; letter-spacing: .105em; text-transform: uppercase;
     }
-    .sdca-legend-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; letter-spacing: .02em; }
-    .sdca-legend-item { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
-    .sdca-legend-item + .sdca-legend-item { margin-top: 7px; }
-    .sdca-legend-swatch {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      box-sizing: border-box;
-      flex: none;
-      border-radius: 50%;
-      border: 1.5px solid #fff;
+    #map-title {
+      margin: 0; font-family: var(--font-display); font-size: 29px;
+      font-weight: 740; line-height: 1.12; letter-spacing: -.045em;
+      text-wrap: balance;
     }
-    .sdca-legend-placement { background: #F0047F; }
-    .sdca-legend-exchange { background: #2D0153; }
-    @media (max-width: 480px) {
-      #lu-logo { width: 158px; }
-      #sdca-page-title { max-width: 215px; font-size: 14px; margin-bottom: 10px; }
-      #sdca-legend { font-size: 12px; padding: 9px 11px; }
+    #map-summary { margin: 12px 0 0; color: var(--panel-subtle); font-size: 14px; line-height: 1.58; }
+    #sdca-explore { margin-top: 21px; padding-top: 19px; border-top: 1px solid var(--panel-line); }
+    #sdca-explore > summary { display: none; }
+    .filter-heading { margin: 0 0 11px; color: #EEF0F5; font-size: 13px; font-weight: 740; letter-spacing: .008em; }
+    /* Static legend: labels accompany colour to avoid reliance on colour alone. */
+    #sdca-key { display: flex; flex-wrap: wrap; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .key-item {
+      min-height: 38px; display: inline-flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.31);
+      background: rgba(255,255,255,.08); color: #fff;
+      font-size: 13px; font-weight: 680; line-height: 1.35;
+    }
+    .swatch { width: 18px; height: 18px; flex: none; display: inline-block; border: 2px solid #fff; border-radius: 50%; }
+    .swatch[hidden] { display: none !important; }
+    .swatch.placement { background: var(--placement); }
+    .swatch.exchange { background: var(--exchange); }
+    .swatch.all { background: linear-gradient(90deg, var(--placement) 50%, var(--exchange) 50%); }
+    .usage-tip { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--panel-line); font-size: 13px; line-height: 1.6; color: var(--panel-subtle); }
+    .usage-tip strong { color: white; }
+    .browse-button {
+      display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: center; gap: 7px;
+      margin-top: 19px; padding: 12px 14px; border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.90); background: #FFF; color: #20182C;
+      text-align: center; font-size: 14px; font-weight: 730;
+      transition: background .16s ease, transform .16s ease;
+    }
+    .browse-button::after { content: '›'; font-size: 23px; line-height: .5; margin-left: auto; padding-right: 1px; }
+    .browse-button:hover { background: #F1EDF7; }
+
+    /* Simple navigation controls – minimum 44 × 44px targets. */
+    .mapboxgl-ctrl-top-right { top: 22px; right: 22px; }
+    .mapboxgl-ctrl-top-right .mapboxgl-ctrl { margin: 0 !important; }
+    .mapboxgl-ctrl-group { overflow: hidden; border: 1px solid #E5E8EF; border-radius: 15px !important; box-shadow: var(--shadow-floating) !important; }
+    .mapboxgl-ctrl-group button { width: 46px !important; height: 46px !important; border-color: #E5E8EF; background: #FFF; }
+    .mapboxgl-ctrl-group button:hover { background: #F2F3F7; }
+    #reset-europe {
+      position: absolute; z-index: 5; top: 183px; right: 22px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      min-height: 46px; padding: 0 16px;
+      background: var(--surface); color: #242938; border: 1px solid #D7DCE4;
+      border-radius: 999px; box-shadow: var(--shadow-floating);
+      font-size: 13px; font-weight: 740;
+    }
+    #reset-europe:hover { background: #F3F4F8; }
+    .reset-icon { font-size: 21px; font-weight: 400; line-height: 1; }
+    #map-move {
+      position: absolute; z-index: 5; top: 241px; right: 22px; width: 158px;
+      color: var(--ink); font-size: 13px;
+    }
+    #map-move > summary {
+      display: flex; align-items: center; justify-content: center; min-height: 46px; padding: 9px 13px;
+      list-style: none; border: 1px solid #D7DCE4; border-radius: 999px;
+      background: #fff; font-weight: 730; cursor: pointer; box-shadow: var(--shadow-floating);
+    }
+    #map-move > summary::-webkit-details-marker { display: none; }
+    #map-move > summary::before { content: '✥'; font-size: 18px; font-weight: 400; margin-right: 9px; }
+    #map-move > summary:hover { background: #F3F4F8; }
+    .pan-pad {
+      display: grid; grid-template-columns: repeat(3, 44px); justify-content: center;
+      gap: 5px; margin-top: 8px; padding: 11px 6px;
+      border: 1px solid #E1E5EC; border-radius: 17px; background: #fff;
+      box-shadow: var(--shadow-floating);
+    }
+    .pan-pad button {
+      width: 44px; height: 44px; border: 1px solid #D1D7E0; border-radius: 12px;
+      background: #F8F9FB; color: #1D2834; font-size: 19px; font-weight: 750;
+    }
+    .pan-pad button:hover { background: #E8EDF4; }
+    #error { display: none; position: absolute; z-index: 20; left: 24px; right: 24px; bottom: 36px; padding: 14px 17px; color: #64241B; background: #FFF6F2; border: 2px solid #B35D4F; border-radius: 14px; font-size: 14px; }
+
+    /* Light location cards: strong type hierarchy and clear action. */
+    .mapboxgl-popup { z-index: 8; }
+    .mapboxgl-popup-content {
+      max-height: min(68dvh, 510px); overflow-y: auto;
+      border: 1px solid #E6E9EF; border-radius: 21px; background: #FFF;
+      padding: 25px 24px 23px; box-shadow: 0 16px 50px rgba(12, 19, 30, .28), 0 2px 7px rgba(0,0,0,.10);
+      font: 15px/1.55 var(--font); color: var(--ink);
+      scrollbar-width: thin;
+    }
+    .mapboxgl-popup-tip { border-top-color: #fff !important; }
+    .mapboxgl-popup-close-button {
+      top: 8px; right: 8px; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      color: #384252; border-radius: 50%; font-size: 25px; line-height: 1;
+    }
+    .mapboxgl-popup-close-button:hover { background: #F0F2F6; }
+    .popup-eyebrow {
+      display: flex; align-items: center; gap: 8px; margin: 0 35px 11px 0;
+      color: #515D6B; font-size: 12px; font-weight: 760;
+      letter-spacing: .065em; text-transform: uppercase;
+    }
+    .popup-eyebrow .swatch { width: 14px; height: 14px; border-color: #D6DBE3; }
+    .popup-title {
+      margin: 0 18px 12px 0; color: #151C28;
+      font: 740 23px/1.22 var(--font-display); letter-spacing: -.032em;
+      overflow-wrap: anywhere;
+    }
+    .popup-description { margin: 0 0 21px; color: #405061; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+    .popup-link {
+      display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 18px; border: 1px solid #2D0153; border-radius: 13px;
+      color: white; background: #2D0153; text-decoration: none; font-weight: 730; font-size: 14px;
+      transition: background .16s ease;
+    }
+    .popup-link:hover { background: #49126D; }
+    .popup-link:focus-visible { outline-color: #B17000 !important; }
+    .popup-line { margin: 20px 0 16px; border: 0; border-top: 1px solid #DFE3EA; }
+    .nearby-intro { margin: 0 28px 14px 0; color: #4A5969; font-size: 14px; line-height: 1.5; }
+    .nearby-list { display: flex; flex-direction: column; gap: 8px; max-height: 245px; overflow-y: auto; margin: 0 0 14px; }
+    .nearby-item {
+      display: flex; min-height: 48px; align-items: center; gap: 12px; padding: 11px 13px;
+      text-align: left; color: #182332; background: #FFF; border: 1px solid #D6DCE5;
+      border-radius: 13px;
+    }
+    .nearby-item:hover { background: #F5F6FA; border-color: #8A94A1; }
+    .nearby-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .nearby-text strong { font-size: 14px; line-height: 1.35; }
+    .nearby-text small { color: #4A5869; font-size: 13px; }
+    .nearby-more { margin: 8px 0 12px; font-size: 13px; color: #4C5969; }
+    .quiet-action {
+      display: inline-flex; min-height: 44px; align-items: center; padding: 9px 13px;
+      border: 1px solid #C9D0DB; border-radius: 12px; background: #FFF;
+      color: #2D0153; font-size: 14px; font-weight: 720;
+    }
+    .quiet-action:hover { background: #F3F1F8; }
+
+    /* Accessible browse panel – independent of graphical map interaction. */
+    #browse-panel {
+      position: absolute; z-index: 12; top: 24px; left: 396px;
+      width: min(397px, calc(100vw - 530px));
+      max-height: min(82dvh, 750px); overflow-y: auto; overscroll-behavior: contain;
+      padding: 24px; background: #FFF; color: #1D2734;
+      border: 1px solid #E9ECF2; border-radius: 23px;
+      box-shadow: 0 20px 65px rgba(0,0,0,.29), 0 2px 7px rgba(0,0,0,.09);
+    }
+    #browse-panel[hidden] { display: none !important; }
+    .browse-header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+    #browse-heading { margin: 0; font: 750 23px/1.22 var(--font-display); letter-spacing: -.033em; }
+    .browse-close {
+      flex: none; min-width: 44px; min-height: 44px; margin: -7px -7px 0 0;
+      border: 1px solid #D5DCE5; border-radius: 13px;
+      background: #F6F7FA; color: #1C2938; font-size: 23px;
+    }
+    .browse-close:hover { background: #E9ECF3; }
+    .browse-hint { margin: 12px 0 21px; font-size: 14px; line-height: 1.55; color: #4C5967; }
+    #location-search-label { display: block; margin-bottom: 8px; font-weight: 730; font-size: 14px; }
+    #location-search {
+      width: 100%; min-height: 48px; padding: 11px 13px;
+      background: #FFF; border: 2px solid #8E97A5; border-radius: 13px;
+      color: #1F2C39; font-size: 16px;
+    }
+    #location-search::placeholder { color: #687482; opacity: 1; }
+    #browse-count { margin: 15px 0 11px; font-size: 13px; line-height: 1.5; color: #485868; }
+    #browse-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .browse-location {
+      display: flex; width: 100%; min-height: 56px; align-items: center; gap: 12px;
+      padding: 11px 14px; background: #FFF; border: 1px solid #D5DAE3;
+      border-radius: 14px; color: #1D2938; text-align: left; font-size: 14px; line-height: 1.4;
+    }
+    .browse-location:hover { background: #F4F5F8; border-color: #9198A5; }
+    .browse-location .swatch { border-color: #CFD5DE; }
+    .browse-location-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .browse-location-text strong { font-size: 14px; font-weight: 750; }
+    .browse-location-text small { color: #516071; font-size: 13px; }
+
+    /* Keep the map the focal point on smaller screens. */
+    @media (max-width: 1000px) and (min-width: 621px) {
+      #browse-panel { left: auto; right: 18px; top: auto; bottom: 18px; width: min(395px, calc(100vw - 40px)); max-height: 60dvh; }
+    }
+    @media (max-width: 620px) {
+      #sdca-panel {
+        top: max(10px, env(safe-area-inset-top)); left: 10px;
+        width: min(282px, calc(100vw - 76px)); max-width: none;
+        max-height: min(56dvh, 420px); padding: 17px 17px 16px;
+        border-radius: 20px;
+      }
+      #lu-logo { width: 149px; }
+      #school-label { font-size: 10px; line-height: 1.4; letter-spacing: .065em; margin: 15px 0 6px; }
+      #map-title { font-size: 22px; line-height: 1.13; }
+      #map-summary { display: none; }
+      #sdca-explore { margin-top: 13px; padding-top: 0; }
+      #sdca-explore > summary {
+        display: flex; align-items: center; min-height: 44px;
+        color: #FFF; font-size: 14px; font-weight: 730; cursor: pointer;
+        list-style: none;
+      }
+      #sdca-explore > summary::after { content: '⌄'; font-size: 21px; margin-left: auto; transition: transform .15s ease; }
+      #sdca-explore[open] > summary::after { transform: rotate(180deg); }
+      #sdca-explore > summary::-webkit-details-marker { display: none; }
+      .explore-content { padding-top: 12px; }
+      .filter-heading { font-size: 13px; }
+      .key-item { font-size: 13px; }
+      .usage-tip { margin-top: 12px; padding-top: 11px; }
+      .browse-button { margin-top: 11px; min-height: 44px; padding: 9px 11px; font-size: 13px; border-radius: 12px; }
+      .mapboxgl-ctrl-top-right { top: max(10px, env(safe-area-inset-top)); right: 10px; }
+      .mapboxgl-ctrl-group { border-radius: 13px !important; }
+      .mapboxgl-ctrl-group button { width: 44px !important; height: 44px !important; }
+      #reset-europe { top: auto; bottom: max(24px, env(safe-area-inset-bottom)); right: 10px; min-height: 44px; padding: 0 12px; font-size: 13px; }
+      #map-move { top: auto; bottom: calc(max(24px, env(safe-area-inset-bottom)) + 56px); right: 10px; width: 150px; }
+      #map-move > summary { min-height: 44px; }
+      #browse-panel {
+        position: absolute; left: 10px; right: 10px; top: auto;
+        bottom: max(14px, env(safe-area-inset-bottom)); width: auto;
+        max-height: min(68dvh, 620px); padding: 21px 18px;
+        border-radius: 22px;
+      }
+      #browse-heading { font-size: 21px; }
+      .mapboxgl-popup { max-width: calc(100vw - 22px) !important; }
+      .mapboxgl-popup-content { padding: 22px 19px 19px; max-height: 60dvh; }
+      .popup-title { font-size: 21px; }
+      #error { left: 10px; right: 10px; bottom: 14px; }
+    }
+    @media (max-width: 355px) {
+      #sdca-panel { width: min(242px, calc(100vw - 70px)); padding: 15px; }
+      #lu-logo { width: 137px; }
+      #school-label { font-size: 10px; }
+      #map-title { font-size: 19px; }
+      #reset-europe { font-size: 12px; }
+    }
+    /* High magnification and short displays: content stays reachable by scrolling. */
+    @media (max-height: 620px) and (min-width: 621px) {
+      #sdca-panel { max-height: calc(100dvh - 36px); top: 18px; }
+      #browse-panel { max-height: calc(100dvh - 36px); }
+    }
+    @media (prefers-contrast: more), (forced-colors: active) {
+      #sdca-panel { background: #101010; border: 2px solid #FFF; }
+      .key-item { border: 2px solid #FFF; }
+      #browse-panel { border: 2px solid #333; }
+    }
+    @media (prefers-reduced-transparency: reduce) { #sdca-panel { -webkit-backdrop-filter: none; backdrop-filter: none; background: #15171D; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+
+    /* Accessibility-led refinements: translation at top-right, navigation bottom-right. */
+    #language-picker {
+      position: absolute; z-index: 10; top: max(22px,env(safe-area-inset-top)); right: 22px;
+      min-height: 48px; display: flex; align-items: center; gap: 8px;
+      padding: 5px 11px; border: 1px solid #CAD1DD; border-radius: 14px;
+      color: #18212E; background: #FFF; box-shadow: var(--shadow-floating);
+    }
+    #language-picker .lang-icon { font-size: 21px; line-height: 1; }
+    #language-select {
+      min-width: 156px; max-width: 178px; min-height: 38px;
+      color: #17212E; border: 0; border-radius: 8px;
+      background: transparent; font-size: 14px; font-weight: 700;
+      text-overflow: ellipsis; cursor: pointer;
+    }
+    #machine-language-note {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      width: min(322px, calc(100vw - 30px)); margin: 0; padding: 12px 14px;
+      border: 1px solid #CDD5E0; border-radius: 13px;
+      background: #FFFFFF; color: #202B38; font-size: 13px; line-height: 1.5;
+      font-weight: 450; box-shadow: var(--shadow-floating);
+    }
+    #machine-language-note[hidden] { display: none !important; }
+    #machine-language-note a { display: block; margin-top: 6px; color: #321156; font-weight: 750; text-underline-offset: 3px; }
+    #machine-language-note a:focus-visible { outline: 3px solid #7140AA; outline-offset: 3px; }
+    #language-picker:focus-within { outline: 3px solid var(--focus); outline-offset: 3px; }
+    #language-select:focus-visible { outline: 0 !important; }
+    .mapboxgl-ctrl-top-right { top: 90px; right: 22px; }
+    #reset-europe {
+      top: auto; right: 22px; bottom: 45px;
+    }
+    #map-move { top: auto; right: 22px; bottom: 103px; }
+    .pan-pad {
+      position: absolute; right: 0; bottom: calc(100% + 8px);
+      margin-top: 0;
+    }
+    /* White university logo stays above title with no coloured backing. */
+    #lu-logo { min-height: 34px; width: 182px; object-fit: contain; object-position: left; }
+    #translation-note { margin: 8px 0 0; color: var(--panel-subtle); font-size: 12px; line-height: 1.5; }
+    #translation-note[hidden] { display: none; }
+    .popup-translate {
+      display: inline-flex; align-items: center; min-height: 44px;
+      margin-top: 12px; color: #321156; font-size: 14px;
+      font-weight: 700; text-underline-offset: 3px;
+    }
+    @media (max-width: 620px) {
+      #language-picker {
+        top: max(10px,env(safe-area-inset-top)); right: 10px;
+        width: 53px; height: 48px; padding: 4px 5px;
+        border-radius: 13px; gap: 0;
+      }
+      #language-picker .lang-icon { font-size: 20px; }
+      #language-select {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        min-width: 0; max-width: none; opacity: .01; cursor: pointer;
+      }
+      .mapboxgl-ctrl-top-right { top: max(72px,calc(env(safe-area-inset-top) + 60px)); right: 10px; }
+      #reset-europe { top: auto; bottom: max(38px,calc(env(safe-area-inset-bottom) + 35px)); right: 10px; }
+      #map-move { top: auto; bottom: max(97px,calc(env(safe-area-inset-bottom) + 94px)); right: 10px; }
+      #translation-note { font-size: 12px; }
+    }
+    @media (prefers-contrast: more), (forced-colors: active) {
+      #language-picker { border: 2px solid CanvasText; }
     }
   </style>
 </head>
 <body>
-  <div id="map" aria-label="Interactive SDCA Global Engagement Map"></div>
-  <div id="sdca-branding">
-    <img id="lu-logo" src="LU-logo-white.png" alt="Loughborough University logo">
-    <h1 id="sdca-page-title">School of Design and Creative Arts</h1>
-    <aside id="sdca-legend" aria-label="Map key">
-      <div class="sdca-legend-title">Map key</div>
-      <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-placement" aria-hidden="true"></span><span>Student Placements</span></div>
-      <div class="sdca-legend-item"><span class="sdca-legend-swatch sdca-legend-exchange" aria-hidden="true"></span><span>Exchange Programmes</span></div>
-    </aside>
+  <a href="#browse-panel" class="skip-link" id="skip-locations">Skip map and browse locations</a>
+  <main id="map" aria-label="Interactive world map. For a keyboard-accessible alternative, use Browse locations."></main>
+  <section id="sdca-panel" aria-label="About and explore the global engagement map">
+    <img id="lu-logo" src="https://chris210.github.io/LU-logo-white.png" alt="Loughborough University" width="174">
+    <div id="school-label">School of Design and Creative Arts</div>
+    <h1 id="map-title">Global Engagement Map</h1>
+    <p id="map-summary">Explore our international exchanges and student placements around the world.</p>
+    <details id="sdca-explore" open>
+      <summary>Explore locations</summary>
+      <div class="explore-content">
+        <h2 class="filter-heading" id="key-heading">Map key</h2>
+        <ul id="sdca-key" aria-labelledby="key-heading">
+          <li class="key-item" data-key="placement"><span class="swatch placement" aria-hidden="true"></span><span class="key-label">Student placements</span></li>
+          <li class="key-item" data-key="exchange"><span class="swatch exchange" aria-hidden="true"></span><span class="key-label">Exchange programmes</span></li>
+        </ul>
+        <p id="translation-note" hidden>Location names and descriptions are supplied in English. Choose “Translate details” in a popup to translate them.</p>
+        <p class="usage-tip"><strong>Explore the map:</strong> Select a dot to view its details. If locations overlap, choose from the list or zoom in. Use +/− to zoom.</p>
+      </div>
+    </details>
+    <button type="button" id="browse-toggle" class="browse-button" aria-controls="browse-panel" aria-expanded="false">Search Locations by Name</button>
+  </section>
+  <section id="browse-panel" hidden aria-labelledby="browse-heading">
+    <div class="browse-header"><h2 id="browse-heading" tabindex="-1">Search Locations by Name</h2>
+      <button type="button" id="browse-close" class="browse-close" aria-label="Close locations list">×</button></div>
+    <p class="browse-hint">Use this list instead of selecting map dots. It contains locations currently visible on the map. Use the map movement controls to explore another area.</p>
+    <label id="location-search-label" for="location-search">Search locations by name</label>
+    <input id="location-search" type="search" autocomplete="off" placeholder="Enter a location name">
+    <p id="browse-count" role="status" aria-live="polite">Map locations loading…</p>
+    <ul id="browse-list"></ul>
+  </section>
+  <div id="language-picker" role="group" aria-label="Language selection">
+    <span class="lang-icon" aria-hidden="true">文</span>
+    <label for="language-select" class="visually-hidden">Choose interface language</label>
+    <select id="language-select" aria-label="Choose interface language" title="Language / 语言 / भाषा — scroll for more languages">
+      <option value="en">English</option>
+      <optgroup label="Chinese / 中文">
+        <option value="zh-CN">简体中文 — Simplified Chinese</option>
+        <option value="zh-TW">繁體中文 — Traditional Chinese</option>
+      </optgroup>
+      <optgroup label="Indian languages / भारतीय भाषाएँ">
+        <option value="hi">हिन्दी — Hindi</option>
+        <option value="pa">ਪੰਜਾਬੀ — Punjabi</option>
+        <option value="bn">বাংলা — Bengali</option>
+        <option value="gu">ગુજરાતી — Gujarati</option>
+        <option value="ta">தமிழ் — Tamil</option>
+        <option value="te">తెలుగు — Telugu</option>
+        <option value="mr">मराठी — Marathi</option>
+        <option value="ur">اردو — Urdu</option>
+      </optgroup>
+      <!-- Google Translate advertises 249 languages and script variants (November 2026). -->
+      <optgroup label="Other Google Translate languages — scroll to browse">
+        <option value="ab">Abkhaz</option>
+        <option value="ace">Acehnese</option>
+        <option value="ach">Acholi</option>
+        <option value="aa">Afar</option>
+        <option value="af">Afrikaans</option>
+        <option value="sq">Albanian</option>
+        <option value="alz">Alur</option>
+        <option value="am">Amharic</option>
+        <option value="ar">Arabic</option>
+        <option value="hy">Armenian</option>
+        <option value="as">Assamese</option>
+        <option value="av">Avar</option>
+        <option value="awa">Awadhi</option>
+        <option value="ay">Aymara</option>
+        <option value="az">Azerbaijani</option>
+        <option value="ban">Balinese</option>
+        <option value="bal">Baluchi</option>
+        <option value="bm">Bambara</option>
+        <option value="bci">Baoulé</option>
+        <option value="ba">Bashkir</option>
+        <option value="eu">Basque</option>
+        <option value="btx">Batak Karo</option>
+        <option value="bts">Batak Simalungun</option>
+        <option value="bbc">Batak Toba</option>
+        <option value="be">Belarusian</option>
+        <option value="bem">Bemba</option>
+        <option value="bew">Betawi</option>
+        <option value="bho">Bhojpuri</option>
+        <option value="bik">Bikol</option>
+        <option value="bs">Bosnian</option>
+        <option value="br">Breton</option>
+        <option value="bg">Bulgarian</option>
+        <option value="bua">Buryat</option>
+        <option value="yue">Cantonese</option>
+        <option value="ca">Catalan</option>
+        <option value="ceb">Cebuano</option>
+        <option value="ch">Chamorro</option>
+        <option value="ce">Chechen</option>
+        <option value="ny">Chichewa</option>
+        <option value="chk">Chuukese</option>
+        <option value="cv">Chuvash</option>
+        <option value="co">Corsican</option>
+        <option value="crh-Cyrl">Crimean Tatar (Cyrillic)</option>
+        <option value="crh-Latn">Crimean Tatar (Latin)</option>
+        <option value="hr">Croatian</option>
+        <option value="cs">Czech</option>
+        <option value="da">Danish</option>
+        <option value="prs">Dari</option>
+        <option value="dv">Dhivehi</option>
+        <option value="din">Dinka</option>
+        <option value="doi">Dogri</option>
+        <option value="dov">Dombe</option>
+        <option value="nl">Dutch</option>
+        <option value="dyu">Dyula</option>
+        <option value="dz">Dzongkha</option>
+        <option value="eo">Esperanto</option>
+        <option value="et">Estonian</option>
+        <option value="ee">Ewe</option>
+        <option value="fo">Faroese</option>
+        <option value="fj">Fijian</option>
+        <option value="fil">Filipino</option>
+        <option value="fi">Finnish</option>
+        <option value="fon">Fon</option>
+        <option value="fr">French</option>
+        <option value="fr-CA">French (Canada)</option>
+        <option value="fy">Frisian</option>
+        <option value="fur">Friulian</option>
+        <option value="ff">Fulani</option>
+        <option value="gaa">Ga</option>
+        <option value="gl">Galician</option>
+        <option value="ka">Georgian</option>
+        <option value="de">German</option>
+        <option value="el">Greek</option>
+        <option value="gn">Guarani</option>
+        <option value="ht">Haitian Creole</option>
+        <option value="cnh">Hakha Chin</option>
+        <option value="ha">Hausa</option>
+        <option value="haw">Hawaiian</option>
+        <option value="iw">Hebrew</option>
+        <option value="hil">Hiligaynon</option>
+        <option value="hmn">Hmong</option>
+        <option value="hu">Hungarian</option>
+        <option value="hrx">Hunsrik</option>
+        <option value="iba">Iban</option>
+        <option value="is">Icelandic</option>
+        <option value="ig">Igbo</option>
+        <option value="ilo">Ilocano</option>
+        <option value="id">Indonesian</option>
+        <option value="iu-Latn">Inuktut (Latin)</option>
+        <option value="iu">Inuktut (Syllabics)</option>
+        <option value="ga">Irish Gaelic</option>
+        <option value="it">Italian</option>
+        <option value="jam">Jamaican Patois</option>
+        <option value="ja">Japanese</option>
+        <option value="jw">Javanese</option>
+        <option value="kac">Jingpo</option>
+        <option value="kl">Kalaallisut</option>
+        <option value="kn">Kannada</option>
+        <option value="kr">Kanuri</option>
+        <option value="pam">Kapampangan</option>
+        <option value="kk">Kazakh</option>
+        <option value="kha">Khasi</option>
+        <option value="km">Khmer</option>
+        <option value="cgg">Kiga</option>
+        <option value="kg">Kikongo</option>
+        <option value="rw">Kinyarwanda</option>
+        <option value="ktu">Kituba</option>
+        <option value="trp">Kokborok</option>
+        <option value="kv">Komi</option>
+        <option value="gom">Konkani</option>
+        <option value="ko">Korean</option>
+        <option value="kri">Krio</option>
+        <option value="ku">Kurdish (Kurmanji)</option>
+        <option value="ckb">Kurdish (Sorani)</option>
+        <option value="ky">Kyrgyz</option>
+        <option value="lo">Lao</option>
+        <option value="ltg">Latgalian</option>
+        <option value="la">Latin</option>
+        <option value="lv">Latvian</option>
+        <option value="lij">Ligurian</option>
+        <option value="li">Limburgish</option>
+        <option value="ln">Lingala</option>
+        <option value="lt">Lithuanian</option>
+        <option value="lmo">Lombard</option>
+        <option value="lg">Luganda</option>
+        <option value="luo">Luo</option>
+        <option value="lb">Luxembourgish</option>
+        <option value="mk">Macedonian</option>
+        <option value="mad">Madurese</option>
+        <option value="mai">Maithili</option>
+        <option value="mak">Makassar</option>
+        <option value="mg">Malagasy</option>
+        <option value="ms">Malay</option>
+        <option value="ms-Arab">Malay (Jawi)</option>
+        <option value="ml">Malayalam</option>
+        <option value="mt">Maltese</option>
+        <option value="mam">Mam</option>
+        <option value="gv">Manx</option>
+        <option value="mi">Maori</option>
+        <option value="mh">Marshallese</option>
+        <option value="mwr">Marwadi</option>
+        <option value="mfe">Mauritian Creole</option>
+        <option value="chm">Meadow Mari</option>
+        <option value="mni-Mtei">Meiteilon (Manipuri)</option>
+        <option value="min">Minang</option>
+        <option value="lus">Mizo</option>
+        <option value="mn">Mongolian</option>
+        <option value="my">Myanmar (Burmese)</option>
+        <option value="nqo">N&#x27;Ko</option>
+        <option value="nhe">Nahuatl (Eastern Huasteca)</option>
+        <option value="ndc">Ndau</option>
+        <option value="nr">Ndebele (South)</option>
+        <option value="new">Nepal Bhasa (Newari)</option>
+        <option value="ne">Nepali</option>
+        <option value="no">Norwegian</option>
+        <option value="nus">Nuer</option>
+        <option value="oc">Occitan</option>
+        <option value="or">Odia (Oriya)</option>
+        <option value="om">Oromo</option>
+        <option value="os">Ossetian</option>
+        <option value="pag">Pangasinan</option>
+        <option value="pap">Papiamento</option>
+        <option value="ps">Pashto</option>
+        <option value="fa">Persian</option>
+        <option value="pl">Polish</option>
+        <option value="pt-BR">Portuguese (Brazil)</option>
+        <option value="pt-PT">Portuguese (Portugal)</option>
+        <option value="pa-Arab">Punjabi (Shahmukhi)</option>
+        <option value="qu">Quechua</option>
+        <option value="kek">Qʼeqchiʼ</option>
+        <option value="rom">Romani</option>
+        <option value="ro">Romanian</option>
+        <option value="rn">Rundi</option>
+        <option value="ru">Russian</option>
+        <option value="se">Sami (North)</option>
+        <option value="sm">Samoan</option>
+        <option value="sg">Sango</option>
+        <option value="sa">Sanskrit</option>
+        <option value="sat-Latn">Santali (Latin)</option>
+        <option value="sat-Olck">Santali (Ol Chiki)</option>
+        <option value="gd">Scots Gaelic</option>
+        <option value="nso">Sepedi</option>
+        <option value="sr">Serbian</option>
+        <option value="st">Sesotho</option>
+        <option value="crs">Seychellois Creole</option>
+        <option value="shn">Shan</option>
+        <option value="sn">Shona</option>
+        <option value="scn">Sicilian</option>
+        <option value="szl">Silesian</option>
+        <option value="sd">Sindhi</option>
+        <option value="si">Sinhala</option>
+        <option value="sk">Slovak</option>
+        <option value="sl">Slovenian</option>
+        <option value="so">Somali</option>
+        <option value="es">Spanish</option>
+        <option value="su">Sundanese</option>
+        <option value="sus">Susu</option>
+        <option value="sw">Swahili</option>
+        <option value="ss">Swati</option>
+        <option value="sv">Swedish</option>
+        <option value="ty">Tahitian</option>
+        <option value="tg">Tajik</option>
+        <option value="zgh">Tamazight</option>
+        <option value="zgh-Tfng">Tamazight (Tifinagh)</option>
+        <option value="tt">Tatar</option>
+        <option value="tet">Tetum</option>
+        <option value="th">Thai</option>
+        <option value="bo">Tibetan</option>
+        <option value="ti">Tigrinya</option>
+        <option value="tiv">Tiv</option>
+        <option value="tpi">Tok Pisin</option>
+        <option value="to">Tongan</option>
+        <option value="lua">Tshiluba</option>
+        <option value="ts">Tsonga</option>
+        <option value="tn">Tswana</option>
+        <option value="tcy">Tulu</option>
+        <option value="tum">Tumbuka</option>
+        <option value="tr">Turkish</option>
+        <option value="tk">Turkmen</option>
+        <option value="tyv">Tuvan</option>
+        <option value="ak">Twi</option>
+        <option value="udm">Udmurt</option>
+        <option value="uk">Ukrainian</option>
+        <option value="ug">Uyghur</option>
+        <option value="uz">Uzbek</option>
+        <option value="ve">Venda</option>
+        <option value="vec">Venetian</option>
+        <option value="vi">Vietnamese</option>
+        <option value="war">Waray</option>
+        <option value="cy">Welsh</option>
+        <option value="wo">Wolof</option>
+        <option value="xh">Xhosa</option>
+        <option value="sah">Yakut</option>
+        <option value="yi">Yiddish</option>
+        <option value="yo">Yoruba</option>
+        <option value="yua">Yucatec Maya</option>
+        <option value="zap">Zapotec</option>
+        <option value="zu">Zulu</option>
+      </optgroup>
+    </select>
+    <p id="machine-language-note" hidden role="status" aria-live="polite">
+      This interface is currently available in English for the selected language.
+      <a id="translate-page-link" href="#" target="_blank" rel="noopener noreferrer">Open in Google Translate ↗</a>
+      (Map interactions may be limited in the translated version.)
+    </p>
   </div>
+  <button type="button" id="reset-europe" title="Centre the map on Europe" aria-label="Reset map view to Europe"><span class="reset-icon" aria-hidden="true">⌖</span> Reset to Europe</button>
+  <details id="map-move">
+    <summary>Move map</summary>
+    <div class="pan-pad" aria-label="Move map by direction">
+      <span></span><button type="button" data-pan="north" aria-label="Move map north">↑</button><span></span>
+      <button type="button" data-pan="west" aria-label="Move map west">←</button><span></span><button type="button" data-pan="east" aria-label="Move map east">→</button>
+      <span></span><button type="button" data-pan="south" aria-label="Move map south">↓</button><span></span>
+    </div>
+  </details>
   <div id="error" role="alert"></div>
+
   <script>
   (() => {
-    // Existing published Mapbox style and public token.
+    'use strict';
+    // Original public Mapbox token, style and circle data layer.
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXN1eGQiLCJhIjoiY21tZXQ3dnRpMDB5YjJwczhzaXdnZ3VmNCJ9.HLg634ycbIvgXNwmRPDCHg';
     const POINT_LAYER = 'GE Data';
+    const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const moveView = options => prefersReducedMotion() ? map.jumpTo(options) : map.flyTo(options);
+    const EUROPE_CENTRE = [10, 49];
+    const mobile = window.matchMedia('(max-width: 620px)').matches;
+    const europeZoom = mobile ? 2.1 : 2.5;
+    if (mobile) document.getElementById('sdca-explore').open = false;
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/chrisuxd/cmmewcucc00j001qz3xo68y0z',
-      center: [-34, 38],
-      zoom: 2,
+      center: EUROPE_CENTRE,
+      zoom: europeZoom,
       scrollZoom: false
     });
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    const translations = {
+  "en": {
+    "school": "School of Design and Creative Arts",
+    "title": "Global Engagement Map",
+    "summary": "Explore our international exchanges and student placements around the world.",
+    "explore": "Explore locations",
+    "filterTitle": "Map key",
+    "all": "All locations",
+    "placement": "Student placements",
+    "exchange": "Exchange programmes",
+    "statusAll": "Showing all locations.",
+    "statusPlacement": "Showing student placements.",
+    "statusExchange": "Showing exchange programmes.",
+    "tipHead": "Explore the map:",
+    "tip": "Select a dot to view its details. If locations overlap, choose from the list or zoom in. Use +/− to zoom.",
+    "searchButton": "Search Locations by Name",
+    "searchHead": "Search Locations by Name",
+    "searchHint": "Search the locations currently visible on the map. Move the map to explore other areas.",
+    "searchLabel": "Search locations by name",
+    "searchPlaceholder": "Enter a location name",
+    "reset": "Reset to Europe",
+    "move": "Move map",
+    "close": "Close location search",
+    "visit": "Visit partner website ↗",
+    "translate": "Translate details ↗",
+    "placementSing": "Student Placement",
+    "exchangeSing": "Exchange Programme",
+    "globalCat": "Global Engagement",
+    "nearby": "locations nearby",
+    "nearbyIntro": "Several points are close together. Choose a location, or zoom in.",
+    "zoom": "Zoom in on these locations",
+    "other": "Other nearby locations",
+    "translationNote": "Names and descriptions are supplied in English. Use “Translate details” in a popup to translate them.",
+    "langLabel": "Choose interface language",
+    "loading": "Loading locations…",
+    "noMatch": "No matching locations in this view. Try another name or move the map."
+  },
+  "zh-CN": {
+    "school": "设计与创意艺术学院",
+    "title": "全球交流合作地图",
+    "summary": "探索我们在世界各地的国际交流项目与学生实习机会。",
+    "explore": "探索地点",
+    "filterTitle": "地图图例",
+    "all": "全部地点",
+    "placement": "学生实习",
+    "exchange": "交流项目",
+    "statusAll": "显示全部地点。",
+    "statusPlacement": "仅显示学生实习地点。",
+    "statusExchange": "仅显示交流项目地点。",
+    "tipHead": "地图使用说明：",
+    "tip": "点击地图上的圆点查看详情。如果地点重叠，可从列表中选择或放大地图。使用 +/− 缩放。",
+    "searchButton": "按名称搜索地点",
+    "searchHead": "按名称搜索地点",
+    "searchHint": "搜索当前地图范围内的地点。移动地图可探索其他区域。",
+    "searchLabel": "输入地点名称",
+    "searchPlaceholder": "搜索地点名称",
+    "reset": "返回欧洲视图",
+    "move": "移动地图",
+    "close": "关闭地点搜索",
+    "visit": "访问合作伙伴网站 ↗",
+    "translate": "翻译详情 ↗",
+    "placementSing": "学生实习",
+    "exchangeSing": "交流项目",
+    "globalCat": "全球交流",
+    "nearby": "个附近地点",
+    "nearbyIntro": "这些地点距离很近。请选择一个地点，或放大地图。",
+    "zoom": "放大查看",
+    "other": "其他附近地点",
+    "translationNote": "地点名称和描述为原始英文内容。可在弹窗中点击“翻译详情”。",
+    "langLabel": "选择界面语言",
+    "loading": "正在加载地点…",
+    "noMatch": "当前视图中没有匹配的地点。请尝试其他名称或移动地图。"
+  },
+  "zh-TW": {
+    "school": "設計與創意藝術學院",
+    "title": "全球交流合作地圖",
+    "summary": "探索我們在世界各地的國際交流計畫與學生實習機會。",
+    "explore": "探索地點",
+    "filterTitle": "地圖圖例",
+    "all": "所有地點",
+    "placement": "學生實習",
+    "exchange": "交流計畫",
+    "statusAll": "顯示所有地點。",
+    "statusPlacement": "僅顯示學生實習地點。",
+    "statusExchange": "僅顯示交流計畫地點。",
+    "tipHead": "地圖使用說明：",
+    "tip": "點選地圖上的圓點查看詳情。地點重疊時，可從清單選擇或放大地圖。使用 +/− 縮放。",
+    "searchButton": "依名稱搜尋地點",
+    "searchHead": "依名稱搜尋地點",
+    "searchHint": "搜尋目前地圖範圍內的地點。移動地圖以探索其他區域。",
+    "searchLabel": "輸入地點名稱",
+    "searchPlaceholder": "搜尋地點名稱",
+    "reset": "返回歐洲視圖",
+    "move": "移動地圖",
+    "close": "關閉地點搜尋",
+    "visit": "造訪合作夥伴網站 ↗",
+    "translate": "翻譯詳情 ↗",
+    "placementSing": "學生實習",
+    "exchangeSing": "交流計畫",
+    "globalCat": "全球交流",
+    "nearby": "個附近地點",
+    "nearbyIntro": "這些地點距離很近。請選擇一個地點，或放大地圖。",
+    "zoom": "放大查看",
+    "other": "其他附近地點",
+    "translationNote": "地點名稱與描述為原始英文內容。可在彈出視窗中點選「翻譯詳情」。",
+    "langLabel": "選擇介面語言",
+    "loading": "正在載入地點…",
+    "noMatch": "目前視圖中沒有符合的地點。請嘗試其他名稱或移動地圖。"
+  },
+  "hi": {
+    "school": "स्कूल ऑफ़ डिज़ाइन एंड क्रिएटिव आर्ट्स",
+    "title": "वैश्विक सहभागिता मानचित्र",
+    "summary": "दुनिया भर में हमारे अंतरराष्ट्रीय विनिमय कार्यक्रमों और छात्र इंटर्नशिप को देखें।",
+    "explore": "स्थानों को देखें",
+    "filterTitle": "मानचित्र संकेत",
+    "all": "सभी स्थान",
+    "placement": "छात्र इंटर्नशिप",
+    "exchange": "विनिमय कार्यक्रम",
+    "statusAll": "सभी स्थान दिखाए जा रहे हैं।",
+    "statusPlacement": "केवल छात्र इंटर्नशिप दिखाई जा रही हैं।",
+    "statusExchange": "केवल विनिमय कार्यक्रम दिखाए जा रहे हैं।",
+    "tipHead": "मानचित्र का उपयोग:",
+    "tip": "विवरण देखने के लिए बिंदु चुनें। स्थान पास-पास हों तो सूची से चुनें या ज़ूम करें।",
+    "searchButton": "नाम से स्थान खोजें",
+    "searchHead": "नाम से स्थान खोजें",
+    "searchHint": "मानचित्र में दिख रहे स्थान खोजें। अन्य क्षेत्र देखने के लिए मानचित्र को स्थानांतरित करें।",
+    "searchLabel": "स्थान का नाम",
+    "searchPlaceholder": "स्थान का नाम लिखें",
+    "reset": "यूरोप पर वापस जाएँ",
+    "move": "मानचित्र घुमाएँ",
+    "close": "खोज बंद करें",
+    "visit": "साझेदार वेबसाइट देखें ↗",
+    "translate": "विवरण अनुवाद करें ↗",
+    "placementSing": "छात्र इंटर्नशिप",
+    "exchangeSing": "विनिमय कार्यक्रम",
+    "globalCat": "वैश्विक सहभागिता",
+    "nearby": "पास के स्थान",
+    "nearbyIntro": "कई स्थान पास-पास हैं। कोई स्थान चुनें या ज़ूम करें।",
+    "zoom": "ज़ूम इन करें",
+    "other": "अन्य पास के स्थान",
+    "translationNote": "स्थान के नाम और विवरण अंग्रेज़ी में हैं। विवरण के अनुवाद के लिए पॉपअप में दिए गए लिंक का उपयोग करें।",
+    "langLabel": "इंटरफ़ेस भाषा चुनें",
+    "loading": "स्थान लोड हो रहे हैं…",
+    "noMatch": "इस दृश्य में कोई स्थान नहीं मिला। दूसरा नाम खोजें या मानचित्र हिलाएँ।"
+  },
+  "pa": {
+    "school": "ਸਕੂਲ ਆਫ਼ ਡਿਜ਼ਾਈਨ ਐਂਡ ਕ੍ਰੀਏਟਿਵ ਆਰਟਸ",
+    "title": "ਗਲੋਬਲ ਐਂਗੇਜਮੈਂਟ ਨਕਸ਼ਾ",
+    "summary": "ਦੁਨੀਆ ਭਰ ਦੇ ਅੰਤਰਰਾਸ਼ਟਰੀ ਐਕਸਚੇਂਜ ਅਤੇ ਵਿਦਿਆਰਥੀ ਪਲੇਸਮੈਂਟ ਵੇਖੋ।",
+    "explore": "ਥਾਵਾਂ ਵੇਖੋ",
+    "filterTitle": "ਨਕਸ਼ੇ ਦੀ ਕੁੰਜੀ",
+    "all": "ਸਾਰੀਆਂ ਥਾਵਾਂ",
+    "placement": "ਵਿਦਿਆਰਥੀ ਪਲੇਸਮੈਂਟ",
+    "exchange": "ਐਕਸਚੇਂਜ ਪ੍ਰੋਗਰਾਮ",
+    "statusAll": "ਸਾਰੀਆਂ ਥਾਵਾਂ ਦਿਖਾਈਆਂ ਜਾ ਰਹੀਆਂ ਹਨ।",
+    "statusPlacement": "ਵਿਦਿਆਰਥੀ ਪਲੇਸਮੈਂਟ ਦਿਖਾਈਆਂ ਜਾ ਰਹੀਆਂ ਹਨ।",
+    "statusExchange": "ਐਕਸਚੇਂਜ ਪ੍ਰੋਗਰਾਮ ਦਿਖਾਏ ਜਾ ਰਹੇ ਹਨ।",
+    "tipHead": "ਨਕਸ਼ਾ ਵਰਤੋ:",
+    "tip": "ਵੇਰਵੇ ਲਈ ਬਿੰਦੂ ਚੁਣੋ। ਥਾਵਾਂ ਇਕੱਠੀਆਂ ਹੋਣ ਤਾਂ ਸੂਚੀ ਤੋਂ ਚੁਣੋ ਜਾਂ ਜ਼ੂਮ ਕਰੋ।",
+    "searchButton": "ਨਾਂ ਨਾਲ ਥਾਂ ਲੱਭੋ",
+    "searchHead": "ਨਾਂ ਨਾਲ ਥਾਂ ਲੱਭੋ",
+    "searchHint": "ਇਸ ਵੇਲੇ ਨਕਸ਼ੇ ਉੱਤੇ ਦਿਖ ਰਹੀਆਂ ਥਾਵਾਂ ਲੱਭੋ।",
+    "searchLabel": "ਥਾਂ ਦਾ ਨਾਂ",
+    "searchPlaceholder": "ਥਾਂ ਦਾ ਨਾਂ ਲਿਖੋ",
+    "reset": "ਯੂਰਪ ਵੱਲ ਵਾਪਸ",
+    "move": "ਨਕਸ਼ਾ ਹਿਲਾਓ",
+    "close": "ਖੋਜ ਬੰਦ ਕਰੋ",
+    "visit": "ਭਾਈਵਾਲ ਵੈੱਬਸਾਈਟ ↗",
+    "translate": "ਵੇਰਵਾ ਅਨੁਵਾਦ ਕਰੋ ↗",
+    "placementSing": "ਵਿਦਿਆਰਥੀ ਪਲੇਸਮੈਂਟ",
+    "exchangeSing": "ਐਕਸਚੇਂਜ ਪ੍ਰੋਗਰਾਮ",
+    "globalCat": "ਗਲੋਬਲ ਐਂਗੇਜਮੈਂਟ",
+    "nearby": "ਨੇੜਲੀਆਂ ਥਾਵਾਂ",
+    "nearbyIntro": "ਕਈ ਥਾਵਾਂ ਨੇੜੇ ਹਨ। ਇੱਕ ਚੁਣੋ ਜਾਂ ਜ਼ੂਮ ਕਰੋ।",
+    "zoom": "ਜ਼ੂਮ ਇਨ",
+    "other": "ਹੋਰ ਨੇੜਲੀਆਂ ਥਾਵਾਂ",
+    "translationNote": "ਥਾਵਾਂ ਦੇ ਨਾਂ ਤੇ ਵੇਰਵੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਹਨ। ਅਨੁਵਾਦ ਲਈ ਪੌਪਅੱਪ ਦਾ ਲਿੰਕ ਵਰਤੋ।",
+    "langLabel": "ਭਾਸ਼ਾ ਚੁਣੋ",
+    "loading": "ਥਾਵਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ…",
+    "noMatch": "ਇੱਥੇ ਕੋਈ ਥਾਂ ਨਹੀਂ ਮਿਲੀ। ਹੋਰ ਨਾਂ ਅਜ਼ਮਾਓ।"
+  },
+  "bn": {
+    "school": "স্কুল অব ডিজাইন অ্যান্ড ক্রিয়েটিভ আর্টস",
+    "title": "বৈশ্বিক সম্পৃক্ততার মানচিত্র",
+    "summary": "বিশ্বজুড়ে আমাদের আন্তর্জাতিক বিনিময় ও শিক্ষার্থী প্লেসমেন্ট দেখুন।",
+    "explore": "স্থান দেখুন",
+    "filterTitle": "মানচিত্রের নির্দেশিকা",
+    "all": "সব স্থান",
+    "placement": "শিক্ষার্থী প্লেসমেন্ট",
+    "exchange": "বিনিময় কর্মসূচি",
+    "statusAll": "সব স্থান দেখানো হচ্ছে।",
+    "statusPlacement": "শিক্ষার্থী প্লেসমেন্ট দেখানো হচ্ছে।",
+    "statusExchange": "বিনিময় কর্মসূচি দেখানো হচ্ছে।",
+    "tipHead": "মানচিত্র ব্যবহার:",
+    "tip": "বিস্তারিত দেখতে বিন্দু নির্বাচন করুন। স্থানগুলো কাছাকাছি হলে তালিকা থেকে বেছে নিন বা জুম করুন।",
+    "searchButton": "নাম দিয়ে স্থান খুঁজুন",
+    "searchHead": "নাম দিয়ে স্থান খুঁজুন",
+    "searchHint": "মানচিত্রে বর্তমানে দেখা যাচ্ছে এমন স্থান খুঁজুন।",
+    "searchLabel": "স্থানের নাম",
+    "searchPlaceholder": "স্থানের নাম লিখুন",
+    "reset": "ইউরোপে ফিরুন",
+    "move": "মানচিত্র সরান",
+    "close": "অনুসন্ধান বন্ধ করুন",
+    "visit": "অংশীদারের ওয়েবসাইট ↗",
+    "translate": "বিস্তারিত অনুবাদ করুন ↗",
+    "placementSing": "শিক্ষার্থী প্লেসমেন্ট",
+    "exchangeSing": "বিনিময় কর্মসূচি",
+    "globalCat": "বৈশ্বিক সম্পৃক্ততা",
+    "nearby": "কাছাকাছি স্থান",
+    "nearbyIntro": "কয়েকটি স্থান খুব কাছাকাছি। একটি বেছে নিন বা জুম করুন।",
+    "zoom": "জুম ইন",
+    "other": "অন্যান্য কাছের স্থান",
+    "translationNote": "স্থানের নাম ও বিবরণ ইংরেজিতে দেওয়া। অনুবাদের জন্য পপআপের লিংক ব্যবহার করুন।",
+    "langLabel": "ভাষা নির্বাচন করুন",
+    "loading": "স্থান লোড হচ্ছে…",
+    "noMatch": "এই দৃশ্যে কোনো স্থান পাওয়া যায়নি।"
+  },
+  "gu": {
+    "school": "સ્કૂલ ઑફ ડિઝાઇન એન્ડ ક્રિએટિવ આર્ટ્સ",
+    "title": "વૈશ્વિક જોડાણ નકશો",
+    "summary": "વિશ્વભરના આંતરરાષ્ટ્રીય વિનિમય કાર્યક્રમો અને વિદ્યાર્થી પ્લેસમેન્ટ જુઓ.",
+    "explore": "સ્થળો જુઓ",
+    "filterTitle": "નકશાની સૂચિ",
+    "all": "બધાં સ્થળો",
+    "placement": "વિદ્યાર્થી પ્લેસમેન્ટ",
+    "exchange": "વિનિમય કાર્યક્રમો",
+    "statusAll": "બધાં સ્થળો દર્શાવાય છે.",
+    "statusPlacement": "વિદ્યાર્થી પ્લેસમેન્ટ દર્શાવાય છે.",
+    "statusExchange": "વિનિમય કાર્યક્રમો દર્શાવાય છે.",
+    "tipHead": "નકશાનો ઉપયોગ:",
+    "tip": "વિગતો માટે બિંદુ પસંદ કરો. સ્થળો નજીક હોય તો યાદીમાંથી પસંદ કરો અથવા ઝૂમ કરો.",
+    "searchButton": "નામથી સ્થળ શોધો",
+    "searchHead": "નામથી સ્થળ શોધો",
+    "searchHint": "હાલ નકશામાં દેખાતા સ્થળો શોધો.",
+    "searchLabel": "સ્થળનું નામ",
+    "searchPlaceholder": "સ્થળનું નામ લખો",
+    "reset": "યુરોપ પર પાછા",
+    "move": "નકશો ખસેડો",
+    "close": "શોધ બંધ કરો",
+    "visit": "ભાગીદાર વેબસાઇટ ↗",
+    "translate": "વિગતોનું ભાષાંતર ↗",
+    "placementSing": "વિદ્યાર્થી પ્લેસમેન્ટ",
+    "exchangeSing": "વિનિમય કાર્યક્રમ",
+    "globalCat": "વૈશ્વિક જોડાણ",
+    "nearby": "નજીકનાં સ્થળો",
+    "nearbyIntro": "ઘણાં સ્થળો નજીક છે. એક પસંદ કરો અથવા ઝૂમ કરો.",
+    "zoom": "ઝૂમ ઇન",
+    "other": "અન્ય નજીકનાં સ્થળો",
+    "translationNote": "સ્થળનાં નામ અને વર્ણન અંગ્રેજીમાં છે. ભાષાંતર માટે પોપઅપની લિંક વાપરો.",
+    "langLabel": "ભાષા પસંદ કરો",
+    "loading": "સ્થળો લોડ થઈ રહ્યાં છે…",
+    "noMatch": "આ દૃશ્યમાં કોઈ સ્થળ મળ્યું નથી."
+  },
+  "ta": {
+    "school": "வடிவமைப்பு மற்றும் படைப்புக் கலைகள் பள்ளி",
+    "title": "உலகளாவிய தொடர்பு வரைபடம்",
+    "summary": "உலகெங்கிலும் உள்ள சர்வதேச பரிமாற்றங்களையும் மாணவர் பயிற்சி வாய்ப்புகளையும் ஆராயுங்கள்.",
+    "explore": "இடங்களை ஆராய்க",
+    "filterTitle": "வரைபடக் குறியீடு",
+    "all": "அனைத்து இடங்களும்",
+    "placement": "மாணவர் பயிற்சிகள்",
+    "exchange": "பரிமாற்றத் திட்டங்கள்",
+    "statusAll": "அனைத்து இடங்களும் காட்டப்படுகின்றன.",
+    "statusPlacement": "மாணவர் பயிற்சி இடங்கள் காட்டப்படுகின்றன.",
+    "statusExchange": "பரிமாற்றத் திட்டங்கள் காட்டப்படுகின்றன.",
+    "tipHead": "வரைபடத்தைப் பயன்படுத்த:",
+    "tip": "விவரங்களை அறிய புள்ளியைத் தேர்ந்தெடுக்கவும். இடங்கள் நெருக்கமாக இருந்தால் பட்டியலைப் பயன்படுத்தவும் அல்லது பெரிதாக்கவும்.",
+    "searchButton": "பெயரால் இடத்தைத் தேடுக",
+    "searchHead": "பெயரால் இடத்தைத் தேடுக",
+    "searchHint": "தற்போது வரைபடத்தில் தெரியும் இடங்களைத் தேடலாம்.",
+    "searchLabel": "இடத்தின் பெயர்",
+    "searchPlaceholder": "இடப் பெயரை உள்ளிடுக",
+    "reset": "ஐரோப்பாவுக்குத் திரும்பு",
+    "move": "வரைபடத்தை நகர்த்து",
+    "close": "தேடலை மூடு",
+    "visit": "கூட்டாளர் இணையதளம் ↗",
+    "translate": "விவரங்களை மொழிபெயர் ↗",
+    "placementSing": "மாணவர் பயிற்சி",
+    "exchangeSing": "பரிமாற்றத் திட்டம்",
+    "globalCat": "உலகளாவிய தொடர்பு",
+    "nearby": "அருகிலுள்ள இடங்கள்",
+    "nearbyIntro": "சில இடங்கள் அருகருகே உள்ளன. ஒன்றைத் தேர்ந்தெடுக்கவும் அல்லது பெரிதாக்கவும்.",
+    "zoom": "பெரிதாக்கு",
+    "other": "மற்ற அருகிலுள்ள இடங்கள்",
+    "translationNote": "இடங்களின் பெயர்களும் விளக்கங்களும் ஆங்கிலத்தில் உள்ளன. மொழிபெயர்க்கப் பாப்அப் இணைப்பைப் பயன்படுத்தவும்.",
+    "langLabel": "மொழியைத் தேர்ந்தெடு",
+    "loading": "இடங்கள் ஏற்றப்படுகின்றன…",
+    "noMatch": "இந்தக் காட்சியில் பொருந்தும் இடம் இல்லை."
+  },
+  "te": {
+    "school": "స్కూల్ ఆఫ్ డిజైన్ అండ్ క్రియేటివ్ ఆర్ట్స్",
+    "title": "ప్రపంచ భాగస్వామ్య పటం",
+    "summary": "ప్రపంచవ్యాప్తంగా మా అంతర్జాతీయ మార్పిడి కార్యక్రమాలు, విద్యార్థి ప్లేస్‌మెంట్లను చూడండి.",
+    "explore": "ప్రదేశాలు చూడండి",
+    "filterTitle": "మ్యాప్ సూచిక",
+    "all": "అన్ని ప్రదేశాలు",
+    "placement": "విద్యార్థి ప్లేస్‌మెంట్లు",
+    "exchange": "మార్పిడి కార్యక్రమాలు",
+    "statusAll": "అన్ని ప్రదేశాలు చూపుతున్నాం.",
+    "statusPlacement": "విద్యార్థి ప్లేస్‌మెంట్లు చూపుతున్నాం.",
+    "statusExchange": "మార్పిడి కార్యక్రమాలు చూపుతున్నాం.",
+    "tipHead": "పటాన్ని ఉపయోగించండి:",
+    "tip": "వివరాల కోసం చుక్కను ఎంచుకోండి. దగ్గరగా ఉన్న ప్రదేశాలను జాబితాలో ఎంచుకోండి లేదా జూమ్ చేయండి.",
+    "searchButton": "పేరుతో ప్రదేశం వెతకండి",
+    "searchHead": "పేరుతో ప్రదేశం వెతకండి",
+    "searchHint": "ప్రస్తుతం పటంలో కనిపించే ప్రదేశాలను వెతకండి.",
+    "searchLabel": "ప్రదేశం పేరు",
+    "searchPlaceholder": "ప్రదేశం పేరు ఇవ్వండి",
+    "reset": "యూరప్‌కు తిరిగి వెళ్లండి",
+    "move": "పటాన్ని కదపండి",
+    "close": "వెతుకులాట మూసివేయండి",
+    "visit": "భాగస్వామి వెబ్‌సైట్ ↗",
+    "translate": "వివరాలను అనువదించు ↗",
+    "placementSing": "విద్యార్థి ప్లేస్‌మెంట్",
+    "exchangeSing": "మార్పిడి కార్యక్రమం",
+    "globalCat": "ప్రపంచ భాగస్వామ్యం",
+    "nearby": "దగ్గరి ప్రదేశాలు",
+    "nearbyIntro": "కొన్ని ప్రదేశాలు దగ్గరగా ఉన్నాయి. ఒకదాన్ని ఎంచుకోండి లేదా జూమ్ చేయండి.",
+    "zoom": "జూమ్ ఇన్",
+    "other": "ఇతర దగ్గరి ప్రదేశాలు",
+    "translationNote": "ప్రదేశాల పేర్లు, వివరణలు ఆంగ్లంలో ఉన్నాయి. అనువాదం కోసం పాప్అప్ లింక్‌ను వాడండి.",
+    "langLabel": "భాషను ఎంచుకోండి",
+    "loading": "ప్రదేశాలు లోడ్ అవుతున్నాయి…",
+    "noMatch": "ఈ వీక్షణలో సరిపడే ప్రదేశాలు లేవు."
+  },
+  "mr": {
+    "school": "स्कूल ऑफ डिझाइन अँड क्रिएटिव्ह आर्ट्स",
+    "title": "जागतिक सहभाग नकाशा",
+    "summary": "जगभरातील आमचे आंतरराष्ट्रीय विनिमय कार्यक्रम आणि विद्यार्थी प्लेसमेंट शोधा.",
+    "explore": "ठिकाणे पाहा",
+    "filterTitle": "नकाशाचा संकेत",
+    "all": "सर्व ठिकाणे",
+    "placement": "विद्यार्थी प्लेसमेंट",
+    "exchange": "विनिमय कार्यक्रम",
+    "statusAll": "सर्व ठिकाणे दाखवत आहे.",
+    "statusPlacement": "विद्यार्थी प्लेसमेंट दाखवत आहे.",
+    "statusExchange": "विनिमय कार्यक्रम दाखवत आहे.",
+    "tipHead": "नकाशा वापरा:",
+    "tip": "तपशील पाहण्यासाठी बिंदू निवडा. ठिकाणे जवळ असल्यास यादीतून निवडा किंवा झूम करा.",
+    "searchButton": "नावाने ठिकाण शोधा",
+    "searchHead": "नावाने ठिकाण शोधा",
+    "searchHint": "सध्या नकाशावर दिसणारी ठिकाणे शोधा.",
+    "searchLabel": "ठिकाणाचे नाव",
+    "searchPlaceholder": "ठिकाणाचे नाव लिहा",
+    "reset": "युरोपवर परत जा",
+    "move": "नकाशा हलवा",
+    "close": "शोध बंद करा",
+    "visit": "भागीदार संकेतस्थळ ↗",
+    "translate": "तपशील भाषांतरित करा ↗",
+    "placementSing": "विद्यार्थी प्लेसमेंट",
+    "exchangeSing": "विनिमय कार्यक्रम",
+    "globalCat": "जागतिक सहभाग",
+    "nearby": "जवळची ठिकाणे",
+    "nearbyIntro": "काही ठिकाणे जवळ आहेत. एक निवडा किंवा झूम करा.",
+    "zoom": "झूम इन",
+    "other": "इतर जवळची ठिकाणे",
+    "translationNote": "ठिकाणांची नावे आणि वर्णने इंग्रजीत आहेत. भाषांतरासाठी पॉपअपमधील दुवा वापरा.",
+    "langLabel": "भाषा निवडा",
+    "loading": "ठिकाणे लोड होत आहेत…",
+    "noMatch": "या दृश्यात जुळणारे ठिकाण नाही."
+  },
+  "ur": {
+    "school": "اسکول آف ڈیزائن اینڈ کری ایٹو آرٹس",
+    "title": "عالمی روابط کا نقشہ",
+    "summary": "دنیا بھر میں ہمارے بین الاقوامی تبادلوں اور طلبہ کی تربیتی تقرریوں کو دریافت کریں۔",
+    "explore": "مقامات دیکھیں",
+    "filterTitle": "نقشے کی علامتیں",
+    "all": "تمام مقامات",
+    "placement": "طلبہ کی تقرریاں",
+    "exchange": "تبادلہ پروگرام",
+    "statusAll": "تمام مقامات دکھائے جا رہے ہیں۔",
+    "statusPlacement": "طلبہ کی تقرریاں دکھائی جا رہی ہیں۔",
+    "statusExchange": "تبادلہ پروگرام دکھائے جا رہے ہیں۔",
+    "tipHead": "نقشہ استعمال کریں:",
+    "tip": "تفصیلات کے لیے نقطہ منتخب کریں۔ مقامات قریب ہوں تو فہرست سے منتخب کریں یا زوم کریں۔",
+    "searchButton": "نام سے مقام تلاش کریں",
+    "searchHead": "نام سے مقام تلاش کریں",
+    "searchHint": "نقشے پر موجودہ نظر آنے والے مقامات تلاش کریں۔",
+    "searchLabel": "مقام کا نام",
+    "searchPlaceholder": "مقام کا نام لکھیں",
+    "reset": "یورپ پر واپس جائیں",
+    "move": "نقشہ حرکت دیں",
+    "close": "تلاش بند کریں",
+    "visit": "شراکت دار کی ویب سائٹ ↗",
+    "translate": "تفصیلات کا ترجمہ ↗",
+    "placementSing": "طلبہ کی تقرری",
+    "exchangeSing": "تبادلہ پروگرام",
+    "globalCat": "عالمی روابط",
+    "nearby": "قریبی مقامات",
+    "nearbyIntro": "کئی مقامات قریب ہیں۔ ایک منتخب کریں یا زوم کریں۔",
+    "zoom": "زوم ان",
+    "other": "دیگر قریبی مقامات",
+    "translationNote": "مقامات کے نام اور تفصیلات انگریزی میں ہیں۔ ترجمے کے لیے پاپ اپ کا لنک استعمال کریں۔",
+    "langLabel": "زبان منتخب کریں",
+    "loading": "مقامات لوڈ ہو رہے ہیں…",
+    "noMatch": "اس منظر میں کوئی مماثل مقام نہیں ملا۔"
+  }
+};
+    const searchCountLanguage = {
+      en: ['locations in this view', 'matching your search', 'Showing the first 150; refine your search.'],
+      'zh-CN': ['个当前视图中的地点', '符合搜索条件', '只显示前150个结果，请缩小搜索范围。'],
+      'zh-TW': ['個目前視圖中的地點', '符合搜尋條件', '只顯示前150筆結果，請縮小搜尋範圍。'],
+      hi: ['स्थान इस दृश्य में', 'आपकी खोज से मेल खाते हैं', 'पहले 150 परिणाम दिखाए गए हैं; खोज को सीमित करें।'],
+      pa: ['ਇਸ ਦ੍ਰਿਸ਼ ਵਿੱਚ ਥਾਵਾਂ', 'ਖੋਜ ਨਾਲ ਮੇਲ ਖਾਂਦੀਆਂ ਹਨ', 'ਪਹਿਲੀਆਂ 150 ਥਾਵਾਂ ਦਿਖਾਈਆਂ ਗਈਆਂ ਹਨ।'],
+      bn: ['এই দৃশ্যে স্থান', 'অনুসন্ধানের সঙ্গে মিলেছে', 'প্রথম ১৫০টি ফলাফল দেখানো হয়েছে।'],
+      gu: ['આ દૃશ્યમાં સ્થળો', 'શોધ સાથે મેળ ખાતાં', 'પ્રથમ 150 પરિણામ બતાવ્યાં છે.'],
+      ta: ['இந்தக் காட்சியில் இடங்கள்', 'தேடலுடன் பொருந்துகின்றன', 'முதல் 150 முடிவுகள் மட்டும் காட்டப்படுகின்றன.'],
+      te: ['ఈ వీక్షణలో ప్రదేశాలు', 'శోధనకు సరిపోతున్నాయి', 'మొదటి 150 ఫలితాలు మాత్రమే చూపుతున్నాం.'],
+      mr: ['या दृश्यातील ठिकाणे', 'शोधाशी जुळणारी', 'पहिली 150 ठिकाणे दाखवली आहेत.'],
+      ur: ['اس منظر میں مقامات', 'تلاش سے مماثل', 'پہلے 150 نتائج دکھائے گئے ہیں۔']
+    };
+    let currentLanguage = 'en';
+    const t = (key) => (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
+    const languagePicker = document.getElementById('language-select');
+    const setText = (selector, key) => {
+      const el = document.querySelector(selector);
+      if (el) el.textContent = t(key);
+    };
+    function updateLanguage(lang) {
+      const hasInterfaceTranslation = Boolean(translations[lang]);
+      currentLanguage = lang;
+      // Only declare the page's language when the interface strings are translated.
+      document.documentElement.lang = hasInterfaceTranslation ? lang : 'en';
+      document.documentElement.dir = lang === 'ur' ? 'rtl' : 'ltr';
+      languagePicker.value = lang;
+      const note = document.getElementById('machine-language-note');
+      const translatePageLink = document.getElementById('translate-page-link');
+      note.hidden = hasInterfaceTranslation;
+      if (!hasInterfaceTranslation) {
+        const chosenName = languagePicker.selectedOptions[0]?.textContent || lang;
+        note.firstChild.textContent = 'The map interface does not yet have a built-in ' + chosenName + ' translation. ';
+        translatePageLink.href = 'https://translate.google.com/translate?sl=en&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent('https://chris210.github.io/');
+      }
+      languagePicker.setAttribute('aria-label', t('langLabel'));
+      setText('#school-label','school');
+      setText('#map-title','title');
+      setText('#map-summary','summary');
+      setText('#sdca-explore > summary','explore');
+      setText('.filter-heading','filterTitle');
+      for (const [kind,key] of [['placement','placement'],['exchange','exchange']]) {
+        const label = document.querySelector(`.key-item[data-key="${kind}"] .key-label`);
+        if (label) label.textContent = t(key);
+      }
+      const tip = document.querySelector('.usage-tip');
+      tip.replaceChildren();
+      const bold = document.createElement('strong');
+      bold.textContent = t('tipHead') + ' ';
+      tip.append(bold, document.createTextNode(t('tip')));
+      setText('#browse-toggle','searchButton');
+      setText('#browse-heading','searchHead');
+      setText('.browse-hint','searchHint');
+      setText('#location-search-label','searchLabel');
+      document.getElementById('location-search').placeholder = t('searchPlaceholder');
+      document.getElementById('browse-close').setAttribute('aria-label', t('close'));
+      const reset = document.getElementById('reset-europe');
+      reset.setAttribute('aria-label',t('reset'));
+      reset.setAttribute('title',t('reset'));
+      reset.replaceChildren();
+      const resetIcon = document.createElement('span');
+      resetIcon.className = 'reset-icon'; resetIcon.textContent='⌖'; resetIcon.setAttribute('aria-hidden','true');
+      reset.append(resetIcon, document.createTextNode(' ' + t('reset')));
+      setText('#map-move > summary','move');
+      document.getElementById('translation-note').textContent = t('translationNote');
+      document.getElementById('translation-note').hidden = currentLanguage === 'en';
+      document.getElementById('skip-locations').textContent = t('searchButton');
+      // Refresh visible search results in the selected interface language.
+      if (typeof updateBrowseList === 'function' && !document.getElementById('browse-panel').hidden) updateBrowseList();
+    }
+    languagePicker.addEventListener('change', () => updateLanguage(languagePicker.value));
+
     const error = message => {
-      const element = document.getElementById('error');
-      element.textContent = message;
-      element.style.display = 'block';
+      const node = document.getElementById('error');
+      node.textContent = message;
+      node.style.display = 'block';
       console.error(message);
     };
-
-    const emptyClickFilter = ['==', ['get', 'id'], '__no_point_selected__'];
-    let clickOutlineReady = false;
+    const noFeatureFilter = ['==', ['get', 'id'], '__sdca_no_feature__'];
+    // The categories are a visual key only. Keep every data point visible.
+    let originalFilter = null;
+    let hoverLayerReady = false;
+    let selectionLayerReady = false;
+    let hoveredKey = null;
     let popup = null;
-    function matchingFeatureFilter(feature) {
-      const p = feature.properties || {};
-      if (p.id !== undefined && p.id !== null) return ['==', ['get', 'id'], p.id];
-      if (p.name) return ['==', ['get', 'name'], p.name];
-      return emptyClickFilter;
-    }
+    let suppressPopupFocusReturn = false;
+    let popupReturnFocusTo = null;
 
-    function setClickOutline(feature) {
-      if (!clickOutlineReady || !map.getLayer('sdca-click-outline')) return;
-      map.setFilter('sdca-click-outline', feature ? matchingFeatureFilter(feature) : emptyClickFilter);
+    const buildFilter = (extra = null) => {
+      const clauses = [];
+      if (originalFilter) clauses.push(originalFilter);
+      if (extra) clauses.push(extra);
+      if (clauses.length === 0) return null;
+      return clauses.length === 1 ? clauses[0] : ['all', ...clauses];
+    };
+    const featureKey = f => {
+      const p = f.properties || {};
+      const coordinates = f.geometry?.coordinates || [];
+      return String(p.id ?? f.id ?? [p.name, ...coordinates].join('|'));
+    };
+    const matchFeature = feature => {
+      const p = feature.properties || {};
+      if (p.id !== null && p.id !== undefined) return ['==', ['get', 'id'], p.id];
+      if (p.name) return ['==', ['get', 'name'], p.name];
+      return noFeatureFilter;
+    };
+    const categoryOf = fields => {
+      // Prefer the actual Mapbox category. A known description can be used only
+      // when the source's group field is missing or too generic to be useful.
+      const group = String(fields.group || '').trim().toLowerCase();
+      if (group.includes('placement')) return 'placement';
+      if (group.includes('exchange')) return 'exchange';
+      const description = String(fields.description || '').toLowerCase();
+      if (/\b(student )?placements?\b/.test(description)) return 'placement';
+      if (/\bexchange (programme|program|partner|student|students)\b/.test(description)) return 'exchange';
+      return 'other';
+    };
+    const searchCategoryName = fields => {
+      const type = categoryOf(fields);
+      if (type === 'placement') return t('placementSing');
+      if (type === 'exchange') return t('exchangeSing');
+      return ''; // No generic, uninformative “Global Engagement” subtitle.
+    };
+    const categoryName = fields => {
+      const type = categoryOf(fields);
+      if (type === 'placement') return t('placementSing');
+      if (type === 'exchange') return t('exchangeSing');
+      return fields.group || t('globalCat');
+    };
+    const make = (tag, className, label) => {
+      const elem = document.createElement(tag);
+      if (className) elem.className = className;
+      if (label !== undefined) elem.textContent = label;
+      return elem;
+    };
+    const removePopupSilently = () => {
+      if (popup) {
+        const old = popup;
+        popup = null;
+        suppressPopupFocusReturn = true;
+        old.remove();
+        suppressPopupFocusReturn = false;
+      }
+    };
+    const closePopup = () => {
+      const focusWasInside = Boolean(document.activeElement?.closest?.('.mapboxgl-popup'));
+      const returnTo = popupReturnFocusTo;
+      removePopupSilently();
+      if (focusWasInside) {
+        if (returnTo?.isConnected && returnTo !== document.body) returnTo.focus({preventScroll:true});
+        else map.getCanvas().focus({preventScroll:true});
+      }
+      if (selectionLayerReady && map.getLayer('sdca-selected-ring')) {
+        map.setFilter('sdca-selected-ring', buildFilter(noFeatureFilter));
+      }
+    };
+    const setSelection = feature => {
+      if (selectionLayerReady && map.getLayer('sdca-selected-ring')) {
+        map.setFilter('sdca-selected-ring', buildFilter(feature ? matchFeature(feature) : noFeatureFilter));
+      }
+    };
+    const openPopup = (content, coordinates, focusRestore = null) => {
+      const returnFocusTo = focusRestore || document.activeElement;
+      popupReturnFocusTo = returnFocusTo;
+      removePopupSilently();
+      const instance = new mapboxgl.Popup({ offset: 17, maxWidth: '355px', closeOnClick: false, closeButton: true })
+        .setLngLat(coordinates).setDOMContent(content).addTo(map);
+      popup = instance;
+      // Announce the opened information to assistive technology.
+      const heading = content.querySelector('.popup-title');
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
+      instance.on('close', () => {
+        if (popup === instance) {
+          popup = null;
+          setSelection(null);
+          if (!suppressPopupFocusReturn) {
+            // After closing with the X, return the keyboard user to where they were.
+            if (returnFocusTo && returnFocusTo.isConnected && returnFocusTo !== document.body) {
+              returnFocusTo.focus({ preventScroll: true });
+            } else {
+              map.getCanvas().focus({ preventScroll: true });
+            }
+          }
+        }
+      });
+    };
+    function showLocation(feature, nearby = null, anchor = null, focusRestore = null) {
+      const fields = feature.properties || {};
+      const content = make('article', 'sdca-popup-body');
+      const eyebrow = make('p', 'popup-eyebrow');
+      const swatch = make('span', 'swatch ' + categoryOf(fields));
+      swatch.setAttribute('aria-hidden', 'true');
+      eyebrow.append(swatch, document.createTextNode(categoryName(fields)));
+      content.append(eyebrow);
+      const locationHeading = make('h2', 'popup-title', fields.name || 'Location');
+      locationHeading.lang = 'en'; locationHeading.dir = 'auto';
+      content.append(locationHeading);
+      if (fields.description) {
+        const desc = make('p', 'popup-description', fields.description);
+        desc.lang = 'en'; desc.dir = 'auto';
+        content.append(desc);
+      }
+      if (fields.url) {
+        try {
+          const url = new URL(String(fields.url));
+          if (url.protocol === 'https:' || url.protocol === 'http:') {
+            const link = make('a', 'popup-link', t('visit'));
+            link.href = url.href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            content.append(link);
+          }
+        } catch (_) { console.warn('Invalid website URL for', fields.name); }
+      }
+      if (currentLanguage !== 'en' && (fields.name || fields.description)) {
+        const textToTranslate = [fields.name || '', fields.description || ''].filter(Boolean).join('\n\n');
+        const translated = make('a', 'popup-translate', t('translate'));
+        const languageCode = currentLanguage === 'zh-TW' ? 'zh-TW' : currentLanguage === 'zh-CN' ? 'zh-CN' : currentLanguage;
+        translated.href = 'https://translate.google.com/?sl=en&tl=' + encodeURIComponent(languageCode) + '&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
+        translated.target = '_blank';
+        translated.rel = 'noopener noreferrer';
+        translated.setAttribute('title', t('translate'));
+        content.append(translated);
+      }
+      if (nearby && nearby.length > 1) {
+        content.append(make('hr', 'popup-line'));
+        const back = make('button', 'quiet-action', '← ' + t('other'));
+        back.type = 'button';
+        back.addEventListener('click', () => showNearby(nearby, anchor));
+        content.append(back);
+      }
+      setSelection(feature);
+      const coordinates = feature.geometry?.type === 'Point'
+        ? feature.geometry.coordinates.slice() : anchor;
+      openPopup(content, coordinates, focusRestore);
     }
+    function showNearby(features, anchor) {
+      setSelection(null);
+      const content = make('div', 'sdca-popup-body');
+      content.append(make('h2', 'popup-title', `${features.length} ${t('nearby')}`));
+      content.append(make('p', 'nearby-intro', t('nearbyIntro')));
+      const list = make('div', 'nearby-list');
+      for (const feature of features.slice(0, 12)) {
+        const properties = feature.properties || {};
+        const button = make('button', 'nearby-item');
+        button.type = 'button';
+        const typeLabel = searchCategoryName(properties);
+        const icon = make('span', 'swatch ' + categoryOf(properties));
+        icon.setAttribute('aria-hidden', 'true');
+        if (!typeLabel) icon.hidden = true;
+        const text = make('span', 'nearby-text');
+        text.append(make('strong', '', properties.name || 'Location'));
+        if (typeLabel) text.append(make('small', '', typeLabel));
+        button.append(icon, text);
+        button.addEventListener('click', () => showLocation(feature, features, anchor));
+        list.append(button);
+      }
+      content.append(list);
+      if (features.length > 12) content.append(make('p', 'nearby-more', `Showing 12 of ${features.length}. Zoom in to reveal more locations.`));
+      const zoom = make('button', 'quiet-action', '＋ ' + t('zoom'));
+      zoom.type = 'button';
+      zoom.addEventListener('click', () => {
+        closePopup();
+        moveView({ center: anchor, zoom: Math.min(map.getZoom() + 2, 12), essential: false });
+      });
+      content.append(zoom);
+      openPopup(content, anchor);
+    }
+    const pointsNear = (point, radius) => {
+      const box = [[point.x - radius, point.y - radius], [point.x + radius, point.y + radius]];
+      const candidates = map.queryRenderedFeatures(box, { layers: [POINT_LAYER] });
+      const uniques = new Map();
+      for (const feature of candidates) {
+        if (feature.geometry?.type !== 'Point') continue;
+        const key = featureKey(feature);
+        if (!uniques.has(key)) uniques.set(key, feature);
+      }
+      // The nearest points come first if more than one occupies the click area.
+      return [...uniques.values()].sort((a, b) => {
+        const pa = map.project(a.geometry.coordinates);
+        const pb = map.project(b.geometry.coordinates);
+        return Math.hypot(pa.x - point.x, pa.y - point.y) - Math.hypot(pb.x - point.x, pb.y - point.y);
+      });
+    };
+    const resetToEurope = () => {
+      closePopup();
+      moveView({ center: EUROPE_CENTRE, zoom: window.matchMedia('(max-width: 620px)').matches ? 2.1 : 2.5, bearing: 0, pitch: 0, essential: false });
+    };
+    document.getElementById('reset-europe').addEventListener('click', resetToEurope);
+
+    // Accessible alternative to the WebGL points: a keyboard-operable list of locations
+    // currently rendered in the viewport. Vector tiles do not expose the full global dataset.
+    const browsePanel = document.getElementById('browse-panel');
+    const browseToggle = document.getElementById('browse-toggle');
+    const browseClose = document.getElementById('browse-close');
+    const browseSearch = document.getElementById('location-search');
+    const browseCount = document.getElementById('browse-count');
+    const browseList = document.getElementById('browse-list');
+    let availableLocations = [];
+    let mapIsReady = false;
+    const uniqueVisibleLocations = () => {
+      if (!mapIsReady || !map.getLayer(POINT_LAYER)) return [];
+      const rect = [[0,0], [map.getCanvas().clientWidth, map.getCanvas().clientHeight]];
+      const unique = new Map();
+      for (const feature of map.queryRenderedFeatures(rect, { layers: [POINT_LAYER] })) {
+        if (feature.geometry?.type !== 'Point') continue;
+        const key = featureKey(feature);
+        if (!unique.has(key)) unique.set(key, feature);
+      }
+      return [...unique.values()].sort((a,b) => String(a.properties?.name || '').localeCompare(String(b.properties?.name || '')));
+    };
+    const updateBrowseList = () => {
+      if (browsePanel.hidden) return;
+      availableLocations = uniqueVisibleLocations();
+      const term = browseSearch.value.trim().toLowerCase();
+      const matches = availableLocations.filter(f => {
+        const props = f.properties || {};
+        return `${props.name || ''} ${props.group || ''} ${props.description || ''}`.toLowerCase().includes(term);
+      });
+      browseList.replaceChildren();
+      const maxItems = 150;
+      for (const feature of matches.slice(0,maxItems)) {
+        const props = feature.properties || {};
+        const li = document.createElement('li');
+        const button = make('button', 'browse-location');
+        button.type = 'button';
+        // Search results display names only. Category metadata remains untouched
+        // for the map and individual popups, but is not shown in this list.
+        const labels = make('span','browse-location-text');
+        labels.append(make('strong','',String(props.name || 'Unnamed location')));
+        button.append(labels);
+        button.setAttribute('aria-label', `View ${props.name || 'location'}`);
+        button.addEventListener('click', () => {
+          const coords = feature.geometry?.coordinates;
+          if (!coords) return;
+          moveView({ center: coords, zoom: Math.max(map.getZoom(), 4), essential: false });
+          showLocation(feature, null, null, browseSearch);
+        });
+        li.append(button);
+        browseList.append(li);
+      }
+      const resultWords = searchCountLanguage[currentLanguage] || searchCountLanguage.en;
+      browseCount.textContent = !mapIsReady ? t('loading') :
+        `${matches.length} ${resultWords[0]}${term ? ' · ' + resultWords[1] : ''}.${matches.length > maxItems ? ' ' + resultWords[2] : ''}`;
+      if (!matches.length) {
+        const li = make('li','', mapIsReady ? t('noMatch') : t('loading'));
+        browseList.append(li);
+      }
+    };
+    const showBrowse = () => {
+      browsePanel.hidden = false;
+      browseToggle.setAttribute('aria-expanded','true');
+      updateBrowseList();
+      document.getElementById('browse-heading').focus({preventScroll:true});
+    };
+    const hideBrowse = () => {
+      browsePanel.hidden = true;
+      browseToggle.setAttribute('aria-expanded','false');
+      browseToggle.focus({preventScroll:true});
+    };
+    browseToggle.addEventListener('click', () => browsePanel.hidden ? showBrowse() : hideBrowse());
+    browseClose.addEventListener('click', hideBrowse);
+    browseSearch.addEventListener('input', updateBrowseList);
+    document.getElementById('skip-locations').addEventListener('click', event => {
+      event.preventDefault(); showBrowse();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        if (popup) { event.preventDefault(); closePopup(); }
+        else if (!browsePanel.hidden) { event.preventDefault(); hideBrowse(); }
+      }
+    });
+    // Clickable pan buttons are an alternative to dragging the globe (WCAG 2.5.7).
+    document.querySelectorAll('[data-pan]').forEach(button => {
+      button.addEventListener('click', () => {
+        const direction = button.dataset.pan;
+        const amount = Math.min(map.getCanvas().clientWidth, map.getCanvas().clientHeight) * 0.35;
+        const offsets = { north:[0,amount], south:[0,-amount], east:[-amount,0], west:[amount,0] };
+        map.panBy(offsets[direction], { duration: prefersReducedMotion() ? 0 : 350 });
+      });
+    });
+    map.on('idle', updateBrowseList);
+
     map.on('load', () => {
       const layer = map.getLayer(POINT_LAYER);
       if (!layer) {
-        error('The “GE Data” layer was not found. Check the published Mapbox Studio style.');
+        error('The “GE Data” layer is missing from the published Mapbox style.');
         return;
       }
-      // Keep the original click-selection halo when the source is a vector tileset.
+      originalFilter = layer.filter || null;
+      mapIsReady = true;
+      updateBrowseList();
+      // Use the same Mapbox vector tileset and colour expression as the original layer.
+      const originalColor = map.getPaintProperty(POINT_LAYER, 'circle-color');
       if (layer.source && layer['source-layer']) {
+        const shared = { type: 'circle', source: layer.source, 'source-layer': layer['source-layer'] };
         map.addLayer({
-          id: 'sdca-click-outline', type: 'circle',
-          source: layer.source, 'source-layer': layer['source-layer'],
-          filter: emptyClickFilter,
+          ...shared, id: 'sdca-selected-ring', filter: buildFilter(noFeatureFilter),
           paint: {
-            'circle-radius': 17,
-            'circle-color': '#ffffff',
-            'circle-opacity': 0.12,
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 3
+            'circle-radius': 18, 'circle-color': '#fff', 'circle-opacity': .1,
+            'circle-stroke-width': 3, 'circle-stroke-color': '#fff'
           }
         }, POINT_LAYER);
-        clickOutlineReady = true;
-      }
-      // Hover: use the SAME source, layer and colour expression as GE Data.
-      // This makes the enlarged dot exactly the colour it already has on the map.
-      // No guesswork based on the `group` or raw `color` dataset fields.
-      const ORIGINAL_COLOUR = map.getPaintProperty(POINT_LAYER, 'circle-color');
-      const originalFilter = layer.filter || null;
-      let hoveredKey = null;
-      const HOVER_HALO = 'sdca-hover-halo';
-      const HOVER_DOT = 'sdca-hover-marker';
-      let hoverReady = false;
-      if (layer.source && layer['source-layer'] && ORIGINAL_COLOUR !== undefined) {
-        const shared = {
-          type: 'circle',
-          source: layer.source,
-          'source-layer': layer['source-layer']
-        };
-        const initialFilter = originalFilter
-          ? ['all', originalFilter, emptyClickFilter]
-          : emptyClickFilter;
-        // Soft white halo behind the larger colour-filled point.
-        map.addLayer({
-          ...shared,
-          id: HOVER_HALO,
-          filter: initialFilter,
-          paint: {
-            'circle-radius': 19,
-            'circle-color': '#ffffff',
-            'circle-opacity': 0.16
-          }
-        });
-        // CRITICAL: copy the original Mapbox Studio circle-colour expression.
-        // Since this layer uses the same tileset, each point keeps its original colour.
-        map.addLayer({
-          ...shared,
-          id: HOVER_DOT,
-          filter: initialFilter,
-          paint: {
-            'circle-radius': 14,
-            'circle-color': ORIGINAL_COLOUR,
-            'circle-opacity': 1,
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 3
-          }
-        });
-        hoverReady = true;
-      } else {
-        console.warn('Hover overlay could not use GE Data styling; pointer cursor still works.');
-      }
-      const setHover = (feature) => {
-        const p = feature?.properties || {};
-        const coords = feature?.geometry?.coordinates || [];
-        const nextKey = feature
-          ? String(p.id ?? feature.id ?? `${coords[0]},${coords[1]}`)
-          : null;
-        if (nextKey === hoveredKey) return;
-        hoveredKey = nextKey;
-        map.getCanvas().style.cursor = feature ? 'pointer' : '';
-        if (!hoverReady) return;
-        const featureFilter = feature ? matchingFeatureFilter(feature) : emptyClickFilter;
-        const filter = originalFilter
-          ? ['all', originalFilter, featureFilter]
-          : featureFilter;
-        map.setFilter(HOVER_HALO, filter);
-        map.setFilter(HOVER_DOT, filter);
-      };
-      // Check only the original points, ignoring the decorative hover layers.
-      map.on('mousemove', event => {
-        const features = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER] });
-        const point = features.find(f => f.geometry?.type === 'Point');
-        setHover(point || null);
-      });
-      map.getCanvas().addEventListener('mouseleave', () => setHover(null));
-      // Existing popup behaviour, unchanged.
-      map.on('click', POINT_LAYER, event => {
-        const feature = event.features && event.features[0];
-        if (!feature) return;
-        const fields = feature.properties || {};
-        if (popup) popup.remove();
-        setClickOutline(feature);
-        const body = document.createElement('div');
-        const heading = document.createElement('h3');
-        heading.className = 'sdca-title';
-        heading.textContent = fields.name || 'Location';
-        body.append(heading);
-        if (fields.group) {
-          const group = document.createElement('p');
-          group.className = 'sdca-group';
-          group.textContent = fields.group;
-          body.append(group);
-        }
-        if (fields.description) {
-          const description = document.createElement('p');
-          description.className = 'sdca-description';
-          description.textContent = fields.description;
-          body.append(description);
-        }
-        if (fields.url) {
-          try {
-            const url = new URL(fields.url);
-            if (url.protocol === 'http:' || url.protocol === 'https:') {
-              const link = document.createElement('a');
-              link.className = 'sdca-link';
-              link.href = url.href;
-              link.target = '_blank';
-              link.rel = 'noopener noreferrer';
-              link.textContent = 'Visit website ↗';
-              body.append(link);
+        selectionLayerReady = true;
+        if (originalColor !== undefined) {
+          map.addLayer({
+            ...shared, id: 'sdca-hover-halo', filter: buildFilter(noFeatureFilter),
+            paint: { 'circle-radius': 20, 'circle-color': '#fff', 'circle-opacity': .15 }
+          });
+          map.addLayer({
+            ...shared, id: 'sdca-hover-dot', filter: buildFilter(noFeatureFilter),
+            paint: {
+              'circle-radius': 14, 'circle-color': originalColor,
+              'circle-opacity': 1, 'circle-stroke-color': '#fff', 'circle-stroke-width': 3
             }
-          } catch (e) {
-            console.warn('Invalid external URL for', fields.name);
-          }
+          });
+          hoverLayerReady = true;
         }
-        const coordinates = feature.geometry && feature.geometry.type === 'Point'
-          ? feature.geometry.coordinates.slice()
-          : [event.lngLat.lng, event.lngLat.lat];
-        popup = new mapboxgl.Popup({ offset: 17, maxWidth: '340px', closeOnClick: true })
-          .setLngLat(coordinates)
-          .setDOMContent(body)
-          .addTo(map);
-        popup.on('close', () => {
-          setClickOutline(null);
-          popup = null;
-        });
+      }
+      function updateHover(feature) {
+        const key = feature ? featureKey(feature) : null;
+        if (key === hoveredKey) return;
+        hoveredKey = key;
+        map.getCanvas().style.cursor = feature ? 'pointer' : '';
+        if (hoverLayerReady) {
+          const filter = buildFilter(feature ? matchFeature(feature) : noFeatureFilter);
+          map.setFilter('sdca-hover-halo', filter);
+          map.setFilter('sdca-hover-dot', filter);
+        }
+      }
+      map.on('mousemove', event => {
+        const points = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER] });
+        updateHover(points.find(f => f.geometry?.type === 'Point') || null);
+      });
+      map.getCanvas().addEventListener('mouseleave', () => updateHover(null));
+      // A larger 20–24 px hit target makes overlapping circles usable on touch and desktop.
+      map.on('click', event => {
+        const touch = window.matchMedia('(pointer: coarse)').matches;
+        const features = pointsNear(event.point, touch ? 24 : 18);
+        if (!features.length) { closePopup(); return; }
+        if (features.length > 1) showNearby(features, [event.lngLat.lng, event.lngLat.lat]);
+        else showLocation(features[0]);
       });
     });
+    updateLanguage('en');
+    map.on('error', event => { if (event.error) console.error('Mapbox:', event.error); });
   })();
   </script>
 </body>
