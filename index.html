@@ -42,7 +42,6 @@
       console.error(message);
     };
 
-    const emptyCollection = () => ({ type: 'FeatureCollection', features: [] });
     const emptyClickFilter = ['==', ['get', 'id'], '__no_point_selected__'];
     let clickOutlineReady = false;
     let popup = null;
@@ -83,73 +82,83 @@
         clickOutlineReady = true;
       }
 
-      // Reliable hover: draw a bigger version of the currently hovered point.
-      // This does NOT depend on feature IDs or Mapbox Studio feature-state expressions.
-      // It works for a vector tileset as well as a GeoJSON source.
-      const HOVER_SOURCE = 'sdca-hover-point';
-      map.addSource(HOVER_SOURCE, { type: 'geojson', data: emptyCollection() });
-      map.addLayer({
-        id: 'sdca-hover-halo', type: 'circle', source: HOVER_SOURCE,
-        paint: {
-          'circle-radius': 17,
-          'circle-color': '#ffffff',
-          'circle-opacity': 0.25
-        }
-      });
-      map.addLayer({
-        id: 'sdca-hover-marker', type: 'circle', source: HOVER_SOURCE,
-        paint: {
-          'circle-radius': 12,
-          'circle-color': ['get', 'hoverColor'],
-          'circle-opacity': 1,
-          'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 3
-        }
-      });
+      // Hover: use the SAME source, layer and colour expression as GE Data.
+      // This makes the enlarged dot exactly the colour it already has on the map.
+      // No guesswork based on the `group` or raw `color` dataset fields.
+      const ORIGINAL_COLOUR = map.getPaintProperty(POINT_LAYER, 'circle-color');
+      const originalFilter = layer.filter || null;
+      let hoveredKey = null;
+      const HOVER_HALO = 'sdca-hover-halo';
+      const HOVER_DOT = 'sdca-hover-marker';
+      let hoverReady = false;
 
-      let currentHoverKey = null;
-      const clearHover = () => {
-        if (currentHoverKey === null) return;
-        currentHoverKey = null;
-        map.getSource(HOVER_SOURCE).setData(emptyCollection());
-        map.getCanvas().style.cursor = '';
+      if (layer.source && layer['source-layer'] && ORIGINAL_COLOUR !== undefined) {
+        const shared = {
+          type: 'circle',
+          source: layer.source,
+          'source-layer': layer['source-layer']
+        };
+        const initialFilter = originalFilter
+          ? ['all', originalFilter, emptyClickFilter]
+          : emptyClickFilter;
+
+        // Soft white halo behind the larger colour-filled point.
+        map.addLayer({
+          ...shared,
+          id: HOVER_HALO,
+          filter: initialFilter,
+          paint: {
+            'circle-radius': 19,
+            'circle-color': '#ffffff',
+            'circle-opacity': 0.16
+          }
+        });
+
+        // CRITICAL: copy the original Mapbox Studio circle-colour expression.
+        // Since this layer uses the same tileset, each point keeps its original colour.
+        map.addLayer({
+          ...shared,
+          id: HOVER_DOT,
+          filter: initialFilter,
+          paint: {
+            'circle-radius': 14,
+            'circle-color': ORIGINAL_COLOUR,
+            'circle-opacity': 1,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 3
+          }
+        });
+        hoverReady = true;
+      } else {
+        console.warn('Hover overlay could not use GE Data styling; pointer cursor still works.');
+      }
+
+      const setHover = (feature) => {
+        const p = feature?.properties || {};
+        const coords = feature?.geometry?.coordinates || [];
+        const nextKey = feature
+          ? String(p.id ?? feature.id ?? `${coords[0]},${coords[1]}`)
+          : null;
+        if (nextKey === hoveredKey) return;
+        hoveredKey = nextKey;
+        map.getCanvas().style.cursor = feature ? 'pointer' : '';
+
+        if (!hoverReady) return;
+        const featureFilter = feature ? matchingFeatureFilter(feature) : emptyClickFilter;
+        const filter = originalFilter
+          ? ['all', originalFilter, featureFilter]
+          : featureFilter;
+        map.setFilter(HOVER_HALO, filter);
+        map.setFilter(HOVER_DOT, filter);
       };
 
-      // Query the ORIGINAL layer (not the hover decoration) to prevent flicker.
+      // Check only the original points, ignoring the decorative hover layers.
       map.on('mousemove', event => {
         const features = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER] });
-        const feature = features[0];
-        if (!feature || feature.geometry?.type !== 'Point') {
-          clearHover();
-          return;
-        }
-
-        map.getCanvas().style.cursor = 'pointer';
-        const p = feature.properties || {};
-        const coords = feature.geometry.coordinates;
-        const key = String(p.id ?? feature.id ?? `${coords[0]},${coords[1]}`);
-        if (key === currentHoverKey) return;
-        currentHoverKey = key;
-
-        // The source's `color` values differ from the colours shown by
-        // the published Mapbox Studio style. Use the displayed palette by group.
-        const group = String(p.group || '').trim().toLowerCase();
-        const hoverColor = group === 'placement'
-          ? '#F0047F'
-          : group === 'exchange programme'
-            ? '#2D0153'
-            : '#2D0153'; // fallback for an unrecognised category
-
-        map.getSource(HOVER_SOURCE).setData({
-          type: 'FeatureCollection',
-          features: [{
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: coords },
-            properties: { hoverColor }
-          }]
-        });
+        const point = features.find(f => f.geometry?.type === 'Point');
+        setHover(point || null);
       });
-      map.getCanvas().addEventListener('mouseleave', clearHover);
+      map.getCanvas().addEventListener('mouseleave', () => setHover(null));
 
       // Existing popup behaviour, unchanged.
       map.on('click', POINT_LAYER, event => {
