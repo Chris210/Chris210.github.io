@@ -16,10 +16,26 @@
     .sdca-link { display: inline-block; margin-top: 2px; color: #1955b5; font-weight: 700; text-decoration: underline; }
     .sdca-link:focus-visible { outline: 2px solid #1955b5; outline-offset: 4px; }
     #error { display: none; position: absolute; z-index: 5; left: 15px; right: 15px; top: 15px; padding: 12px; color: #631e15; background: #fff4f1; border: 1px solid #e1a398; border-radius: 8px; font: 14px Arial, sans-serif; }
+    /* Loughborough University logo overlay: stays visible while the map moves. */
+    #lu-logo {
+      position: absolute;
+      z-index: 10;
+      top: 20px;
+      left: 20px;
+      width: 180px;
+      max-width: 40vw;
+      height: auto;
+      box-sizing: border-box;
+      padding: 14px;
+      background: #2D0153;
+      border-radius: 10px;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
   <div id="map" aria-label="Interactive SDCA Global Engagement Map"></div>
+  <img id="lu-logo" src="LU-logo-white.png" alt="Loughborough University logo">
   <div id="error" role="alert"></div>
   <script>
   (() => {
