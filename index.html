@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SDCA Global Engagement Map</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { height: 100%; width: 100%; min-height: 350px; }
+    .mapboxgl-popup-content { border-radius: 12px; padding: 18px 20px; box-shadow: 0 5px 22px rgba(0,0,0,.20); font: 14px/1.5 Arial, Helvetica, sans-serif; }
+    .sdca-title { margin: 0 22px 2px 0; font-size: 18px; line-height: 1.35; color: #17252e; }
+    .sdca-group { color: #6d547c; font-size: 12px; font-weight: 600; margin: 0 0 12px; }
+    .sdca-description { color: #34434a; margin: 8px 0 12px; white-space: pre-wrap; }
+    .sdca-link { display: inline-block; margin-top: 2px; color: #1955b5; font-weight: 700; text-decoration: underline; }
+    .sdca-link:focus-visible { outline: 2px solid #1955b5; outline-offset: 4px; }
+    #error { display: none; position: absolute; z-index: 5; left: 15px; right: 15px; top: 15px; padding: 12px; color: #631e15; background: #fff4f1; border: 1px solid #e1a398; border-radius: 8px; font: 14px Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="map" aria-label="Interactive SDCA Global Engagement Map"></div>
+  <div id="error" role="alert"></div>
+  <script>
+  (() => {
+    // Your existing Mapbox Studio map and PUBLIC access token.
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXN1eGQiLCJhIjoiY21tZXQ3dnRpMDB5YjJwczhzaXdnZ3VmNCJ9.HLg634ycbIvgXNwmRPDCHg';
+    const pointLayer = 'GE Data';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/chrisuxd/cmmewcucc00j001qz3xo68y0z',
+      center: [-34, 38],
+      zoom: 2,
+      scrollZoom: false
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    const error = (message) => {
+      const element = document.getElementById('error');
+      element.textContent = message;
+      element.style.display = 'block';
+      console.error(message);
+    };
+
+    // Display an outline around a point without modifying your Studio colour formula.
+    // These highlight layers reuse the existing source, so the map remains data-driven.
+    let highlightsReady = false;
+    const emptyFilter = ['==', ['get', 'id'], '__no_point_selected__'];
+
+    function matchingFeatureFilter(feature) {
+      const properties = feature.properties || {};
+      if (properties.id !== undefined && properties.id !== null) {
+        return ['==', ['get', 'id'], properties.id];
+      }
+      if (properties.name) {
+        return ['==', ['get', 'name'], properties.name];
+      }
+      return emptyFilter;
+    }
+
+    function setHighlight(layerId, feature) {
+      if (highlightsReady && map.getLayer(layerId)) {
+        map.setFilter(layerId, feature ? matchingFeatureFilter(feature) : emptyFilter);
+      }
+    }
+
+    let popup = null;
+
+    map.on('load', () => {
+      const layer = map.getLayer(pointLayer);
+      if (!layer) {
+        error('The “GE Data” layer was not found. Check that the updated style has been published in Mapbox Studio.');
+        return;
+      }
+
+      // The source has a source-layer when backed by a vector tileset.
+      const sourceLayer = layer['source-layer'];
+      if (sourceLayer && layer.source) {
+        const sourceProps = { source: layer.source, 'source-layer': sourceLayer };
+        map.addLayer({
+          id: 'sdca-click-outline',
+          type: 'circle',
+          ...sourceProps,
+          filter: emptyFilter,
+          paint: {
+            'circle-radius': 17,
+            'circle-color': '#ffffff',
+            'circle-opacity': 0.12,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 3
+          }
+        }, pointLayer);
+        map.addLayer({
+          id: 'sdca-hover-outline',
+          type: 'circle',
+          ...sourceProps,
+          filter: emptyFilter,
+          paint: {
+            'circle-radius': 15,
+            'circle-color': '#ffffff',
+            'circle-opacity': 0.18,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 2
+          }
+        }, pointLayer);
+        highlightsReady = true;
+      }
+
+      map.on('mouseenter', pointLayer, event => {
+        map.getCanvas().style.cursor = 'pointer';
+        if (event.features && event.features.length) {
+          setHighlight('sdca-hover-outline', event.features[0]);
+        }
+      });
+      map.on('mousemove', pointLayer, event => {
+        if (event.features && event.features.length) {
+          setHighlight('sdca-hover-outline', event.features[0]);
+        }
+      });
+      map.on('mouseleave', pointLayer, () => {
+        map.getCanvas().style.cursor = '';
+        setHighlight('sdca-hover-outline', null);
+      });
+
+      map.on('click', pointLayer, event => {
+        const feature = event.features && event.features[0];
+        if (!feature) return;
+        const fields = feature.properties || {};
+
+        if (popup) popup.remove();
+        setHighlight('sdca-click-outline', feature);
+
+        const body = document.createElement('div');
+        const heading = document.createElement('h3');
+        heading.className = 'sdca-title';
+        heading.textContent = fields.name || 'Location';
+        body.append(heading);
+
+        if (fields.group) {
+          const group = document.createElement('p');
+          group.className = 'sdca-group';
+          group.textContent = fields.group;
+          body.append(group);
+        }
+        if (fields.description) {
+          const description = document.createElement('p');
+          description.className = 'sdca-description';
+          description.textContent = fields.description;
+          body.append(description);
+        }
+        if (fields.url) {
+          try {
+            const url = new URL(fields.url);
+            if (url.protocol === 'http:' || url.protocol === 'https:') {
+              const link = document.createElement('a');
+              link.className = 'sdca-link';
+              link.href = url.href;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              link.textContent = 'Visit website ↗';
+              body.append(link);
+            }
+          } catch (e) {
+            console.warn('Invalid external URL for', fields.name);
+          }
+        }
+
+        const coordinates = feature.geometry && feature.geometry.type === 'Point'
+          ? feature.geometry.coordinates.slice()
+          : [event.lngLat.lng, event.lngLat.lat];
+        popup = new mapboxgl.Popup({ offset: 17, maxWidth: '340px', closeOnClick: true })
+          .setLngLat(coordinates)
+          .setDOMContent(body)
+          .addTo(map);
+        popup.on('close', () => {
+          setHighlight('sdca-click-outline', null);
+          popup = null;
+        });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
