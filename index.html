@@ -467,6 +467,28 @@
     @media (max-width: 620px) {
       html[dir="rtl"] #panel-toggle { right: auto; left: 12px; }
     }
+
+    /* One shared right-hand guide for all four floating map controls.
+       Keep this independent of interface writing direction: RTL moves the
+       information-panel toggle, never the map's primary controls. */
+    :root { --sdca-controls-right: 22px; }
+    @media (max-width: 620px) {
+      :root { --sdca-controls-right: 10px; }
+    }
+    #language-picker,
+    .mapboxgl-ctrl-top-right,
+    #map-move,
+    #reset-europe {
+      right: var(--sdca-controls-right);
+      left: auto;
+    }
+    /* Mapbox normally adds its own right margin to navigation controls.
+       Remove it so the zoom buttons share the exact same right edge. */
+    .mapboxgl-ctrl-top-right > .mapboxgl-ctrl {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+      float: right;
+    }
   </style>
 </head>
 <body>
