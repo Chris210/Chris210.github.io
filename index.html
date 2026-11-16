@@ -55,7 +55,21 @@
       -webkit-backdrop-filter: saturate(120%) blur(26px); backdrop-filter: saturate(120%) blur(26px);
       scrollbar-width: thin; scrollbar-color: #747884 transparent;
     }
-    #lu-logo { display: block; width: 182px; max-width: 100%; height: auto; background: transparent; padding: 0; }
+    /* Top-level panel can be minimised without hiding its identity or heading. */
+    #panel-toggle {
+      position: absolute; z-index: 2; top: 16px; right: 16px;
+      width: 44px; height: 44px; display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.30); border-radius: 13px;
+      background: rgba(255,255,255,.09); color: #FFFFFF;
+      transition: background .16s ease;
+    }
+    #panel-toggle:hover { background: rgba(255,255,255,.17); }
+    #panel-toggle svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .16s ease; }
+    #panel-toggle[aria-expanded="false"] svg { transform: rotate(180deg); }
+    #sdca-panel-details[hidden] { display: none !important; }
+    #sdca-panel.is-collapsed { padding-bottom: 25px; }
+    /* Identity stack keeps identical margins in both expanded and collapsed modes. */
+    #lu-logo { display: block; width: 182px; max-width: calc(100% - 53px); height: auto; background: transparent; padding: 0; }
     #school-label {
       margin: 24px 0 8px; color: var(--panel-subtle);
       font-size: 11px; line-height: 1.5; font-weight: 750; letter-spacing: .105em; text-transform: uppercase;
@@ -109,8 +123,16 @@
       border-radius: 999px; box-shadow: var(--shadow-floating);
       font-size: 13px; font-weight: 740;
     }
-    #reset-europe:hover { background: #F3F4F8; }
-    .reset-icon { font-size: 21px; font-weight: 400; line-height: 1; }
+    /* Reset button is neutral unless actively pressed; it never latches on. */
+    #reset-europe:hover { background: var(--surface); }
+    #reset-europe:active {
+      background: #8793A5;
+      border-color: #526073;
+      color: #101923;
+    }
+    /* Consistent 20px SVG icons across the translation, move and reset controls. */
+    .utility-icon { width: 20px; height: 20px; flex: 0 0 20px; display: block; stroke-width: 1.9; }
+    .reset-icon { color: currentColor; }
     #map-move {
       position: absolute; z-index: 5; top: 241px; right: 22px; width: 158px;
       color: var(--ink); font-size: 13px;
@@ -121,8 +143,12 @@
       background: #fff; font-weight: 730; cursor: pointer; box-shadow: var(--shadow-floating);
     }
     #map-move > summary::-webkit-details-marker { display: none; }
-    #map-move > summary::before { content: '✥'; font-size: 18px; font-weight: 400; margin-right: 9px; }
+    #map-move > summary { gap: 9px; }
+    #map-move > summary::before { content: none; }
     #map-move > summary:hover { background: #F3F4F8; }
+    /* Selected/expanded state: 3.11:1 against white; 5.69:1 dark text on fill. */
+    #map-move[open] > summary { background: #8793A5; border-color: #526073; color: #101923; }
+    #map-move[open] > summary:hover { background: #818DA0; color: #101923; }
     .pan-pad {
       display: grid; grid-template-columns: repeat(3, 44px); justify-content: center;
       gap: 5px; margin-top: 8px; padding: 11px 6px;
@@ -146,6 +172,19 @@
       scrollbar-width: thin;
     }
     .mapboxgl-popup-tip { border-top-color: #fff !important; }
+    /* Extremely tall or edge-anchored single-location popups can also be kept on-screen. */
+    .mapboxgl-popup.sdca-popup-contained {
+      position: fixed !important; top: 50% !important; left: 50% !important;
+      right: auto !important; bottom: auto !important;
+      transform: translate(-50%, -50%) !important;
+      max-width: calc(100vw - 28px) !important;
+      max-height: calc(100dvh - 32px) !important;
+    }
+    .mapboxgl-popup.sdca-popup-contained .mapboxgl-popup-content {
+      max-height: calc(100dvh - 32px) !important;
+      overflow-y: auto;
+    }
+    .mapboxgl-popup.sdca-popup-contained .mapboxgl-popup-tip { display: none; }
     .mapboxgl-popup-close-button {
       top: 8px; right: 8px; width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
@@ -191,6 +230,59 @@
       color: #2D0153; font-size: 14px; font-weight: 720;
     }
     .quiet-action:hover { background: #F3F1F8; }
+
+
+    /* Nearby-point chooser is a viewport-bound dialog, never an anchored map popup.
+       The list scrolls independently while Close and Zoom In always remain visible. */
+    #sdca-nearby-dialog {
+      position: fixed; inset: 0; margin: auto; padding: 0;
+      width: min(410px, calc(100vw - 28px));
+      max-width: calc(100vw - 28px);
+      max-height: calc(100dvh - 32px);
+      max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
+      overflow: hidden; color: var(--ink); background: #fff;
+      border: 1px solid #DDE2E9; border-radius: 22px;
+      box-shadow: 0 24px 72px rgba(10,16,26,.35), 0 2px 9px rgba(10,16,26,.12);
+      font: 15px/1.5 var(--font);
+    }
+    #sdca-nearby-dialog::backdrop { background: rgba(12, 18, 28, .38); }
+    #sdca-nearby-dialog .nearby-dialog-shell {
+      display: flex; flex-direction: column;
+      max-height: calc(100dvh - 32px);
+      max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
+      min-height: 0;
+    }
+    #sdca-nearby-dialog .nearby-dialog-scroll {
+      min-height: 0; flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain;
+      padding: 23px 23px 8px; scrollbar-width: thin;
+    }
+    #sdca-nearby-dialog .popup-title { margin-right: 54px; }
+    /* The modal heading receives programmatic focus for screen-reader context. */
+    #sdca-nearby-heading:focus { outline: none; }
+    #sdca-nearby-dialog .nearby-intro { margin-right: 18px; }
+    #sdca-nearby-dialog .nearby-list {
+      max-height: none; overflow: visible; margin-bottom: 10px;
+    }
+    #sdca-nearby-dialog .nearby-dialog-close {
+      position: absolute; z-index: 1; right: 11px; top: 11px;
+      display: grid; place-items: center; width: 44px; height: 44px;
+      border: 0; border-radius: 50%; background: #F1F3F6;
+      color: #26313E; font-size: 25px; line-height: 1;
+    }
+    #sdca-nearby-dialog .nearby-dialog-close:hover { background: #E3E7ED; }
+    #sdca-nearby-dialog .nearby-dialog-footer {
+      flex: 0 0 auto; padding: 12px 23px max(18px, env(safe-area-inset-bottom));
+      border-top: 1px solid #E4E8EE; background: #fff;
+    }
+    #sdca-nearby-dialog .nearby-dialog-footer .quiet-action {
+      width: 100%; justify-content: center;
+    }
+    @media (max-width: 620px) {
+      #sdca-nearby-dialog { width: calc(100vw - 20px); max-width: calc(100vw - 20px); border-radius: 19px; }
+      #sdca-nearby-dialog .nearby-dialog-scroll { padding: 20px 17px 8px; }
+      #sdca-nearby-dialog .nearby-dialog-footer { padding: 11px 17px max(15px, env(safe-area-inset-bottom)); }
+      #sdca-nearby-dialog .popup-title { font-size: 21px; }
+    }
 
     /* Accessible browse panel – independent of graphical map interaction. */
     #browse-panel {
@@ -243,6 +335,8 @@
         border-radius: 20px;
       }
       #lu-logo { width: 149px; }
+      #sdca-panel.is-collapsed { padding-bottom: 17px; }
+      #panel-toggle { top: 12px; right: 12px; }
       #school-label { font-size: 10px; line-height: 1.4; letter-spacing: .065em; margin: 15px 0 6px; }
       #map-title { font-size: 22px; line-height: 1.13; }
       #map-summary { display: none; }
@@ -281,6 +375,7 @@
     @media (max-width: 355px) {
       #sdca-panel { width: min(242px, calc(100vw - 70px)); padding: 15px; }
       #lu-logo { width: 137px; }
+      #sdca-panel.is-collapsed { padding-bottom: 15px; }
       #school-label { font-size: 10px; }
       #map-title { font-size: 19px; }
       #reset-europe { font-size: 12px; }
@@ -303,15 +398,17 @@
     /* Accessibility-led refinements: translation at top-right, navigation bottom-right. */
     #language-picker {
       position: absolute; z-index: 10; top: max(22px,env(safe-area-inset-top)); right: 22px;
-      min-height: 48px; display: flex; align-items: center; gap: 8px;
-      padding: 5px 11px; border: 1px solid #CAD1DD; border-radius: 14px;
-      color: #18212E; background: #FFF; box-shadow: var(--shadow-floating);
+      min-height: 46px; display: flex; align-items: center; gap: 9px;
+      padding: 3px 13px 3px 15px; border: 1px solid #D7DCE4; border-radius: 999px;
+      color: #242938; background: #FFF; box-shadow: var(--shadow-floating);
+      font-family: var(--font); font-size: 13px; font-weight: 730;
     }
-    #language-picker .lang-icon { font-size: 21px; line-height: 1; }
+    #language-picker .lang-icon { color: #242938; }
     #language-select {
-      min-width: 156px; max-width: 178px; min-height: 38px;
-      color: #17212E; border: 0; border-radius: 8px;
-      background: transparent; font-size: 14px; font-weight: 700;
+      min-width: 146px; max-width: 178px; min-height: 38px;
+      color: #242938; border: 0; border-radius: 8px;
+      background: transparent; font-family: var(--font); font-size: 13px; font-weight: 730;
+      letter-spacing: 0; line-height: 1.2;
       text-overflow: ellipsis; cursor: pointer;
     }
     #machine-language-note {
@@ -347,10 +444,10 @@
     @media (max-width: 620px) {
       #language-picker {
         top: max(10px,env(safe-area-inset-top)); right: 10px;
-        width: 53px; height: 48px; padding: 4px 5px;
-        border-radius: 13px; gap: 0;
+        width: 53px; height: 48px; padding: 4px 14px;
+        border-radius: 999px; gap: 0;
       }
-      #language-picker .lang-icon { font-size: 20px; }
+      #language-picker .lang-icon { width: 20px; height: 20px; flex-basis: 20px; }
       #language-select {
         position: absolute; inset: 0; width: 100%; height: 100%;
         min-width: 0; max-width: none; opacity: .01; cursor: pointer;
@@ -370,8 +467,12 @@
   <main id="map" aria-label="Interactive world map. For a keyboard-accessible alternative, use Browse locations."></main>
   <section id="sdca-panel" aria-label="About and explore the global engagement map">
     <img id="lu-logo" src="https://chris210.github.io/LU-logo-white.png" alt="Loughborough University" width="174">
+    <button type="button" id="panel-toggle" aria-controls="sdca-panel-details" aria-expanded="true" aria-label="Minimise information panel" title="Minimise information panel">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 6-6 6 6"/></svg>
+    </button>
     <div id="school-label">School of Design and Creative Arts</div>
     <h1 id="map-title">Global Engagement Map</h1>
+    <div id="sdca-panel-details">
     <p id="map-summary">Explore our international exchanges and student placements around the world.</p>
     <details id="sdca-explore" open>
       <summary>Explore locations</summary>
@@ -386,6 +487,7 @@
       </div>
     </details>
     <button type="button" id="browse-toggle" class="browse-button" aria-controls="browse-panel" aria-expanded="false">Search Locations by Name</button>
+    </div>
   </section>
   <section id="browse-panel" hidden aria-labelledby="browse-heading">
     <div class="browse-header"><h2 id="browse-heading" tabindex="-1">Search Locations by Name</h2>
@@ -397,7 +499,10 @@
     <ul id="browse-list"></ul>
   </section>
   <div id="language-picker" role="group" aria-label="Language selection">
-    <span class="lang-icon" aria-hidden="true">文</span>
+    <svg class="lang-icon utility-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M3 12h18M12 3c-2.6 2.5-4 5.5-4 9s1.4 6.5 4 9M12 3c2.6 2.5 4 5.5 4 9s-1.4 6.5-4 9"/>
+    </svg>
     <label for="language-select" class="visually-hidden">Choose interface language</label>
     <select id="language-select" aria-label="Choose interface language" title="Language / 语言 / भाषा — scroll for more languages">
       <option value="en">English</option>
@@ -663,9 +768,19 @@
       (Map interactions may be limited in the translated version.)
     </p>
   </div>
-  <button type="button" id="reset-europe" title="Centre the map on Europe" aria-label="Reset map view to Europe"><span class="reset-icon" aria-hidden="true">⌖</span> Reset to Europe</button>
+  <button type="button" id="reset-europe" title="Centre the map on Europe" aria-label="Reset map view to Europe">
+    <svg class="reset-icon utility-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+    </svg>
+    <span class="reset-label">Reset Map</span>
+  </button>
   <details id="map-move">
-    <summary>Move map</summary>
+    <summary>
+      <svg class="move-icon utility-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v20M2 12h20M9 5l3-3 3 3M9 19l3 3 3-3M5 9l-3 3 3 3M19 9l3 3-3 3"/>
+      </svg>
+      <span class="move-label">Move Map</span>
+    </summary>
     <div class="pan-pad" aria-label="Move map by direction">
       <span></span><button type="button" data-pan="north" aria-label="Move map north">↑</button><span></span>
       <button type="button" data-pan="west" aria-label="Move map west">←</button><span></span><button type="button" data-pan="east" aria-label="Move map east">→</button>
@@ -714,8 +829,8 @@
     "searchHint": "Search the locations currently visible on the map. Move the map to explore other areas.",
     "searchLabel": "Search locations by name",
     "searchPlaceholder": "Enter a location name",
-    "reset": "Reset to Europe",
-    "move": "Move map",
+    "reset": "Reset Map",
+    "move": "Move Map",
     "close": "Close location search",
     "visit": "Visit partner website ↗",
     "translate": "Translate details ↗",
@@ -750,7 +865,7 @@
     "searchHint": "搜索当前地图范围内的地点。移动地图可探索其他区域。",
     "searchLabel": "输入地点名称",
     "searchPlaceholder": "搜索地点名称",
-    "reset": "返回欧洲视图",
+    "reset": "重置地图",
     "move": "移动地图",
     "close": "关闭地点搜索",
     "visit": "访问合作伙伴网站 ↗",
@@ -786,7 +901,7 @@
     "searchHint": "搜尋目前地圖範圍內的地點。移動地圖以探索其他區域。",
     "searchLabel": "輸入地點名稱",
     "searchPlaceholder": "搜尋地點名稱",
-    "reset": "返回歐洲視圖",
+    "reset": "重設地圖",
     "move": "移動地圖",
     "close": "關閉地點搜尋",
     "visit": "造訪合作夥伴網站 ↗",
@@ -822,7 +937,7 @@
     "searchHint": "मानचित्र में दिख रहे स्थान खोजें। अन्य क्षेत्र देखने के लिए मानचित्र को स्थानांतरित करें।",
     "searchLabel": "स्थान का नाम",
     "searchPlaceholder": "स्थान का नाम लिखें",
-    "reset": "यूरोप पर वापस जाएँ",
+    "reset": "मानचित्र रीसेट करें",
     "move": "मानचित्र घुमाएँ",
     "close": "खोज बंद करें",
     "visit": "साझेदार वेबसाइट देखें ↗",
@@ -858,7 +973,7 @@
     "searchHint": "ਇਸ ਵੇਲੇ ਨਕਸ਼ੇ ਉੱਤੇ ਦਿਖ ਰਹੀਆਂ ਥਾਵਾਂ ਲੱਭੋ।",
     "searchLabel": "ਥਾਂ ਦਾ ਨਾਂ",
     "searchPlaceholder": "ਥਾਂ ਦਾ ਨਾਂ ਲਿਖੋ",
-    "reset": "ਯੂਰਪ ਵੱਲ ਵਾਪਸ",
+    "reset": "ਨਕਸ਼ਾ ਰੀਸੈੱਟ ਕਰੋ",
     "move": "ਨਕਸ਼ਾ ਹਿਲਾਓ",
     "close": "ਖੋਜ ਬੰਦ ਕਰੋ",
     "visit": "ਭਾਈਵਾਲ ਵੈੱਬਸਾਈਟ ↗",
@@ -894,7 +1009,7 @@
     "searchHint": "মানচিত্রে বর্তমানে দেখা যাচ্ছে এমন স্থান খুঁজুন।",
     "searchLabel": "স্থানের নাম",
     "searchPlaceholder": "স্থানের নাম লিখুন",
-    "reset": "ইউরোপে ফিরুন",
+    "reset": "মানচিত্র রিসেট করুন",
     "move": "মানচিত্র সরান",
     "close": "অনুসন্ধান বন্ধ করুন",
     "visit": "অংশীদারের ওয়েবসাইট ↗",
@@ -930,7 +1045,7 @@
     "searchHint": "હાલ નકશામાં દેખાતા સ્થળો શોધો.",
     "searchLabel": "સ્થળનું નામ",
     "searchPlaceholder": "સ્થળનું નામ લખો",
-    "reset": "યુરોપ પર પાછા",
+    "reset": "નકશો રીસેટ કરો",
     "move": "નકશો ખસેડો",
     "close": "શોધ બંધ કરો",
     "visit": "ભાગીદાર વેબસાઇટ ↗",
@@ -966,7 +1081,7 @@
     "searchHint": "தற்போது வரைபடத்தில் தெரியும் இடங்களைத் தேடலாம்.",
     "searchLabel": "இடத்தின் பெயர்",
     "searchPlaceholder": "இடப் பெயரை உள்ளிடுக",
-    "reset": "ஐரோப்பாவுக்குத் திரும்பு",
+    "reset": "வரைபடத்தை மீட்டமை",
     "move": "வரைபடத்தை நகர்த்து",
     "close": "தேடலை மூடு",
     "visit": "கூட்டாளர் இணையதளம் ↗",
@@ -1002,7 +1117,7 @@
     "searchHint": "ప్రస్తుతం పటంలో కనిపించే ప్రదేశాలను వెతకండి.",
     "searchLabel": "ప్రదేశం పేరు",
     "searchPlaceholder": "ప్రదేశం పేరు ఇవ్వండి",
-    "reset": "యూరప్‌కు తిరిగి వెళ్లండి",
+    "reset": "మ్యాప్‌ను రీసెట్ చేయండి",
     "move": "పటాన్ని కదపండి",
     "close": "వెతుకులాట మూసివేయండి",
     "visit": "భాగస్వామి వెబ్‌సైట్ ↗",
@@ -1038,7 +1153,7 @@
     "searchHint": "सध्या नकाशावर दिसणारी ठिकाणे शोधा.",
     "searchLabel": "ठिकाणाचे नाव",
     "searchPlaceholder": "ठिकाणाचे नाव लिहा",
-    "reset": "युरोपवर परत जा",
+    "reset": "नकाशा रीसेट करा",
     "move": "नकाशा हलवा",
     "close": "शोध बंद करा",
     "visit": "भागीदार संकेतस्थळ ↗",
@@ -1074,7 +1189,7 @@
     "searchHint": "نقشے پر موجودہ نظر آنے والے مقامات تلاش کریں۔",
     "searchLabel": "مقام کا نام",
     "searchPlaceholder": "مقام کا نام لکھیں",
-    "reset": "یورپ پر واپس جائیں",
+    "reset": "نقشہ ری سیٹ کریں",
     "move": "نقشہ حرکت دیں",
     "close": "تلاش بند کریں",
     "visit": "شراکت دار کی ویب سائٹ ↗",
@@ -1108,6 +1223,43 @@
     let currentLanguage = 'en';
     const t = (key) => (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
     const languagePicker = document.getElementById('language-select');
+    const infoPanel = document.getElementById('sdca-panel');
+    const panelDetails = document.getElementById('sdca-panel-details');
+    const panelToggle = document.getElementById('panel-toggle');
+    const panelToggleLanguage = {
+      en: ['Minimise information panel', 'Expand information panel'],
+      'zh-CN': ['收起信息面板', '展开信息面板'],
+      'zh-TW': ['收合資訊面板', '展開資訊面板'],
+      hi: ['जानकारी पैनल छोटा करें', 'जानकारी पैनल खोलें'],
+      pa: ['ਜਾਣਕਾਰੀ ਪੈਨਲ ਸਮੇਟੋ', 'ਜਾਣਕਾਰੀ ਪੈਨਲ ਖੋਲ੍ਹੋ'],
+      bn: ['তথ্য প্যানেল সংকুচিত করুন', 'তথ্য প্যানেল প্রসারিত করুন'],
+      gu: ['માહિતી પેનલ નાની કરો', 'માહિતી પેનલ વિસ્તારો'],
+      ta: ['தகவல் பலகையைச் சுருக்கு', 'தகவல் பலகையை விரி'],
+      te: ['సమాచార ప్యానెల్‌ను కుదించు', 'సమాచార ప్యానెల్‌ను విస్తరించు'],
+      mr: ['माहिती पॅनेल लहान करा', 'माहिती पॅनेल विस्तृत करा'],
+      ur: ['معلوماتی پینل سمیٹیں', 'معلوماتی پینل کھولیں']
+    };
+    const updatePanelToggleLabel = () => {
+      const collapsed = panelDetails.hidden;
+      const label = (panelToggleLanguage[currentLanguage] || panelToggleLanguage.en)[collapsed ? 1 : 0];
+      panelToggle.setAttribute('aria-label', label);
+      panelToggle.setAttribute('title', label);
+      panelToggle.setAttribute('aria-expanded', String(!collapsed));
+    };
+    panelToggle.addEventListener('click', () => {
+      const collapsed = !panelDetails.hidden;
+      panelDetails.hidden = collapsed;
+      infoPanel.classList.toggle('is-collapsed', collapsed);
+      // The search is a separate panel: close it when hiding its launch control.
+      if (collapsed) {
+        const browse = document.getElementById('browse-panel');
+        if (!browse.hidden) {
+          browse.hidden = true;
+          document.getElementById('browse-toggle').setAttribute('aria-expanded', 'false');
+        }
+      }
+      updatePanelToggleLabel();
+    });
     const setText = (selector, key) => {
       const el = document.querySelector(selector);
       if (el) el.textContent = t(key);
@@ -1128,6 +1280,7 @@
         translatePageLink.href = 'https://translate.google.com/translate?sl=en&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent('https://chris210.github.io/');
       }
       languagePicker.setAttribute('aria-label', t('langLabel'));
+      updatePanelToggleLabel();
       setText('#school-label','school');
       setText('#map-title','title');
       setText('#map-summary','summary');
@@ -1151,11 +1304,8 @@
       const reset = document.getElementById('reset-europe');
       reset.setAttribute('aria-label',t('reset'));
       reset.setAttribute('title',t('reset'));
-      reset.replaceChildren();
-      const resetIcon = document.createElement('span');
-      resetIcon.className = 'reset-icon'; resetIcon.textContent='⌖'; resetIcon.setAttribute('aria-hidden','true');
-      reset.append(resetIcon, document.createTextNode(' ' + t('reset')));
-      setText('#map-move > summary','move');
+      reset.querySelector('.reset-label').textContent = t('reset');
+      setText('#map-move .move-label','move');
       document.getElementById('translation-note').textContent = t('translationNote');
       document.getElementById('translation-note').hidden = currentLanguage === 'en';
       document.getElementById('skip-locations').textContent = t('searchButton');
@@ -1177,6 +1327,7 @@
     let selectionLayerReady = false;
     let hoveredKey = null;
     let popup = null;
+    let nearbyDialog = null;
     let suppressPopupFocusReturn = false;
     let popupReturnFocusTo = null;
 
@@ -1236,7 +1387,14 @@
         suppressPopupFocusReturn = false;
       }
     };
+    const dismissNearbyDialog = (restoreFocus = true) => {
+      if (!nearbyDialog) return;
+      const dialog = nearbyDialog;
+      dialog._restoreFocus = restoreFocus;
+      if (dialog.open) dialog.close();
+    };
     const closePopup = () => {
+      if (nearbyDialog) dismissNearbyDialog();
       const focusWasInside = Boolean(document.activeElement?.closest?.('.mapboxgl-popup'));
       const returnTo = popupReturnFocusTo;
       removePopupSilently();
@@ -1255,11 +1413,24 @@
     };
     const openPopup = (content, coordinates, focusRestore = null) => {
       const returnFocusTo = focusRestore || document.activeElement;
+      // The map popup replaces the nearby chooser once a location has been selected.
+      if (nearbyDialog) dismissNearbyDialog(false);
       popupReturnFocusTo = returnFocusTo;
       removePopupSilently();
       const instance = new mapboxgl.Popup({ offset: 17, maxWidth: '355px', closeOnClick: false, closeButton: true })
         .setLngLat(coordinates).setDOMContent(content).addTo(map);
       popup = instance;
+      // Keep even unusually long single-location popups within the viewport.
+      requestAnimationFrame(() => {
+        const element = instance.getElement?.();
+        if (!element || !element.isConnected) return;
+        const rect = element.getBoundingClientRect();
+        const edge = 12;
+        if (rect.top < edge || rect.bottom > innerHeight - edge ||
+            rect.left < edge || rect.right > innerWidth - edge) {
+          element.classList.add('sdca-popup-contained');
+        }
+      });
       // Announce the opened information to assistive technology.
       const heading = content.querySelector('.popup-title');
       if (heading) {
@@ -1333,9 +1504,29 @@
     }
     function showNearby(features, anchor) {
       setSelection(null);
-      const content = make('div', 'sdca-popup-body');
-      content.append(make('h2', 'popup-title', `${features.length} ${t('nearby')}`));
-      content.append(make('p', 'nearby-intro', t('nearbyIntro')));
+      // When returning from a particular location, quietly replace its map popup.
+      const returnFocusTo = popup ? popupReturnFocusTo : document.activeElement;
+      removePopupSilently();
+      if (nearbyDialog) dismissNearbyDialog(false);
+
+      const dialog = make('dialog', 'sdca-nearby-dialog');
+      dialog.id = 'sdca-nearby-dialog';
+      dialog.setAttribute('aria-labelledby', 'sdca-nearby-heading');
+      dialog.setAttribute('aria-describedby', 'sdca-nearby-intro');
+      dialog._restoreFocus = true;
+      const shell = make('div', 'nearby-dialog-shell');
+      const close = make('button', 'nearby-dialog-close', '×');
+      close.type = 'button';
+      close.setAttribute('aria-label', t('close'));
+      close.addEventListener('click', () => dialog.close());
+      const content = make('div', 'nearby-dialog-scroll');
+      const heading = make('h2', 'popup-title', `${features.length} ${t('nearby')}`);
+      heading.id = 'sdca-nearby-heading';
+      heading.tabIndex = -1;
+      content.append(heading);
+      const intro = make('p', 'nearby-intro', t('nearbyIntro'));
+      intro.id = 'sdca-nearby-intro';
+      content.append(intro);
       const list = make('div', 'nearby-list');
       for (const feature of features.slice(0, 12)) {
         const properties = feature.properties || {};
@@ -1349,19 +1540,47 @@
         text.append(make('strong', '', properties.name || 'Location'));
         if (typeLabel) text.append(make('small', '', typeLabel));
         button.append(icon, text);
-        button.addEventListener('click', () => showLocation(feature, features, anchor));
+        button.addEventListener('click', () => {
+          // Return keyboard focus to the user's original trigger when the map popup closes.
+          dialog._restoreFocus = false;
+          dialog.close();
+          showLocation(feature, features, anchor, returnFocusTo);
+        });
         list.append(button);
       }
       content.append(list);
-      if (features.length > 12) content.append(make('p', 'nearby-more', `Showing 12 of ${features.length}. Zoom in to reveal more locations.`));
+      if (features.length > 12) {
+        content.append(make('p', 'nearby-more', `Showing 12 of ${features.length}. Zoom in to reveal more locations.`));
+      }
+      const footer = make('div', 'nearby-dialog-footer');
       const zoom = make('button', 'quiet-action', '＋ ' + t('zoom'));
       zoom.type = 'button';
       zoom.addEventListener('click', () => {
-        closePopup();
+        dialog.close();
         moveView({ center: anchor, zoom: Math.min(map.getZoom() + 2, 12), essential: false });
       });
-      content.append(zoom);
-      openPopup(content, anchor);
+      footer.append(zoom);
+      shell.append(close, content, footer);
+      dialog.append(shell);
+      dialog.addEventListener('keydown', event => {
+        // The native dialog handles Escape; prevent another overlay also closing.
+        if (event.key === 'Escape') event.stopPropagation();
+      });
+      dialog.addEventListener('close', () => {
+        if (nearbyDialog === dialog) nearbyDialog = null;
+        dialog.remove();
+        if (dialog._restoreFocus) {
+          if (returnFocusTo?.isConnected && returnFocusTo !== document.body) {
+            returnFocusTo.focus({ preventScroll: true });
+          } else {
+            map.getCanvas().focus({ preventScroll: true });
+          }
+        }
+      });
+      document.body.append(dialog);
+      nearbyDialog = dialog;
+      dialog.showModal();
+      heading.focus({ preventScroll: true });
     }
     const pointsNear = (point, radius) => {
       const box = [[point.x - radius, point.y - radius], [point.x + radius, point.y + radius]];
@@ -1463,6 +1682,7 @@
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
+        if (nearbyDialog?.open) return; // The native modal handles this Escape key.
         if (popup) { event.preventDefault(); closePopup(); }
         else if (!browsePanel.hidden) { event.preventDefault(); hideBrowse(); }
       }
