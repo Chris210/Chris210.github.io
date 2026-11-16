@@ -1223,6 +1223,43 @@
     let currentLanguage = 'en';
     const t = (key) => (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
     const languagePicker = document.getElementById('language-select');
+
+    // Choose the visitor's preferred browser language on their first visit.
+    // A language explicitly selected in the menu always takes priority later.
+    const languagePreferenceKey = 'sdca-map-preferred-language-v1';
+    const availableLanguages = new Map(
+      Array.from(languagePicker.options, option => [option.value.toLowerCase(), option.value])
+    );
+    function resolveBrowserLanguage(locale) {
+      if (typeof locale !== 'string') return null;
+      const code = locale.trim().replace(/_/g, '-').toLowerCase();
+      if (!code) return null;
+      // Chinese script or regional preferences determine Simplified vs Traditional.
+      if (code === 'zh' || code.startsWith('zh-')) {
+        const parts = code.split('-');
+        return parts.some(part => ['hant', 'tw', 'hk', 'mo'].includes(part)) ? 'zh-TW' : 'zh-CN';
+      }
+      // Match a full language tag first, then the base language (e.g., hi-IN -> hi).
+      return availableLanguages.get(code) || availableLanguages.get(code.split('-')[0]) || null;
+    }
+    function initialLanguage() {
+      try {
+        const saved = window.localStorage.getItem(languagePreferenceKey);
+        if (saved && availableLanguages.has(saved.toLowerCase())) {
+          return availableLanguages.get(saved.toLowerCase());
+        }
+      } catch (error) {
+        // Local storage may be unavailable in private browsing or restricted iframes.
+      }
+      const preferences = Array.isArray(navigator.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language];
+      for (const locale of preferences) {
+        const matched = resolveBrowserLanguage(locale);
+        if (matched) return matched;
+      }
+      return 'en';
+    }
     const infoPanel = document.getElementById('sdca-panel');
     const panelDetails = document.getElementById('sdca-panel-details');
     const panelToggle = document.getElementById('panel-toggle');
@@ -1312,7 +1349,15 @@
       // Refresh visible search results in the selected interface language.
       if (typeof updateBrowseList === 'function' && !document.getElementById('browse-panel').hidden) updateBrowseList();
     }
-    languagePicker.addEventListener('change', () => updateLanguage(languagePicker.value));
+    languagePicker.addEventListener('change', () => {
+      const selected = languagePicker.value;
+      updateLanguage(selected);
+      try {
+        window.localStorage.setItem(languagePreferenceKey, selected);
+      } catch (error) {
+        // The selected language still applies for this visit if storage is blocked.
+      }
+    });
 
     const error = message => {
       const node = document.getElementById('error');
@@ -1759,7 +1804,7 @@
         else showLocation(features[0]);
       });
     });
-    updateLanguage('en');
+    updateLanguage(initialLanguage());
     map.on('error', event => { if (event.error) console.error('Mapbox:', event.error); });
   })();
   </script>
