@@ -444,7 +444,8 @@
     @media (max-width: 620px) {
       #language-picker {
         top: max(10px,env(safe-area-inset-top)); right: 10px;
-        width: 53px; height: 48px; padding: 4px 14px;
+        width: 44px; height: 44px; min-height: 44px;
+        padding: 0; justify-content: center;
         border-radius: 999px; gap: 0;
       }
       #language-picker .lang-icon { width: 20px; height: 20px; flex-basis: 20px; }
@@ -459,6 +460,12 @@
     }
     @media (prefers-contrast: more), (forced-colors: active) {
       #language-picker { border: 2px solid CanvasText; }
+    }
+    /* In right-to-left languages the university logo sits on the right.
+       Place the expand/collapse button on the opposite (left) side. */
+    html[dir="rtl"] #panel-toggle { right: auto; left: 16px; }
+    @media (max-width: 620px) {
+      html[dir="rtl"] #panel-toggle { right: auto; left: 12px; }
     }
   </style>
 </head>
@@ -504,24 +511,34 @@
       <path d="M3 12h18M12 3c-2.6 2.5-4 5.5-4 9s1.4 6.5 4 9M12 3c2.6 2.5 4 5.5 4 9s-1.4 6.5-4 9"/>
     </svg>
     <label for="language-select" class="visually-hidden">Choose interface language</label>
-    <select id="language-select" aria-label="Choose interface language" title="Language / 语言 / भाषा — scroll for more languages">
+    <select id="language-select" aria-label="Choose interface language" title="Choose language">
       <option value="en">English</option>
-      <optgroup label="Chinese / 中文">
+      <optgroup label="East Asian languages">
         <option value="zh-CN">简体中文 — Simplified Chinese</option>
         <option value="zh-TW">繁體中文 — Traditional Chinese</option>
+        <option value="ko">한국어 — Korean (South Korea)</option>
+        <option value="ja">日本語 — Japanese</option>
+      </optgroup>
+      <optgroup label="Southeast Asian Languages">
+        <option value="ms">Bahasa Melayu — Malay</option>
+        <option value="ms-Arab">Malay (Jawi)</option>
       </optgroup>
       <optgroup label="South Asian languages">
         <option value="hi">हिन्दी — Hindi</option>
         <option value="pa">ਪੰਜਾਬੀ — Punjabi</option>
-        <option value="bn">বাংলা — Bengali</option>
+        <option value="bn">বাংলা — Bangla (Bengali)</option>
         <option value="gu">ગુજરાતી — Gujarati</option>
         <option value="ta">தமிழ் — Tamil</option>
         <option value="te">తెలుగు — Telugu</option>
         <option value="mr">मराठी — Marathi</option>
         <option value="ur">اردو — Urdu</option>
+        <option value="ne">नेपाली — Nepali</option>
+      </optgroup>
+      <optgroup label="Semitic languages">
+        <option value="ar">العربية — Arabic</option>
       </optgroup>
       <!-- Google Translate advertises 249 languages and script variants (November 2026). -->
-      <optgroup label="Other Google Translate languages — scroll to browse">
+      <optgroup label="Other Google Translate languages">
         <option value="ab">Abkhaz</option>
         <option value="ace">Acehnese</option>
         <option value="ach">Acholi</option>
@@ -530,7 +547,6 @@
         <option value="sq">Albanian</option>
         <option value="alz">Alur</option>
         <option value="am">Amharic</option>
-        <option value="ar">Arabic</option>
         <option value="hy">Armenian</option>
         <option value="as">Assamese</option>
         <option value="av">Avar</option>
@@ -615,7 +631,6 @@
         <option value="ga">Irish Gaelic</option>
         <option value="it">Italian</option>
         <option value="jam">Jamaican Patois</option>
-        <option value="ja">Japanese</option>
         <option value="jw">Javanese</option>
         <option value="kac">Jingpo</option>
         <option value="kl">Kalaallisut</option>
@@ -632,7 +647,6 @@
         <option value="trp">Kokborok</option>
         <option value="kv">Komi</option>
         <option value="gom">Konkani</option>
-        <option value="ko">Korean</option>
         <option value="kri">Krio</option>
         <option value="ku">Kurdish (Kurmanji)</option>
         <option value="ckb">Kurdish (Sorani)</option>
@@ -654,8 +668,6 @@
         <option value="mai">Maithili</option>
         <option value="mak">Makassar</option>
         <option value="mg">Malagasy</option>
-        <option value="ms">Malay</option>
-        <option value="ms-Arab">Malay (Jawi)</option>
         <option value="ml">Malayalam</option>
         <option value="mt">Maltese</option>
         <option value="mam">Mam</option>
@@ -675,7 +687,6 @@
         <option value="ndc">Ndau</option>
         <option value="nr">Ndebele (South)</option>
         <option value="new">Nepal Bhasa (Newari)</option>
-        <option value="ne">Nepali</option>
         <option value="no">Norwegian</option>
         <option value="nus">Nuer</option>
         <option value="oc">Occitan</option>
@@ -1205,9 +1216,225 @@
     "langLabel": "زبان منتخب کریں",
     "loading": "مقامات لوڈ ہو رہے ہیں…",
     "noMatch": "اس منظر میں کوئی مماثل مقام نہیں ملا۔"
+  },
+  "ko": {
+    "school": "디자인 및 창의예술학부",
+    "title": "글로벌 교류 지도",
+    "summary": "전 세계의 국제 교환 프로그램과 학생 현장실습 장소를 살펴보세요.",
+    "explore": "장소 탐색",
+    "filterTitle": "지도 범례",
+    "all": "모든 장소",
+    "placement": "학생 현장실습",
+    "exchange": "교환 프로그램",
+    "statusAll": "모든 장소를 표시합니다.",
+    "statusPlacement": "학생 현장실습 장소를 표시합니다.",
+    "statusExchange": "교환 프로그램 장소를 표시합니다.",
+    "tipHead": "지도 사용 방법:",
+    "tip": "지도에서 점을 선택하면 자세한 정보를 볼 수 있습니다. 장소가 겹치면 목록에서 선택하거나 지도를 확대하세요. +/− 버튼으로 확대하거나 축소할 수 있습니다.",
+    "searchButton": "이름으로 장소 검색",
+    "searchHead": "이름으로 장소 검색",
+    "searchHint": "현재 지도에 보이는 장소를 검색하세요. 다른 지역을 보려면 지도를 이동하세요.",
+    "searchLabel": "장소 이름으로 검색",
+    "searchPlaceholder": "장소 이름 입력",
+    "reset": "지도 초기화",
+    "move": "지도 이동",
+    "close": "장소 검색 닫기",
+    "visit": "협력 기관 웹사이트 방문 ↗",
+    "translate": "상세 정보 번역 ↗",
+    "placementSing": "학생 현장실습",
+    "exchangeSing": "교환 프로그램",
+    "globalCat": "국제 교류",
+    "nearby": "개의 인접 장소",
+    "nearbyIntro": "여러 장소가 가까이 있습니다. 장소를 선택하거나 지도를 확대하세요.",
+    "zoom": "이 장소들 확대하기",
+    "other": "다른 인접 장소",
+    "translationNote": "장소 이름과 설명은 원본 데이터에 따라 영어로 표시됩니다. 팝업의 ‘상세 정보 번역’을 통해 번역할 수 있습니다.",
+    "langLabel": "인터페이스 언어 선택",
+    "loading": "장소를 불러오는 중…",
+    "noMatch": "현재 화면에 일치하는 장소가 없습니다. 다른 이름으로 검색하거나 지도를 이동하세요."
+  },
+  "ja": {
+    "school": "デザイン・クリエイティブアーツ学部",
+    "title": "グローバル交流マップ",
+    "summary": "世界各地の国際交換プログラムや学生の実習先をご覧ください。",
+    "explore": "地点を探す",
+    "filterTitle": "地図の凡例",
+    "all": "すべての地点",
+    "placement": "学生の実習先",
+    "exchange": "交換留学プログラム",
+    "statusAll": "すべての地点を表示しています。",
+    "statusPlacement": "学生の実習先を表示しています。",
+    "statusExchange": "交換留学プログラムを表示しています。",
+    "tipHead": "地図の使い方：",
+    "tip": "地図上の点を選ぶと詳細が表示されます。地点が重なる場合は一覧から選ぶか、地図を拡大してください。+/−で拡大・縮小できます。",
+    "searchButton": "名前で地点を検索",
+    "searchHead": "名前で地点を検索",
+    "searchHint": "現在の地図に表示されている地点を検索できます。別の地域を見るには地図を移動してください。",
+    "searchLabel": "地点名で検索",
+    "searchPlaceholder": "地点名を入力",
+    "reset": "地図をリセット",
+    "move": "地図を移動",
+    "close": "地点検索を閉じる",
+    "visit": "協力機関のウェブサイト ↗",
+    "translate": "詳細を翻訳 ↗",
+    "placementSing": "学生の実習先",
+    "exchangeSing": "交換留学プログラム",
+    "globalCat": "国際交流",
+    "nearby": "件の近くの地点",
+    "nearbyIntro": "近くに複数の地点があります。地点を選ぶか、地図を拡大してください。",
+    "zoom": "この地点を拡大",
+    "other": "近くのほかの地点",
+    "translationNote": "地点名と説明は元のデータに従い英語で表示されます。ポップアップの「詳細を翻訳」から翻訳できます。",
+    "langLabel": "表示言語を選択",
+    "loading": "地点を読み込み中…",
+    "noMatch": "この範囲に一致する地点はありません。別の名前で検索するか、地図を移動してください。"
+  },
+  "ms": {
+    "school": "Sekolah Reka Bentuk dan Seni Kreatif",
+    "title": "Peta Penglibatan Global",
+    "summary": "Terokai program pertukaran antarabangsa dan penempatan pelajar kami di seluruh dunia.",
+    "explore": "Terokai lokasi",
+    "filterTitle": "Petunjuk peta",
+    "all": "Semua lokasi",
+    "placement": "Penempatan pelajar",
+    "exchange": "Program pertukaran",
+    "statusAll": "Memaparkan semua lokasi.",
+    "statusPlacement": "Memaparkan penempatan pelajar.",
+    "statusExchange": "Memaparkan program pertukaran.",
+    "tipHead": "Terokai peta:",
+    "tip": "Pilih titik untuk melihat butirannya. Jika lokasi bertindih, pilih daripada senarai atau zum masuk. Gunakan +/− untuk zum.",
+    "searchButton": "Cari Lokasi Mengikut Nama",
+    "searchHead": "Cari Lokasi Mengikut Nama",
+    "searchHint": "Cari lokasi yang sedang kelihatan pada peta. Gerakkan peta untuk menerokai kawasan lain.",
+    "searchLabel": "Cari lokasi mengikut nama",
+    "searchPlaceholder": "Masukkan nama lokasi",
+    "reset": "Tetapkan Semula Peta",
+    "move": "Gerakkan Peta",
+    "close": "Tutup carian lokasi",
+    "visit": "Lawati laman web rakan kerjasama ↗",
+    "translate": "Terjemah butiran ↗",
+    "placementSing": "Penempatan Pelajar",
+    "exchangeSing": "Program Pertukaran",
+    "globalCat": "Penglibatan Global",
+    "nearby": "lokasi berdekatan",
+    "nearbyIntro": "Beberapa lokasi berdekatan antara satu sama lain. Pilih lokasi atau zum masuk.",
+    "zoom": "Zum masuk ke lokasi ini",
+    "other": "Lokasi berdekatan yang lain",
+    "translationNote": "Nama dan perihalan lokasi disediakan dalam bahasa Inggeris. Gunakan “Terjemah butiran” dalam tetingkap timbul untuk menterjemahkannya.",
+    "langLabel": "Pilih bahasa antara muka",
+    "loading": "Memuatkan lokasi…",
+    "noMatch": "Tiada lokasi yang sepadan dalam paparan ini. Cuba nama lain atau gerakkan peta."
+  },
+  "ms-Arab": {
+    "school": "سکوله ريکا بنتوق دان سني کرياتيف",
+    "title": "ڤيتا ڤڠليبتن ݢلوبل",
+    "summary": "تروکاءي ڤروݢرم ڤرتوقرن انتارابڠسا دان ڤنمڤتن ڤلاجر کامي د سلوروه دنيا.",
+    "explore": "تروکاءي لوکاسي",
+    "filterTitle": "ڤتونجوق ڤيتا",
+    "all": "سموا لوکاسي",
+    "placement": "ڤنمڤتن ڤلاجر",
+    "exchange": "ڤروݢرم ڤرتوقرن",
+    "statusAll": "مماڤرکن سموا لوکاسي.",
+    "statusPlacement": "مماڤرکن ڤنمڤتن ڤلاجر.",
+    "statusExchange": "مماڤرکن ڤروݢرم ڤرتوقرن.",
+    "tipHead": "تروکاءي ڤيتا:",
+    "tip": "ڤيليه تيتيق اونتوق مليهت بوتيرنڽ. جک لوکاسي برتينديه، ڤيليه درڤد سناراي اتاو زوم ماسوق. ݢوناکن +/− اونتوق زوم.",
+    "searchButton": "چاري لوکاسي مڠيکوت نام",
+    "searchHead": "چاري لوکاسي مڠيکوت نام",
+    "searchHint": "چاري لوکاسي يڠ کليهتن ڤد ڤيتا. ݢرقکن ڤيتا اونتوق منروکاءي کاوسن لاءين.",
+    "searchLabel": "چاري لوکاسي مڠيکوت نام",
+    "searchPlaceholder": "ماسوقکن نام لوکاسي",
+    "reset": "تتڤ سمولا ڤيتا",
+    "move": "ݢرقکن ڤيتا",
+    "close": "توتوڤ چارين لوکاسي",
+    "visit": "لاوت لامن ويب راکن کرجاسام ↗",
+    "translate": "ترجمه بوتيرن ↗",
+    "placementSing": "ڤنمڤتن ڤلاجر",
+    "exchangeSing": "ڤروݢرم ڤرتوقرن",
+    "globalCat": "ڤڠليبتن ݢلوبل",
+    "nearby": "لوکاسي بردکتن",
+    "nearbyIntro": "ببراڤ لوکاسي بردکتن. ڤيليه لوکاسي اتاو زوم ماسوق.",
+    "zoom": "زوم ماسوق ک لوکاسي اين",
+    "other": "لوکاسي بردکتن يڠ لاءين",
+    "translationNote": "نام دان ڤريهالن لوکاسي دسدياکن دالم بهاس ايڠݢريس. ݢوناکن «ترجمه بوتيرن» دالم تتيڠکڤ تيمبول.",
+    "langLabel": "ڤيليه بهاس انتارا موک",
+    "loading": "ممواتکن لوکاسي…",
+    "noMatch": "تياد لوکاسي يڠ سڤادن دالم ڤاڤرن اين. چوبا نام لاءين اتاو ݢرقکن ڤيتا."
+  },
+  "ne": {
+    "school": "डिजाइन तथा सिर्जनात्मक कला विद्यालय",
+    "title": "विश्वव्यापी सहभागिता नक्सा",
+    "summary": "विश्वभरका हाम्रा अन्तर्राष्ट्रिय आदानप्रदान कार्यक्रम र विद्यार्थी कार्यअनुभवका स्थानहरू अन्वेषण गर्नुहोस्।",
+    "explore": "स्थानहरू हेर्नुहोस्",
+    "filterTitle": "नक्साको सङ्केत",
+    "all": "सबै स्थान",
+    "placement": "विद्यार्थी कार्यअनुभव",
+    "exchange": "आदानप्रदान कार्यक्रम",
+    "statusAll": "सबै स्थान देखाइँदै छन्।",
+    "statusPlacement": "विद्यार्थी कार्यअनुभवका स्थान देखाइँदै छन्।",
+    "statusExchange": "आदानप्रदान कार्यक्रमका स्थान देखाइँदै छन्।",
+    "tipHead": "नक्सा हेर्ने तरिका:",
+    "tip": "विवरण हेर्न नक्साको बिन्दु छान्नुहोस्। स्थानहरू खप्टिएका छन् भने सूचीबाट छान्नुहोस् वा नक्सा ठूलो पार्नुहोस्। +/− ले जुम गर्नुहोस्।",
+    "searchButton": "नामबाट स्थान खोज्नुहोस्",
+    "searchHead": "नामबाट स्थान खोज्नुहोस्",
+    "searchHint": "हाल नक्सामा देखिएका स्थानहरू खोज्नुहोस्। अन्य क्षेत्र हेर्न नक्सा सार्नुहोस्।",
+    "searchLabel": "नामबाट स्थान खोज्नुहोस्",
+    "searchPlaceholder": "स्थानको नाम लेख्नुहोस्",
+    "reset": "नक्सा रिसेट गर्नुहोस्",
+    "move": "नक्सा सार्नुहोस्",
+    "close": "स्थान खोजी बन्द गर्नुहोस्",
+    "visit": "साझेदार संस्थाको वेबसाइट हेर्नुहोस् ↗",
+    "translate": "विवरण अनुवाद गर्नुहोस् ↗",
+    "placementSing": "विद्यार्थी कार्यअनुभव",
+    "exchangeSing": "आदानप्रदान कार्यक्रम",
+    "globalCat": "विश्वव्यापी सहभागिता",
+    "nearby": "वटा नजिकका स्थान",
+    "nearbyIntro": "धेरै स्थानहरू नजिक छन्। कुनै स्थान छान्नुहोस् वा नक्सा ठूलो पार्नुहोस्।",
+    "zoom": "यी स्थानहरू ठूलो पारेर हेर्नुहोस्",
+    "other": "अन्य नजिकका स्थानहरू",
+    "translationNote": "स्थानका नाम र विवरण अङ्ग्रेजीमा दिइएका छन्। अनुवादका लागि पपअपको “विवरण अनुवाद गर्नुहोस्” प्रयोग गर्नुहोस्।",
+    "langLabel": "इन्टरफेसको भाषा छान्नुहोस्",
+    "loading": "स्थानहरू लोड हुँदै छन्…",
+    "noMatch": "यस दृश्यमा मिल्ने स्थान भेटिएन। अर्को नाम खोज्नुहोस् वा नक्सा सार्नुहोस्।"
+  },
+  "ar": {
+    "school": "كلية التصميم والفنون الإبداعية",
+    "title": "خريطة التواصل العالمي",
+    "summary": "استكشف برامج التبادل الدولي وفرص التدريب العملي للطلاب في أنحاء العالم.",
+    "explore": "استكشاف المواقع",
+    "filterTitle": "مفتاح الخريطة",
+    "all": "جميع المواقع",
+    "placement": "التدريب العملي للطلاب",
+    "exchange": "برامج التبادل",
+    "statusAll": "عرض جميع المواقع.",
+    "statusPlacement": "عرض مواقع التدريب العملي للطلاب.",
+    "statusExchange": "عرض مواقع برامج التبادل.",
+    "tipHead": "كيفية استكشاف الخريطة:",
+    "tip": "اختر نقطة لعرض تفاصيلها. إذا تداخلت المواقع، فاختر من القائمة أو كبّر الخريطة. استخدم +/− للتكبير والتصغير.",
+    "searchButton": "البحث عن المواقع بالاسم",
+    "searchHead": "البحث عن المواقع بالاسم",
+    "searchHint": "ابحث في المواقع الظاهرة حاليًا على الخريطة. حرّك الخريطة لاستكشاف مناطق أخرى.",
+    "searchLabel": "البحث عن المواقع بالاسم",
+    "searchPlaceholder": "أدخل اسم الموقع",
+    "reset": "إعادة ضبط الخريطة",
+    "move": "تحريك الخريطة",
+    "close": "إغلاق البحث عن المواقع",
+    "visit": "زيارة موقع المؤسسة الشريكة ↗",
+    "translate": "ترجمة التفاصيل ↗",
+    "placementSing": "تدريب عملي للطلاب",
+    "exchangeSing": "برنامج تبادل",
+    "globalCat": "تواصل عالمي",
+    "nearby": "مواقع قريبة",
+    "nearbyIntro": "توجد عدة مواقع متقاربة. اختر موقعًا أو كبّر الخريطة.",
+    "zoom": "تكبير هذه المواقع",
+    "other": "مواقع قريبة أخرى",
+    "translationNote": "أسماء المواقع وأوصافها مقدّمة باللغة الإنجليزية. استخدم «ترجمة التفاصيل» في النافذة المنبثقة لترجمتها.",
+    "langLabel": "اختيار لغة الواجهة",
+    "loading": "جارٍ تحميل المواقع…",
+    "noMatch": "لا توجد مواقع مطابقة في هذا العرض. جرّب اسمًا آخر أو حرّك الخريطة."
   }
 };
-    const searchCountLanguage = {
+        const searchCountLanguage = {
       en: ['locations in this view', 'matching your search', 'Showing the first 150; refine your search.'],
       'zh-CN': ['个当前视图中的地点', '符合搜索条件', '只显示前150个结果，请缩小搜索范围。'],
       'zh-TW': ['個目前視圖中的地點', '符合搜尋條件', '只顯示前150筆結果，請縮小搜尋範圍。'],
@@ -1218,10 +1445,464 @@
       ta: ['இந்தக் காட்சியில் இடங்கள்', 'தேடலுடன் பொருந்துகின்றன', 'முதல் 150 முடிவுகள் மட்டும் காட்டப்படுகின்றன.'],
       te: ['ఈ వీక్షణలో ప్రదేశాలు', 'శోధనకు సరిపోతున్నాయి', 'మొదటి 150 ఫలితాలు మాత్రమే చూపుతున్నాం.'],
       mr: ['या दृश्यातील ठिकाणे', 'शोधाशी जुळणारी', 'पहिली 150 ठिकाणे दाखवली आहेत.'],
-      ur: ['اس منظر میں مقامات', 'تلاش سے مماثل', 'پہلے 150 نتائج دکھائے گئے ہیں۔']
+      ur: ['اس منظر میں مقامات', 'تلاش سے مماثل', 'پہلے 150 نتائج دکھائے گئے ہیں۔'],
+      "ko": ["현재 화면의 장소", "검색어와 일치", "처음 150개만 표시합니다. 검색 범위를 좁혀 주세요."],
+      "ja": ["件の表示範囲内の地点", "検索に一致", "最初の150件のみ表示しています。検索条件を絞ってください。"],
+      "ms": ["lokasi dalam paparan ini", "sepadan dengan carian anda", "Memaparkan 150 yang pertama; perincikan carian anda."],
+      "ms-Arab": ["لوکاسي دالم ڤاڤرن اين", "سڤادن دڠن چارين اندا", "مماڤرکن 150 يڠ ڤرتام؛ کچيلکن سکوب چارين."],
+      "ne": ["स्थान यस दृश्यमा", "खोजसँग मिल्छन्", "पहिला १५० वटा मात्र देखाइएका छन्; खोज सीमित गर्नुहोस्।"],
+      "ar": ["موقعًا في هذا العرض", "مطابقة لبحثك", "يتم عرض أول 150 نتيجة؛ يرجى تضييق نطاق البحث."]
     };
+    const uiExtras = {
+  "en": {
+    "mapAria": "Interactive world map. For a keyboard-accessible alternative, use the location search.",
+    "panelAria": "About and explore the global engagement map",
+    "languageGroup": "Language selection",
+    "panAria": "Move map by direction",
+    "panNorth": "Move map north",
+    "panSouth": "Move map south",
+    "panEast": "Move map east",
+    "panWest": "Move map west",
+    "unnamed": "Location",
+    "view": "View",
+    "moreNearby": "Showing 12 of {count}. Zoom in to reveal more locations.",
+    "sourceDisclaimer": "Map labels and location descriptions originate in English from the source data."
+  },
+  "zh-CN": {
+    "mapAria": "互动世界地图。可通过地点搜索使用键盘浏览。",
+    "panelAria": "关于全球交流合作地图及其探索功能",
+    "languageGroup": "语言选择",
+    "panAria": "按方向移动地图",
+    "panNorth": "向北移动地图",
+    "panSouth": "向南移动地图",
+    "panEast": "向东移动地图",
+    "panWest": "向西移动地图",
+    "unnamed": "地点",
+    "view": "查看",
+    "moreNearby": "显示 {count} 个地点中的前 12 个。放大地图可查看更多地点。",
+    "sourceDisclaimer": "地图地名和地点描述来自英文原始数据。"
+  },
+  "zh-TW": {
+    "mapAria": "互動世界地圖。可透過地點搜尋以鍵盤瀏覽。",
+    "panelAria": "關於全球交流合作地圖及其探索功能",
+    "languageGroup": "語言選擇",
+    "panAria": "依方向移動地圖",
+    "panNorth": "向北移動地圖",
+    "panSouth": "向南移動地圖",
+    "panEast": "向東移動地圖",
+    "panWest": "向西移動地圖",
+    "unnamed": "地點",
+    "view": "查看",
+    "moreNearby": "顯示 {count} 個地點中的前 12 個。放大地圖可查看更多地點。",
+    "sourceDisclaimer": "地圖標籤與地點描述來自英文原始資料。"
+  },
+  "hi": {
+    "mapAria": "इंटरैक्टिव विश्व मानचित्र। कीबोर्ड से उपयोग के लिए स्थान खोज का उपयोग करें।",
+    "panelAria": "वैश्विक सहभागिता मानचित्र के बारे में जानें और उसे देखें",
+    "languageGroup": "भाषा चयन",
+    "panAria": "दिशा के अनुसार मानचित्र खिसकाएँ",
+    "panNorth": "मानचित्र उत्तर की ओर खिसकाएँ",
+    "panSouth": "मानचित्र दक्षिण की ओर खिसकाएँ",
+    "panEast": "मानचित्र पूर्व की ओर खिसकाएँ",
+    "panWest": "मानचित्र पश्चिम की ओर खिसकाएँ",
+    "unnamed": "स्थान",
+    "view": "देखें",
+    "moreNearby": "{count} में से 12 स्थान दिखाए गए हैं। और स्थान देखने के लिए ज़ूम करें।",
+    "sourceDisclaimer": "मानचित्र के नाम और स्थान विवरण मूल अंग्रेज़ी डेटा से आते हैं।"
+  },
+  "pa": {
+    "mapAria": "ਇੰਟਰਐਕਟਿਵ ਵਿਸ਼ਵ ਨਕਸ਼ਾ। ਕੀਬੋਰਡ ਨਾਲ ਵਰਤਣ ਲਈ ਥਾਵਾਂ ਦੀ ਖੋਜ ਵਰਤੋ।",
+    "panelAria": "ਗਲੋਬਲ ਸੰਪਰਕ ਨਕਸ਼ੇ ਬਾਰੇ ਜਾਣੋ ਅਤੇ ਇਸ ਨੂੰ ਵੇਖੋ",
+    "languageGroup": "ਭਾਸ਼ਾ ਚੋਣ",
+    "panAria": "ਦਿਸ਼ਾ ਅਨੁਸਾਰ ਨਕਸ਼ਾ ਹਿਲਾਓ",
+    "panNorth": "ਨਕਸ਼ਾ ਉੱਤਰ ਵੱਲ ਹਿਲਾਓ",
+    "panSouth": "ਨਕਸ਼ਾ ਦੱਖਣ ਵੱਲ ਹਿਲਾਓ",
+    "panEast": "ਨਕਸ਼ਾ ਪੂਰਬ ਵੱਲ ਹਿਲਾਓ",
+    "panWest": "ਨਕਸ਼ਾ ਪੱਛਮ ਵੱਲ ਹਿਲਾਓ",
+    "unnamed": "ਥਾਂ",
+    "view": "ਵੇਖੋ",
+    "moreNearby": "{count} ਵਿੱਚੋਂ 12 ਥਾਵਾਂ ਦਿਖਾਈਆਂ ਗਈਆਂ ਹਨ। ਹੋਰ ਦੇਖਣ ਲਈ ਜ਼ੂਮ ਕਰੋ।",
+    "sourceDisclaimer": "ਨਕਸ਼ੇ ਦੇ ਲੇਬਲ ਅਤੇ ਵੇਰਵੇ ਮੂਲ ਅੰਗਰੇਜ਼ੀ ਡੇਟਾ ਤੋਂ ਹਨ।"
+  },
+  "bn": {
+    "mapAria": "ইন্টারঅ্যাকটিভ বিশ্ব মানচিত্র। কীবোর্ড দিয়ে ব্যবহার করতে স্থান অনুসন্ধান করুন।",
+    "panelAria": "বিশ্বব্যাপী সম্পৃক্ততা মানচিত্র সম্পর্কে জানুন ও ঘুরে দেখুন",
+    "languageGroup": "ভাষা নির্বাচন",
+    "panAria": "দিক অনুযায়ী মানচিত্র সরান",
+    "panNorth": "মানচিত্র উত্তরে সরান",
+    "panSouth": "মানচিত্র দক্ষিণে সরান",
+    "panEast": "মানচিত্র পূর্বে সরান",
+    "panWest": "মানচিত্র পশ্চিমে সরান",
+    "unnamed": "স্থান",
+    "view": "দেখুন",
+    "moreNearby": "{count}টির মধ্যে প্রথম ১২টি স্থান দেখানো হচ্ছে। আরও দেখতে জুম করুন।",
+    "sourceDisclaimer": "মানচিত্রের নাম ও স্থানের বিবরণ মূল ইংরেজি ডেটা থেকে এসেছে।"
+  },
+  "gu": {
+    "mapAria": "ઇન્ટરએક્ટિવ વિશ્વ નકશો. કીબોર્ડથી વાપરવા સ્થળ શોધનો ઉપયોગ કરો.",
+    "panelAria": "વૈશ્વિક જોડાણ નકશા વિશે જાણો અને અન્વેષણ કરો",
+    "languageGroup": "ભાષાની પસંદગી",
+    "panAria": "દિશા મુજબ નકશો ખસેડો",
+    "panNorth": "નકશો ઉત્તર તરફ ખસેડો",
+    "panSouth": "નકશો દક્ષિણ તરફ ખસેડો",
+    "panEast": "નકશો પૂર્વ તરફ ખસેડો",
+    "panWest": "નકશો પશ્ચિમ તરફ ખસેડો",
+    "unnamed": "સ્થળ",
+    "view": "જુઓ",
+    "moreNearby": "{count}માંથી પ્રથમ 12 સ્થળો બતાવ્યાં છે. વધુ જોવા ઝૂમ કરો.",
+    "sourceDisclaimer": "નકશાનાં નામ અને સ્થળનાં વર્ણનો મૂળ અંગ્રેજી ડેટામાંથી આવે છે."
+  },
+  "ta": {
+    "mapAria": "ஊடாடும் உலக வரைபடம். விசைப்பலகையில் பயன்படுத்த இடத் தேடலைப் பயன்படுத்தவும்.",
+    "panelAria": "உலகளாவிய தொடர்பு வரைபடத்தைப் பற்றி அறிந்து ஆராயவும்",
+    "languageGroup": "மொழித் தேர்வு",
+    "panAria": "திசைப்படி வரைபடத்தை நகர்த்தவும்",
+    "panNorth": "வரைபடத்தை வடக்கே நகர்த்தவும்",
+    "panSouth": "வரைபடத்தைத் தெற்கே நகர்த்தவும்",
+    "panEast": "வரைபடத்தைக் கிழக்கே நகர்த்தவும்",
+    "panWest": "வரைபடத்தை மேற்கே நகர்த்தவும்",
+    "unnamed": "இடம்",
+    "view": "காண்க",
+    "moreNearby": "{count} இடங்களில் முதல் 12 காட்டப்படுகின்றன. மேலும் காணப் பெரிதாக்கவும்.",
+    "sourceDisclaimer": "வரைபடப் பெயர்களும் இட விளக்கங்களும் மூல ஆங்கிலத் தரவிலிருந்து வருகின்றன."
+  },
+  "te": {
+    "mapAria": "ఇంటరాక్టివ్ ప్రపంచ పటం. కీబోర్డ్‌తో ఉపయోగించడానికి ప్రదేశాల శోధనను ఉపయోగించండి.",
+    "panelAria": "ప్రపంచ అనుసంధాన పటం గురించి తెలుసుకొని అన్వేషించండి",
+    "languageGroup": "భాష ఎంపిక",
+    "panAria": "దిశ ప్రకారం పటాన్ని కదిలించండి",
+    "panNorth": "పటాన్ని ఉత్తరానికి కదిలించండి",
+    "panSouth": "పటాన్ని దక్షిణానికి కదిలించండి",
+    "panEast": "పటాన్ని తూర్పుకు కదిలించండి",
+    "panWest": "పటాన్ని పడమరకు కదిలించండి",
+    "unnamed": "ప్రదేశం",
+    "view": "చూడండి",
+    "moreNearby": "{count}లో మొదటి 12 ప్రదేశాలను చూపుతున్నాం. మరిన్ని చూడటానికి జూమ్ చేయండి.",
+    "sourceDisclaimer": "పటంలోని పేర్లు, ప్రదేశాల వివరణలు అసలు ఆంగ్ల డేటా నుంచి వస్తాయి."
+  },
+  "mr": {
+    "mapAria": "परस्परसंवादी जगाचा नकाशा. कीबोर्डने वापरण्यासाठी ठिकाण शोध वापरा.",
+    "panelAria": "जागतिक सहभाग नकाशाबद्दल माहिती आणि शोध",
+    "languageGroup": "भाषा निवड",
+    "panAria": "दिशेनुसार नकाशा हलवा",
+    "panNorth": "नकाशा उत्तरेकडे हलवा",
+    "panSouth": "नकाशा दक्षिणेकडे हलवा",
+    "panEast": "नकाशा पूर्वेकडे हलवा",
+    "panWest": "नकाशा पश्चिमेकडे हलवा",
+    "unnamed": "ठिकाण",
+    "view": "पाहा",
+    "moreNearby": "{count} पैकी पहिली 12 ठिकाणे दाखवली आहेत. अधिक पाहण्यासाठी झूम करा.",
+    "sourceDisclaimer": "नकाशातील नावे आणि वर्णने मूळ इंग्रजी डेटामधून येतात."
+  },
+  "ur": {
+    "mapAria": "دنیا کا تعاملی نقشہ۔ کی بورڈ سے استعمال کے لیے مقامات کی تلاش کریں۔",
+    "panelAria": "عالمی روابط کے نقشے کے بارے میں جانیں اور دریافت کریں",
+    "languageGroup": "زبان کا انتخاب",
+    "panAria": "سمت کے لحاظ سے نقشہ حرکت دیں",
+    "panNorth": "نقشہ شمال کی طرف لے جائیں",
+    "panSouth": "نقشہ جنوب کی طرف لے جائیں",
+    "panEast": "نقشہ مشرق کی طرف لے جائیں",
+    "panWest": "نقشہ مغرب کی طرف لے جائیں",
+    "unnamed": "مقام",
+    "view": "دیکھیں",
+    "moreNearby": "{count} میں سے پہلے 12 مقامات دکھائے جا رہے ہیں۔ مزید دیکھنے کے لیے زوم کریں۔",
+    "sourceDisclaimer": "نقشے کے نام اور مقامات کی تفصیلات اصل انگریزی ڈیٹا سے آتی ہیں۔"
+  },
+  "ko": {
+    "mapAria": "대화형 세계 지도입니다. 키보드로 이용하려면 장소 검색을 사용하세요.",
+    "panelAria": "글로벌 교류 지도 소개 및 탐색",
+    "languageGroup": "언어 선택",
+    "panAria": "방향 버튼으로 지도 이동",
+    "panNorth": "지도를 북쪽으로 이동",
+    "panSouth": "지도를 남쪽으로 이동",
+    "panEast": "지도를 동쪽으로 이동",
+    "panWest": "지도를 서쪽으로 이동",
+    "unnamed": "장소",
+    "view": "보기",
+    "moreNearby": "전체 {count}개 중 12개를 표시합니다. 확대하면 더 많은 장소를 볼 수 있습니다.",
+    "sourceDisclaimer": "지도 지명과 장소 설명은 영어 원본 데이터에서 제공됩니다."
+  },
+  "ja": {
+    "mapAria": "世界地図です。キーボードで操作する場合は地点検索をお使いください。",
+    "panelAria": "グローバル交流マップの概要と探索",
+    "languageGroup": "言語選択",
+    "panAria": "方向ボタンで地図を移動",
+    "panNorth": "地図を北へ移動",
+    "panSouth": "地図を南へ移動",
+    "panEast": "地図を東へ移動",
+    "panWest": "地図を西へ移動",
+    "unnamed": "地点",
+    "view": "表示",
+    "moreNearby": "全{count}件のうち12件を表示しています。拡大するとほかの地点を表示できます。",
+    "sourceDisclaimer": "地図の地名と地点の説明は英語の元データに基づいています。"
+  },
+  "ms": {
+    "mapAria": "Peta dunia interaktif. Untuk penggunaan papan kekunci, gunakan carian lokasi.",
+    "panelAria": "Perihal dan penerokaan peta penglibatan global",
+    "languageGroup": "Pemilihan bahasa",
+    "panAria": "Gerakkan peta mengikut arah",
+    "panNorth": "Gerakkan peta ke utara",
+    "panSouth": "Gerakkan peta ke selatan",
+    "panEast": "Gerakkan peta ke timur",
+    "panWest": "Gerakkan peta ke barat",
+    "unnamed": "Lokasi",
+    "view": "Lihat",
+    "moreNearby": "Memaparkan 12 daripada {count}. Zum masuk untuk melihat lebih banyak lokasi.",
+    "sourceDisclaimer": "Label peta dan perihalan lokasi berasal daripada data sumber berbahasa Inggeris."
+  },
+  "ms-Arab": {
+    "mapAria": "ڤيتا دنيا اينتراکتيف. اونتوق ڤاڤن ککونچي، ݢوناکن چارين لوکاسي.",
+    "panelAria": "مڠناءي دان منروکاءي ڤيتا ڤڠليبتن ݢلوبل",
+    "languageGroup": "ڤميليهن بهاس",
+    "panAria": "ݢرقکن ڤيتا مڠيکوت اره",
+    "panNorth": "ݢرقکن ڤيتا ک اوتارا",
+    "panSouth": "ݢرقکن ڤيتا ک سلتن",
+    "panEast": "ݢرقکن ڤيتا ک تيمور",
+    "panWest": "ݢرقکن ڤيتا ک بارت",
+    "unnamed": "لوکاسي",
+    "view": "ليهت",
+    "moreNearby": "مماڤرکن 12 درڤد {count}. زوم ماسوق اونتوق مليهت لبيه باڽق لوکاسي.",
+    "sourceDisclaimer": "ليبل ڤيتا دان ڤريهالن لوکاسي دريڤد داتا سومبر بهاس ايڠݢريس."
+  },
+  "ne": {
+    "mapAria": "अन्तरक्रियात्मक विश्व नक्सा। किबोर्डबाट प्रयोग गर्न स्थान खोजी प्रयोग गर्नुहोस्।",
+    "panelAria": "विश्वव्यापी सहभागिता नक्साबारे जानकारी र अन्वेषण",
+    "languageGroup": "भाषा छनोट",
+    "panAria": "दिशा अनुसार नक्सा सार्नुहोस्",
+    "panNorth": "नक्सा उत्तरतिर सार्नुहोस्",
+    "panSouth": "नक्सा दक्षिणतिर सार्नुहोस्",
+    "panEast": "नक्सा पूर्वतिर सार्नुहोस्",
+    "panWest": "नक्सा पश्चिमतिर सार्नुहोस्",
+    "unnamed": "स्थान",
+    "view": "हेर्नुहोस्",
+    "moreNearby": "{count} मध्ये १२ वटा स्थान देखाइँदै छन्। थप हेर्न नक्सा ठूलो पार्नुहोस्।",
+    "sourceDisclaimer": "नक्साका नाम र स्थान विवरण मूल अङ्ग्रेजी डेटाबाट आएका हुन्।"
+  },
+  "ar": {
+    "mapAria": "خريطة عالمية تفاعلية. لاستخدام لوحة المفاتيح، استخدم البحث عن المواقع.",
+    "panelAria": "نبذة عن خريطة التواصل العالمي واستكشافها",
+    "languageGroup": "اختيار اللغة",
+    "panAria": "تحريك الخريطة حسب الاتجاه",
+    "panNorth": "تحريك الخريطة شمالًا",
+    "panSouth": "تحريك الخريطة جنوبًا",
+    "panEast": "تحريك الخريطة شرقًا",
+    "panWest": "تحريك الخريطة غربًا",
+    "unnamed": "موقع",
+    "view": "عرض",
+    "moreNearby": "يتم عرض 12 موقعًا من أصل {count}. كبّر الخريطة لإظهار المزيد.",
+    "sourceDisclaimer": "تأتي تسميات الخريطة وأوصاف المواقع من البيانات الأصلية باللغة الإنجليزية."
+  }
+};
+    const languageGroups = {
+  "en": [
+    "East Asian languages",
+    "Southeast Asian languages",
+    "South Asian languages",
+    "Semitic languages",
+    "Other Google Translate languages"
+  ],
+  "zh-CN": [
+    "东亚语言",
+    "东南亚语言",
+    "南亚语言",
+    "闪米特语族",
+    "其他 Google 翻译语言"
+  ],
+  "zh-TW": [
+    "東亞語言",
+    "東南亞語言",
+    "南亞語言",
+    "閃米特語族",
+    "其他 Google 翻譯語言"
+  ],
+  "ko": [
+    "동아시아 언어",
+    "동남아시아 언어",
+    "남아시아 언어",
+    "셈어파 언어",
+    "기타 Google 번역 언어"
+  ],
+  "ja": [
+    "東アジアの言語",
+    "東南アジアの言語",
+    "南アジアの言語",
+    "セム語派の言語",
+    "その他の Google 翻訳対応言語"
+  ],
+  "ms": [
+    "Bahasa Asia Timur",
+    "Bahasa Asia Tenggara",
+    "Bahasa Asia Selatan",
+    "Bahasa Semitik",
+    "Bahasa Google Translate yang lain"
+  ],
+  "ms-Arab": [
+    "بهاس اسيا تيمور",
+    "بهاس اسيا تڠݢارا",
+    "بهاس اسيا سلتن",
+    "بهاس ساميتيک",
+    "بهاس ݢوݢل ترجمه يڠ لاءين"
+  ],
+  "hi": [
+    "पूर्वी एशियाई भाषाएँ",
+    "दक्षिण-पूर्वी एशियाई भाषाएँ",
+    "दक्षिण एशियाई भाषाएँ",
+    "सामी भाषाएँ",
+    "अन्य Google अनुवाद भाषाएँ"
+  ],
+  "pa": [
+    "ਪੂਰਬੀ ਏਸ਼ੀਆਈ ਭਾਸ਼ਾਵਾਂ",
+    "ਦੱਖਣ-ਪੂਰਬੀ ਏਸ਼ੀਆਈ ਭਾਸ਼ਾਵਾਂ",
+    "ਦੱਖਣੀ ਏਸ਼ੀਆਈ ਭਾਸ਼ਾਵਾਂ",
+    "ਸੇਮਿਟਿਕ ਭਾਸ਼ਾਵਾਂ",
+    "ਹੋਰ Google ਅਨੁਵਾਦ ਭਾਸ਼ਾਵਾਂ"
+  ],
+  "bn": [
+    "পূর্ব এশীয় ভাষা",
+    "দক্ষিণ-পূর্ব এশীয় ভাষা",
+    "দক্ষিণ এশীয় ভাষা",
+    "সেমিটিক ভাষা",
+    "অন্যান্য Google অনুবাদ ভাষা"
+  ],
+  "gu": [
+    "પૂર્વ એશિયાઈ ભાષાઓ",
+    "દક્ષિણ-પૂર્વ એશિયાઈ ભાષાઓ",
+    "દક્ષિણ એશિયાઈ ભાષાઓ",
+    "સેમિટિક ભાષાઓ",
+    "અન્ય Google અનુવાદ ભાષાઓ"
+  ],
+  "ta": [
+    "கிழக்கு ஆசிய மொழிகள்",
+    "தென்கிழக்கு ஆசிய மொழிகள்",
+    "தெற்காசிய மொழிகள்",
+    "செமிட்டிக் மொழிகள்",
+    "பிற Google மொழிபெயர்ப்பு மொழிகள்"
+  ],
+  "te": [
+    "తూర్పు ఆసియా భాషలు",
+    "ఆగ్నేయ ఆసియా భాషలు",
+    "దక్షిణ ఆసియా భాషలు",
+    "సెమిటిక్ భాషలు",
+    "ఇతర Google అనువాద భాషలు"
+  ],
+  "mr": [
+    "पूर्व आशियाई भाषा",
+    "आग्नेय आशियाई भाषा",
+    "दक्षिण आशियाई भाषा",
+    "सेमिटिक भाषा",
+    "इतर Google भाषांतर भाषा"
+  ],
+  "ur": [
+    "مشرقی ایشیائی زبانیں",
+    "جنوب مشرقی ایشیائی زبانیں",
+    "جنوبی ایشیائی زبانیں",
+    "سامی زبانیں",
+    "دیگر Google ترجمہ زبانیں"
+  ],
+  "ne": [
+    "पूर्वी एसियाली भाषाहरू",
+    "दक्षिणपूर्वी एसियाली भाषाहरू",
+    "दक्षिण एसियाली भाषाहरू",
+    "सेमिटिक भाषाहरू",
+    "अन्य Google अनुवाद भाषाहरू"
+  ],
+  "ar": [
+    "لغات شرق آسيا",
+    "لغات جنوب شرق آسيا",
+    "لغات جنوب آسيا",
+    "اللغات السامية",
+    "لغات أخرى في ترجمة Google"
+  ]
+};
+    const mapboxControlLabels = {
+  "en": [
+    "Zoom in",
+    "Zoom out",
+    "Reset bearing to north"
+  ],
+  "zh-CN": [
+    "放大",
+    "缩小",
+    "将地图方向重置为正北"
+  ],
+  "zh-TW": [
+    "放大",
+    "縮小",
+    "將地圖方向重設為正北"
+  ],
+  "ko": [
+    "확대",
+    "축소",
+    "지도의 북쪽 방향 복원"
+  ],
+  "ja": [
+    "拡大",
+    "縮小",
+    "地図の方位を北に戻す"
+  ],
+  "ms": [
+    "Zum masuk",
+    "Zum keluar",
+    "Tetapkan arah peta ke utara"
+  ],
+  "ms-Arab": [
+    "زوم ماسوق",
+    "زوم کلوار",
+    "تتڤکن اره ڤيتا ک اوتارا"
+  ],
+  "hi": [
+    "ज़ूम इन",
+    "ज़ूम आउट",
+    "मानचित्र की दिशा उत्तर में रीसेट करें"
+  ],
+  "pa": [
+    "ਜ਼ੂਮ ਇਨ",
+    "ਜ਼ੂਮ ਆਉਟ",
+    "ਨਕਸ਼ੇ ਦੀ ਦਿਸ਼ਾ ਉੱਤਰ ਵੱਲ ਰੀਸੈੱਟ ਕਰੋ"
+  ],
+  "bn": [
+    "জুম ইন",
+    "জুম আউট",
+    "মানচিত্রের দিক উত্তরমুখী করুন"
+  ],
+  "gu": [
+    "ઝૂમ ઇન",
+    "ઝૂમ આઉટ",
+    "નકશાની દિશા ઉત્તર તરફ રીસેટ કરો"
+  ],
+  "ta": [
+    "பெரிதாக்கு",
+    "சிறிதாக்கு",
+    "வரைபட திசையை வடக்காக மாற்று"
+  ],
+  "te": [
+    "జూమ్ ఇన్",
+    "జూమ్ అవుట్",
+    "పటం దిశను ఉత్తరానికి రీసెట్ చేయండి"
+  ],
+  "mr": [
+    "झूम इन",
+    "झूम आउट",
+    "नकाशाची दिशा उत्तरेकडे रीसेट करा"
+  ],
+  "ur": [
+    "زوم اِن",
+    "زوم آؤٹ",
+    "نقشے کی سمت شمال کی طرف بحال کریں"
+  ],
+  "ne": [
+    "जुम इन",
+    "जुम आउट",
+    "नक्साको दिशा उत्तरतिर रिसेट गर्नुहोस्"
+  ],
+  "ar": [
+    "تكبير",
+    "تصغير",
+    "إعادة توجيه الخريطة نحو الشمال"
+  ]
+};
     let currentLanguage = 'en';
-    const t = (key) => (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
+    const t = (key) => translations[currentLanguage]?.[key] || uiExtras[currentLanguage]?.[key] || translations.en[key] || uiExtras.en[key] || key;
     const languagePicker = document.getElementById('language-select');
 
     // Choose the visitor's preferred browser language on their first visit.
@@ -1274,7 +1955,13 @@
       ta: ['தகவல் பலகையைச் சுருக்கு', 'தகவல் பலகையை விரி'],
       te: ['సమాచార ప్యానెల్‌ను కుదించు', 'సమాచార ప్యానెల్‌ను విస్తరించు'],
       mr: ['माहिती पॅनेल लहान करा', 'माहिती पॅनेल विस्तृत करा'],
-      ur: ['معلوماتی پینل سمیٹیں', 'معلوماتی پینل کھولیں']
+      ur: ['معلوماتی پینل سمیٹیں', 'معلوماتی پینل کھولیں'],
+      "ko": ["정보 패널 접기", "정보 패널 펼치기"],
+      "ja": ["情報パネルを閉じる", "情報パネルを開く"],
+      "ms": ["Minimakan panel maklumat", "Kembangkan panel maklumat"],
+      "ms-Arab": ["کچيلکن ڤنل معلومت", "کمبڠکن ڤنل معلومت"],
+      "ne": ["जानकारी प्यानल सानो पार्नुहोस्", "जानकारी प्यानल विस्तार गर्नुहोस्"],
+      "ar": ["طي لوحة المعلومات", "توسيع لوحة المعلومات"]
     };
     const updatePanelToggleLabel = () => {
       const collapsed = panelDetails.hidden;
@@ -1322,7 +2009,7 @@
       currentLanguage = lang;
       // Only declare the page's language when the interface strings are translated.
       document.documentElement.lang = hasInterfaceTranslation ? lang : 'en';
-      document.documentElement.dir = lang === 'ur' ? 'rtl' : 'ltr';
+      document.documentElement.dir = ['ur', 'ar', 'ms-Arab'].includes(lang) ? 'rtl' : 'ltr';
       languagePicker.value = lang;
       const note = document.getElementById('machine-language-note');
       const translatePageLink = document.getElementById('translate-page-link');
@@ -1332,7 +2019,30 @@
         note.firstChild.textContent = 'The map interface does not yet have a built-in ' + chosenName + ' translation. ';
         translatePageLink.href = 'https://translate.google.com/translate?sl=en&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent('https://chris210.github.io/');
       }
+      document.title = t('title') + ' | ' + t('school');
+      document.querySelector('meta[name="description"]').setAttribute('content', t('summary'));
+      languagePicker.title = t('langLabel');
+      const regionLabels = languageGroups[currentLanguage] || languageGroups.en;
+      Array.from(languagePicker.querySelectorAll('optgroup')).forEach((group, index) => {
+        group.label = regionLabels[index];
+      });
+      const ctrlLabels = mapboxControlLabels[currentLanguage] || mapboxControlLabels.en;
+      ['zoom-in','zoom-out','compass'].forEach((name, index) => {
+        const button = document.querySelector('.mapboxgl-ctrl-' + name);
+        if (button) {
+          button.setAttribute('aria-label', ctrlLabels[index]);
+          button.setAttribute('title', ctrlLabels[index]);
+        }
+      });
       languagePicker.setAttribute('aria-label', t('langLabel'));
+      document.querySelector('#language-picker').setAttribute('aria-label', t('languageGroup'));
+      document.getElementById('map').setAttribute('aria-label', t('mapAria'));
+      document.getElementById('sdca-panel').setAttribute('aria-label', t('panelAria'));
+      document.querySelector('#map-move .pan-pad').setAttribute('aria-label', t('panAria'));
+      for (const direction of ['north','south','east','west']) {
+        const suffix = direction.charAt(0).toUpperCase() + direction.slice(1);
+        document.querySelector(`[data-pan="${direction}"]`).setAttribute('aria-label', t('pan' + suffix));
+      }
       updatePanelToggleLabel();
       setText('#school-label','school');
       setText('#map-title','title');
@@ -1433,6 +2143,23 @@
       if (type === 'exchange') return t('exchangeSing');
       return fields.group || t('globalCat');
     };
+    // If the published Mapbox tileset later includes name_<locale> / description_<locale>
+    // properties, prefer them in popups. The current English-only source remains intact.
+    const localizedField = (fields, key) => {
+      if (currentLanguage === 'en') return fields[key];
+      const tags = [currentLanguage, currentLanguage.replace('-', '_'), currentLanguage.split('-')[0]];
+      if (currentLanguage === 'zh-CN') tags.push('zh_Hans', 'zh-Hans');
+      if (currentLanguage === 'zh-TW') tags.push('zh_Hant', 'zh-Hant');
+      for (const tag of tags) {
+        const value = fields[key + '_' + tag];
+        if (typeof value === 'string' && value.trim()) return value;
+      }
+      return fields[key];
+    };
+    const hasLocalizedField = (fields, key) => {
+      if (currentLanguage === 'en') return true;
+      return localizedField(fields, key) !== fields[key];
+    };
     const make = (tag, className, label) => {
       const elem = document.createElement(tag);
       if (className) elem.className = className;
@@ -1521,12 +2248,12 @@
       swatch.setAttribute('aria-hidden', 'true');
       eyebrow.append(swatch, document.createTextNode(categoryName(fields)));
       content.append(eyebrow);
-      const locationHeading = make('h2', 'popup-title', fields.name || 'Location');
-      locationHeading.lang = 'en'; locationHeading.dir = 'auto';
+      const locationHeading = make('h2', 'popup-title', localizedField(fields, 'name') || t('unnamed'));
+      locationHeading.lang = hasLocalizedField(fields, 'name') ? currentLanguage : 'en'; locationHeading.dir = 'auto';
       content.append(locationHeading);
       if (fields.description) {
-        const desc = make('p', 'popup-description', fields.description);
-        desc.lang = 'en'; desc.dir = 'auto';
+        const desc = make('p', 'popup-description', localizedField(fields, 'description'));
+        desc.lang = hasLocalizedField(fields, 'description') ? currentLanguage : 'en'; desc.dir = 'auto';
         content.append(desc);
       }
       if (fields.url) {
@@ -1541,7 +2268,7 @@
           }
         } catch (_) { console.warn('Invalid website URL for', fields.name); }
       }
-      if (currentLanguage !== 'en' && (fields.name || fields.description)) {
+      if (currentLanguage !== 'en' && ((fields.name && !hasLocalizedField(fields, 'name')) || (fields.description && !hasLocalizedField(fields, 'description')))) {
         const textToTranslate = [fields.name || '', fields.description || ''].filter(Boolean).join('\n\n');
         const translated = make('a', 'popup-translate', t('translate'));
         const languageCode = currentLanguage === 'zh-TW' ? 'zh-TW' : currentLanguage === 'zh-CN' ? 'zh-CN' : currentLanguage;
@@ -1598,7 +2325,7 @@
         icon.setAttribute('aria-hidden', 'true');
         if (!typeLabel) icon.hidden = true;
         const text = make('span', 'nearby-text');
-        text.append(make('strong', '', properties.name || 'Location'));
+        text.append(make('strong', '', localizedField(properties, 'name') || t('unnamed')));
         if (typeLabel) text.append(make('small', '', typeLabel));
         button.append(icon, text);
         button.addEventListener('click', () => {
@@ -1611,7 +2338,7 @@
       }
       content.append(list);
       if (features.length > 12) {
-        content.append(make('p', 'nearby-more', `Showing 12 of ${features.length}. Zoom in to reveal more locations.`));
+        content.append(make('p', 'nearby-more', t('moreNearby').replace('{count}', features.length)));
       }
       const footer = make('div', 'nearby-dialog-footer');
       const zoom = make('button', 'quiet-action', '＋ ' + t('zoom'));
@@ -1704,9 +2431,9 @@
         // Search results display names only. Category metadata remains untouched
         // for the map and individual popups, but is not shown in this list.
         const labels = make('span','browse-location-text');
-        labels.append(make('strong','',String(props.name || 'Unnamed location')));
+        labels.append(make('strong','',String(props.name || t('unnamed'))));
         button.append(labels);
-        button.setAttribute('aria-label', `View ${props.name || 'location'}`);
+        button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
         button.addEventListener('click', () => {
           const coords = feature.geometry?.coordinates;
           if (!coords) return;
@@ -1765,6 +2492,15 @@
         error('The “GE Data” layer is missing from the published Mapbox style.');
         return;
       }
+      // Mapbox controls can appear after the initial language selection.
+      const controlLabels = mapboxControlLabels[currentLanguage] || mapboxControlLabels.en;
+      ['zoom-in','zoom-out','compass'].forEach((name, index) => {
+        const button = document.querySelector('.mapboxgl-ctrl-' + name);
+        if (button) {
+          button.setAttribute('aria-label', controlLabels[index]);
+          button.setAttribute('title', controlLabels[index]);
+        }
+      });
       originalFilter = layer.filter || null;
       mapIsReady = true;
       updateBrowseList();
