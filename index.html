@@ -1283,6 +1283,22 @@
       panelToggle.setAttribute('title', label);
       panelToggle.setAttribute('aria-expanded', String(!collapsed));
     };
+    // On first load, reduce visual clutter on phones and tablets. Desktop stays
+    // expanded. This runs only once: manual expand/collapse is never overridden.
+    const isPhoneOrTablet = () => {
+      const agent = navigator.userAgent || '';
+      const mobileOrTabletAgent = /Android|iPhone|iPad|iPod|Mobile|Tablet|Kindle|Silk|PlayBook/i.test(agent);
+      // iPadOS can identify itself as a Mac when requesting desktop websites.
+      const desktopModeIPad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+      const touchFirstDevice = window.matchMedia('(pointer: coarse) and (hover: none)').matches;
+      return mobileOrTabletAgent || desktopModeIPad || touchFirstDevice;
+    };
+    if (isPhoneOrTablet()) {
+      panelDetails.hidden = true;
+      infoPanel.classList.add('is-collapsed');
+    }
+    updatePanelToggleLabel();
+
     panelToggle.addEventListener('click', () => {
       const collapsed = !panelDetails.hidden;
       panelDetails.hidden = collapsed;
