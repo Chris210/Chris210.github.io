@@ -23,10 +23,9 @@
   <div id="error" role="alert"></div>
   <script>
   (() => {
-    // Your existing Mapbox Studio map and PUBLIC access token.
+    // Existing published Mapbox style and public token.
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXN1eGQiLCJhIjoiY21tZXQ3dnRpMDB5YjJwczhzaXdnZ3VmNCJ9.HLg634ycbIvgXNwmRPDCHg';
-    const pointLayer = 'GE Data';
-
+    const POINT_LAYER = 'GE Data';
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/chrisuxd/cmmewcucc00j001qz3xo68y0z',
@@ -34,56 +33,45 @@
       zoom: 2,
       scrollZoom: false
     });
-
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    const error = (message) => {
+    const error = message => {
       const element = document.getElementById('error');
       element.textContent = message;
       element.style.display = 'block';
       console.error(message);
     };
 
-    // Display an outline around a point without modifying your Studio colour formula.
-    // These highlight layers reuse the existing source, so the map remains data-driven.
-    let highlightsReady = false;
-    const emptyFilter = ['==', ['get', 'id'], '__no_point_selected__'];
-
-    function matchingFeatureFilter(feature) {
-      const properties = feature.properties || {};
-      if (properties.id !== undefined && properties.id !== null) {
-        return ['==', ['get', 'id'], properties.id];
-      }
-      if (properties.name) {
-        return ['==', ['get', 'name'], properties.name];
-      }
-      return emptyFilter;
-    }
-
-    function setHighlight(layerId, feature) {
-      if (highlightsReady && map.getLayer(layerId)) {
-        map.setFilter(layerId, feature ? matchingFeatureFilter(feature) : emptyFilter);
-      }
-    }
-
+    const emptyCollection = () => ({ type: 'FeatureCollection', features: [] });
+    const emptyClickFilter = ['==', ['get', 'id'], '__no_point_selected__'];
+    let clickOutlineReady = false;
     let popup = null;
 
+    function matchingFeatureFilter(feature) {
+      const p = feature.properties || {};
+      if (p.id !== undefined && p.id !== null) return ['==', ['get', 'id'], p.id];
+      if (p.name) return ['==', ['get', 'name'], p.name];
+      return emptyClickFilter;
+    }
+
+    function setClickOutline(feature) {
+      if (!clickOutlineReady || !map.getLayer('sdca-click-outline')) return;
+      map.setFilter('sdca-click-outline', feature ? matchingFeatureFilter(feature) : emptyClickFilter);
+    }
+
     map.on('load', () => {
-      const layer = map.getLayer(pointLayer);
+      const layer = map.getLayer(POINT_LAYER);
       if (!layer) {
-        error('The “GE Data” layer was not found. Check that the updated style has been published in Mapbox Studio.');
+        error('The “GE Data” layer was not found. Check the published Mapbox Studio style.');
         return;
       }
 
-      // The source has a source-layer when backed by a vector tileset.
-      const sourceLayer = layer['source-layer'];
-      if (sourceLayer && layer.source) {
-        const sourceProps = { source: layer.source, 'source-layer': sourceLayer };
+      // Keep the original click-selection halo when the source is a vector tileset.
+      if (layer.source && layer['source-layer']) {
         map.addLayer({
-          id: 'sdca-click-outline',
-          type: 'circle',
-          ...sourceProps,
-          filter: emptyFilter,
+          id: 'sdca-click-outline', type: 'circle',
+          source: layer.source, 'source-layer': layer['source-layer'],
+          filter: emptyClickFilter,
           paint: {
             'circle-radius': 17,
             'circle-color': '#ffffff',
@@ -91,46 +79,80 @@
             'circle-stroke-color': '#ffffff',
             'circle-stroke-width': 3
           }
-        }, pointLayer);
-        map.addLayer({
-          id: 'sdca-hover-outline',
-          type: 'circle',
-          ...sourceProps,
-          filter: emptyFilter,
-          paint: {
-            'circle-radius': 15,
-            'circle-color': '#ffffff',
-            'circle-opacity': 0.18,
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 2
-          }
-        }, pointLayer);
-        highlightsReady = true;
+        }, POINT_LAYER);
+        clickOutlineReady = true;
       }
 
-      map.on('mouseenter', pointLayer, event => {
-        map.getCanvas().style.cursor = 'pointer';
-        if (event.features && event.features.length) {
-          setHighlight('sdca-hover-outline', event.features[0]);
+      // Reliable hover: draw a bigger version of the currently hovered point.
+      // This does NOT depend on feature IDs or Mapbox Studio feature-state expressions.
+      // It works for a vector tileset as well as a GeoJSON source.
+      const HOVER_SOURCE = 'sdca-hover-point';
+      map.addSource(HOVER_SOURCE, { type: 'geojson', data: emptyCollection() });
+      map.addLayer({
+        id: 'sdca-hover-halo', type: 'circle', source: HOVER_SOURCE,
+        paint: {
+          'circle-radius': 17,
+          'circle-color': '#ffffff',
+          'circle-opacity': 0.25
         }
       });
-      map.on('mousemove', pointLayer, event => {
-        if (event.features && event.features.length) {
-          setHighlight('sdca-hover-outline', event.features[0]);
+      map.addLayer({
+        id: 'sdca-hover-marker', type: 'circle', source: HOVER_SOURCE,
+        paint: {
+          'circle-radius': 12,
+          'circle-color': ['get', 'hoverColor'],
+          'circle-opacity': 1,
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 3
         }
-      });
-      map.on('mouseleave', pointLayer, () => {
-        map.getCanvas().style.cursor = '';
-        setHighlight('sdca-hover-outline', null);
       });
 
-      map.on('click', pointLayer, event => {
+      let currentHoverKey = null;
+      const clearHover = () => {
+        if (currentHoverKey === null) return;
+        currentHoverKey = null;
+        map.getSource(HOVER_SOURCE).setData(emptyCollection());
+        map.getCanvas().style.cursor = '';
+      };
+
+      // Query the ORIGINAL layer (not the hover decoration) to prevent flicker.
+      map.on('mousemove', event => {
+        const features = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER] });
+        const feature = features[0];
+        if (!feature || feature.geometry?.type !== 'Point') {
+          clearHover();
+          return;
+        }
+
+        map.getCanvas().style.cursor = 'pointer';
+        const p = feature.properties || {};
+        const coords = feature.geometry.coordinates;
+        const key = String(p.id ?? feature.id ?? `${coords[0]},${coords[1]}`);
+        if (key === currentHoverKey) return;
+        currentHoverKey = key;
+
+        const rawColor = typeof p.color === 'string' ? p.color.trim() : '';
+        const hoverColor = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(rawColor)
+          ? rawColor : '#6f3092';
+
+        map.getSource(HOVER_SOURCE).setData({
+          type: 'FeatureCollection',
+          features: [{
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: coords },
+            properties: { hoverColor }
+          }]
+        });
+      });
+      map.getCanvas().addEventListener('mouseleave', clearHover);
+
+      // Existing popup behaviour, unchanged.
+      map.on('click', POINT_LAYER, event => {
         const feature = event.features && event.features[0];
         if (!feature) return;
         const fields = feature.properties || {};
-
         if (popup) popup.remove();
-        setHighlight('sdca-click-outline', feature);
+        setClickOutline(feature);
 
         const body = document.createElement('div');
         const heading = document.createElement('h3');
@@ -175,7 +197,7 @@
           .setDOMContent(body)
           .addTo(map);
         popup.on('close', () => {
-          setHighlight('sdca-click-outline', null);
+          setClickOutline(null);
           popup = null;
         });
       });
