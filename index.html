@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#15171D">
+  <meta name="theme-color" content="#F3F4F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15171D" media="(prefers-color-scheme: dark)">
   <title>Global Engagement Map | School of Design and Creative Arts</title>
   <meta name="description" content="Explore international exchange programmes and student placements at Loughborough University's School of Design and Creative Arts.">
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
@@ -488,6 +489,119 @@
       margin-right: 0 !important;
       margin-left: 0 !important;
       float: right;
+    }
+    /* Automatic colour scheme: follows the visitor's browser/OS setting.
+       Changes are CSS-only, so switching preferences updates live without
+       reloading the map or replacing its custom style/GE Data layer. */
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --panel: rgba(255, 255, 255, .96);
+        --panel-text: #192536;
+        --panel-subtle: #425165;
+        --panel-line: rgba(35, 48, 67, .19);
+        --shadow-panel: 0 20px 62px rgba(16, 28, 40, .20), 0 3px 10px rgba(16,28,40,.09);
+      }
+      body { background: #F3F4F7; }
+      #sdca-panel { scrollbar-color: #A6B0BE transparent; }
+      /* The existing logo file is white; tint the same transparent asset dark. */
+      #lu-logo { filter: brightness(0) saturate(100%) invert(12%) sepia(16%) saturate(887%) hue-rotate(172deg) brightness(95%) contrast(92%); }
+      #panel-toggle { background: #F5F6F9; border-color: #C7D0DC; color: #25344B; }
+      #panel-toggle:hover { background: #E7ECF3; }
+      .filter-heading, .usage-tip strong { color: var(--panel-text); }
+      .key-item { background: #F4F6F9; border-color: #D0D8E3; color: #233347; }
+      #sdca-explore > summary { color: var(--panel-text); }
+      .browse-button { background: #2D0153; color: #FFFFFF; border-color: #2D0153; }
+      .browse-button:hover { background: #49126D; }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --ink: #F1F4FA;
+        --ink-subtle: #C7D0DE;
+        --surface: #242A36;
+        --surface-muted: #303849;
+        --stroke: #505D70;
+        --shadow-floating: 0 10px 30px rgba(0,0,0,.38), 0 1px 5px rgba(0,0,0,.23);
+      }
+      body { background: #15171D; }
+      /* Floating language selection and Mapbox navigation. */
+      #language-picker, #reset-europe, #map-move > summary {
+        background: #242A36; color: #F4F6FC; border-color: #576274;
+      }
+      #language-picker .lang-icon, #language-select { color: #F4F6FC; }
+      #reset-europe:hover { background: #303849; }
+      #map-move > summary:hover { background: #303849; }
+      #reset-europe:active, #map-move[open] > summary,
+      #map-move[open] > summary:hover { background: #8793A5; border-color: #526073; color: #101923; }
+      .mapboxgl-ctrl-group { background: #242A36; border-color: #576274; }
+      .mapboxgl-ctrl-group button { background: #242A36; border-color: #576274 !important; }
+      .mapboxgl-ctrl-group button:hover { background: #303849; }
+      .mapboxgl-ctrl-group .mapboxgl-ctrl-icon { filter: invert(1); }
+      .pan-pad { background: #242A36; border-color: #576274; }
+      .pan-pad button { background: #303849; color: #F4F6FC; border-color: #576274; }
+      .pan-pad button:hover { background: #414B60; }
+      #machine-language-note {
+        background: #252D3B; color: #E9EDF7; border-color: #576274;
+      }
+      #machine-language-note a { color: #DFBFFF; }
+      /* The search panel, popups and nearby chooser also follow dark mode. */
+      #browse-panel, #sdca-nearby-dialog, .mapboxgl-popup-content {
+        background: #202733; color: #F1F4FA; border-color: #4D586B;
+      }
+      .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+      .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+      .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: #202733 !important; }
+      .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+      .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+      .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: #202733 !important; }
+      .mapboxgl-popup-anchor-left .mapboxgl-popup-tip { border-right-color: #202733 !important; }
+      .mapboxgl-popup-anchor-right .mapboxgl-popup-tip { border-left-color: #202733 !important; }
+      .popup-title, .popup-eyebrow, .popup-description, .nearby-intro, .nearby-more,
+      .browse-hint, #browse-count, .browse-location-text small, .nearby-text small {
+        color: #E0E7F2;
+      }
+      .popup-title, #browse-heading, #location-search-label { color: #FFFFFF; }
+      .mapboxgl-popup-close-button, .browse-close,
+      #sdca-nearby-dialog .nearby-dialog-close {
+        color: #F3F6FB; background: #303849; border-color: #596579;
+      }
+      .mapboxgl-popup-close-button:hover, .browse-close:hover,
+      #sdca-nearby-dialog .nearby-dialog-close:hover { background: #424D61; }
+      #location-search {
+        background: #2B3443; border-color: #8796AA; color: #F8FAFF;
+      }
+      #location-search::placeholder { color: #C2CDDD; }
+      .browse-location, .nearby-item, .quiet-action {
+        background: #2B3443; color: #F1F4FA; border-color: #576479;
+      }
+      .browse-location:hover, .nearby-item:hover, .quiet-action:hover {
+        background: #394458; border-color: #93A2B8;
+      }
+      .browse-location .swatch, .popup-eyebrow .swatch { border-color: #B4BDCB; }
+      .popup-line { border-top-color: #536077; }
+      .popup-link { background: #5D178B; border-color: #A76CCB; color: #FFFFFF; }
+      .popup-link:hover { background: #7323A6; }
+      .popup-translate { color: #DFBFFF; }
+      #sdca-nearby-dialog .nearby-dialog-footer {
+        background: #202733; border-top-color: #4D586B;
+      }
+    }
+    /* Preserve high-contrast and reduced-transparency preferences in both themes. */
+    @media (prefers-color-scheme: light) and (prefers-reduced-transparency: reduce) {
+      #sdca-panel { background: #FFFFFF; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    }
+    @media (prefers-color-scheme: dark) and (prefers-reduced-transparency: reduce) {
+      #sdca-panel { background: #15171D; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    }
+    @media (prefers-contrast: more), (forced-colors: active) {
+      #sdca-panel { background: Canvas; color: CanvasText; border: 2px solid CanvasText; }
+      #panel-toggle { color: CanvasText; border-color: CanvasText; }
+      .filter-heading, .usage-tip strong, #sdca-explore > summary,
+      #school-label, #map-title, #map-summary, .usage-tip { color: CanvasText; }
+      .key-item { background: Canvas; color: CanvasText; border: 2px solid CanvasText; }
+      #lu-logo { filter: none; }
+      #browse-panel { border: 2px solid CanvasText; }
     }
   </style>
 </head>
