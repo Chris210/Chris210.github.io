@@ -91,15 +91,15 @@
       map.addLayer({
         id: 'sdca-hover-halo', type: 'circle', source: HOVER_SOURCE,
         paint: {
-          'circle-radius': 17,
+          'circle-radius': 23,
           'circle-color': '#ffffff',
-          'circle-opacity': 0.25
+          'circle-opacity': 0.13
         }
       });
       map.addLayer({
         id: 'sdca-hover-marker', type: 'circle', source: HOVER_SOURCE,
         paint: {
-          'circle-radius': 12,
+          'circle-radius': 18,
           'circle-color': ['get', 'hoverColor'],
           'circle-opacity': 1,
           'circle-stroke-color': '#ffffff',
