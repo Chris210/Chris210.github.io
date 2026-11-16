@@ -91,15 +91,15 @@
       map.addLayer({
         id: 'sdca-hover-halo', type: 'circle', source: HOVER_SOURCE,
         paint: {
-          'circle-radius': 23,
+          'circle-radius': 17,
           'circle-color': '#ffffff',
-          'circle-opacity': 0.13
+          'circle-opacity': 0.25
         }
       });
       map.addLayer({
         id: 'sdca-hover-marker', type: 'circle', source: HOVER_SOURCE,
         paint: {
-          'circle-radius': 18,
+          'circle-radius': 12,
           'circle-color': ['get', 'hoverColor'],
           'circle-opacity': 1,
           'circle-stroke-color': '#ffffff',
@@ -131,9 +131,14 @@
         if (key === currentHoverKey) return;
         currentHoverKey = key;
 
-        const rawColor = typeof p.color === 'string' ? p.color.trim() : '';
-        const hoverColor = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(rawColor)
-          ? rawColor : '#6f3092';
+        // The source's `color` values differ from the colours shown by
+        // the published Mapbox Studio style. Use the displayed palette by group.
+        const group = String(p.group || '').trim().toLowerCase();
+        const hoverColor = group === 'placement'
+          ? '#F0047F'
+          : group === 'exchange programme'
+            ? '#2D0153'
+            : '#2D0153'; // fallback for an unrecognised category
 
         map.getSource(HOVER_SOURCE).setData({
           type: 'FeatureCollection',
