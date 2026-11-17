@@ -336,6 +336,31 @@
     .browse-location-text strong { font-size: 14px; font-weight: 750; }
     .browse-location-text small { color: color-mix(in srgb, var(--brand-grey) 80%, var(--brand-white)); font-size: 13px; }
 
+
+    /* Curated map-connected shortlist, with a route back to all mapped locations. */
+    .browse-collection-switch {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 9px; flex-wrap: wrap; margin-top: 19px;
+    }
+    #browse-collection-title { margin: 0; font: 750 16px/1.35 var(--font-display); }
+    #browse-mode-toggle {
+      min-height: 44px; padding: 7px 10px; border: 1px solid var(--stroke);
+      border-radius: 10px; background: var(--surface); color: var(--ink);
+      font-size: 12px; font-weight: 740; text-decoration: underline; text-underline-offset: 2px;
+    }
+    #browse-mode-toggle:hover { background: var(--surface-muted); }
+    .browse-featured-category {
+      padding: 12px 2px 4px; color: var(--ink-subtle);
+      font-size: 12px; font-weight: 780; letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    #browse-panel .browse-collection-switch[hidden] { display: none !important; }
+    @media (prefers-color-scheme: dark) {
+      #browse-mode-toggle { background: var(--brand-grey); border-color: rgba(255,255,255,.28); color: var(--brand-white); }
+      #browse-mode-toggle:hover { background: color-mix(in srgb, var(--brand-grey) 78%, var(--brand-white)); }
+      .browse-featured-category { color: rgba(255,255,255,.80); }
+    }
+
     /* Keep the map the focal point on smaller screens. */
     @media (max-width: 1000px) and (min-width: 621px) {
       #browse-panel { left: auto; right: 18px; top: auto; bottom: 18px; width: min(395px, calc(100vw - 40px)); max-height: 60dvh; }
@@ -735,6 +760,10 @@
     <p class="browse-hint">Use this list instead of selecting map dots. It contains locations currently visible on the map. Use the map movement controls to explore another area.</p>
     <label id="location-search-label" for="location-search">Search partners by name</label>
     <input id="location-search" type="search" autocomplete="off" placeholder="Enter a location name">
+    <div class="browse-collection-switch" id="browse-collection-switch">
+      <h3 id="browse-collection-title">Featured connections</h3>
+      <button id="browse-mode-toggle" type="button" aria-controls="browse-list">Browse all in view</button>
+    </div>
     <p id="browse-count" role="status" aria-live="polite">Map locations loading…</p>
     <ul id="browse-list"></ul>
   </section>
@@ -2683,6 +2712,511 @@
     };
     document.getElementById('reset-europe').addEventListener('click', resetMapView);
 
+    // Editor-selected shortlist from published Loughborough exchange and placement
+    // examples. These NAMES alone are not evidence of a mapped or active partnership.
+    // Show a featured item only when the actual Mapbox layer contains a matching
+    // location in the loaded viewport; other mapped locations remain searchable.
+    const FEATURED_ORGANISATIONS = [
+      {
+            "name": "Delft University of Technology",
+            "group": "academic",
+            "aliases": [
+                  "TU Delft"
+            ]
+      },
+      {
+            "name": "Politecnico di Milano",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Design School Kolding",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Nanyang Technological University",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "City University of Hong Kong",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Queensland University of Technology",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "University of Technology Sydney",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Joshibi University of Art and Design",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Mimar Sinan Fine Arts University",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Norwegian University of Science and Technology",
+            "group": "academic",
+            "aliases": [
+                  "NTNU"
+            ]
+      },
+      {
+            "name": "University of Michigan",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Shibaura Institute of Technology",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "Middle East Technical University",
+            "group": "academic",
+            "aliases": [
+                  "METU"
+            ]
+      },
+      {
+            "name": "Université de Montréal",
+            "group": "academic",
+            "aliases": [
+                  "University of Montreal"
+            ]
+      },
+      {
+            "name": "Curtin University",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "University of Zaragoza",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "RheinMain University of Applied Sciences",
+            "group": "academic",
+            "aliases": [
+                  "Hochschule RheinMain"
+            ]
+      },
+      {
+            "name": "Virginia Tech",
+            "group": "academic",
+            "aliases": [
+                  "Virginia Polytechnic Institute and State University"
+            ]
+      },
+      {
+            "name": "University of Wuppertal",
+            "group": "academic",
+            "aliases": [
+                  "Bergische Universität Wuppertal"
+            ]
+      },
+      {
+            "name": "Graz University of Technology",
+            "group": "academic",
+            "aliases": [
+                  "TU Graz"
+            ]
+      },
+      {
+            "name": "Pentagram",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "Wieden+Kennedy",
+            "group": "design",
+            "aliases": [
+                  "Wieden Kennedy"
+            ]
+      },
+      {
+            "name": "Porsche Design",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "PriestmanGoode",
+            "group": "design",
+            "aliases": [
+                  "Priestman Goode"
+            ]
+      },
+      {
+            "name": "Seymourpowell",
+            "group": "design",
+            "aliases": [
+                  "Seymour Powell"
+            ]
+      },
+      {
+            "name": "Kinneir Dufort",
+            "group": "design",
+            "aliases": [
+                  "Kinneirdufort"
+            ]
+      },
+      {
+            "name": "Cambridge Consultants",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "PDD",
+            "group": "design",
+            "aliases": [
+                  "PDD Group"
+            ]
+      },
+      {
+            "name": "VanBerlo",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "DCA",
+            "group": "design",
+            "aliases": [
+                  "DCA Design International"
+            ]
+      },
+      {
+            "name": "Foolproof",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "PA Consulting",
+            "group": "design",
+            "aliases": []
+      },
+      {
+            "name": "LEGO",
+            "group": "employers",
+            "aliases": [
+                  "The LEGO Group",
+                  "Lego Group"
+            ]
+      },
+      {
+            "name": "The Walt Disney Company",
+            "group": "employers",
+            "aliases": [
+                  "Disney"
+            ]
+      },
+      {
+            "name": "Microsoft",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "BMW",
+            "group": "employers",
+            "aliases": [
+                  "BMW Group"
+            ]
+      },
+      {
+            "name": "Jaguar Land Rover",
+            "group": "employers",
+            "aliases": [
+                  "JLR"
+            ]
+      },
+      {
+            "name": "Bentley Motors",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "Rolls-Royce",
+            "group": "employers",
+            "aliases": [
+                  "Rolls Royce",
+                  "Rolls-Royce plc"
+            ]
+      },
+      {
+            "name": "Adidas",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "IBM",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "Bosch",
+            "group": "employers",
+            "aliases": [
+                  "Robert Bosch"
+            ]
+      },
+      {
+            "name": "Canon",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "Unilever",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "L’Oréal",
+            "group": "employers",
+            "aliases": [
+                  "L'Oreal",
+                  "Loreal"
+            ]
+      },
+      {
+            "name": "Diageo",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "Dr. Martens",
+            "group": "employers",
+            "aliases": [
+                  "Dr Martens"
+            ]
+      },
+      {
+            "name": "PUMA",
+            "group": "employers",
+            "aliases": []
+      },
+      {
+            "name": "SharkNinja",
+            "group": "employers",
+            "aliases": [
+                  "Shark Ninja"
+            ]
+      },
+      {
+            "name": "H&M",
+            "group": "employers",
+            "aliases": [
+                  "H & M",
+                  "Hennes and Mauritz"
+            ]
+      }
+];
+    const featuredLabels = {
+      "en": {
+            "heading": "Featured connections",
+            "showAll": "Browse all in view",
+            "showFeatured": "Show featured",
+            "academic": "Academic institutions",
+            "design": "Design studios and consultancies",
+            "employers": "Global employers",
+            "featuredCount": "{count} of 50 shortlisted organisations found in this map view. Move the map to explore others.",
+            "featuredEmpty": "No shortlisted organisations in this map view. Move the map or search for any partner.",
+            "allCount": "{count} locations currently visible on the map."
+      },
+      "zh-CN": {
+            "heading": "精选合作联系",
+            "showAll": "浏览当前地图全部地点",
+            "showFeatured": "显示精选",
+            "academic": "学术机构",
+            "design": "设计工作室与咨询公司",
+            "employers": "全球雇主",
+            "featuredCount": "当前地图范围内找到 50 个候选机构中的 {count} 个。移动地图可探索其他区域。",
+            "featuredEmpty": "当前地图范围内未找到候选机构。请移动地图或按名称搜索。",
+            "allCount": "当前地图可见 {count} 个地点。"
+      },
+      "zh-TW": {
+            "heading": "精選合作聯繫",
+            "showAll": "瀏覽目前地圖全部地點",
+            "showFeatured": "顯示精選",
+            "academic": "學術機構",
+            "design": "設計工作室與顧問公司",
+            "employers": "全球僱主",
+            "featuredCount": "目前地圖範圍內找到 50 個候選機構中的 {count} 個。移動地圖可探索其他地區。",
+            "featuredEmpty": "目前地圖範圍內沒有候選機構。請移動地圖或按名稱搜尋。",
+            "allCount": "目前地圖可見 {count} 個地點。"
+      },
+      "hi": {
+            "heading": "चुनिंदा संपर्क",
+            "showAll": "इस दृश्य में सभी देखें",
+            "showFeatured": "चुनिंदा दिखाएँ",
+            "academic": "शैक्षणिक संस्थान",
+            "design": "डिज़ाइन स्टूडियो और परामर्शदाता",
+            "employers": "वैश्विक नियोक्ता",
+            "featuredCount": "इस मानचित्र दृश्य में 50 चुने गए संगठनों में से {count} मिले। अन्य स्थान देखने के लिए मानचित्र खिसकाएँ।",
+            "featuredEmpty": "इस दृश्य में कोई चुना गया संगठन नहीं मिला। मानचित्र खिसकाएँ या नाम से खोजें।",
+            "allCount": "इस मानचित्र दृश्य में {count} स्थान हैं।"
+      },
+      "pa": {
+            "heading": "ਚੋਣਵੇਂ ਸੰਪਰਕ",
+            "showAll": "ਇਸ ਦ੍ਰਿਸ਼ ਦੀਆਂ ਸਾਰੀਆਂ ਥਾਵਾਂ",
+            "showFeatured": "ਚੋਣਵੇਂ ਦਿਖਾਓ",
+            "academic": "ਵਿੱਦਿਅਕ ਸੰਸਥਾਵਾਂ",
+            "design": "ਡਿਜ਼ਾਈਨ ਸਟੂਡੀਓ ਅਤੇ ਸਲਾਹਕਾਰ",
+            "employers": "ਵਿਸ਼ਵ ਪੱਧਰੀ ਰੁਜ਼ਗਾਰਦਾਤਾ",
+            "featuredCount": "ਇਸ ਨਕਸ਼ੇ ਵਿੱਚ 50 ਚੁਣੀਆਂ ਸੰਸਥਾਵਾਂ ਵਿੱਚੋਂ {count} ਮਿਲੀਆਂ ਹਨ। ਹੋਰ ਦੇਖਣ ਲਈ ਨਕਸ਼ਾ ਹਿਲਾਓ।",
+            "featuredEmpty": "ਇਸ ਦ੍ਰਿਸ਼ ਵਿੱਚ ਕੋਈ ਚੁਣੀ ਸੰਸਥਾ ਨਹੀਂ ਮਿਲੀ। ਨਕਸ਼ਾ ਹਿਲਾਓ ਜਾਂ ਨਾਮ ਨਾਲ ਲੱਭੋ।",
+            "allCount": "ਇਸ ਦ੍ਰਿਸ਼ ਵਿੱਚ {count} ਥਾਵਾਂ ਹਨ।"
+      },
+      "bn": {
+            "heading": "নির্বাচিত সংযোগ",
+            "showAll": "এই দৃশ্যের সব স্থান দেখুন",
+            "showFeatured": "নির্বাচিতগুলি দেখুন",
+            "academic": "শিক্ষাপ্রতিষ্ঠান",
+            "design": "ডিজাইন স্টুডিও ও পরামর্শদাতা",
+            "employers": "আন্তর্জাতিক নিয়োগকর্তা",
+            "featuredCount": "এই মানচিত্রে বাছাই করা ৫০টি প্রতিষ্ঠানের মধ্যে {count}টি পাওয়া গেছে। অন্য এলাকা দেখতে মানচিত্র সরান।",
+            "featuredEmpty": "এই দৃশ্যে নির্বাচিত প্রতিষ্ঠান নেই। মানচিত্র সরান বা নাম দিয়ে খুঁজুন।",
+            "allCount": "এই দৃশ্যে {count}টি স্থান রয়েছে।"
+      },
+      "gu": {
+            "heading": "પસંદગીના જોડાણો",
+            "showAll": "આ દૃશ્યનાં બધાં સ્થળો જુઓ",
+            "showFeatured": "પસંદગીનાં બતાવો",
+            "academic": "શૈક્ષણિક સંસ્થાઓ",
+            "design": "ડિઝાઇન સ્ટુડિયો અને સલાહકારો",
+            "employers": "વૈશ્વિક નોકરીદાતાઓ",
+            "featuredCount": "આ નકશામાં 50 પસંદ કરેલી સંસ્થાઓમાંથી {count} મળી છે. વધુ જોવા નકશો ખસેડો.",
+            "featuredEmpty": "આ દૃશ્યમાં કોઈ પસંદ કરેલી સંસ્થા મળી નથી. નકશો ખસેડો અથવા નામથી શોધો.",
+            "allCount": "આ દૃશ્યમાં {count} સ્થળો છે."
+      },
+      "ta": {
+            "heading": "தேர்ந்தெடுக்கப்பட்ட தொடர்புகள்",
+            "showAll": "இந்தக் காட்சியில் அனைத்தையும் காண்க",
+            "showFeatured": "தேர்ந்தெடுத்தவற்றைக் காண்க",
+            "academic": "கல்வி நிறுவனங்கள்",
+            "design": "வடிவமைப்பு நிறுவனங்கள் மற்றும் ஆலோசகர்கள்",
+            "employers": "சர்வதேச வேலை வழங்குநர்கள்",
+            "featuredCount": "தேர்ந்தெடுக்கப்பட்ட 50 நிறுவனங்களில் {count} இந்த வரைபடக் காட்சியில் உள்ளன. மற்ற பகுதிகளைப் பார்க்க வரைபடத்தை நகர்த்தவும்.",
+            "featuredEmpty": "இந்தக் காட்சியில் தேர்ந்தெடுக்கப்பட்ட நிறுவனங்கள் இல்லை. வரைபடத்தை நகர்த்தவும் அல்லது பெயரால் தேடவும்.",
+            "allCount": "இந்தக் காட்சியில் {count} இடங்கள் உள்ளன."
+      },
+      "te": {
+            "heading": "ఎంచుకున్న అనుబంధాలు",
+            "showAll": "ఈ వీక్షణలో అన్నీ చూడండి",
+            "showFeatured": "ఎంచుకున్నవి చూపు",
+            "academic": "విద్యాసంస్థలు",
+            "design": "డిజైన్ స్టూడియోలు మరియు కన్సల్టెన్సీలు",
+            "employers": "ప్రపంచవ్యాప్త ఉద్యోగదాతలు",
+            "featuredCount": "ఎంచుకున్న 50 సంస్థలలో {count} ఈ మ్యాప్ వీక్షణలో కనిపించాయి. మరిన్ని ప్రాంతాల కోసం మ్యాప్‌ను కదిలించండి.",
+            "featuredEmpty": "ఈ వీక్షణలో ఎంపిక చేసిన సంస్థలు లేవు. మ్యాప్‌ను కదిలించండి లేదా పేరుతో వెతకండి.",
+            "allCount": "ఈ వీక్షణలో {count} ప్రదేశాలు ఉన్నాయి."
+      },
+      "mr": {
+            "heading": "निवडक संबंध",
+            "showAll": "या दृश्यातील सर्व ठिकाणे",
+            "showFeatured": "निवडक दाखवा",
+            "academic": "शैक्षणिक संस्था",
+            "design": "डिझाइन स्टुडिओ आणि सल्लागार",
+            "employers": "जागतिक नियोक्ते",
+            "featuredCount": "निवडलेल्या 50 संस्थांपैकी {count} या नकाशात आढळल्या. इतर भाग पाहण्यासाठी नकाशा हलवा.",
+            "featuredEmpty": "या दृश्यात निवडलेल्या संस्था नाहीत. नकाशा हलवा किंवा नावाने शोधा.",
+            "allCount": "या दृश्यात {count} ठिकाणे आहेत."
+      },
+      "ur": {
+            "heading": "منتخب روابط",
+            "showAll": "اس منظر میں سب دیکھیں",
+            "showFeatured": "منتخب دکھائیں",
+            "academic": "تعلیمی ادارے",
+            "design": "ڈیزائن اسٹوڈیوز اور مشیر",
+            "employers": "عالمی آجر",
+            "featuredCount": "اس نقشے میں منتخب 50 اداروں میں سے {count} نظر آ رہے ہیں۔ دوسرے علاقے دیکھنے کے لیے نقشہ حرکت دیں۔",
+            "featuredEmpty": "اس منظر میں منتخب ادارے نہیں ملے۔ نقشہ حرکت دیں یا نام سے تلاش کریں۔",
+            "allCount": "اس منظر میں {count} مقامات ہیں۔"
+      },
+      "ko": {
+            "heading": "주요 교류 기관",
+            "showAll": "이 화면의 전체 장소",
+            "showFeatured": "주요 기관 보기",
+            "academic": "교육 기관",
+            "design": "디자인 스튜디오 및 컨설팅",
+            "employers": "글로벌 기업",
+            "featuredCount": "선정된 50개 기관 중 이 지도 화면에서 {count}개를 찾았습니다. 다른 지역은 지도를 이동해 보세요.",
+            "featuredEmpty": "이 화면에 선정된 기관이 없습니다. 지도를 이동하거나 이름으로 검색하세요.",
+            "allCount": "이 지도 화면에 {count}개 장소가 있습니다."
+      },
+      "ja": {
+            "heading": "注目の交流先",
+            "showAll": "この範囲の全地点",
+            "showFeatured": "注目の交流先に戻る",
+            "academic": "教育機関",
+            "design": "デザインスタジオ・コンサルティング",
+            "employers": "グローバル企業",
+            "featuredCount": "選定した50機関のうち、この地図に表示されているのは{count}件です。他の地域は地図を移動してください。",
+            "featuredEmpty": "この範囲に選定した機関はありません。地図を移動するか、名前で検索してください。",
+            "allCount": "この地図に{count}件の地点が表示されています。"
+      },
+      "ms": {
+            "heading": "Hubungan pilihan",
+            "showAll": "Lihat semua dalam paparan",
+            "showFeatured": "Tunjuk pilihan",
+            "academic": "Institusi akademik",
+            "design": "Studio dan perunding reka bentuk",
+            "employers": "Majikan global",
+            "featuredCount": "{count} daripada 50 organisasi pilihan ditemui dalam paparan peta ini. Gerakkan peta untuk meneroka kawasan lain.",
+            "featuredEmpty": "Tiada organisasi pilihan dalam paparan ini. Gerakkan peta atau cari mengikut nama.",
+            "allCount": "{count} lokasi dalam paparan peta ini."
+      },
+      "ms-Arab": {
+            "heading": "هوبوڠن ڤيليهن",
+            "showAll": "ليهت سموا دالم ڤاڤرن",
+            "showFeatured": "تونجوق ڤيليهن",
+            "academic": "اينستيتوسي اکادميک",
+            "design": "ستوديو دان ڤرونديڠ ريکا بنتوق",
+            "employers": "ماجکن ݢلوبل",
+            "featuredCount": "{count} درڤد 50 اورݢانيساسي ڤيليهن دتموي دالم ڤاڤرن ڤيتا اين. ݢرقکن ڤيتا اونتوق منراجم کاوسن لاءين.",
+            "featuredEmpty": "تياد اورݢانيساسي ڤيليهن دالم ڤاڤرن اين. ݢرقکن ڤيتا اتاو چاري نام.",
+            "allCount": "{count} لوکاسي دالم ڤاڤرن ڤيتا اين."
+      },
+      "ne": {
+            "heading": "छनोट गरिएका सम्बन्ध",
+            "showAll": "यस दृश्यका सबै स्थान",
+            "showFeatured": "छनोट गरिएका देखाउनुहोस्",
+            "academic": "शैक्षिक संस्थाहरू",
+            "design": "डिजाइन स्टुडियो र परामर्शदाता",
+            "employers": "विश्वव्यापी रोजगारदाता",
+            "featuredCount": "छनोट गरिएका ५० संस्थामध्ये यस नक्सामा {count} भेटिए। अरू ठाउँ हेर्न नक्सा सार्नुहोस्।",
+            "featuredEmpty": "यस दृश्यमा कुनै छनोट गरिएको संस्था भेटिएन। नक्सा सार्नुहोस् वा नाम खोज्नुहोस्।",
+            "allCount": "यस दृश्यमा {count} स्थान छन्।"
+      },
+      "ar": {
+            "heading": "جهات مختارة",
+            "showAll": "تصفح جميع المواقع الظاهرة",
+            "showFeatured": "عرض الجهات المختارة",
+            "academic": "المؤسسات الأكاديمية",
+            "design": "استوديوهات التصميم والاستشارات",
+            "employers": "جهات التوظيف العالمية",
+            "featuredCount": "تم العثور على {count} من أصل 50 جهة مختارة في عرض الخريطة الحالي. حرّك الخريطة لاستكشاف مناطق أخرى.",
+            "featuredEmpty": "لا توجد جهات مختارة في هذا العرض. حرّك الخريطة أو ابحث بالاسم.",
+            "allCount": "يوجد {count} موقعًا في عرض الخريطة الحالي."
+      }
+};
+    const featuredT = key => (featuredLabels[currentLanguage] || featuredLabels.en)[key];
+    const normalizedName = value => String(value || '').normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
+    const featuredMatchers = FEATURED_ORGANISATIONS.map(item => ({
+      ...item, normalizedAliases: [item.name, ...item.aliases].map(normalizedName)
+    }));
+
     // Accessible alternative to the WebGL points: a keyboard-operable list of locations
     // currently rendered in the viewport. Vector tiles do not expose the full global dataset.
     const browsePanel = document.getElementById('browse-panel');
@@ -2691,6 +3225,10 @@
     const browseSearch = document.getElementById('location-search');
     const browseCount = document.getElementById('browse-count');
     const browseList = document.getElementById('browse-list');
+    const browseSection = document.getElementById('browse-collection-switch');
+    const browseSectionTitle = document.getElementById('browse-collection-title');
+    const browseModeToggle = document.getElementById('browse-mode-toggle');
+    let browseMode = 'featured';
     let availableLocations = [];
     let mapIsReady = false;
     const uniqueVisibleLocations = () => {
@@ -2704,47 +3242,85 @@
       }
       return [...unique.values()].sort((a,b) => String(a.properties?.name || '').localeCompare(String(b.properties?.name || '')));
     };
+    const makeBrowseItem = (feature, displayName = '') => {
+      const props = feature.properties || {};
+      const li = document.createElement('li');
+      const button = make('button', 'browse-location');
+      button.type = 'button';
+      // The name links to a VERIFIED map feature; descriptions/categories stay
+      // in the Mapbox record and are shown only in the location popup.
+      const labels = make('span','browse-location-text');
+      labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
+      button.append(labels);
+      button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
+      button.addEventListener('click', () => {
+        const coords = feature.geometry?.coordinates;
+        if (!coords) return;
+        visitorMovedMap = true;
+        // Reveal the selected partner on the map rather than leaving the
+        // search panel covering its popup. Applies to featured and all results.
+        browsePanel.hidden = true;
+        browseToggle.setAttribute('aria-expanded', 'false');
+        moveView({ center: coords, zoom: Math.max(map.getZoom(), 4), essential: false });
+        // Restore keyboard focus to the map after dismissing the popup, not
+        // to the search field inside the now-hidden search panel.
+        showLocation(feature, null, null, map.getCanvas());
+      });
+      li.append(button);
+      return li;
+    };
     const updateBrowseList = () => {
       if (browsePanel.hidden) return;
       availableLocations = uniqueVisibleLocations();
       const term = browseSearch.value.trim().toLowerCase();
-      const matches = availableLocations.filter(f => {
-        const props = f.properties || {};
-        return `${props.name || ''} ${props.group || ''} ${props.description || ''}`.toLowerCase().includes(term);
-      });
+      const searching = Boolean(term);
+      browseSection.hidden = searching;
+      browseModeToggle.textContent = featuredT(browseMode === 'featured' ? 'showAll' : 'showFeatured');
+      browseSectionTitle.textContent = featuredT(browseMode === 'featured' ? 'heading' : 'showAll');
       browseList.replaceChildren();
-      const maxItems = 150;
-      for (const feature of matches.slice(0,maxItems)) {
-        const props = feature.properties || {};
-        const li = document.createElement('li');
-        const button = make('button', 'browse-location');
-        button.type = 'button';
-        // Search results display names only. Category metadata remains untouched
-        // for the map and individual popups, but is not shown in this list.
-        const labels = make('span','browse-location-text');
-        labels.append(make('strong','',String(props.name || t('unnamed'))));
-        button.append(labels);
-        button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
-        button.addEventListener('click', () => {
-          visitorMovedMap = true;
-          const coords = feature.geometry?.coordinates;
-          if (!coords) return;
-          moveView({ center: coords, zoom: Math.max(map.getZoom(), 4), essential: false });
-          showLocation(feature, null, null, browseSearch);
+      if (searching) {
+        // Searching always covers ALL visible Mapbox locations, not just the
+        // shortlist. No arbitrary 150-result cut-off hides partners.
+        const matches = availableLocations.filter(f => {
+          const p = f.properties || {};
+          return `${p.name || ''} ${p.group || ''} ${p.description || ''}`.toLowerCase().includes(term);
         });
-        li.append(button);
-        browseList.append(li);
-      }
-      const resultWords = searchCountLanguage[currentLanguage] || searchCountLanguage.en;
-      browseCount.textContent = !mapIsReady ? t('loading') :
-        `${matches.length} ${resultWords[0]}${term ? ' · ' + resultWords[1] : ''}.${matches.length > maxItems ? ' ' + resultWords[2] : ''}`;
-      if (!matches.length) {
-        const li = make('li','', mapIsReady ? t('noMatch') : t('loading'));
-        browseList.append(li);
+        for (const f of matches) browseList.append(makeBrowseItem(f));
+        const words = searchCountLanguage[currentLanguage] || searchCountLanguage.en;
+        browseCount.textContent = `${matches.length} ${words[0]} · ${words[1]}.`;
+        if (!matches.length) browseList.append(make('li','',mapIsReady ? t('noMatch') : t('loading')));
+      } else if (browseMode === 'all') {
+        // Preserve the original keyboard-accessible list as an explicit option.
+        for (const f of availableLocations) browseList.append(makeBrowseItem(f));
+        browseCount.textContent = featuredT('allCount').replace('{count}', availableLocations.length);
+        if (!availableLocations.length) browseList.append(make('li','',t('loading')));
+      } else {
+        const mappedNames = new Map();
+        for (const f of availableLocations) {
+          const name = normalizedName(f.properties?.name);
+          if (name && !mappedNames.has(name)) mappedNames.set(name, f);
+        }
+        let lastGroup = '';
+        let matchCount = 0;
+        for (const item of featuredMatchers) {
+          const feature = item.normalizedAliases.map(a => mappedNames.get(a)).find(Boolean);
+          if (!feature) continue; // Do not display unverified partners.
+          if (item.group !== lastGroup) {
+            const li = make('li', 'browse-featured-category', featuredT(item.group));
+            browseList.append(li);
+            lastGroup = item.group;
+          }
+          browseList.append(makeBrowseItem(feature, item.name));
+          matchCount++;
+        }
+        browseCount.textContent = featuredT('featuredCount').replace('{count}', matchCount);
+        if (!matchCount) browseList.append(make('li','',mapIsReady ? featuredT('featuredEmpty') : t('loading')));
       }
     };
     const showBrowse = () => {
       browsePanel.hidden = false;
+      browseMode = 'featured';
+      browseSearch.value = '';
       browseToggle.setAttribute('aria-expanded','true');
       updateBrowseList();
       document.getElementById('browse-heading').focus({preventScroll:true});
@@ -2754,6 +3330,10 @@
       browseToggle.setAttribute('aria-expanded','false');
       browseToggle.focus({preventScroll:true});
     };
+    browseModeToggle.addEventListener('click', () => {
+      browseMode = browseMode === 'featured' ? 'all' : 'featured';
+      updateBrowseList();
+    });
     browseToggle.addEventListener('click', () => browsePanel.hidden ? showBrowse() : hideBrowse());
     browseClose.addEventListener('click', hideBrowse);
     browseSearch.addEventListener('input', updateBrowseList);
