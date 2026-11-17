@@ -299,8 +299,8 @@
 
     /* Accessible browse panel – independent of graphical map interaction. */
     #browse-panel {
-      position: absolute; z-index: 12; top: 24px; left: 396px;
-      width: min(397px, calc(100vw - 530px));
+      position: absolute; z-index: 12; top: 24px; left: 400px;
+      width: min(397px, calc(100vw - 420px));
       max-height: min(82dvh, 750px); overflow-y: auto; overscroll-behavior: contain;
       padding: 24px; background: #FFFFFF; color: var(--brand-grey);
       border: 1px solid color-mix(in srgb, var(--brand-grey) 12%, var(--brand-white)); border-radius: 23px;
@@ -363,7 +363,7 @@
 
     /* Keep the map the focal point on smaller screens. */
     @media (max-width: 1000px) and (min-width: 621px) {
-      #browse-panel { left: auto; right: 18px; top: auto; bottom: 18px; width: min(395px, calc(100vw - 40px)); max-height: 60dvh; }
+      #browse-panel { left: 400px; right: auto; top: 24px; bottom: auto; width: min(395px, calc(100vw - 420px)); max-height: min(82dvh, 750px); }
     }
     @media (max-width: 620px) {
       #sdca-panel {
@@ -2712,57 +2712,63 @@
     };
     document.getElementById('reset-europe').addEventListener('click', resetMapView);
 
-    // Editor-selected shortlist from published Loughborough exchange and placement
-    // examples. Names alone do not establish a current mapped relationship.
-    // The featured menu only displays entries verified against the actual Mapbox
-    // source worldwide; ordinary search and Browse all remain viewport-based.
+    // International Art & Design academic/employer reputation editorial shortlist.
+    // Candidate names are drawn from Loughborough's publicly described exchange
+    // and placement opportunities and the previous site's featured shortlist.
+    // This is a curatorial selection, NOT a QS ranking or verification of an
+    // active institutional partnership. The menu shows ONLY organisations
+    // matched to actual map records from the published Mapbox data.
+    // The order prioritises design-specific academic connections across regions,
+    // followed by renowned design practices and internationally visible employers.
     const FEATURED_ORGANISATIONS = [
       {
             "name": "Delft University of Technology",
             "group": "academic",
             "aliases": [
-                  "TU Delft"
+                  "TU Delft",
+                  "Delft University"
             ]
       },
       {
             "name": "Politecnico di Milano",
             "group": "academic",
-            "aliases": []
+            "aliases": [
+                  "Milano Politecnico",
+                  "Polytechnic University of Milan"
+            ]
       },
       {
             "name": "Design School Kolding",
             "group": "academic",
-            "aliases": []
+            "aliases": [
+                  "Designskolen Kolding",
+                  "Kolding School of Design",
+                  "Design School, Denmark"
+            ]
       },
       {
-            "name": "Nanyang Technological University",
+            "name": "Academy of Fine Arts, Uniarts Helsinki",
             "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "City University of Hong Kong",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "Queensland University of Technology",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "University of Technology Sydney",
-            "group": "academic",
-            "aliases": []
+            "aliases": [
+                  "Academy of Fine Arts Helsinki",
+                  "Academy of Fine Arts, UniArts Helsinki",
+                  "University of the Arts Helsinki - Academy of Fine Arts"
+            ]
       },
       {
             "name": "Joshibi University of Art and Design",
             "group": "academic",
-            "aliases": []
+            "aliases": [
+                  "Joshibi University",
+                  "Joshibi University of Art & Design"
+            ]
       },
       {
             "name": "Mimar Sinan Fine Arts University",
             "group": "academic",
-            "aliases": []
+            "aliases": [
+                  "Mimar Sinan University of Fine Arts"
+            ]
       },
       {
             "name": "Norwegian University of Science and Technology",
@@ -2772,16 +2778,6 @@
             ]
       },
       {
-            "name": "University of Michigan",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "Shibaura Institute of Technology",
-            "group": "academic",
-            "aliases": []
-      },
-      {
             "name": "Middle East Technical University",
             "group": "academic",
             "aliases": [
@@ -2789,48 +2785,156 @@
             ]
       },
       {
-            "name": "Université de Montréal",
+            "name": "Shibaura Institute of Technology",
             "group": "academic",
             "aliases": [
-                  "University of Montreal"
-            ]
-      },
-      {
-            "name": "Curtin University",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "University of Zaragoza",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "RheinMain University of Applied Sciences",
-            "group": "academic",
-            "aliases": [
-                  "Hochschule RheinMain"
-            ]
-      },
-      {
-            "name": "Virginia Tech",
-            "group": "academic",
-            "aliases": [
-                  "Virginia Polytechnic Institute and State University"
+                  "SIT"
             ]
       },
       {
             "name": "University of Wuppertal",
             "group": "academic",
             "aliases": [
+                  "Wuppertal University",
                   "Bergische Universität Wuppertal"
             ]
       },
       {
-            "name": "Graz University of Technology",
+            "name": "RheinMain University of Applied Sciences",
             "group": "academic",
             "aliases": [
-                  "TU Graz"
+                  "RheinMain University",
+                  "RheinMain University of Applied Science",
+                  "Hochschule RheinMain"
+            ]
+      },
+      {
+            "name": "Université de Montréal",
+            "group": "academic",
+            "aliases": [
+                  "University of Montreal",
+                  "Universite de Montreal"
+            ]
+      },
+      {
+            "name": "Indian Institute of Technology Bombay",
+            "group": "academic",
+            "aliases": [
+                  "IIT Bombay",
+                  "Indian Institute of Technology, Bombay",
+                  "IIT Mumbai"
+            ]
+      },
+      {
+            "name": "Indian Institute of Technology Delhi",
+            "group": "academic",
+            "aliases": [
+                  "IIT Delhi",
+                  "Indian Institute of Technology, Delhi"
+            ]
+      },
+      {
+            "name": "City University of Hong Kong",
+            "group": "academic",
+            "aliases": [
+                  "City University Hong Kong",
+                  "City University, Hong Kong",
+                  "CityU Hong Kong"
+            ]
+      },
+      {
+            "name": "Nanyang Technological University",
+            "group": "academic",
+            "aliases": [
+                  "Nanyang Technology University",
+                  "NTU Singapore"
+            ]
+      },
+      {
+            "name": "University of Technology Sydney",
+            "group": "academic",
+            "aliases": [
+                  "UTS"
+            ]
+      },
+      {
+            "name": "University of Queensland",
+            "group": "academic",
+            "aliases": [
+                  "The University of Queensland",
+                  "UQ"
+            ]
+      },
+      {
+            "name": "Curtin University",
+            "group": "academic",
+            "aliases": [
+                  "Curtin University of Technology"
+            ]
+      },
+      {
+            "name": "University of Michigan",
+            "group": "academic",
+            "aliases": [
+                  "University of Michigan Ann Arbor",
+                  "U-M"
+            ]
+      },
+      {
+            "name": "Virginia Tech",
+            "group": "academic",
+            "aliases": [
+                  "Virginia Polytechnic Institute and State University",
+                  "Virginia Technology"
+            ]
+      },
+      {
+            "name": "Purdue University",
+            "group": "academic",
+            "aliases": [
+                  "Purdue University West Lafayette"
+            ]
+      },
+      {
+            "name": "Kansai University",
+            "group": "academic",
+            "aliases": []
+      },
+      {
+            "name": "University of Zaragoza",
+            "group": "academic",
+            "aliases": [
+                  "Universidad de Zaragoza"
+            ]
+      },
+      {
+            "name": "Kansas City Art Institute",
+            "group": "academic",
+            "aliases": [
+                  "Kansas Art Institute",
+                  "KCAI"
+            ]
+      },
+      {
+            "name": "Victoria University",
+            "group": "academic",
+            "aliases": [
+                  "Victoria University Australia",
+                  "Victoria University Melbourne"
+            ]
+      },
+      {
+            "name": "New Mexico State University",
+            "group": "academic",
+            "aliases": [
+                  "NMSU"
+            ]
+      },
+      {
+            "name": "Oklahoma State University",
+            "group": "academic",
+            "aliases": [
+                  "OSU"
             ]
       },
       {
@@ -2842,13 +2946,21 @@
             "name": "Wieden+Kennedy",
             "group": "design",
             "aliases": [
-                  "Wieden Kennedy"
+                  "Wieden Kennedy",
+                  "Wieden & Kennedy"
             ]
       },
       {
             "name": "Porsche Design",
             "group": "design",
             "aliases": []
+      },
+      {
+            "name": "VanBerlo",
+            "group": "design",
+            "aliases": [
+                  "Van Berlo"
+            ]
       },
       {
             "name": "PriestmanGoode",
@@ -2877,18 +2989,6 @@
             "aliases": []
       },
       {
-            "name": "PDD",
-            "group": "design",
-            "aliases": [
-                  "PDD Group"
-            ]
-      },
-      {
-            "name": "VanBerlo",
-            "group": "design",
-            "aliases": []
-      },
-      {
             "name": "DCA",
             "group": "design",
             "aliases": [
@@ -2896,14 +2996,11 @@
             ]
       },
       {
-            "name": "Foolproof",
+            "name": "PDD",
             "group": "design",
-            "aliases": []
-      },
-      {
-            "name": "PA Consulting",
-            "group": "design",
-            "aliases": []
+            "aliases": [
+                  "PDD Group"
+            ]
       },
       {
             "name": "LEGO",
@@ -2917,6 +3014,7 @@
             "name": "The Walt Disney Company",
             "group": "employers",
             "aliases": [
+                  "Walt Disney",
                   "Disney"
             ]
       },
@@ -2933,32 +3031,12 @@
             ]
       },
       {
-            "name": "Jaguar Land Rover",
-            "group": "employers",
-            "aliases": [
-                  "JLR"
-            ]
-      },
-      {
-            "name": "Bentley Motors",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "Rolls-Royce",
-            "group": "employers",
-            "aliases": [
-                  "Rolls Royce",
-                  "Rolls-Royce plc"
-            ]
-      },
-      {
             "name": "Adidas",
             "group": "employers",
             "aliases": []
       },
       {
-            "name": "IBM",
+            "name": "Canon",
             "group": "employers",
             "aliases": []
       },
@@ -2970,7 +3048,7 @@
             ]
       },
       {
-            "name": "Canon",
+            "name": "IBM",
             "group": "employers",
             "aliases": []
       },
@@ -2988,35 +3066,17 @@
             ]
       },
       {
-            "name": "Diageo",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "Dr. Martens",
-            "group": "employers",
-            "aliases": [
-                  "Dr Martens"
-            ]
-      },
-      {
             "name": "PUMA",
             "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "SharkNinja",
-            "group": "employers",
             "aliases": [
-                  "Shark Ninja"
+                  "Puma"
             ]
       },
       {
-            "name": "H&M",
+            "name": "Burberry",
             "group": "employers",
             "aliases": [
-                  "H & M",
-                  "Hennes and Mauritz"
+                  "Burberry Group"
             ]
       }
 ];
