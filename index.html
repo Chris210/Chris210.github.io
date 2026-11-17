@@ -2713,9 +2713,9 @@
     document.getElementById('reset-europe').addEventListener('click', resetMapView);
 
     // Editor-selected shortlist from published Loughborough exchange and placement
-    // examples. These NAMES alone are not evidence of a mapped or active partnership.
-    // Show a featured item only when the actual Mapbox layer contains a matching
-    // location in the loaded viewport; other mapped locations remain searchable.
+    // examples. Names alone do not establish a current mapped relationship.
+    // The featured menu only displays entries verified against the actual Mapbox
+    // source worldwide; ordinary search and Browse all remain viewport-based.
     const FEATURED_ORGANISATIONS = [
       {
             "name": "Delft University of Technology",
@@ -3028,8 +3028,10 @@
             "academic": "Academic institutions",
             "design": "Design studios and consultancies",
             "employers": "Global employers",
-            "featuredCount": "{count} of 50 shortlisted organisations found in this map view. Move the map to explore others.",
-            "featuredEmpty": "No shortlisted organisations in this map view. Move the map or search for any partner.",
+            "featuredCount": "{count} shortlisted organisations found across the world map.",
+            "featuredEmpty": "No shortlisted organisations found in the published world map data.",
+            "featuredLoading": "Checking featured partners across the world map…",
+            "featuredError": "Worldwide featured search is temporarily unavailable. Showing matches in this view instead.",
             "allCount": "{count} locations currently visible on the map."
       },
       "zh-CN": {
@@ -3039,8 +3041,10 @@
             "academic": "学术机构",
             "design": "设计工作室与咨询公司",
             "employers": "全球雇主",
-            "featuredCount": "当前地图范围内找到 50 个候选机构中的 {count} 个。移动地图可探索其他区域。",
-            "featuredEmpty": "当前地图范围内未找到候选机构。请移动地图或按名称搜索。",
+            "featuredCount": "在世界地图数据中找到 {count} 个精选机构。",
+            "featuredEmpty": "已发布的全球地图数据中没有找到精选机构。",
+            "featuredLoading": "正在查找世界各地的精选机构…",
+            "featuredError": "全球精选搜索暂时不可用；改为显示当前地图范围内的匹配项。",
             "allCount": "当前地图可见 {count} 个地点。"
       },
       "zh-TW": {
@@ -3050,8 +3054,10 @@
             "academic": "學術機構",
             "design": "設計工作室與顧問公司",
             "employers": "全球僱主",
-            "featuredCount": "目前地圖範圍內找到 50 個候選機構中的 {count} 個。移動地圖可探索其他地區。",
-            "featuredEmpty": "目前地圖範圍內沒有候選機構。請移動地圖或按名稱搜尋。",
+            "featuredCount": "在全球地圖資料中找到 {count} 個精選機構。",
+            "featuredEmpty": "已發佈的全球地圖資料中找不到精選機構。",
+            "featuredLoading": "正在尋找全球的精選機構…",
+            "featuredError": "全球精選搜尋暫時無法使用；改為顯示目前地圖範圍內的相符項目。",
             "allCount": "目前地圖可見 {count} 個地點。"
       },
       "hi": {
@@ -3061,8 +3067,10 @@
             "academic": "शैक्षणिक संस्थान",
             "design": "डिज़ाइन स्टूडियो और परामर्शदाता",
             "employers": "वैश्विक नियोक्ता",
-            "featuredCount": "इस मानचित्र दृश्य में 50 चुने गए संगठनों में से {count} मिले। अन्य स्थान देखने के लिए मानचित्र खिसकाएँ।",
-            "featuredEmpty": "इस दृश्य में कोई चुना गया संगठन नहीं मिला। मानचित्र खिसकाएँ या नाम से खोजें।",
+            "featuredCount": "विश्व मानचित्र के डेटा में {count} चयनित संस्थाएँ मिलीं।",
+            "featuredEmpty": "प्रकाशित विश्व मानचित्र डेटा में कोई चयनित संस्था नहीं मिली।",
+            "featuredLoading": "विश्व मानचित्र में चयनित संस्थाओं की जाँच हो रही है…",
+            "featuredError": "वैश्विक चयनित खोज अभी उपलब्ध नहीं है। इस दृश्य के मिलान दिखा रहे हैं।",
             "allCount": "इस मानचित्र दृश्य में {count} स्थान हैं।"
       },
       "pa": {
@@ -3072,8 +3080,10 @@
             "academic": "ਵਿੱਦਿਅਕ ਸੰਸਥਾਵਾਂ",
             "design": "ਡਿਜ਼ਾਈਨ ਸਟੂਡੀਓ ਅਤੇ ਸਲਾਹਕਾਰ",
             "employers": "ਵਿਸ਼ਵ ਪੱਧਰੀ ਰੁਜ਼ਗਾਰਦਾਤਾ",
-            "featuredCount": "ਇਸ ਨਕਸ਼ੇ ਵਿੱਚ 50 ਚੁਣੀਆਂ ਸੰਸਥਾਵਾਂ ਵਿੱਚੋਂ {count} ਮਿਲੀਆਂ ਹਨ। ਹੋਰ ਦੇਖਣ ਲਈ ਨਕਸ਼ਾ ਹਿਲਾਓ।",
-            "featuredEmpty": "ਇਸ ਦ੍ਰਿਸ਼ ਵਿੱਚ ਕੋਈ ਚੁਣੀ ਸੰਸਥਾ ਨਹੀਂ ਮਿਲੀ। ਨਕਸ਼ਾ ਹਿਲਾਓ ਜਾਂ ਨਾਮ ਨਾਲ ਲੱਭੋ।",
+            "featuredCount": "ਵਿਸ਼ਵ ਨਕਸ਼ੇ ਦੇ ਡੇਟਾ ਵਿੱਚ {count} ਚੁਣੀਆਂ ਸੰਸਥਾਵਾਂ ਮਿਲੀਆਂ।",
+            "featuredEmpty": "ਪ੍ਰਕਾਸ਼ਿਤ ਵਿਸ਼ਵ ਨਕਸ਼ੇ ਦੇ ਡੇਟਾ ਵਿੱਚ ਕੋਈ ਚੁਣੀ ਸੰਸਥਾ ਨਹੀਂ ਮਿਲੀ।",
+            "featuredLoading": "ਵਿਸ਼ਵ ਨਕਸ਼ੇ ਵਿੱਚ ਚੁਣੀਆਂ ਸੰਸਥਾਵਾਂ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ…",
+            "featuredError": "ਵਿਸ਼ਵ ਪੱਧਰੀ ਖੋਜ ਅਜੇ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਇਸ ਦ੍ਰਿਸ਼ ਦੇ ਮੇਲ ਦਿਖਾਏ ਜਾ ਰਹੇ ਹਨ।",
             "allCount": "ਇਸ ਦ੍ਰਿਸ਼ ਵਿੱਚ {count} ਥਾਵਾਂ ਹਨ।"
       },
       "bn": {
@@ -3083,8 +3093,10 @@
             "academic": "শিক্ষাপ্রতিষ্ঠান",
             "design": "ডিজাইন স্টুডিও ও পরামর্শদাতা",
             "employers": "আন্তর্জাতিক নিয়োগকর্তা",
-            "featuredCount": "এই মানচিত্রে বাছাই করা ৫০টি প্রতিষ্ঠানের মধ্যে {count}টি পাওয়া গেছে। অন্য এলাকা দেখতে মানচিত্র সরান।",
-            "featuredEmpty": "এই দৃশ্যে নির্বাচিত প্রতিষ্ঠান নেই। মানচিত্র সরান বা নাম দিয়ে খুঁজুন।",
+            "featuredCount": "বিশ্ব মানচিত্রের তথ্যে {count}টি নির্বাচিত প্রতিষ্ঠান পাওয়া গেছে।",
+            "featuredEmpty": "প্রকাশিত বিশ্ব মানচিত্রের তথ্যে কোনো নির্বাচিত প্রতিষ্ঠান পাওয়া যায়নি।",
+            "featuredLoading": "বিশ্ব মানচিত্রে নির্বাচিত প্রতিষ্ঠান খোঁজা হচ্ছে…",
+            "featuredError": "বিশ্বব্যাপী নির্বাচিত অনুসন্ধান আপাতত উপলব্ধ নেই। বর্তমান দৃশ্যের মিল দেখানো হচ্ছে।",
             "allCount": "এই দৃশ্যে {count}টি স্থান রয়েছে।"
       },
       "gu": {
@@ -3094,8 +3106,10 @@
             "academic": "શૈક્ષણિક સંસ્થાઓ",
             "design": "ડિઝાઇન સ્ટુડિયો અને સલાહકારો",
             "employers": "વૈશ્વિક નોકરીદાતાઓ",
-            "featuredCount": "આ નકશામાં 50 પસંદ કરેલી સંસ્થાઓમાંથી {count} મળી છે. વધુ જોવા નકશો ખસેડો.",
-            "featuredEmpty": "આ દૃશ્યમાં કોઈ પસંદ કરેલી સંસ્થા મળી નથી. નકશો ખસેડો અથવા નામથી શોધો.",
+            "featuredCount": "વિશ્વ નકશાના ડેટામાં {count} પસંદ કરેલી સંસ્થાઓ મળી.",
+            "featuredEmpty": "પ્રકાશિત વિશ્વ નકશાના ડેટામાં કોઈ પસંદ કરેલી સંસ્થા મળી નથી.",
+            "featuredLoading": "વિશ્વ નકશામાં પસંદ કરેલી સંસ્થાઓ તપાસી રહ્યાં છીએ…",
+            "featuredError": "વિશ્વવ્યાપી પસંદગીની શોધ હાલમાં ઉપલબ્ધ નથી. આ દૃશ્યના પરિણામો બતાવીએ છીએ.",
             "allCount": "આ દૃશ્યમાં {count} સ્થળો છે."
       },
       "ta": {
@@ -3105,8 +3119,10 @@
             "academic": "கல்வி நிறுவனங்கள்",
             "design": "வடிவமைப்பு நிறுவனங்கள் மற்றும் ஆலோசகர்கள்",
             "employers": "சர்வதேச வேலை வழங்குநர்கள்",
-            "featuredCount": "தேர்ந்தெடுக்கப்பட்ட 50 நிறுவனங்களில் {count} இந்த வரைபடக் காட்சியில் உள்ளன. மற்ற பகுதிகளைப் பார்க்க வரைபடத்தை நகர்த்தவும்.",
-            "featuredEmpty": "இந்தக் காட்சியில் தேர்ந்தெடுக்கப்பட்ட நிறுவனங்கள் இல்லை. வரைபடத்தை நகர்த்தவும் அல்லது பெயரால் தேடவும்.",
+            "featuredCount": "உலக வரைபடத் தரவில் தேர்ந்தெடுக்கப்பட்ட {count} நிறுவனங்கள் உள்ளன.",
+            "featuredEmpty": "வெளியிடப்பட்ட உலக வரைபடத் தரவில் தேர்ந்தெடுக்கப்பட்ட நிறுவனங்கள் இல்லை.",
+            "featuredLoading": "உலக வரைபடத்தில் தேர்ந்தெடுக்கப்பட்ட நிறுவனங்களைத் தேடுகிறது…",
+            "featuredError": "உலகளாவிய தேடல் தற்காலிகமாக கிடைக்கவில்லை. இந்தக் காட்சியின் பொருத்தங்கள் காட்டப்படுகின்றன.",
             "allCount": "இந்தக் காட்சியில் {count} இடங்கள் உள்ளன."
       },
       "te": {
@@ -3116,8 +3132,10 @@
             "academic": "విద్యాసంస్థలు",
             "design": "డిజైన్ స్టూడియోలు మరియు కన్సల్టెన్సీలు",
             "employers": "ప్రపంచవ్యాప్త ఉద్యోగదాతలు",
-            "featuredCount": "ఎంచుకున్న 50 సంస్థలలో {count} ఈ మ్యాప్ వీక్షణలో కనిపించాయి. మరిన్ని ప్రాంతాల కోసం మ్యాప్‌ను కదిలించండి.",
-            "featuredEmpty": "ఈ వీక్షణలో ఎంపిక చేసిన సంస్థలు లేవు. మ్యాప్‌ను కదిలించండి లేదా పేరుతో వెతకండి.",
+            "featuredCount": "ప్రపంచ మ్యాప్ డేటాలో ఎంపిక చేసిన {count} సంస్థలు కనిపించాయి.",
+            "featuredEmpty": "ప్రచురిత ప్రపంచ మ్యాప్ డేటాలో ఎంపిక చేసిన సంస్థలేవీ కనిపించలేదు.",
+            "featuredLoading": "ప్రపంచ మ్యాప్‌లో ఎంపిక చేసిన సంస్థలను వెతుకుతోంది…",
+            "featuredError": "ప్రపంచవ్యాప్త శోధన తాత్కాలికంగా అందుబాటులో లేదు. ఈ వీక్షణలోని ఫలితాలు చూపుతున్నాం.",
             "allCount": "ఈ వీక్షణలో {count} ప్రదేశాలు ఉన్నాయి."
       },
       "mr": {
@@ -3127,8 +3145,10 @@
             "academic": "शैक्षणिक संस्था",
             "design": "डिझाइन स्टुडिओ आणि सल्लागार",
             "employers": "जागतिक नियोक्ते",
-            "featuredCount": "निवडलेल्या 50 संस्थांपैकी {count} या नकाशात आढळल्या. इतर भाग पाहण्यासाठी नकाशा हलवा.",
-            "featuredEmpty": "या दृश्यात निवडलेल्या संस्था नाहीत. नकाशा हलवा किंवा नावाने शोधा.",
+            "featuredCount": "जागतिक नकाशाच्या डेटामध्ये {count} निवडलेल्या संस्था सापडल्या.",
+            "featuredEmpty": "प्रकाशित जागतिक नकाशाच्या डेटामध्ये निवडलेल्या संस्था आढळल्या नाहीत.",
+            "featuredLoading": "जागतिक नकाशावर निवडलेल्या संस्था शोधत आहोत…",
+            "featuredError": "जागतिक शोध तात्पुरता उपलब्ध नाही. या दृश्यातील जुळणाऱ्या संस्था दाखवत आहोत.",
             "allCount": "या दृश्यात {count} ठिकाणे आहेत."
       },
       "ur": {
@@ -3138,8 +3158,10 @@
             "academic": "تعلیمی ادارے",
             "design": "ڈیزائن اسٹوڈیوز اور مشیر",
             "employers": "عالمی آجر",
-            "featuredCount": "اس نقشے میں منتخب 50 اداروں میں سے {count} نظر آ رہے ہیں۔ دوسرے علاقے دیکھنے کے لیے نقشہ حرکت دیں۔",
-            "featuredEmpty": "اس منظر میں منتخب ادارے نہیں ملے۔ نقشہ حرکت دیں یا نام سے تلاش کریں۔",
+            "featuredCount": "عالمی نقشے کے ڈیٹا میں {count} منتخب ادارے ملے۔",
+            "featuredEmpty": "شائع شدہ عالمی نقشے کے ڈیٹا میں کوئی منتخب ادارہ نہیں ملا۔",
+            "featuredLoading": "عالمی نقشے میں منتخب ادارے تلاش کیے جا رہے ہیں…",
+            "featuredError": "عالمی تلاش عارضی طور پر دستیاب نہیں۔ موجودہ منظر کے نتائج دکھائے جا رہے ہیں۔",
             "allCount": "اس منظر میں {count} مقامات ہیں۔"
       },
       "ko": {
@@ -3149,8 +3171,10 @@
             "academic": "교육 기관",
             "design": "디자인 스튜디오 및 컨설팅",
             "employers": "글로벌 기업",
-            "featuredCount": "선정된 50개 기관 중 이 지도 화면에서 {count}개를 찾았습니다. 다른 지역은 지도를 이동해 보세요.",
-            "featuredEmpty": "이 화면에 선정된 기관이 없습니다. 지도를 이동하거나 이름으로 검색하세요.",
+            "featuredCount": "세계 지도 데이터에서 선정된 기관 {count}곳을 찾았습니다.",
+            "featuredEmpty": "게시된 세계 지도 데이터에서 선정된 기관을 찾지 못했습니다.",
+            "featuredLoading": "세계 지도에서 선정된 기관을 확인하는 중…",
+            "featuredError": "전 세계 검색을 일시적으로 사용할 수 없어 현재 지도에 보이는 결과를 표시합니다.",
             "allCount": "이 지도 화면에 {count}개 장소가 있습니다."
       },
       "ja": {
@@ -3160,8 +3184,10 @@
             "academic": "教育機関",
             "design": "デザインスタジオ・コンサルティング",
             "employers": "グローバル企業",
-            "featuredCount": "選定した50機関のうち、この地図に表示されているのは{count}件です。他の地域は地図を移動してください。",
-            "featuredEmpty": "この範囲に選定した機関はありません。地図を移動するか、名前で検索してください。",
+            "featuredCount": "世界の地図データに登録された注目の機関は{count}件です。",
+            "featuredEmpty": "公開された世界地図データに選定機関は見つかりませんでした。",
+            "featuredLoading": "世界地図全体から注目の機関を検索しています…",
+            "featuredError": "世界全体の検索を一時的に利用できないため、現在の表示範囲の結果を示します。",
             "allCount": "この地図に{count}件の地点が表示されています。"
       },
       "ms": {
@@ -3171,8 +3197,10 @@
             "academic": "Institusi akademik",
             "design": "Studio dan perunding reka bentuk",
             "employers": "Majikan global",
-            "featuredCount": "{count} daripada 50 organisasi pilihan ditemui dalam paparan peta ini. Gerakkan peta untuk meneroka kawasan lain.",
-            "featuredEmpty": "Tiada organisasi pilihan dalam paparan ini. Gerakkan peta atau cari mengikut nama.",
+            "featuredCount": "{count} organisasi pilihan ditemui dalam data peta seluruh dunia.",
+            "featuredEmpty": "Tiada organisasi pilihan ditemui dalam data peta dunia yang diterbitkan.",
+            "featuredLoading": "Menyemak organisasi pilihan di seluruh peta dunia…",
+            "featuredError": "Carian seluruh dunia tidak tersedia buat sementara. Memaparkan padanan dalam paparan ini.",
             "allCount": "{count} lokasi dalam paparan peta ini."
       },
       "ms-Arab": {
@@ -3182,8 +3210,10 @@
             "academic": "اينستيتوسي اکادميک",
             "design": "ستوديو دان ڤرونديڠ ريکا بنتوق",
             "employers": "ماجکن ݢلوبل",
-            "featuredCount": "{count} درڤد 50 اورݢانيساسي ڤيليهن دتموي دالم ڤاڤرن ڤيتا اين. ݢرقکن ڤيتا اونتوق منراجم کاوسن لاءين.",
-            "featuredEmpty": "تياد اورݢانيساسي ڤيليهن دالم ڤاڤرن اين. ݢرقکن ڤيتا اتاو چاري نام.",
+            "featuredCount": "{count} اورݢانيساسي ڤيليهن دتموي دالم داتا ڤيتا سلوروه دنيا.",
+            "featuredEmpty": "تياد اورݢانيساسي ڤيليهن دتموي دالم داتا ڤيتا دنيا يڠ دتربيتکن.",
+            "featuredLoading": "مڽمق اورݢانيساسي ڤيليهن د سلوروه ڤيتا دنيا…",
+            "featuredError": "چاريان سلوروه دنيا تيدق ترسديا بوات سمينتارا. ڤادانن دالم ڤاڤرن اين دتونجوقکن.",
             "allCount": "{count} لوکاسي دالم ڤاڤرن ڤيتا اين."
       },
       "ne": {
@@ -3193,8 +3223,10 @@
             "academic": "शैक्षिक संस्थाहरू",
             "design": "डिजाइन स्टुडियो र परामर्शदाता",
             "employers": "विश्वव्यापी रोजगारदाता",
-            "featuredCount": "छनोट गरिएका ५० संस्थामध्ये यस नक्सामा {count} भेटिए। अरू ठाउँ हेर्न नक्सा सार्नुहोस्।",
-            "featuredEmpty": "यस दृश्यमा कुनै छनोट गरिएको संस्था भेटिएन। नक्सा सार्नुहोस् वा नाम खोज्नुहोस्।",
+            "featuredCount": "विश्व नक्साको डेटामा {count} छनोट गरिएका संस्थाहरू भेटिए।",
+            "featuredEmpty": "प्रकाशित विश्व नक्साको डेटामा छनोट गरिएका संस्थाहरू भेटिएनन्।",
+            "featuredLoading": "विश्व नक्साभरि छनोट गरिएका संस्थाहरू खोजिँदैछन्…",
+            "featuredError": "विश्वव्यापी खोज अस्थायी रूपमा उपलब्ध छैन। अहिलेको दृश्यका नतिजा देखाइँदैछ।",
             "allCount": "यस दृश्यमा {count} स्थान छन्।"
       },
       "ar": {
@@ -3204,8 +3236,10 @@
             "academic": "المؤسسات الأكاديمية",
             "design": "استوديوهات التصميم والاستشارات",
             "employers": "جهات التوظيف العالمية",
-            "featuredCount": "تم العثور على {count} من أصل 50 جهة مختارة في عرض الخريطة الحالي. حرّك الخريطة لاستكشاف مناطق أخرى.",
-            "featuredEmpty": "لا توجد جهات مختارة في هذا العرض. حرّك الخريطة أو ابحث بالاسم.",
+            "featuredCount": "تم العثور على {count} جهة مختارة في بيانات خريطة العالم.",
+            "featuredEmpty": "لم تُعثر على جهات مختارة في بيانات خريطة العالم المنشورة.",
+            "featuredLoading": "جارٍ البحث عن الجهات المختارة في خريطة العالم…",
+            "featuredError": "البحث العالمي غير متاح مؤقتاً؛ تُعرض النتائج الموجودة في هذا المشهد.",
             "allCount": "يوجد {count} موقعًا في عرض الخريطة الحالي."
       }
 };
@@ -3217,8 +3251,214 @@
       ...item, normalizedAliases: [item.name, ...item.aliases].map(normalizedName)
     }));
 
-    // Accessible alternative to the WebGL points: a keyboard-operable list of locations
-    // currently rendered in the viewport. Vector tiles do not expose the full global dataset.
+    // Featured-partner lookup: read the actual public Mapbox vector tiles across
+    // the WORLD, not merely the tiles/rendered features in the current viewport.
+    // No second Mapbox map instance, extra map load or third-party geocoder needed.
+    // Matches are only promoted when the tile contains the partner's real data.
+    const worldFeaturedMatches = new Map();
+    let worldFeaturedState = 'loading';
+    let worldIndexStarted = false;
+    const wantedWorldNames = new Set(featuredMatchers.flatMap(item => item.normalizedAliases));
+    const worldFeatureFrom = (properties, coordinates, id) => ({
+      type:'Feature', properties, geometry:{type:'Point', coordinates}, id
+    });
+    const addWorldFeature = feature => {
+      if (feature.geometry?.type !== 'Point') return;
+      const name = normalizedName(feature.properties?.name);
+      const coords = feature.geometry.coordinates;
+      if (wantedWorldNames.has(name) && Number.isFinite(coords?.[0]) && Number.isFinite(coords?.[1])) {
+        if (!worldFeaturedMatches.has(name)) worldFeaturedMatches.set(name, feature);
+      }
+    };
+
+    // Tiny read-only Mapbox Vector Tile (MVT) point decoder; avoids loading an
+    // additional WebGL map or depending on a third-party script/CDN.
+    const readMvtPoints = (buffer, tileZ, tileX, tileY, wantedLayer) => {
+      const bytes = new Uint8Array(buffer);
+      const decoder = new TextDecoder();
+      const reader = (data) => {
+        let pos = 0;
+        const u8 = data instanceof Uint8Array ? data : new Uint8Array(data);
+        const varint = () => {
+          let value = 0, shift = 0, byte;
+          do {
+            if (pos >= u8.length || shift > 63) throw Error('Invalid vector tile varint');
+            byte = u8[pos++]; value += (byte & 127) * 2 ** shift; shift += 7;
+          } while (byte & 128);
+          return value;
+        };
+        const chunk = () => { const n = varint(); const end = pos + n; if (end > u8.length) throw Error('Invalid vector tile length'); const out = u8.subarray(pos,end); pos=end; return out; };
+        const skip = wire => {
+          if (wire === 0) varint();
+          else if (wire === 1) pos += 8;
+          else if (wire === 2) chunk();
+          else if (wire === 5) pos += 4;
+          else throw Error('Invalid vector tile wire type');
+          if (pos > u8.length) throw Error('Invalid vector tile field');
+        };
+        const float = (size) => {
+          const n = new DataView(u8.buffer, u8.byteOffset + pos, size);
+          const value = size === 4 ? n.getFloat32(0,true) : n.getFloat64(0,true);
+          pos += size; return value;
+        };
+        return {varint,chunk,skip,float,text:()=>decoder.decode(chunk()),get pos(){return pos},get length(){return u8.length}};
+      };
+      const valuesFrom = data => {
+        const r = reader(data); let value = null;
+        while (r.pos < r.length) {
+          const tag = r.varint(), field = tag >>> 3, wire = tag & 7;
+          if (field === 1 && wire === 2) value = r.text();
+          else if (field === 2 && wire === 5) value = r.float(4);
+          else if (field === 3 && wire === 1) value = r.float(8);
+          else if ([4,5,6,7].includes(field) && wire === 0) {
+            const v = r.varint(); value = field === 6 ? (v & 1 ? -(v+1)/2 : v/2) : field === 7 ? Boolean(v) : v;
+          } else r.skip(wire);
+        }
+        return value;
+      };
+      const packed = data => {
+        const r = reader(data), out = [];
+        while (r.pos < r.length) out.push(r.varint());
+        return out;
+      };
+      const decodeZigZag = v => v & 1 ? -(v+1)/2 : v/2;
+      const pointCoords = (geometry, extent) => {
+        const output = []; let x=0,y=0,i=0;
+        while (i < geometry.length) {
+          const op = geometry[i++], command = op & 7, n = op >>> 3;
+          if (command === 1 || command === 2) {
+            for (let j=0; j<n && i+1<geometry.length; j++) {
+              x += decodeZigZag(geometry[i++]); y += decodeZigZag(geometry[i++]);
+              if (command === 1) {
+                const lng = ((tileX + x/extent) / 2**tileZ)*360 - 180;
+                const merc = Math.PI*(1-2*(tileY + y/extent)/2**tileZ);
+                const lat = Math.atan(Math.sinh(merc))*180/Math.PI;
+                output.push([lng,lat]);
+              }
+            }
+          } else if (command !== 7) break;
+        }
+        return output;
+      };
+      const parseLayer = data => {
+        const r = reader(data); let name='', extent=4096;
+        const keys=[], values=[], features=[];
+        while (r.pos < r.length) {
+          const tag=r.varint(), field=tag>>>3, wire=tag&7;
+          if (field===1 && wire===2) name=r.text();
+          else if (field===2 && wire===2) features.push(r.chunk());
+          else if (field===3 && wire===2) keys.push(r.text());
+          else if (field===4 && wire===2) values.push(valuesFrom(r.chunk()));
+          else if (field===5 && wire===0) extent=r.varint();
+          else r.skip(wire);
+        }
+        if (name !== wantedLayer) return;
+        for (const bytes of features) {
+          const fr=reader(bytes); let id, type=0, tagIds=[], geometry=[];
+          while (fr.pos < fr.length) {
+            const tag=fr.varint(), field=tag>>>3, wire=tag&7;
+            if (field===1 && wire===0) id=fr.varint();
+            else if (field===2 && wire===2) tagIds=packed(fr.chunk());
+            else if (field===3 && wire===0) type=fr.varint();
+            else if (field===4 && wire===2) geometry=packed(fr.chunk());
+            else fr.skip(wire);
+          }
+          if (type !== 1) continue; // Only partner points.
+          const props={};
+          for (let i=0;i+1<tagIds.length;i+=2) {
+            if (keys[tagIds[i]] !== undefined) props[keys[tagIds[i]]] = values[tagIds[i+1]];
+          }
+          if (!wantedWorldNames.has(normalizedName(props.name))) continue;
+          for (const coordinates of pointCoords(geometry, extent)) addWorldFeature(worldFeatureFrom(props, coordinates, id));
+        }
+      };
+      const tile = reader(bytes);
+      while (tile.pos < tile.length) {
+        const tag = tile.varint(), field=tag>>>3, wire=tag&7;
+        if (field === 3 && wire === 2) parseLayer(tile.chunk());
+        else tile.skip(wire);
+      }
+    };
+    const mapboxPublicToken = mapboxgl.accessToken;
+    const getJson = async url => {
+      const ctrl=new AbortController();
+      const timer=setTimeout(()=>ctrl.abort(),12000);
+      try {
+        const response = await fetch(url,{signal:ctrl.signal});
+        if (!response.ok) throw Error('Mapbox data request failed ('+response.status+')');
+        return response.json();
+      } finally { clearTimeout(timer); }
+    };
+    const resolveTiles = async definition => {
+      if (Array.isArray(definition.tiles) && definition.tiles.length) return {tiles:definition.tiles,minzoom:definition.minzoom||0};
+      if (!definition.url) throw Error('Map source has no tile URL');
+      let url=definition.url;
+      if (url.startsWith('mapbox://')) {
+        const ids=url.slice('mapbox://'.length);
+        url='https://api.mapbox.com/v4/'+encodeURIComponent(ids).replace(/%2C/gi,',')+'.json?access_token='+encodeURIComponent(mapboxPublicToken);
+      }
+      return getJson(url);
+    };
+    const scanWorldTiles = async (tileJson, sourceLayer, z) => {
+      const template = tileJson.tiles?.[0];
+      if (!template) throw Error('Published source has no tile template');
+      const jobs=[];
+      for (let x=0; x<2**z; x++) for (let y=0; y<2**z; y++) jobs.push([x,y]);
+      let next=0, succeeded=0;
+      await Promise.all(Array.from({length:Math.min(8,jobs.length)},async () => {
+        while (next<jobs.length) {
+          const [x,y]=jobs[next++];
+          const url=template.replace(/\{z\}/g,String(z)).replace(/\{x\}/g,String(x)).replace(/\{y\}/g,String(y))
+            .replace(/\{ratio\}/g,'');
+          try {
+            const ctrl=new AbortController();
+            const timer=setTimeout(()=>ctrl.abort(),11000);
+            let response;
+            try { response=await fetch(url,{signal:ctrl.signal}); }
+            finally {clearTimeout(timer);}
+            if (response.status===404 || response.status===204) {succeeded++;continue;}
+            if (!response.ok) continue;
+            let buffer=await response.arrayBuffer();
+            let view=new Uint8Array(buffer);
+            if (view[0]===31 && view[1]===139 && typeof DecompressionStream==='function') {
+              buffer=await new Response(new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+            }
+            readMvtPoints(buffer,z,x,y,sourceLayer);
+            succeeded++;
+          } catch (e) { console.warn('Could not read partner tile',z,x,y,e); }
+        }
+      }));
+      if (succeeded !== jobs.length) throw Error('Some worldwide vector tiles could not be loaded');
+    };
+    const startWorldFeaturedLookup = async () => {
+      if (worldIndexStarted || !mapIsReady) return;
+      worldIndexStarted = true;
+      try {
+        const layer=map.getLayer(POINT_LAYER);
+        const definition=map.getStyle().sources[layer.source];
+        if (!definition) throw Error('Published point source is missing');
+        if (definition.type==='geojson') {
+          const geo=typeof definition.data==='string' ? await getJson(definition.data) : definition.data;
+          for (const feature of geo?.features||[]) addWorldFeature(feature);
+        } else if (definition.type==='vector' && layer['source-layer']) {
+          const tileJson=await resolveTiles(definition);
+          const minimumZoom=Math.ceil(tileJson.minzoom||0);
+          if (minimumZoom>3) throw Error('Source minimum zoom requires a separate global partner index');
+          const z=Math.max(2,minimumZoom);
+          await scanWorldTiles(tileJson,layer['source-layer'],z);
+          // A published tileset may omit its points below its minimum zoom.
+          if (worldFeaturedMatches.size===0 && z===2) await scanWorldTiles(tileJson,layer['source-layer'],3);
+        } else throw Error('Unsupported worldwide point-source format');
+        worldFeaturedState='ready';
+      } catch(e) {
+        console.warn('Worldwide featured partner lookup unavailable:',e);
+        worldFeaturedState='error';
+      }
+      updateBrowseList();
+    };
+
+    // Browse all and ordinary searches use visible map points. Featured connections
+    // use a separate worldwide index built from the SAME published Mapbox source.
     const browsePanel = document.getElementById('browse-panel');
     const browseToggle = document.getElementById('browse-toggle');
     const browseClose = document.getElementById('browse-close');
@@ -3242,7 +3482,7 @@
       }
       return [...unique.values()].sort((a,b) => String(a.properties?.name || '').localeCompare(String(b.properties?.name || '')));
     };
-    const makeBrowseItem = (feature, displayName = '') => {
+    const makeBrowseItem = (feature, displayName = '', isFeatured = false) => {
       const props = feature.properties || {};
       const li = document.createElement('li');
       const button = make('button', 'browse-location');
@@ -3261,10 +3501,15 @@
         // search panel covering its popup. Applies to featured and all results.
         browsePanel.hidden = true;
         browseToggle.setAttribute('aria-expanded', 'false');
-        moveView({ center: coords, zoom: Math.max(map.getZoom(), 4), essential: false });
-        // Restore keyboard focus to the map after dismissing the popup, not
-        // to the search field inside the now-hidden search panel.
-        showLocation(feature, null, null, map.getCanvas());
+        // Featured partners get a city-scale view even if they were on the
+        // opposite side of the planet; ordinary results keep prior behaviour.
+        const destinationZoom = isFeatured ? 10 : Math.max(map.getZoom(),4);
+        const destination = {center: coords, zoom: destinationZoom, essential: false};
+        const reveal = () => showLocation(feature, null, null, map.getCanvas());
+        // Open the popup after the camera settles, or Mapbox's auto-pan could
+        // interrupt the globe-to-city animation.
+        if (prefersReducedMotion()) { map.jumpTo(destination); reveal(); }
+        else { map.once('moveend', reveal); map.flyTo(destination); }
       });
       li.append(button);
       return li;
@@ -3295,8 +3540,12 @@
         browseCount.textContent = featuredT('allCount').replace('{count}', availableLocations.length);
         if (!availableLocations.length) browseList.append(make('li','',t('loading')));
       } else {
-        const mappedNames = new Map();
-        for (const f of availableLocations) {
+        // On success use the worldwide tile index. Until it finishes, show
+        // verified local matches, never placeholder/unverified organisations.
+        const mappedNames = worldFeaturedState==='ready' ? worldFeaturedMatches : new Map();
+        // Only fall back to in-view matches if the worldwide request fails;
+        // don't replace a focused list while the global index is still loading.
+        if (worldFeaturedState==='error') for (const f of availableLocations) {
           const name = normalizedName(f.properties?.name);
           if (name && !mappedNames.has(name)) mappedNames.set(name, f);
         }
@@ -3310,11 +3559,13 @@
             browseList.append(li);
             lastGroup = item.group;
           }
-          browseList.append(makeBrowseItem(feature, item.name));
+          browseList.append(makeBrowseItem(feature, item.name, true));
           matchCount++;
         }
-        browseCount.textContent = featuredT('featuredCount').replace('{count}', matchCount);
-        if (!matchCount) browseList.append(make('li','',mapIsReady ? featuredT('featuredEmpty') : t('loading')));
+        browseCount.textContent = worldFeaturedState==='ready'
+          ? featuredT('featuredCount').replace('{count}', matchCount)
+          : featuredT(worldFeaturedState==='error' ? 'featuredError' : 'featuredLoading');
+        if (!matchCount && worldFeaturedState==='ready') browseList.append(make('li','',featuredT('featuredEmpty')));
       }
     };
     const showBrowse = () => {
@@ -3323,6 +3574,7 @@
       browseSearch.value = '';
       browseToggle.setAttribute('aria-expanded','true');
       updateBrowseList();
+      startWorldFeaturedLookup();
       document.getElementById('browse-heading').focus({preventScroll:true});
     };
     const hideBrowse = () => {
@@ -3377,6 +3629,8 @@
       originalFilter = layer.filter || null;
       mapIsReady = true;
       updateBrowseList();
+      // Prefetch only the GE Data tiles; do not request another Mapbox map load.
+      startWorldFeaturedLookup();
       // Use the same Mapbox vector tileset and colour expression as the original layer.
       const originalColor = map.getPaintProperty(POINT_LAYER, 'circle-color');
       if (layer.source && layer['source-layer']) {
