@@ -313,3 +313,32 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
   #v2-home .v2-heading-row {margin-top:10px;}
   #v2-root .v2-cta {bottom:calc(43dvh + 6px);}
 }
+
+/* Tour partner metadata: geographic place name, relationship years and official website. */
+#v2-tour-card .v2-tour-location {margin-bottom:9px;}
+#v2-tour-card .v2-tour-place {display:inline;min-width:0;line-height:1.35;}
+#v2-tour-card .v2-tour-country {font-weight:800;color:#39165f;}
+#v2-tour-card .v2-tour-location-unavailable {color:#726b7c;font-size:12px;}
+#v2-tour-card .v2-tour-relationship {
+ display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 10px;
+ padding:0 2px;margin:9px 0;
+ color:#637080;font-size:12px;line-height:1.4;
+}
+#v2-tour-card .v2-tour-meta-label {font-weight:600;white-space:nowrap;}
+#v2-tour-card .v2-tour-meta-value {color:#37145e;font-weight:750;overflow-wrap:anywhere;}
+#v2-root #v2-tour-website {
+ display:inline-flex;align-items:center;max-width:100%;
+ color:#b50068;text-decoration:none;font-size:12px;
+ font-weight:760;line-height:1.4;
+ padding:5px 2px;margin:0 0 9px;
+ overflow-wrap:anywhere;
+}
+#v2-root #v2-tour-website:hover {text-decoration:underline;text-underline-offset:3px;}
+#v2-root #v2-tour-website:focus-visible {outline:2px solid #b50068;outline-offset:2px;border-radius:4px;}
+.v2-tour-site-label .v2-tour-marker-location {display:block;font-size:11px;color:#606b7a;line-height:1.4;}
+.v2-tour-site-label .v2-tour-marker-location strong {font-weight:800;color:#341454;}
+@media(max-width:680px){
+ #v2-tour-card .v2-tour-relationship {font-size:11px;margin:6px 0;gap:3px 7px;}
+ #v2-root #v2-tour-website {font-size:11px;margin-bottom:5px;}
+ #v2-tour-card .v2-tour-location {margin-bottom:5px;}
+}
