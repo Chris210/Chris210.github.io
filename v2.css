@@ -256,8 +256,8 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 }
 .v2-tour-site-dot {
  position:absolute;left:3px;top:3px;display:block;width:24px;height:24px;
- border:4px solid #fff;border-radius:50%;background:#bd006b;
- box-shadow:0 0 0 5px #c0007050,0 0 0 12px #c000701a,0 4px 14px #2a063b4d;
+ border:4px solid #fff;border-radius:50%;background:#FFBD00;
+ box-shadow:0 0 0 5px rgba(255,189,0,.4),0 0 0 12px rgba(255,189,0,.17),0 4px 14px #2a063b4d;
 }
 .v2-tour-site-label {
  position:absolute;left:45px;top:-16px;
