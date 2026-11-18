@@ -9,6 +9,7 @@ on:
       - 'scripts/build_partner_directory.py'
       - 'head-office-overrides.json'
       - 'partner-location-overrides.json'
+      - 'partner-website-overrides.json'
       - '.github/workflows/build-partner-directory.yml'
   schedule:
     - cron: '23 5 * * *'
