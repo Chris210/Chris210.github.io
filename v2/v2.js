@@ -83,7 +83,8 @@ function view(name){
   if(name==='home') setMobileDrawerOpen(false);
   document.body.classList.toggle('v2-guided-tour-active', name==='tour');
   mode=name;home.hidden=name!=='home'||panelMinimised;
-  $('v2-mobile-nav').hidden=name!=='home';$('v2-mobile-accolade').hidden=name!=='home';
+  // Reuse the identical white mobile masthead in home and guided-tour views.
+  $('v2-mobile-nav').hidden=name!=='home'&&name!=='tour';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
   spot.hidden=name!=='spotlight';compact.hidden=name!=='spotlight'&&!(name==='home'&&panelMinimised);
   dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
