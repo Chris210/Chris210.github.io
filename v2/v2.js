@@ -206,6 +206,16 @@ function highlight(){
  }catch(e){console.warn('Featured marker cluster could not be created',e);}
 }
 window.SDCA_V2={
+ handleMapClick(e){
+  if(!map.getLayer('v2-key-points')||!map.getLayer('v2-key-clusters'))return false;
+  const hits=map.queryRenderedFeatures(e.point,{layers:['v2-key-points','v2-key-clusters']});
+  if(!hits.length)return false;
+  const f=hits[0];
+  if(f.properties?.cluster){return true;} // Layer-specific cluster handler zooms into the group.
+  const item=itemOf(f);
+  if(item){openPartner(item);return true;}
+  return false;
+ },
  handleMapFeature(f){const item=itemOf(f);if(!item)return false;if(mode==='tour'){pauseTour();return true;}openPartner(item,true);return true;},
  openPartner(name){const item=featured.find(i=>normalize(i.name)===normalize(name));if(item)openPartner(item);}
 };
