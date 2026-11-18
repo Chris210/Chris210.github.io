@@ -2389,21 +2389,55 @@
       SA:'عرب سعودي', SG:'سيڠاڤورا', TH:'تايلان',
       TW:'تايوان', US:'اميريک شريکت'
     };
+    // Explicit CLDR fallbacks for browsers whose Intl locale data omits
+    // Punjabi or Nepali territory translations (including some WebKit builds).
+    const coreCountryNames = {
+      pa:{
+        CN:'ਚੀਨ', GB:'ਯੂਨਾਈਟਡ ਕਿੰਗਡਮ', US:'ਸੰਯੁਕਤ ਰਾਜ',
+        IN:'ਭਾਰਤ', FR:'ਫ਼ਰਾਂਸ', DE:'ਜਰਮਨੀ', JP:'ਜਪਾਨ',
+        KR:'ਦੱਖਣ ਕੋਰੀਆ', RU:'ਰੂਸ', CA:'ਕੈਨੇਡਾ', AU:'ਆਸਟ੍ਰੇਲੀਆ',
+        NZ:'ਨਿਊਜ਼ੀਲੈਂਡ', IT:'ਇਟਲੀ', ES:'ਸਪੇਨ', BR:'ਬ੍ਰਾਜ਼ੀਲ',
+        PK:'ਪਾਕਿਸਤਾਨ', BD:'ਬੰਗਲਾਦੇਸ਼', NP:'ਨੇਪਾਲ', LK:'ਸ੍ਰੀ ਲੰਕਾ',
+        MY:'ਮਲੇਸ਼ੀਆ', SG:'ਸਿੰਗਾਪੁਰ', SA:'ਸਾਊਦੀ ਅਰਬ',
+        AE:'ਸੰਯੁਕਤ ਅਰਬ ਅਮੀਰਾਤ', ZA:'ਦੱਖਣੀ ਅਫਰੀਕਾ',
+        EG:'ਮਿਸਰ', IE:'ਆਇਰਲੈਂਡ', NL:'ਨੀਦਰਲੈਂਡ',
+        SE:'ਸਵੀਡਨ', NO:'ਨਾਰਵੇ', FI:'ਫਿਨਲੈਂਡ', DK:'ਡੈਨਮਾਰਕ',
+        PL:'ਪੋਲੈਂਡ', TR:'ਤੁਰਕੀ', TH:'ਥਾਈਲੈਂਡ', ID:'ਇੰਡੋਨੇਸ਼ੀਆ'
+      },
+      ne:{
+        CN:'चीन', GB:'संयुक्त अधिराज्य', US:'संयुक्त राज्य',
+        IN:'भारत', FR:'फ्रान्स', DE:'जर्मनी', JP:'जापान',
+        KR:'दक्षिण कोरिया', RU:'रूस', CA:'क्यानाडा', AU:'अस्ट्रेलिया',
+        NZ:'न्युजिल्याण्ड', IT:'इटली', ES:'स्पेन', BR:'ब्राजिल',
+        PK:'पाकिस्तान', BD:'बङ्गलादेश', NP:'नेपाल', LK:'श्रीलङ्का',
+        MY:'मलेसिया', SG:'सिङ्गापुर', SA:'साउदी अरब',
+        AE:'संयुक्त अरब इमिराट्स', ZA:'दक्षिण अफ्रिका',
+        EG:'इजिप्ट', IE:'आयरल्याण्ड', NL:'नेदरल्याण्ड',
+        SE:'स्विडेन', NO:'नर्वे', FI:'फिनल्याण्ड', DK:'डेनमार्क',
+        PL:'पोल्याण्ड', TR:'तुर्किये', TH:'थाइल्याण्ड', ID:'इन्डोनेशिया'
+      }
+    };
     function getCountryNameExpression(lang) {
       let names;
       if (lang === 'ms-Arab') {
         names = Object.entries(jawiCountryNames).flat();
       } else {
-        if (typeof Intl.DisplayNames !== 'function' ||
-            !Intl.DisplayNames.supportedLocalesOf([lang]).length) return null;
-        const displayNames = new Intl.DisplayNames([lang], {type:'region', fallback:'none'});
         names = [];
-        for (let first = 65; first <= 90; first++) {
-          for (let second = 65; second <= 90; second++) {
-            const code = String.fromCharCode(first, second);
-            const translated = displayNames.of(code);
-            if (translated && translated !== code) names.push(code, translated);
+        if (typeof Intl.DisplayNames === 'function' &&
+            Intl.DisplayNames.supportedLocalesOf([lang]).length) {
+          const displayNames = new Intl.DisplayNames([lang], {type:'region', fallback:'none'});
+          for (let first = 65; first <= 90; first++) {
+            for (let second = 65; second <= 90; second++) {
+              const code = String.fromCharCode(first, second);
+              const translated = displayNames.of(code);
+              if (translated && translated !== code) names.push(code, translated);
+            }
           }
+        }
+        for (const [code, verifiedName] of Object.entries(coreCountryNames[lang] || {})) {
+          const index = names.indexOf(code);
+          if (index === -1) names.push(code, verifiedName);
+          else names[index + 1] = verifiedName;
         }
       }
       return names.length ? ['match', ['get', 'iso_3166_1'], ...names, ['get','name']] : null;
