@@ -3656,9 +3656,13 @@
       map.addSource(CORRECTED_SOURCE, {
         type: 'geojson', data: { type:'FeatureCollection', features:correctedHeadOffices }
       });
+      const originalPointStyle = map.getStyle().layers.find(item => item.id === POINT_LAYER);
       map.addLayer({
         id: CORRECTED_LAYER, type: 'circle', source: CORRECTED_SOURCE,
-        paint: { ...(layer.paint || {}) }
+        paint: { ...(originalPointStyle?.paint || {
+          'circle-color': map.getPaintProperty(POINT_LAYER, 'circle-color') || '#F0047F',
+          'circle-radius': map.getPaintProperty(POINT_LAYER, 'circle-radius') || 7
+        }) }
       });
       function updateHover(feature) {
         const key = feature ? featureKey(feature) : null;
