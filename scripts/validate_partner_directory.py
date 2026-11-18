@@ -69,6 +69,27 @@ def main() -> None:
     if len(set(ids)) != len(ids):
         problems.append(f"{len(ids) - len(set(ids))} non-unique feature ids")
     counts = Counter(f.get("properties", {}).get("group") for f in records)
+    # The original school's two Overview tabs are the historical truth.
+    # Every imported employer row must remain traceable even after deduplication.
+    if "imported_employer_log_rows" in data:
+        actual_rows = sum(len(f.get("properties", {}).get("placement_log_records", []))
+                          for f in records)
+        if actual_rows != data["imported_employer_log_rows"]:
+            problems.append(f"Employer-log integrity failed: {actual_rows} != "
+                            f"{data['imported_employer_log_rows']} source rows")
+        for feature in records:
+            p = feature.get("properties") or {}
+            logs = p.get("placement_log_records") or []
+            if not logs:
+                continue
+            expected_years = {year for row in logs for year in row.get("years", [])}
+            actual_years = set(p.get("placement_years") or [])
+            if expected_years != actual_years:
+                problems.append(f"{p.get('name')}: placement-year flags diverge from source logs")
+            if expected_years and not str(p.get("placement_years_display") or "").strip():
+                problems.append(f"{p.get('name')}: missing placement-years popup label")
+        if counts["Exchange Programme"] < 27:
+            problems.append("Exchange-programme records were unexpectedly lost")
     print(f"Partners: {len(records)}; groups: {dict(counts)}; unresolved (0,0): {zero_names}")
     if problems:
         print("Validation FAILED:")
