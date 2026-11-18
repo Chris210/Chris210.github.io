@@ -18,10 +18,11 @@ const field=(p,...names)=>names.map(k=>p?.[k]).find(v=>v!==undefined&&v!==null&&
 const place=f=>String(field(f?.properties,'location','city','address','town','country','country_name','place')|| (located(f)?'Location on map':'Location to be verified')).replace(/\s+/g,' ').slice(0,110);
 const category=i=>groups.find(g=>g.id===i.group)||groups[0];
 const root=element('div');root.id='v2-root';
-root.innerHTML="\n<div id=\"v2-home\">\n  <div class=\"v2-logo-line\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><button class=\"v2-icon-btn\" id=\"v2-collapse\" type=\"button\" aria-label=\"Minimise panel\">‹</button></div>\n  <div class=\"v2-overline\">School of Design and Creative Arts</div>\n  <h1 class=\"v2-h1\">Loughborough Global<br>Creative Network</h1>\n  <p class=\"v2-subtitle\">Connecting world-leading creativity, education and industry.</p>\n  <div class=\"v2-accolade\"><span class=\"v2-award\" aria-hidden=\"true\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg></span><div><strong>Top 50 in the world for Art and Design</strong><small>QS World University Rankings by Subject 2026</small></div></div>\n  <div class=\"v2-search-wrap\"><label for=\"v2-search\" class=\"visually-hidden\">Search all partners worldwide</label><span class=\"v2-search-icon\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></span><input class=\"v2-search-input\" id=\"v2-search\" type=\"search\" autocomplete=\"off\" placeholder=\"Search partners and places worldwide\"><div id=\"v2-search-results\" hidden role=\"listbox\" aria-label=\"Worldwide partner search results\"></div></div>\n  <div class=\"v2-heading-row\"><h2><span class=\"v2-star\" aria-hidden=\"true\">★</span>Featured Partners</h2><button type=\"button\" class=\"v2-link-btn\" id=\"v2-view-all\">View all 50</button></div>\n  <div class=\"v2-tabs\" role=\"tablist\" aria-label=\"Featured partner categories\"></div>\n  <div class=\"v2-tiles\" id=\"v2-tiles\" aria-live=\"polite\"></div>\n  <div class=\"v2-data-note\"><span aria-hidden=\"true\">ⓘ</span><span>SDCA placement and exchange records · updated 18 Nov 2026</span></div>\n</div>\n<div id=\"v2-mobile-nav\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global<br>Creative Network</strong></div>\n<div id=\"v2-mobile-accolade\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg> &nbsp;Top 50 in the world for Art and Design · QS 2026</div>\n<div class=\"v2-metrics\" id=\"v2-metrics\" aria-label=\"Global network figures\"><span><b>50</b>key partners</span><span><b id=\"v2-placement-count\">—</b>placement hosts</span><span><b id=\"v2-exchange-count\">—</b>exchange universities</span></div>\n<button type=\"button\" class=\"v2-cta\" id=\"v2-start-tour\"><span class=\"v2-play\" aria-hidden=\"true\">▶</span>Take the tour: 50 key partners</button>\n<div id=\"v2-legend\"><span><i class=\"v2-marker-dot\"></i>Key partner</span><span><i class=\"v2-marker-dot other\"></i>Other partners</span></div>\n<div id=\"v2-compact-header\" hidden><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-compact-search\" aria-label=\"Search partners\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></button><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-return-home\" aria-label=\"Return to map\">›</button></div>\n<aside id=\"v2-spotlight\" hidden aria-label=\"Key partner details\"></aside>\n<div id=\"v2-overlay-scrim\" hidden></div>\n<section id=\"v2-directory\" hidden aria-label=\"50 key partners\">\n <div class=\"v2-dir-header\"><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-directory-back\" aria-label=\"Back to map\">‹</button><div class=\"v2-dir-title\"><small>Featured Partners</small><h2>50 organisations our students and staff work with</h2></div><button type=\"button\" class=\"v2-pdf\" id=\"v2-directory-print\">Print / Save PDF</button></div>\n <div class=\"v2-dir-grid\" id=\"v2-dir-grid\"></div><p class=\"v2-dir-note\">Partner names and locations follow the school’s published directory. Locations marked unverified are not plotted.</p>\n</section>\n<section id=\"v2-tour-mode\" hidden aria-live=\"polite\">\n <div id=\"v2-tour-header\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong></div>\n <button type=\"button\" id=\"v2-exit-tour\" aria-label=\"Exit guided tour\" title=\"Exit guided tour\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M6 6 18 18M18 6 6 18\"/></svg><span>Exit tour</span></button>\n <div id=\"v2-tour-card\"><div class=\"v2-spot-header\"><span class=\"v2-badge\">★ Key partner</span><span class=\"v2-spot-type\" id=\"v2-tour-kind\"></span></div><h2 id=\"v2-tour-name\"></h2><p id=\"v2-tour-desc\"></p><div class=\"v2-tour-progress\"><div id=\"v2-tour-progress-active\"></div></div><div class=\"v2-tour-step-line\"><strong id=\"v2-tour-count\"></strong><span id=\"v2-tour-next\"></span></div><div class=\"v2-tour-countdown\" role=\"timer\" aria-label=\"Time until the next partner\"><span id=\"v2-tour-countdown-status\">Next stop in</span><div class=\"v2-countdown-track\" aria-hidden=\"true\"><div id=\"v2-countdown-fill\"></div></div><strong id=\"v2-tour-countdown-seconds\">9s</strong></div><div class=\"v2-tour-actions\"><button type=\"button\" id=\"v2-tour-prev\" aria-label=\"Previous partner\">‹</button><button type=\"button\" id=\"v2-tour-pause\" class=\"v2-pause\" aria-label=\"Pause tour\">Ⅱ</button><button type=\"button\" id=\"v2-tour-next-btn\" aria-label=\"Next partner\">›</button><small>Pauses on interaction · arrow keys to step</small></div></div>\n</section>";
+root.innerHTML="\n<div id=\"v2-home\">\n  <div class=\"v2-logo-line\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><button class=\"v2-icon-btn\" id=\"v2-collapse\" type=\"button\" aria-label=\"Minimise panel\">‹</button></div>\n  <div class=\"v2-overline\">School of Design and Creative Arts</div>\n  <h1 class=\"v2-h1\">Loughborough Global<br>Creative Network</h1>\n  <p class=\"v2-subtitle\">Connecting world-leading creativity, education and industry.</p>\n  <div class=\"v2-accolade\"><span class=\"v2-award\" aria-hidden=\"true\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg></span><div><strong>Top 50 in the world for Art and Design</strong><small>QS World University Rankings by Subject 2026</small></div></div>\n  <div class=\"v2-search-wrap\"><label for=\"v2-search\" class=\"visually-hidden\">Search all partners worldwide</label><span class=\"v2-search-icon\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></span><input class=\"v2-search-input\" id=\"v2-search\" type=\"search\" autocomplete=\"off\" placeholder=\"Search partners and places worldwide\"><div id=\"v2-search-results\" hidden role=\"listbox\" aria-label=\"Worldwide partner search results\"></div></div>\n  <div class=\"v2-heading-row\"><h2><span class=\"v2-star\" aria-hidden=\"true\">★</span>Featured Partners</h2><button type=\"button\" class=\"v2-link-btn\" id=\"v2-view-all\">View all 50</button></div>\n  <div class=\"v2-tabs\" role=\"tablist\" aria-label=\"Featured partner categories\"></div>\n  <div class=\"v2-tiles\" id=\"v2-tiles\" aria-live=\"polite\"></div>\n  <div class=\"v2-data-note\"><span aria-hidden=\"true\">ⓘ</span><span>SDCA placement and exchange records · updated 18 Nov 2026</span></div>\n</div>\n<div id=\"v2-mobile-nav\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global<br>Creative Network</strong></div>\n<div id=\"v2-mobile-accolade\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg> &nbsp;Top 50 in the world for Art and Design · QS 2026</div>\n<div class=\"v2-metrics\" id=\"v2-metrics\" aria-label=\"Global network figures\"><span><b>50</b>key partners</span><span><b id=\"v2-placement-count\">—</b>placement hosts</span><span><b id=\"v2-exchange-count\">—</b>exchange universities</span></div>\n<button type=\"button\" class=\"v2-cta\" id=\"v2-start-tour\"><span class=\"v2-play\" aria-hidden=\"true\">▶</span>Take the tour: 50 key partners</button>\n<div id=\"v2-legend\"><span><i class=\"v2-marker-dot\"></i>Key partner</span><span><i class=\"v2-marker-dot other\"></i>Other partners</span></div>\n<div id=\"v2-compact-header\" hidden><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-compact-search\" aria-label=\"Search partners\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></button><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-return-home\" aria-label=\"Return to map\">›</button></div>\n<aside id=\"v2-spotlight\" hidden aria-label=\"Key partner details\"></aside>\n<div id=\"v2-overlay-scrim\" hidden></div>\n<section id=\"v2-directory\" hidden aria-label=\"50 key partners\">\n <div class=\"v2-dir-header\"><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-directory-back\" aria-label=\"Back to map\">‹</button><div class=\"v2-dir-title\"><small>Featured Partners</small><h2>50 organisations our students and staff work with</h2></div><button type=\"button\" class=\"v2-pdf\" id=\"v2-directory-print\">Print / Save PDF</button></div>\n <div class=\"v2-dir-grid\" id=\"v2-dir-grid\"></div><p class=\"v2-dir-note\">Partner names and locations follow the school’s published directory. Locations marked unverified are not plotted.</p>\n</section>\n<section id=\"v2-tour-mode\" hidden aria-live=\"polite\">\n <div id=\"v2-tour-header\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong></div>\n \n <div id=\"v2-tour-card\"><button type=\"button\" id=\"v2-exit-tour\" aria-label=\"Exit guided tour\" title=\"Exit guided tour\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M6 6 18 18M18 6 6 18\"/></svg><span>Exit tour</span></button><div class=\"v2-spot-header\"><span class=\"v2-badge\">★ Key partner</span><span class=\"v2-spot-type\" id=\"v2-tour-kind\"></span></div><h2 id=\"v2-tour-name\"></h2><p id=\"v2-tour-desc\"></p><div id=\"v2-tour-location\" class=\"v2-tour-location\"></div><div class=\"v2-tour-progress\"><div id=\"v2-tour-progress-active\"></div></div><div class=\"v2-tour-step-line\"><strong id=\"v2-tour-count\"></strong><span id=\"v2-tour-next\"></span></div><div class=\"v2-tour-countdown\" role=\"timer\" aria-label=\"Time until the next partner\"><span id=\"v2-tour-countdown-status\">Next stop in</span><div class=\"v2-countdown-track\" aria-hidden=\"true\"><div id=\"v2-countdown-fill\"></div></div><strong id=\"v2-tour-countdown-seconds\">9s</strong></div><div class=\"v2-tour-actions\"><button type=\"button\" id=\"v2-tour-prev\" aria-label=\"Previous partner\">‹</button><button type=\"button\" id=\"v2-tour-pause\" class=\"v2-pause\" aria-label=\"Pause tour\">Ⅱ</button><button type=\"button\" id=\"v2-tour-next-btn\" aria-label=\"Next partner\">›</button><small>Pauses on interaction · arrow keys to step</small></div></div>\n</section>";
 document.body.appendChild(root);
-const TOUR_INTERVAL_MS=8500;
-let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_INTERVAL_MS,tourDeadline=0;
+const TOUR_DWELL_MS=4000;
+const TOUR_TRAVEL_MS=3700;
+let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
 function view(name){
   mode=name;home.hidden=name!=='home'||panelMinimised;
@@ -110,33 +111,51 @@ function drawSpotlight(i){
  footer.append(element('span','', 'Key partner '+(featured.indexOf(i)+1)+' of 50 · '),next);spot.append(footer);
 }
 function flyTo(i,touring=false){
- const f=find(i);if(!located(f)||!map.loaded())return;
- try{map.flyTo({center:f.geometry.coordinates,zoom:touring?(i.group==='employers'?10.5:3.2):5.5,bearing:0,pitch:0,
- duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:(touring?1500:1150),essential:false,
- padding:touring?{left:0,right:0,top:0,bottom:0}:window.innerWidth>680?{left:65,right:290,top:0,bottom:0}:{left:0,right:0,top:0,bottom:275}});}
- catch(e){console.warn('Map camera could not move',e);}
+ const f=find(i);
+ if(!located(f)||!map.loaded())return false;
+ try{
+   map.flyTo({
+     center:f.geometry.coordinates,
+     zoom:touring?(i.group==='employers'?10.5:8.5):5.5,
+     bearing:0,pitch:0,
+     duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:(touring?TOUR_TRAVEL_MS:1150),
+     essential:false,
+     padding:touring?
+       (window.innerWidth>680?{left:180,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:145}):
+       (window.innerWidth>680?{left:65,right:290,top:0,bottom:0}:{left:0,right:0,top:0,bottom:275})
+   });
+   return true;
+ }catch(e){console.warn('Map camera could not move',e);return false;}
 }
-function openPartner(i,skip=false){stopTimer();drawSpotlight(i);view('spotlight');if(!skip)flyTo(i);}
+function openPartner(i,skip=false){stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');if(!skip)flyTo(i);}
 function renderCountdown(){
  const seconds=$('v2-tour-countdown-seconds');
  if(!seconds)return;
+ const status=$('v2-tour-countdown-status');
+ const fill=$('v2-countdown-fill');
+ if(tourPhase==='travel'){
+   status.textContent='Flying to partner…';
+   seconds.textContent='—';
+   fill.style.width='0%';
+   return;
+ }
  const remaining=Math.max(0,tourRemainingMs);
+ status.textContent=playing?'Next partner in':'Paused · next partner in';
  seconds.textContent=Math.ceil(remaining/1000)+'s';
- $('v2-tour-countdown-status').textContent=playing?'Next stop in':'Paused · next stop in';
- $('v2-countdown-fill').style.width=(100*remaining/TOUR_INTERVAL_MS).toFixed(1)+'%';
+ fill.style.width=(100*remaining/TOUR_DWELL_MS).toFixed(1)+'%';
 }
 function stopTimer(){
  if(tourTimer!==null){clearInterval(tourTimer);tourTimer=null;}
- if(playing)tourRemainingMs=Math.max(0,tourDeadline-performance.now());
+ if(playing&&tourPhase==='dwell')tourRemainingMs=Math.max(0,tourDeadline-performance.now());
  playing=false;
  if(mode==='tour')renderCountdown();
 }
 function overview(){
- stopTimer();panelMinimised=false;view('home');
+ stopTimer();clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';if(map.loaded())map.stop();panelMinimised=false;view('home');
  if(map.loaded())map.easeTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,duration:650,
  padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
 }
-function openDirectory(){stopTimer();directory();view('directory');}
+function openDirectory(){stopTimer();clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';directory();view('directory');}
 function search(){
  const q=$('v2-search').value.trim().toLocaleLowerCase(),box=$('v2-search-results');box.replaceChildren();
  if(!q){box.hidden=true;return;}
@@ -152,40 +171,126 @@ function search(){
  if(!matches.length)box.append(element('div','v2-empty',api.status()==='ready'?'No matching partners found.':'Loading the worldwide directory…'));
  box.hidden=false;
 }
-function pauseTour(){stopTimer();$('v2-tour-pause').textContent='▶';$('v2-tour-pause').setAttribute('aria-label','Resume tour');}
-function playTour(){
+function pauseTour(){
  if(mode!=='tour')return;
  stopTimer();
- if(tourRemainingMs<=0)tourRemainingMs=TOUR_INTERVAL_MS;
- playing=true;
- tourDeadline=performance.now()+tourRemainingMs;
- $('v2-tour-pause').textContent='Ⅱ';
- $('v2-tour-pause').setAttribute('aria-label','Pause tour');
+ $('v2-tour-pause').textContent='▶';
+ $('v2-tour-pause').setAttribute('aria-label','Resume tour');
  renderCountdown();
+}
+function beginDwellClock(){
+ if(tourTimer!==null){clearInterval(tourTimer);tourTimer=null;}
+ if(!playing||tourPhase!=='dwell'||mode!=='tour')return;
+ tourDeadline=performance.now()+tourRemainingMs;
  tourTimer=setInterval(()=>{
+   if(mode!=='tour'){clearInterval(tourTimer);tourTimer=null;return;}
    tourRemainingMs=Math.max(0,tourDeadline-performance.now());
-   if(tourRemainingMs<=0){stepTour(1,true);}
+   if(tourRemainingMs<=0){
+     clearInterval(tourTimer);
+     tourTimer=null;
+     stepTour(1,true);
+     return;
+   }
    renderCountdown();
  },100);
+ renderCountdown();
+}
+function playTour(){
+ if(mode!=='tour')return;
+ playing=true;
+ $('v2-tour-pause').textContent='Ⅱ';
+ $('v2-tour-pause').setAttribute('aria-label','Pause tour');
+ if(tourPhase==='dwell')beginDwellClock();
+ else renderCountdown();
 }
 function tourScreen(){
  const item=ordered[tourIndex],f=find(item),p=f?.properties||{};
- $('v2-tour-name').textContent=item.name;$('v2-tour-kind').textContent=category(item).title;
- $('v2-tour-desc').textContent=String(field(p,'description','summary')||place(f)+' · featured connection with the School of Design and Creative Arts.').slice(0,250);
+ $('v2-tour-name').textContent=item.name;
+ $('v2-tour-kind').textContent=category(item).title;
+ $('v2-tour-desc').textContent=String(field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,250);
+ const placeRow=$('v2-tour-location');
+ placeRow.replaceChildren();
+ placeRow.append(element('span','v2-tour-location-icon','⌖'),element('strong','',located(f)?'Mapped location:':'Location:'),element('span','',siteLocation(f)));
  $('v2-tour-count').textContent='Stop '+(tourIndex+1)+' of '+ordered.length;
  $('v2-tour-next').textContent='Next: '+ordered[(tourIndex+1)%ordered.length].name;
  $('v2-tour-progress-active').style.width=(100*(tourIndex+1)/ordered.length)+'%';
- flyTo(item,true);
+}
+function clearTourArrival(){
+ if(tourArrivalHandler){
+   map.off('moveend',tourArrivalHandler);
+   tourArrivalHandler=null;
+ }
+}
+function clearTourMarker(){
+ if(tourSiteMarker){tourSiteMarker.remove();tourSiteMarker=null;}
+}
+function siteLocation(f){
+ const p=f?.properties||{};
+ const text=field(p,'city','location','address','town','country','country_name','place');
+ if(text)return String(text).replace(/\s+/g,' ').slice(0,120);
+ if(!located(f))return 'Location not verified';
+ const [lng,lat]=f.geometry.coordinates;
+ return Math.abs(lat).toFixed(4)+'°'+(lat>=0?'N':'S')+', '+Math.abs(lng).toFixed(4)+'°'+(lng>=0?'E':'W');
+}
+function showTourMarker(item){
+ clearTourMarker();
+ const f=find(item);
+ if(!located(f))return;
+ const pin=element('div','v2-tour-site-marker');
+ pin.append(element('span','v2-tour-site-dot'));
+ const label=element('div','v2-tour-site-label');
+ label.append(element('strong','',item.name),element('small','',siteLocation(f)));
+ pin.append(label);
+ pin.setAttribute('aria-label','Map marker for '+item.name+' at '+siteLocation(f));
+ tourSiteMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
+   .setLngLat(f.geometry.coordinates).addTo(map);
+}
+function beginTourStep(){
+ tourSequence++;
+ const token=tourSequence;
+ clearTourArrival();
+ clearTourMarker();
+ if(tourTimer!==null){clearInterval(tourTimer);tourTimer=null;}
+ if(map.loaded())map.stop();
+ tourPhase='travel';
+ tourRemainingMs=TOUR_DWELL_MS;
+ const item=ordered[tourIndex];
+ tourScreen();
+ renderCountdown();
+ const arrive=()=>{
+   if(token!==tourSequence||mode!=='tour'||tourPhase!=='travel')return;
+   clearTourArrival();
+   showTourMarker(item);
+   tourPhase='dwell';
+   tourRemainingMs=TOUR_DWELL_MS;
+   if(playing)beginDwellClock();
+   else renderCountdown();
+ };
+ const f=find(item);
+ if(!located(f)||!map.loaded()){arrive();return;}
+ tourArrivalHandler=arrive;
+ map.on('moveend',arrive);
+ if(!flyTo(item,true))arrive();
+ else if(!map.isMoving())arrive();
 }
 function stepTour(d,auto=false){
  if(!auto)pauseTour();
  tourIndex=(tourIndex+d+ordered.length)%ordered.length;
- tourScreen();
- tourRemainingMs=TOUR_INTERVAL_MS;
- if(auto&&playing)tourDeadline=performance.now()+TOUR_INTERVAL_MS;
- renderCountdown();
+ beginTourStep();
 }
-function startTour(){stopTimer();panelMinimised=false;tourIndex=0;tourRemainingMs=TOUR_INTERVAL_MS;view('tour');tourScreen();playTour();}
+function startTour(){
+ stopTimer();
+ clearTourArrival();
+ clearTourMarker();
+ panelMinimised=false;
+ tourIndex=0;
+ playing=true;
+ tourRemainingMs=TOUR_DWELL_MS;
+ view('tour');
+ $('v2-tour-pause').textContent='Ⅱ';
+ $('v2-tour-pause').setAttribute('aria-label','Pause tour');
+ beginTourStep();
+}
 function renderCounts(){
  if(api.status()!=='ready')return;
  const all=api.allFeatures(),points=all.filter(located);
