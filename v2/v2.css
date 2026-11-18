@@ -469,3 +469,61 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
     font-size:9px;
   }
 }
+
+
+/* Mobile navigation and collapsible partner drawer — November 2026.
+   These overrides intentionally do not affect desktop or the V1 site. */
+#v2-mobile-drawer-toggle { display:none; }
+@media screen and (max-width:680px) {
+  :root { --v2-mobile-drawer-peek:72px; }
+  /* Put the university identity and language selection at the top. */
+  #v2-mobile-nav { top:max(12px,env(safe-area-inset-top)); }
+  #language-picker { top:max(12px,env(safe-area-inset-top))!important; }
+  /* Hide the standalone QS banner on small screens only. */
+  #v2-mobile-accolade { display:none!important; }
+  /* Leave room for the masthead: map zoom buttons never cover it. */
+  .mapboxgl-ctrl-top-right { top:90px!important; }
+  /* The original tall sheet is replaced with a closed-by-default drawer. */
+  #v2-root #v2-home {
+    height:min(74dvh,650px);
+    max-height:min(74dvh,650px);
+    padding:9px 20px max(18px,env(safe-area-inset-bottom));
+    transition:height .28s cubic-bezier(.22,1,.36,1),max-height .28s cubic-bezier(.22,1,.36,1);
+    overflow:hidden;
+  }
+  #v2-root #v2-home.v2-mobile-collapsed {
+    height:var(--v2-mobile-drawer-peek);
+    max-height:var(--v2-mobile-drawer-peek);
+    padding:9px 18px 6px;
+  }
+  #v2-home::before { display:none; }
+  #v2-mobile-drawer-toggle {
+    display:flex;flex:0 0 47px;align-items:center;justify-content:center;
+    position:relative;width:100%;min-height:47px;
+    border:0;background:transparent;color:var(--v2-purple);
+    font-size:13px;font-weight:750;letter-spacing:.01em;
+    border-radius:12px;touch-action:manipulation;
+  }
+  #v2-mobile-drawer-toggle::before {
+    content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:42px;height:5px;border-radius:999px;background:#c9cbd0;
+  }
+  #v2-mobile-drawer-toggle:focus-visible {outline:3px solid var(--v2-magenta);outline-offset:1px;}
+  #v2-mobile-drawer-toggle .v2-mobile-drawer-chevron {
+    position:absolute;right:9px;top:17px;font-size:19px;line-height:1;
+    transition:transform .22s ease;
+  }
+  #v2-root.v2-mobile-drawer-open .v2-mobile-drawer-chevron { transform:rotate(180deg); }
+  #v2-home.v2-mobile-collapsed > :not(#v2-mobile-drawer-toggle) {
+    visibility:hidden!important;pointer-events:none!important;
+  }
+  #v2-root .v2-cta {
+    bottom:calc(var(--v2-mobile-drawer-peek) + 14px);
+  }
+  #v2-root.v2-mobile-drawer-open .v2-cta {display:none!important;}
+}
+@media screen and (max-width:680px) and (prefers-reduced-motion:reduce) {
+  #v2-root #v2-home,#v2-mobile-drawer-toggle .v2-mobile-drawer-chevron {
+    transition:none;
+  }
+}
