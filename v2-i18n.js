@@ -1,0 +1,76 @@
+/* V2-only built-in interface translations. Official partner names are never translated. */
+(function(){
+'use strict';
+const EN={
+ ranking:'Top 50 in the world for Art and Design',
+ rankSource:'QS World University Rankings by Subject 2026',
+ searchWorldwide:'Search all {count} partners and places',
+ universityPartners:'Exchange universities',
+ employerPlacements:'Employers & placements',
+ featured:'Featured partners',
+ viewAll:'View all {count}',
+ updated:'SDCA placement and exchange records · updated {date}',
+ employers:'Employers',
+ studios:'Studios',
+ universities:'Universities',
+ featuredCount:'{count} featured partners',
+ hosts:'{count} placement hosts',
+ takeTour:'Take the tour: {count} featured partners',
+ globalEmployer:'Global employer',
+ designStudio:'Design studio',
+ exchangeUniversity:'Exchange university',
+ category:'Category',
+ relationship:'Relationship',
+ academicExchange:'Academic exchange',
+ programmes:'Programmes',
+ placementYears:'Placement years',
+ exchangeYears:'Exchange years',
+ cityUnavailable:'City and country unavailable',
+ noMatches:'No matching partners found.',
+ loadingDirectory:'Loading the worldwide directory…',
+ printPdf:'Print / Save PDF',
+ directoryTitle:'50 organisations our students and staff work with',
+ directoryNote:'Partner names and locations follow the school’s published directory. Locations marked unverified are not plotted.',
+ exitTour:'Exit tour',
+ tourHint:'Pauses on interaction · arrow keys to step',
+ flying:'Flying to partner…',
+ nextIn:'Next partner in',
+ connectionDesc:'Featured connection with the School of Design and Creative Arts.',
+ yearsUnknown:'Years not recorded',
+ unavailable:'Not available',
+ resume:'Resume tour',
+ pause:'Pause tour',
+ backMap:'Back to map',
+ next:'Next',
+ previous:'Previous',
+ searchResults:'Worldwide partner search results',
+ mapColours:'Map marker colours',
+ networkFigures:'Global network figures',
+ partnerDetails:'Featured partner details',
+ selectedPartner:'Selected partner: {name}',
+ website:'Visit {host} →',
+ visitNamedSite:'Visit {name} website ↗',
+ featuredPosition:'Featured partner {index} of {total}',
+ stopPosition:'Stop {index} of {total}',
+};
+const L={
+'zh-CN':{
+ ranking:'艺术与设计学科全球前50强',rankSource:'QS 2026年世界大学学科排名',searchWorldwide:'搜索全部 {count} 个合作伙伴和地点',universityPartners:'交换交流院校',employerPlacements:'雇主与实习单位',featured:'精选合作伙伴',viewAll:'查看全部 {count} 个',updated:'SDCA 实习与交换交流记录 · 更新于 {date}',employers:'雇主',studios:'设计工作室',universities:'大学',featuredCount:'{count} 个精选合作伙伴',hosts:'{count} 个实习单位',takeTour:'开始导览：{count} 个精选合作伙伴',globalEmployer:'全球雇主',designStudio:'设计工作室',exchangeUniversity:'交换交流大学',category:'类别',relationship:'合作关系',academicExchange:'学术交流',programmes:'相关课程',placementYears:'实习年份',exchangeYears:'交流年份',cityUnavailable:'城市和国家信息暂缺',noMatches:'未找到匹配的合作伙伴。',loadingDirectory:'正在加载全球合作伙伴目录…',printPdf:'打印／保存为 PDF',directoryTitle:'与本校师生合作的50家机构',directoryNote:'合作伙伴名称和地点依据学院公布的目录。未核实地点不会显示在地图上。',exitTour:'退出导览',tourHint:'互动时暂停 · 使用方向键切换',flying:'正在前往合作伙伴地点…',nextIn:'距离下一位合作伙伴',connectionDesc:'与设计及创意艺术学院建立合作联系的精选机构。',yearsUnknown:'暂无年份记录',unavailable:'暂无数据',resume:'继续导览',pause:'暂停导览',backMap:'返回地图',next:'下一位',previous:'上一位',searchResults:'全球合作伙伴搜索结果',mapColours:'地图标记颜色',networkFigures:'全球合作网络数据',partnerDetails:'精选合作伙伴详情',selectedPartner:'已选合作伙伴：{name}',website:'访问 {host} →',visitNamedSite:'访问 {name} 网站 ↗',featuredPosition:'精选合作伙伴 {index}／{total}',stopPosition:'第 {index} 站，共 {total} 站'
+},
+'zh-TW':{
+ ranking:'藝術與設計學科全球前50強',rankSource:'QS 2026年世界大學學科排名',searchWorldwide:'搜尋全部 {count} 個合作夥伴與地點',universityPartners:'交換交流大學',employerPlacements:'僱主與實習機構',featured:'精選合作夥伴',viewAll:'查看全部 {count} 個',updated:'SDCA 實習及交換交流紀錄 · 更新於 {date}',employers:'僱主',studios:'設計工作室',universities:'大學',featuredCount:'{count} 個精選合作夥伴',hosts:'{count} 個實習機構',takeTour:'開始導覽：{count} 個精選合作夥伴',globalEmployer:'全球僱主',designStudio:'設計工作室',exchangeUniversity:'交換交流大學',category:'類別',relationship:'合作關係',academicExchange:'學術交流',programmes:'相關課程',placementYears:'實習年度',exchangeYears:'交流年度',cityUnavailable:'城市與國家資料未提供',noMatches:'找不到符合的合作夥伴。',loadingDirectory:'正在載入全球合作夥伴目錄…',printPdf:'列印／儲存為 PDF',directoryTitle:'與本校師生合作的50間機構',directoryNote:'合作夥伴名稱與地點依照學院公布的目錄。未經核實的地點不會顯示於地圖。',exitTour:'結束導覽',tourHint:'互動時暫停 · 使用方向鍵切換',flying:'正在前往合作夥伴地點…',nextIn:'距離下一位合作夥伴',connectionDesc:'與設計及創意藝術學院建立合作的精選機構。',yearsUnknown:'尚無年度紀錄',unavailable:'暫無資料',resume:'繼續導覽',pause:'暫停導覽',backMap:'返回地圖',next:'下一位',previous:'上一位',searchResults:'全球合作夥伴搜尋結果',mapColours:'地圖標記顏色',networkFigures:'全球合作網絡數據',partnerDetails:'精選合作夥伴詳情',selectedPartner:'已選合作夥伴：{name}',website:'前往 {host} →',visitNamedSite:'瀏覽 {name} 網站 ↗',featuredPosition:'精選合作夥伴 {index}／{total}',stopPosition:'第 {index} 站，共 {total} 站'
+},
+'ko':{
+ ranking:'예술·디자인 분야 세계 상위 50위',rankSource:'QS 2026 세계대학 학과별 순위',searchWorldwide:'전 세계 파트너 및 장소 {count}곳 검색',universityPartners:'교환 대학',employerPlacements:'기업 및 현장실습 기관',featured:'주요 협력 기관',viewAll:'전체 {count}곳 보기',updated:'SDCA 현장실습·교환 기록 · {date} 업데이트',employers:'기업',studios:'디자인 스튜디오',universities:'대학교',featuredCount:'주요 협력 기관 {count}곳',hosts:'현장실습 기관 {count}곳',takeTour:'주요 협력 기관 {count}곳 둘러보기',globalEmployer:'글로벌 기업',designStudio:'디자인 스튜디오',exchangeUniversity:'교환 대학',category:'분류',relationship:'협력 관계',academicExchange:'학술 교류',programmes:'프로그램',placementYears:'현장실습 연도',exchangeYears:'교환 연도',cityUnavailable:'도시 및 국가 정보 없음',noMatches:'일치하는 협력 기관이 없습니다.',loadingDirectory:'전 세계 협력 기관 목록 불러오는 중…',printPdf:'인쇄 / PDF 저장',directoryTitle:'학생과 교직원이 협력하는 50개 기관',directoryNote:'기관명과 위치는 대학의 공식 목록을 따릅니다. 확인되지 않은 위치는 지도에 표시되지 않습니다.',exitTour:'둘러보기 종료',tourHint:'상호작용 시 일시정지 · 화살표 키로 이동',flying:'협력 기관으로 이동하는 중…',nextIn:'다음 협력 기관까지',connectionDesc:'디자인·창의예술대학의 주요 협력 기관입니다.',yearsUnknown:'연도 정보 없음',unavailable:'정보 없음',resume:'둘러보기 재개',pause:'둘러보기 일시정지',backMap:'지도로 돌아가기',next:'다음',previous:'이전',searchResults:'전 세계 협력 기관 검색 결과',mapColours:'지도 표시 색상',networkFigures:'글로벌 네트워크 현황',partnerDetails:'주요 협력 기관 정보',selectedPartner:'선택한 기관: {name}',website:'{host} 방문 →',visitNamedSite:'{name} 웹사이트 방문 ↗',featuredPosition:'주요 협력 기관 {index}/{total}',stopPosition:'{total}곳 중 {index}번째'
+},
+'ja':{
+ ranking:'アート＆デザイン分野で世界トップ50',rankSource:'QS世界大学ランキング（分野別）2026',searchWorldwide:'世界の提携先・所在地 {count} 件を検索',universityPartners:'交換留学先大学',employerPlacements:'企業・インターンシップ先',featured:'注目の提携先',viewAll:'全 {count} 件を見る',updated:'SDCAの実習・交換留学記録 · 更新日 {date}',employers:'企業',studios:'デザインスタジオ',universities:'大学',featuredCount:'注目の提携先 {count} 件',hosts:'実習受入先 {count} 件',takeTour:'注目の提携先 {count} 件を巡る',globalEmployer:'グローバル企業',designStudio:'デザインスタジオ',exchangeUniversity:'交換留学先大学',category:'カテゴリー',relationship:'連携内容',academicExchange:'学術交流',programmes:'プログラム',placementYears:'実習年度',exchangeYears:'交換留学年度',cityUnavailable:'都市・国の情報がありません',noMatches:'一致する提携先が見つかりません。',loadingDirectory:'世界の提携先一覧を読み込み中…',printPdf:'印刷 / PDF保存',directoryTitle:'本校の学生・教職員と連携する50機関',directoryNote:'提携先名と所在地は学部の公開データに基づきます。未確認の所在地は地図に表示しません。',exitTour:'ツアーを終了',tourHint:'操作すると一時停止 · 矢印キーで移動',flying:'提携先へ移動中…',nextIn:'次の提携先まで',connectionDesc:'デザイン・クリエイティブアーツ学部の注目提携先です。',yearsUnknown:'年度の記録なし',unavailable:'情報なし',resume:'ツアーを再開',pause:'ツアーを一時停止',backMap:'地図に戻る',next:'次へ',previous:'前へ',searchResults:'世界の提携先検索結果',mapColours:'地図マーカーの色',networkFigures:'グローバルネットワークの数値',partnerDetails:'注目の提携先情報',selectedPartner:'選択中の提携先：{name}',website:'{host} を開く →',visitNamedSite:'{name} のサイトを開く ↗',featuredPosition:'注目の提携先 {index} / {total}',stopPosition:'全 {total} 件中 {index} 件目'
+}
+};
+const LOCALE_KEYS=Object.keys(EN);
+const translate=(locale,key,vars={})=>{
+ const value=L[locale]?.[key]||EN[key]||key;
+ return String(value).replace(/\{(\w+)\}/g,(_,name)=>vars[name]===undefined?'':String(vars[name]));
+};
+window.SDCA_V2_I18N={en:EN,locales:L,keys:LOCALE_KEYS,translate};
+})();
