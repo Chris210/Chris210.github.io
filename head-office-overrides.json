@@ -1,0 +1,133 @@
+{
+  "description": "Permanent head-office coordinate replacements for Mapbox source features published at 0,0. Names must exactly match the source records. Mapbox tileset itself remains unchanged.",
+  "source_tileset": "chrisuxd.1n1nj9bi",
+  "notes": "Elephans is deliberately unresolved; elephans.eu is not independently attributable to an identifiable current office.",
+  "corrections": {
+    "Aday": {
+      "longitude": -0.09893,
+      "latitude": 51.52449,
+      "address": "Former Ecstase Ltd / ADAY principal trading office, 1 Bastwick Street, London EC1V 3NU, UK",
+      "precision": "address",
+      "status": "former office; company in liquidation",
+      "source": "https://www.companiesintheuk.co.uk/gazette/publication/2025-08-11"
+    },
+    "Beastmaker": {
+      "longitude": -2.741262,
+      "latitude": 54.214097,
+      "address": "Beastmaker Ltd, Unit 24-26 Elmsfield Park, Holme, Carnforth LA6 1RJ, UK",
+      "precision": "postcode",
+      "source": "https://find-and-update.company-information.service.gov.uk/company/07835548"
+    },
+    "Bosch Lawn & Gardneing": {
+      "longitude": 1.003401,
+      "latitude": 52.184292,
+      "address": "Bosch Lawn and Garden Limited, Suffolk Works, Stowmarket IP14 1EY, UK",
+      "precision": "postcode",
+      "source": "https://find-and-update.company-information.service.gov.uk/company/03073491"
+    },
+    "By Terry": {
+      "longitude": 2.260992,
+      "latitude": 48.846261,
+      "address": "BY TERRY, 24 Rue Erlanger, 75016 Paris, France",
+      "precision": "street address",
+      "source": "https://www.byterry.com/pages/privacy-policy"
+    },
+    "Earth.Org": {
+      "longitude": 114.12915,
+      "latitude": 22.28082,
+      "address": "Earth.Org Ltd, The Hive on Seven, 7/F Cheung Hing Industrial Building, 12P Smithfield, Kennedy Town, Hong Kong",
+      "precision": "building",
+      "source": "https://earth.org/contact/"
+    },
+    "Ecstase Ltd - ADAY": {
+      "longitude": -0.09893,
+      "latitude": 51.52449,
+      "address": "Former Ecstase Ltd / ADAY principal trading office, 1 Bastwick Street, London EC1V 3NU, UK",
+      "precision": "address",
+      "status": "former office; company in liquidation",
+      "source": "https://www.companiesintheuk.co.uk/gazette/publication/2025-08-11"
+    },
+    "Ectase limited": {
+      "longitude": -0.09893,
+      "latitude": 51.52449,
+      "address": "Former Ecstase Ltd / ADAY principal trading office, 1 Bastwick Street, London EC1V 3NU, UK",
+      "precision": "address",
+      "status": "former office; company in liquidation; spelling differs",
+      "source": "https://www.companiesintheuk.co.uk/gazette/publication/2025-08-11"
+    },
+    "Fernando Romero Enterprise": {
+      "longitude": -99.192374,
+      "latitude": 19.41134,
+      "address": "FR-EE Fernando Romero Enterprise, Calle General Francisco Ramírez 4, Ampliación Daniel Garza, Mexico City 11840, Mexico",
+      "precision": "address",
+      "status": "published office address; verify still current",
+      "source": "https://archinect.com/firms/contact/8306331/fr-ee-fernando-romero-enterprise"
+    },
+    "International Digital Economy Academy": {
+      "longitude": 114.046,
+      "latitude": 22.5074,
+      "address": "IDEA Research Institute HQ, 1 Hongliu Road, Futian Free Trade Zone, Shenzhen, Guangdong, China",
+      "precision": "approximate near address",
+      "source": "https://www.idea.edu.cn/"
+    },
+    "Inventex Solutions": {
+      "longitude": 0.6832,
+      "latitude": 51.172362,
+      "address": "Inventex Solutions Ltd, Burnt House Farm Business Park, Smarden, Kent TN27 8PG, UK",
+      "precision": "postcode",
+      "source": "https://inventex.co.uk/contact-us/"
+    },
+    "K2 Snowboards": {
+      "longitude": -122.132097,
+      "latitude": 47.580975,
+      "address": "K2 Sports, 3305 160th Avenue SE, Bellevue, WA 98008, USA",
+      "precision": "street address",
+      "source": "https://k2snow.com/en-us/support/about-k2"
+    },
+    "Krones AG": {
+      "longitude": 12.191467,
+      "latitude": 48.98406,
+      "address": "Krones AG, Böhmerwaldstraße 5, 93073 Neutraubling, Germany",
+      "precision": "street address",
+      "source": "https://www.krones.com/en/site-notice/"
+    },
+    "Mayertorne Interiors": {
+      "longitude": -0.581411,
+      "latitude": 51.484333,
+      "address": "Former Mayertorne Interiors Ltd registered office, The Green, Datchet, Slough SL3 9AS, UK",
+      "precision": "postcode",
+      "status": "former registered office; dissolved November 2026",
+      "source": "https://www.192.com/atoz/business/slough-sl3/design-consultants/mayertorne-interiors-ltd/8338b4bf552c567c25aabf8078abaa3207a5fd6d/comp/"
+    },
+    "Poker Stars": {
+      "longitude": -4.45115,
+      "latitude": 54.16687,
+      "address": "PokerStars, Douglas Bay Complex, King Edward Road, Onchan, Isle of Man IM3 1DZ",
+      "precision": "building vicinity",
+      "source": "https://careers.flutterinternational.com/our-brands/pokerstars/"
+    },
+    "Prestige Park & Luxury Homes": {
+      "longitude": -0.62632,
+      "latitude": 52.2941,
+      "address": "Prestige Park & Leisure Homes operational head office/manufacturing site, 8 Shipton Way, Express Business Park, Rushden NN10 6GL, UK",
+      "precision": "street address",
+      "status": "registered company office is separately in Hull",
+      "source": "https://www.prestigehomeseeker.com/about-us/our-history"
+    },
+    "TTP": {
+      "longitude": 0.021724,
+      "latitude": 52.090643,
+      "address": "TTP Campus, Cambridge Road, Melbourn SG8 6HQ, UK",
+      "precision": "postcode",
+      "source": "https://find-and-update.company-information.service.gov.uk/company/03304950"
+    },
+    "Zhong Nuo Tong Xun": {
+      "longitude": 114.02752,
+      "latitude": 22.61337,
+      "address": "Shenzhen Zhongnuo Communications Ltd, Huilong Business Centre (汇隆商务中心), Shenzhen North Station, Longhua, Shenzhen, China",
+      "precision": "office building",
+      "status": "website in Mapbox record may belong to different company; separately review",
+      "source": "https://paper.cnstock.com/html/2025-05/09/content_2065196.htm"
+    }
+  }
+}
