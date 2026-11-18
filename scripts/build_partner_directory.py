@@ -277,6 +277,18 @@ def main():
                         if website_fix:
                             feature["properties"]["url"] = website_fix["url"]
                             feature["properties"]["website_corrected"] = True
+                    # Publish consistently usable website URLs in the static
+                    # worldwide directory, even where Mapbox stores a bare
+                    # domain such as 'www.mimagroup.com'. Leave unresolved
+                    # numeric/missing placeholders untouched.
+                    site = feature["properties"].get("url")
+                    if isinstance(site, str):
+                        site = site.replace("\\u00a0", " ").strip()
+                        if not re.match(r"^https?://", site, re.IGNORECASE) and re.fullmatch(
+                            r"(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:[/?#]\\S*)?", site, re.IGNORECASE
+                        ):
+                            site = "https://" + site
+                        feature["properties"]["url"] = site
                     name = str(feature["properties"]["name"]).casefold().strip()
                     # Deduplicate tile overlap / duplicate zoom-generated points.
                     key = (name, round(lon, 3), round(lat, 3))
