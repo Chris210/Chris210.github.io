@@ -65,10 +65,6 @@ function view(name){
   dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
   const picker=$('language-picker');if(picker)picker.hidden=name==='tour';
   $('v2-search-results').hidden=true;
-  // Secondary V2 overlays can follow this view without changing the shared map.
-  document.dispatchEvent(new CustomEvent('sdca-v2-viewchange',{
-   detail:{mode:name,minimised:panelMinimised}
-  }));
 }
 function tabs(){
  const container=home.querySelector('.v2-tabs');container.replaceChildren();
@@ -102,7 +98,24 @@ function directory(){
    b.addEventListener('click',()=>openPartner(i));col.append(b);
   });
   if(g.id==='design'){
-    const rank=element('div','v2-rank-panel');rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>Top 50 in the world for Art and Design</strong></a><br>QS World University Rankings by Subject 2026';col.append(rank);
+    const rank=element('div','v2-rank-panel');
+    rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>Top 50 in the world for Art and Design</strong></a><br>QS World University Rankings by Subject 2026';
+    // Simply expand the original pale-purple QS box with text, not a second panel.
+    const evidence=window.SDCA_V2_EXCELLENCE;
+    if(evidence){
+      const lang=$('language-select')?.value||'en';
+      const localized=evidence.translations[lang]||evidence.translations.en;
+      const list=element('div','v2-evidence-lines');
+      evidence.facts.forEach(fact=>{
+        const line=element('p','v2-evidence-line');
+        line.append(element('strong','v2-evidence-value',fact.value));
+        line.append(document.createTextNode(' '+(localized[fact.key]||evidence.translations.en[fact.key])));
+        if(fact.source)line.append(element('small','v2-evidence-source',' · '+fact.source));
+        list.append(line);
+      });
+      rank.append(list);
+    }
+    col.append(rank);
   }
   container.append(col);
  });
@@ -572,6 +585,7 @@ $('v2-overlay-scrim').onclick=overview;
 $('v2-compact-search').onclick=()=>{overview();$('v2-search').focus();};
 $('v2-return-home').onclick=overview;
 $('v2-collapse').onclick=()=>{panelMinimised=!panelMinimised;view('home');};
+$('language-select')?.addEventListener('change',()=>{if(mode==='directory')directory();});
 $('v2-search').addEventListener('input',search);
 $('v2-search').addEventListener('keydown',e=>{if(e.key==='Enter')$('v2-search-results').querySelector('button:not([disabled])')?.click();});
 $('v2-start-tour').onclick=startTour;$('v2-exit-tour').onclick=overview;
