@@ -67,9 +67,6 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-section-label {font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#65717d;font-weight:750;margin:17px 0 12px}
 .v2-chip-list {display:flex;flex-wrap:wrap;gap:7px}
 .v2-chip {background:#f3f0f7;border-radius:999px;padding:9px 12px;color:#35303d;font-size:12px;line-height:1.2}
-.v2-yearbar {display:flex;gap:4px;margin:14px 0}
-.v2-yearbar span {height:9px;flex:1;border-radius:999px;background:#ccd0d4}
-.v2-yearbar span.active {background:#b9006e}
 .v2-spot-description {color:#606d79;font-size:13px;line-height:1.55}
 .v2-spot-link {display:flex;align-items:center;justify-content:center;background:var(--v2-magenta);color:white!important;border-radius:999px;text-decoration:none;min-height:48px;padding:13px;font-size:13px;font-weight:780;margin-top:18px}
 .v2-spot-link:hover {background:#91005b}
@@ -341,4 +338,20 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  #v2-tour-card .v2-tour-relationship {font-size:11px;margin:6px 0;gap:3px 7px;}
  #v2-root #v2-tour-website {font-size:11px;margin-bottom:5px;}
  #v2-tour-card .v2-tour-location {margin-bottom:5px;}
+}
+
+/* Featured spotlight: clear, sourced QS 2027 rankings and text-only placement years. */
+.v2-stat-grid.v2-stat-grid-two {grid-template-columns:repeat(2,minmax(0,1fr));}
+.v2-stat-grid .v2-qs-stat {background:#f2edf8;}
+.v2-stat-grid .v2-qs-rank {
+ display:block;margin-top:7px;color:#a70068;
+ font-size:21px;font-weight:850;line-height:1.2;
+ text-decoration:none;overflow-wrap:anywhere;
+}
+.v2-stat-grid .v2-qs-rank:hover {text-decoration:underline;text-underline-offset:3px;}
+.v2-stat-grid .v2-qs-rank:focus-visible {outline:2px solid #bb006b;outline-offset:3px;}
+.v2-stat-grid .v2-qs-unavailable {font-size:11px;font-weight:700;color:#756e81;}
+.v2-spot-years {margin:8px 0 15px;line-height:1.55;}
+@media (max-width:680px) {
+ .v2-stat-grid .v2-qs-rank {font-size:18px;}
 }
