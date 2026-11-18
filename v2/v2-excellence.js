@@ -7,7 +7,6 @@ const facts=[
  {value:'100%',key:'impact',source:'REF 2021',tone:'pink'},
  {value:'4TH',key:'ukRank',source:'The Times and Sunday Times Good University Guide 2027',tone:'purple'},
  {value:'1ST',key:'prospects',source:'The Guardian University Guide 2027',tone:'purple'},
- {value:'93%',key:'support',source:'National Student Survey 2026',tone:'purple'},
  {value:'2ND',key:'salary',source:'Longitudinal Education Outcomes · Performing arts',tone:'purple'}
 ];
 const translations={
@@ -17,21 +16,21 @@ const translations={
  prospects:'for Graduate Prospects in Product Design',
  ukRank:'in the UK for Art and Design',
  
- support:'of Design students were positive about academic support on their course',
+ 
  salary:'in the UK for median average salary five years after graduation'
  },
  'zh-CN':{
  heading:'卓越成就',previous:'上一组成就',next:'下一组成就',
  impact:'艺术与设计研究影响力获评“世界领先”或“国际卓越”',
  prospects:'产品设计专业毕业生就业前景排名',ukRank:'英国艺术与设计专业排名',
- support:'设计专业学生对课程学术支持持积极评价',
+ 
  salary:'英国表演艺术专业毕业五年后薪资中位数排名'
  },
  'zh-TW':{
  heading:'卓越成就',previous:'上一組成就',next:'下一組成就',
  impact:'藝術與設計研究影響力獲評「世界領先」或「國際卓越」',
  prospects:'產品設計專業畢業生就業前景排名',ukRank:'英國藝術與設計專業排名',
- support:'設計專業學生對課程學術支援持正面評價',
+ 
  salary:'英國表演藝術專業畢業五年後薪資中位數排名'
  },
  ms:{
@@ -40,7 +39,7 @@ const translations={
  prospects:'bagi Prospek Graduan dalam Reka Bentuk Produk',
  ukRank:'di UK bagi Seni dan Reka Bentuk',
  
- support:'pelajar Reka Bentuk memberikan maklum balas positif tentang sokongan akademik dalam kursus mereka',
+ 
  salary:'di UK bagi gaji median lima tahun selepas tamat pengajian dalam Seni Persembahan'
  },
  'ms-Arab':{
@@ -49,7 +48,7 @@ const translations={
  prospects:'باݢي ڤروسڤيک ݢرادوان دالم ريکا بنتوق ڤرودوک',
  ukRank:'دي UK باݢي سني دان ريکا بنتوق',
  
- support:'ڤلاجر ريکا بنتوق منيبري ماکلوم بالس ڤوسيتيف تنتڠ سوکوڠن اکادميک',
+ 
  salary:'دي UK باݢي ݢاجي ميدين ليما تاهون سلڤس تامت ڤڠاجين دالم سني ڤرسيمبهن'
  },
  hi:{
@@ -58,7 +57,7 @@ const translations={
  prospects:'प्रोडक्ट डिज़ाइन में स्नातक करियर संभावनाओं के लिए',
  ukRank:'कला और डिज़ाइन के लिए ब्रिटेन में',
  
- support:'डिज़ाइन के विद्यार्थियों ने अपने पाठ्यक्रम में शैक्षणिक सहयोग को सकारात्मक बताया',
+ 
  salary:'परफ़ॉर्मिंग आर्ट्स में स्नातक होने के पाँच साल बाद औसत मध्यिका वेतन के लिए ब्रिटेन में'
  },
  pa:{
@@ -67,7 +66,7 @@ const translations={
  prospects:'ਉਤਪਾਦ ਡਿਜ਼ਾਈਨ ਵਿੱਚ ਗ੍ਰੈਜੂਏਟਾਂ ਦੇ ਕਰੀਅਰ ਮੌਕਿਆਂ ਲਈ',
  ukRank:'ਕਲਾ ਅਤੇ ਡਿਜ਼ਾਈਨ ਲਈ ਯੂਕੇ ਵਿੱਚ',
  
- support:'ਡਿਜ਼ਾਈਨ ਦੇ ਵਿਦਿਆਰਥੀਆਂ ਨੇ ਕੋਰਸ ਵਿੱਚ ਅਕਾਦਮਿਕ ਮਦਦ ਨੂੰ ਚੰਗਾ ਦੱਸਿਆ',
+ 
  salary:'ਪਰਫਾਰਮਿੰਗ ਆਰਟਸ ਵਿੱਚ ਗ੍ਰੈਜੂਏਸ਼ਨ ਤੋਂ ਪੰਜ ਸਾਲ ਬਾਅਦ ਦਰਮਿਆਨੀ ਤਨਖਾਹ ਲਈ ਯੂਕੇ ਵਿੱਚ'
  },
  bn:{
@@ -76,7 +75,7 @@ const translations={
  prospects:'প্রোডাক্ট ডিজাইনে স্নাতকদের কর্মজীবনের সম্ভাবনায়',
  ukRank:'শিল্প ও নকশায় যুক্তরাজ্যে',
  
- support:'ডিজাইন শিক্ষার্থীরা কোর্সে একাডেমিক সহায়তায় ইতিবাচক মত দিয়েছেন',
+ 
  salary:'পারফর্মিং আর্টসে স্নাতক হওয়ার পাঁচ বছর পর মধ্যম বেতনের ক্ষেত্রে যুক্তরাজ্যে'
  },
  gu:{
@@ -85,7 +84,7 @@ const translations={
  prospects:'પ્રોડક્ટ ડિઝાઇનમાં સ્નાતકોની કારકિર્દીની તકો માટે',
  ukRank:'કલા અને ડિઝાઇન માટે યુકેમાં',
  
- support:'ડિઝાઇનના વિદ્યાર્થીઓએ અભ્યાસક્રમમાં શૈક્ષણિક સહાય વિશે સકારાત્મક પ્રતિભાવ આપ્યો',
+ 
  salary:'પર્ફોર્મિંગ આર્ટ્સમાં સ્નાતક થયા પછી પાંચ વર્ષે મધ્યમ પગાર માટે યુકેમાં'
  },
  ta:{
@@ -94,7 +93,7 @@ const translations={
  prospects:'தயாரிப்பு வடிவமைப்புப் பட்டதாரிகளின் எதிர்கால வாய்ப்புகளில்',
  ukRank:'கலை மற்றும் வடிவமைப்பில் ஐக்கிய இராச்சியத்தில்',
  
- support:'வடிவமைப்பு மாணவர்கள் தங்கள் பாடத்தின் கல்வி ஆதரவில் திருப்தி தெரிவித்தனர்',
+ 
  salary:'நிகழ்த்துக் கலைகளில் பட்டம் பெற்ற ஐந்து ஆண்டுகளுக்குப் பின் சராசரி நடுநிலை ஊதியத்தில் ஐக்கிய இராச்சியத்தில்'
  },
  te:{
@@ -103,7 +102,7 @@ const translations={
  prospects:'ప్రొడక్ట్ డిజైన్‌లో పట్టభద్రుల ఉపాధి అవకాశాలకు',
  ukRank:'కళలు మరియు డిజైన్‌లో యూకేలో',
  
- support:'డిజైన్ విద్యార్థులు తమ కోర్సులో విద్యా మద్దతుపై సానుకూలంగా స్పందించారు',
+ 
  salary:'ప్రదర్శన కళల్లో పట్టా పొందిన ఐదేళ్ల తర్వాత మధ్యస్థ వేతనంలో యూకేలో'
  },
  mr:{
@@ -112,7 +111,7 @@ const translations={
  prospects:'प्रॉडक्ट डिझाइनमधील पदवीधरांच्या करिअर संधींसाठी',
  ukRank:'कला आणि डिझाइनसाठी यूकेमध्ये',
  
- support:'डिझाइन विद्यार्थ्यांनी अभ्यासक्रमातील शैक्षणिक मदतीबद्दल सकारात्मक मत दिले',
+ 
  salary:'परफॉर्मिंग आर्ट्समध्ये पदवी घेतल्यानंतर पाच वर्षांनी मध्यक वेतनासाठी यूकेमध्ये'
  },
  ur:{
@@ -121,7 +120,7 @@ const translations={
  prospects:'پروڈکٹ ڈیزائن میں فارغ التحصیل طلبہ کے کیریئر امکانات کے لیے',
  ukRank:'آرٹ اور ڈیزائن میں برطانیہ میں',
  
- support:'ڈیزائن کے طلبہ نے اپنے کورس میں تعلیمی مدد کے بارے میں مثبت رائے دی',
+ 
  salary:'پرفارمنگ آرٹس میں گریجویشن کے پانچ سال بعد درمیانی تنخواہ کے لحاظ سے برطانیہ میں'
  },
  ne:{
@@ -130,7 +129,7 @@ const translations={
  prospects:'प्रोडक्ट डिजाइनमा स्नातकको करिअर सम्भावनाका लागि',
  ukRank:'कला तथा डिजाइनमा बेलायतमा',
  
- support:'डिजाइनका विद्यार्थीले पाठ्यक्रमको शैक्षिक सहयोगलाई सकारात्मक मूल्याङ्कन गरे',
+ 
  salary:'प्रदर्शन कलामा स्नातक भएको पाँच वर्षपछि मध्यम तलबका लागि बेलायतमा'
  },
  ar:{
@@ -139,7 +138,7 @@ const translations={
  prospects:'في فرص الخريجين بتخصص تصميم المنتجات',
  ukRank:'في المملكة المتحدة في الفن والتصميم',
  
- support:'من طلاب التصميم عبّروا عن رضاهم عن الدعم الأكاديمي في مقرراتهم',
+ 
  salary:'في المملكة المتحدة في متوسط الراتب الوسيط بعد خمس سنوات من التخرج في الفنون الأدائية'
  },
  ja:{
@@ -148,7 +147,7 @@ const translations={
  prospects:'プロダクトデザイン分野の卒業後の進路で第1位',
  ukRank:'英国のアート＆デザイン分野で第4位',
  
- support:'デザイン専攻の学生が授業での学習支援を高く評価',
+ 
  salary:'英国の舞台芸術分野で卒業5年後の給与中央値が第2位'
  },
  ko:{
@@ -157,7 +156,7 @@ const translations={
  prospects:'제품 디자인 졸업생 진로 전망 1위',
  ukRank:'영국 예술·디자인 분야 4위',
  
- support:'디자인 전공 학생들이 학업 지원에 긍정적으로 응답',
+ 
  salary:'영국 공연예술 분야 졸업 5년 후 급여 중앙값 2위'
  }
 };
