@@ -3631,7 +3631,8 @@
       // not the legacy Mapbox tileset; render those directory features once.
       const suppressWebsitePlaceholder = ['all',
         ['!=', ['get','name'], 'International Digital Economy Academy'],
-        ['!=', ['get','name'], 'UW Designs Ltd']
+        ['!=', ['get','name'], 'UW Designs Ltd'],
+        ['!=', ['get','name'], 'AIE Engineering']
       ];
       originalFilter = buildFilter(['all', hasRealPosition, suppressSupersededDesignReality, suppressWebsitePlaceholder]);
       map.setFilter(POINT_LAYER, originalFilter);
