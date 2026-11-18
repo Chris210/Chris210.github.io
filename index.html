@@ -3420,7 +3420,8 @@
           worldFeaturedMatches.clear();
           for (const feature of directory.features) addWorldFeature(feature);
           correctedHeadOffices = directory.features.filter(feature =>
-            feature?.properties?.head_office_corrected === true &&
+            (feature?.properties?.head_office_corrected === true ||
+             feature?.properties?.directory_override === true) &&
             feature?.geometry?.type === 'Point');
           const officeSource = map.getSource(CORRECTED_SOURCE);
           if (officeSource) officeSource.setData({ type:'FeatureCollection', features:correctedHeadOffices });
@@ -3619,7 +3620,13 @@
       // Hide the original placeholders at (0,0); the verified head-office
       // points are drawn from the corrected worldwide directory instead.
       const hasRealPosition = ['any', ['!=', ['get','longitude'], 0], ['!=', ['get','latitude'], 0]];
-      originalFilter = buildFilter(hasRealPosition);
+      // The published tileset has two Design Reality points. Draw only
+      // the retained St Asaph location from the curated directory overlay.
+      const suppressSupersededDesignReality = ['all',
+        ['!=', ['get','name'], 'Design Reality'],
+        ['!=', ['get','name'], 'design Reality']
+      ];
+      originalFilter = buildFilter(['all', hasRealPosition, suppressSupersededDesignReality]);
       map.setFilter(POINT_LAYER, originalFilter);
       mapIsReady = true;
       updateBrowseList();
