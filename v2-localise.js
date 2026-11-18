@@ -55,6 +55,7 @@ const staticText={
  'No matching partners found.':'noMatches',
  'Loading the worldwide directory…':'loadingDirectory',
  'Print / Save PDF':'printPdf',
+ 'Download PDF':'printPdf',
  '50 organisations our students and staff work with':'directoryTitle',
  'Partner names and locations follow the school’s published directory. Locations marked unverified are not plotted.':'directoryNote',
  'Exit tour':'exitTour',
