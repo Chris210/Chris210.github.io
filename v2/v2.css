@@ -564,3 +564,8 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 
 /* During the guided tour, leave the map unobstructed; normal navigation returns on exit. */
 body.v2-guided-tour-active #map .mapboxgl-ctrl-top-right .mapboxgl-ctrl-group { display:none!important; }
+
+/* V2 mobile tour shares the exact same white masthead as the home view. */
+@media screen and (max-width:680px) {
+  #v2-tour-header { display:none!important; }
+}
