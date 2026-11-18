@@ -3515,6 +3515,7 @@
       });
       map.getCanvas().addEventListener('mouseleave',()=>hover(null));
       map.on('click',event=>{
+        if (window.SDCA_V2?.handleMapClick?.(event)) return;
         const touch=window.matchMedia('(pointer: coarse)').matches;
         const features=pointsNear(event.point,touch?24:18);
         if(!features.length){closePopup();return;}
