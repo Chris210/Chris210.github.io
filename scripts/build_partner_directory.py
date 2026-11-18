@@ -204,6 +204,7 @@ def main():
     decisions = json.loads((BASE / "partner-location-overrides.json").read_text(encoding="utf8"))
     removed_locations = decisions["remove"]
     standardized_locations = decisions["standardize"]
+    website_fixes = json.loads((BASE / "partner-website-overrides.json").read_text(encoding="utf8"))["websites"]
     tilejson_url = f"https://api.mapbox.com/v4/{TILESET_ID}.json?access_token={token}"
     metadata = json.loads(get(tilejson_url))
     templates = metadata.get("tiles") or []
@@ -268,6 +269,14 @@ def main():
                         feature["properties"]["latitude"] = lat
                         feature["properties"]["head_office_corrected"] = True
                         feature["properties"]["head_office_address"] = correction["address"]
+                    # Replace only missing/zero website placeholders. Keep new
+                    # source websites if Mapbox later gains a valid value.
+                    website = feature["properties"].get("url")
+                    if website is None or str(website).strip().lower() in ("", "0", "null"):
+                        website_fix = website_fixes.get(str(feature["properties"]["name"]))
+                        if website_fix:
+                            feature["properties"]["url"] = website_fix["url"]
+                            feature["properties"]["website_corrected"] = True
                     name = str(feature["properties"]["name"]).casefold().strip()
                     # Deduplicate tile overlap / duplicate zoom-generated points.
                     key = (name, round(lon, 3), round(lat, 3))
