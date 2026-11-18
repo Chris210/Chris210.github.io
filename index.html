@@ -2859,334 +2859,63 @@
     };
     document.getElementById('reset-europe').addEventListener('click', resetMapView);
 
-    // International Art & Design academic/employer reputation editorial shortlist.
-    // Curated from 50 records VERIFIED in the actual global Mapbox directory,
-    // with aliases for spelling/abbreviation variants in the source dataset.
-    // This is a curatorial selection, NOT a QS ranking or verification of an
-    // active institutional partnership. Keep the shortlist visible globally;
-    // connect each entry to a mapped point only after its location is verified.
-    // The order prioritises design-specific academic connections across regions,
-    // followed by renowned design practices and internationally visible employers.
+    // Editorial shortlist for international Art & Design academic and employer reputation.
+    // All 50 organisations are matched against distinct, located records in
+    // the authoritative partner-directory.json. Selection highlights established
+    // global exchange links, leading design practices and recognisable employers.
+    // The shortlist is not a QS ranking or a claim that every placement is current.
     const FEATURED_ORGANISATIONS = [
-    {
-        "name": "Delft University of Technology",
-        "group": "academic",
-        "aliases": [
-            "TU Delft",
-            "TU Delft, Netherlands"
-        ]
-    },
-    {
-        "name": "Politecnico di Milano",
-        "group": "academic",
-        "aliases": [
-            "Politechnico di Milano, Italy"
-        ]
-    },
-    {
-        "name": "Design School Kolding",
-        "group": "academic",
-        "aliases": [
-            "Design School Kolding, Denmark"
-        ]
-    },
-    {
-        "name": "Joshibi University of Art and Design",
-        "group": "academic",
-        "aliases": [
-            "Joshibi University of Art & Design, Japan"
-        ]
-    },
-    {
-        "name": "Nanyang Technological University",
-        "group": "academic",
-        "aliases": [
-            "Nanyang Technical University, Singapore"
-        ]
-    },
-    {
-        "name": "City University of Hong Kong",
-        "group": "academic",
-        "aliases": [
-            "City University , Hong Kong"
-        ]
-    },
-    {
-        "name": "Norwegian University of Science and Technology",
-        "group": "academic",
-        "aliases": [
-            "NTNU, Norway"
-        ]
-    },
-    {
-        "name": "Academy of Fine Arts, Finland",
-        "group": "academic",
-        "aliases": [
-            "Academy of Fine Art, Finland"
-        ]
-    },
-    {
-        "name": "Mimar Sinan Fine Arts University",
-        "group": "academic",
-        "aliases": [
-            "Mimar Sinan Fine Arts, Turkey"
-        ]
-    },
-    {
-        "name": "Middle East Technical University",
-        "group": "academic",
-        "aliases": [
-            "Middle East Technical University (METU)"
-        ]
-    },
-    {
-        "name": "Shibaura Institute of Technology",
-        "group": "academic",
-        "aliases": [
-            "Shibaura Institute of Technology, Japan"
-        ]
-    },
-    {
-        "name": "Kansai University",
-        "group": "academic",
-        "aliases": [
-            "Kansai University, Japan"
-        ]
-    },
-    {
-        "name": "University of Michigan",
-        "group": "academic",
-        "aliases": [
-            "University of Michigan, USA"
-        ]
-    },
-    {
-        "name": "Université de Montréal",
-        "group": "academic",
-        "aliases": [
-            "University of Montreal, Canada"
-        ]
-    },
-    {
-        "name": "Curtin University",
-        "group": "academic",
-        "aliases": [
-            "Curtin University, Australia"
-        ]
-    },
-    {
-        "name": "University of Navarra",
-        "group": "academic",
-        "aliases": [
-            "University of Navarra, Spain"
-        ]
-    },
-    {
-        "name": "Virginia Tech",
-        "group": "academic",
-        "aliases": [
-            "Virginia Tech, USA"
-        ]
-    },
-    {
-        "name": "RheinMain University of Applied Sciences",
-        "group": "academic",
-        "aliases": [
-            "RheinMain University of Applied Sciences, Germany"
-        ]
-    },
-    {
-        "name": "University of Zaragoza",
-        "group": "academic",
-        "aliases": [
-            "University of Zaragoza, Spain"
-        ]
-    },
-    {
-        "name": "Kansas City Art Institute",
-        "group": "academic",
-        "aliases": [
-            "Kansas Art Institute, USA"
-        ]
-    },
-    {
-        "name": "Victoria University",
-        "group": "academic",
-        "aliases": [
-            "Victoria University, Australia"
-        ]
-    },
-    {
-        "name": "New Mexico State University",
-        "group": "academic",
-        "aliases": [
-            "New Mexico State, USA"
-        ]
-    },
-    {
-        "name": "University of Technology Sydney, Australia",
-        "group": "academic",
-        "aliases": [
-            "University of Technology, Australia"
-        ]
-    },
-    {
-        "name": "Frog Design",
-        "group": "design",
-        "aliases": [
-            "Frog",
-            "Frog / Capgemini"
-        ]
-    },
-    {
-        "name": "Studio F. A. Porsche",
-        "group": "design",
-        "aliases": [
-            "F.A.Porsche"
-        ]
-    },
-    {
-        "name": "Seymourpowell",
-        "group": "design",
-        "aliases": [
-            "Symore Powel"
-        ]
-    },
-    {
-        "name": "PriestmanGoode",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "Cambridge Consultants",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "DCA",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "PDD",
-        "group": "design",
-        "aliases": [
-            "PDD (Hong Kong)"
-        ]
-    },
-    {
-        "name": "Jacob Jensen Design",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "Layer Design",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "Team Consulting",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "GRO Design",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "Design Reality",
-        "group": "design",
-        "aliases": [
-            "design Reality"
-        ]
-    },
-    {
-        "name": "Dolmen design & Innovation",
-        "group": "design",
-        "aliases": []
-    },
-    {
-        "name": "LEGO",
-        "group": "employers",
-        "aliases": [
-            "Lego"
-        ]
-    },
-    {
-        "name": "The Walt Disney Company",
-        "group": "employers",
-        "aliases": [
-            "Disney"
-        ]
-    },
-    {
-        "name": "BMW",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Canon",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Bosch",
-        "group": "employers",
-        "aliases": [
-            "Bosch Power Tools"
-        ]
-    },
-    {
-        "name": "IBM",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Dyson",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Unilever",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Airbus",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "McLaren",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Louis Vuitton",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Jaguar Land Rover",
-        "group": "employers",
-        "aliases": [
-            "JLR"
-        ]
-    },
-    {
-        "name": "Nissan",
-        "group": "employers",
-        "aliases": []
-    },
-    {
-        "name": "Philips",
-        "group": "employers",
-        "aliases": [
-            "Philips Electronics"
-        ]
-    }
-];
+      {"name":"Delft University of Technology (TU Delft)","group":"academic","aliases":["Delft University of Technology (TU Delft), Netherlands"]},
+      {"name":"Politecnico di Milano","group":"academic","aliases":["Politecnico di Milano, Italy"]},
+      {"name":"Design School Kolding","group":"academic","aliases":["Design School Kolding, Denmark"]},
+      {"name":"Nanyang Technological University","group":"academic","aliases":["Nanyang Technological University, Singapore"]},
+      {"name":"City University of Hong Kong","group":"academic","aliases":["City University , Hong Kong"]},
+      {"name":"Joshibi University of Art and Design","group":"academic","aliases":["Joshibi University of Art & Design, Japan"]},
+      {"name":"University of Technology Sydney","group":"academic","aliases":["University of Technology Sydney, Australia"]},
+      {"name":"Academy of Fine Arts, Helsinki","group":"academic","aliases":["Academy of Fine Art, Finland"]},
+      {"name":"Kansas City Art Institute","group":"academic","aliases":["Kansas City Art Institute, USA"]},
+      {"name":"Mimar Sinan Fine Arts University","group":"academic","aliases":["Mimar Sinan Fine Arts, Turkey"]},
+      {"name":"Middle East Technical University (METU)","group":"academic","aliases":[]},
+      {"name":"Norwegian University of Science and Technology (NTNU)","group":"academic","aliases":["NTNU, Norway"]},
+      {"name":"Université de Montréal","group":"academic","aliases":["University of Montreal, Canada"]},
+      {"name":"University of Michigan","group":"academic","aliases":["University of Michigan, USA"]},
+      {"name":"Curtin University","group":"academic","aliases":["Curtin University, Australia"]},
+      {"name":"Shibaura Institute of Technology","group":"academic","aliases":["Shibaura Institute of Technology, Japan"]},
+      {"name":"Virginia Tech","group":"academic","aliases":["Virginia Tech, USA"]},
+      {"name":"Kansai University","group":"academic","aliases":["Kansai University, Japan"]},
+      {"name":"University of Navarra","group":"academic","aliases":["University of Navarra, Spain"]},
+      {"name":"University of Wuppertal","group":"academic","aliases":["University of Wuppertal, Germany"]},
+      {"name":"RheinMain University of Applied Sciences","group":"academic","aliases":["RheinMain University of Applied Sciences, Germany"]},
+      {"name":"frog (Capgemini Invent)","group":"design","aliases":["Frog"]},
+      {"name":"Seymourpowell","group":"design","aliases":[]},
+      {"name":"PriestmanGoode","group":"design","aliases":[]},
+      {"name":"DCA","group":"design","aliases":[]},
+      {"name":"PDD","group":"design","aliases":[]},
+      {"name":"Kinneir Dufort","group":"design","aliases":[]},
+      {"name":"Pearson Lloyd","group":"design","aliases":[]},
+      {"name":"Form Us With Love","group":"design","aliases":[]},
+      {"name":"Jacob Jensen Design","group":"design","aliases":[]},
+      {"name":"Cambridge Consultants","group":"design","aliases":[]},
+      {"name":"AKQA","group":"design","aliases":[]},
+      {"name":"Wieden+Kennedy","group":"design","aliases":[]},
+      {"name":"LEGO","group":"employers","aliases":[]},
+      {"name":"The Walt Disney Company","group":"employers","aliases":[]},
+      {"name":"Dyson","group":"employers","aliases":[]},
+      {"name":"adidas","group":"employers","aliases":[]},
+      {"name":"BMW","group":"employers","aliases":[]},
+      {"name":"Adobe","group":"employers","aliases":[]},
+      {"name":"IBM","group":"employers","aliases":[]},
+      {"name":"McLaren","group":"employers","aliases":[]},
+      {"name":"Alexander McQueen","group":"employers","aliases":[]},
+      {"name":"Burberry","group":"employers","aliases":[]},
+      {"name":"Iris van Herpen","group":"employers","aliases":[]},
+      {"name":"Louis Vuitton","group":"employers","aliases":[]},
+      {"name":"Warner Bros.","group":"employers","aliases":[]},
+      {"name":"Zandra Rhodes","group":"employers","aliases":[]},
+      {"name":"L'Oréal","group":"employers","aliases":[]},
+      {"name":"Jaguar Land Rover","group":"employers","aliases":[]},
+      {"name":"Unilever","group":"employers","aliases":[]}
+    ];
     const featuredLabels = {
       "en": {
             "heading": "Featured connections",
