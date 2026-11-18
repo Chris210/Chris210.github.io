@@ -248,6 +248,15 @@ def main():
         raise RuntimeError(f"Only {len(partners)} partners found; refusing to publish incomplete index")
     features = sorted(partners.values(), key=lambda f: (str(f["properties"]["name"]).casefold(),
                                                   f["geometry"]["coordinates"][0]))
+    # Do not create a new GitHub commit every day if the data hasn't changed.
+    if DEST.exists():
+        try:
+            previous = json.loads(DEST.read_text(encoding="utf8"))
+            if previous.get("source") == TILESET_ID and previous.get("features") == features:
+                print("Partner directory is unchanged; no commit required", flush=True)
+                return
+        except (OSError, ValueError):
+            pass
     result = {"type": "FeatureCollection", "source": TILESET_ID,
               "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
               "feature_count": len(features), "features": features}
