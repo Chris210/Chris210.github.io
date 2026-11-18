@@ -1107,9 +1107,9 @@
     'use strict';
     // Original public Mapbox token, style and circle data layer.
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXN1eGQiLCJhIjoiY21tZXQ3dnRpMDB5YjJwczhzaXdnZ3VmNCJ9.HLg634ycbIvgXNwmRPDCHg';
-    const POINT_LAYER = 'GE Data';
-    const CORRECTED_LAYER = 'sdca-corrected-head-office-points';
-    const CORRECTED_SOURCE = 'sdca-corrected-head-office-source';
+    const LEGACY_POINT_LAYER = 'GE Data';
+    const POINT_LAYER = 'sdca-master-points';
+    const MASTER_SOURCE = 'sdca-master-partners';
     const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const moveView = options => prefersReducedMotion() ? map.jumpTo(options) : map.flyTo(options);
     const EUROPE_CENTRE = [10, 49];
@@ -2491,10 +2491,11 @@
     const featureKey = f => {
       const p = f.properties || {};
       const coordinates = f.geometry?.coordinates || [];
-      return String(p.id ?? f.id ?? [p.name, ...coordinates].join('|'));
+      return String(f.id ?? p.id ?? [p.name, ...coordinates].join('|'));
     };
     const matchFeature = feature => {
       const p = feature.properties || {};
+      if (feature.id !== null && feature.id !== undefined) return ['==', ['id'], feature.id];
       if (p.id !== null && p.id !== undefined) return ['==', ['get', 'id'], p.id];
       if (p.name) return ['==', ['get', 'name'], p.name];
       return noFeatureFilter;
@@ -2792,7 +2793,7 @@
     }
     const pointsNear = (point, radius) => {
       const box = [[point.x - radius, point.y - radius], [point.x + radius, point.y + radius]];
-      const locationLayers = map.getLayer(CORRECTED_LAYER) ? [POINT_LAYER, CORRECTED_LAYER] : [POINT_LAYER];
+      const locationLayers = [POINT_LAYER];
       const candidates = map.queryRenderedFeatures(box, { layers: locationLayers });
       const uniques = new Map();
       for (const feature of candidates) {
@@ -3378,16 +3379,12 @@
       ...item, normalizedAliases: [item.name, ...item.aliases].map(normalizedName)
     }));
 
-    // A single, verified static worldwide directory is built daily by GitHub
-    // Actions from the exact Mapbox tileset chrisuxd.1n1nj9bi. Browsers make
-    // ONE same-origin JSON request, not 256+ Mapbox tile requests per visitor.
-    // The published map continues to use Mapbox directly for rendering.
+    // One checked-in GeoJSON is the authoritative source for map and worldwide search.
     const worldFeaturedMatches = new Map();
     const worldLocations = new Map();
-    let correctedHeadOffices = [];
+    let masterFeatures = [];
     let worldFeaturedState = 'loading';
     let worldIndexPromise = null;
-    const DIRECTORY_TILESET = 'chrisuxd.1n1nj9bi';
     const matchingFeaturedAlias = (featureName, alias) =>
       featureName === alias || (alias.length >= 4 && featureName.startsWith(alias + ' '));
     const addWorldFeature = feature => {
@@ -3397,7 +3394,7 @@
       const coords = feature.geometry.coordinates;
       if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1]) ||
           (coords[0] === 0 && coords[1] === 0)) return; // Never navigate to Null Island.
-      const key = name + ':' + coords[0].toFixed(3) + ',' + coords[1].toFixed(3);
+      const key = feature.id === undefined ? name + ':' + coords.join(',') : String(feature.id);
       if (!worldLocations.has(key)) worldLocations.set(key, feature);
       for (const item of featuredMatchers) {
         for (const alias of item.normalizedAliases) {
@@ -3418,21 +3415,21 @@
           const response = await fetch('./partner-directory.json', { cache: 'no-cache' });
           if (!response.ok) throw Error('Partner directory HTTP ' + response.status);
           const directory = await response.json();
-          if (directory?.type !== 'FeatureCollection' || directory.source !== DIRECTORY_TILESET ||
-              !Array.isArray(directory.features) || directory.features.length < 50) {
-            throw Error('Invalid or incomplete worldwide partner directory');
-          }
+          if (directory?.type !== 'FeatureCollection' || directory.authoritative !== true ||
+              !Array.isArray(directory.features) || directory.features.length < 50 ||
+              directory.feature_count !== directory.features.length)
+            throw Error('Invalid authoritative partner dataset');
           worldLocations.clear();
           worldFeaturedMatches.clear();
-          for (const feature of directory.features) addWorldFeature(feature);
-          correctedHeadOffices = directory.features.filter(feature =>
-            (feature?.properties?.head_office_corrected === true ||
-             feature?.properties?.directory_override === true ||
-             feature?.properties?.website_corrected === true) &&
-            feature?.geometry?.type === 'Point');
-          const officeSource = map.getSource(CORRECTED_SOURCE);
-          if (officeSource) officeSource.setData({ type:'FeatureCollection', features:correctedHeadOffices });
-          if (worldLocations.size < 50) throw Error('The partner directory contains too few locations');
+          masterFeatures = directory.features.filter(f =>
+            f?.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates) &&
+            f.geometry.coordinates.every(Number.isFinite) &&
+            !(f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0) &&
+            f.properties?.visible !== 'No');
+          for (const feature of masterFeatures) addWorldFeature(feature);
+          const source = map.getSource(MASTER_SOURCE);
+          if (source) source.setData({type:'FeatureCollection',features:masterFeatures});
+          if (worldLocations.size < 50) throw Error('Partner dataset too small');
           worldFeaturedState = 'ready';
         } catch (err) {
           worldFeaturedState = 'error';
@@ -3462,7 +3459,7 @@
       if (!mapIsReady || !map.getLayer(POINT_LAYER)) return [];
       const rect = [[0,0], [map.getCanvas().clientWidth, map.getCanvas().clientHeight]];
       const unique = new Map();
-      const locationLayers = map.getLayer(CORRECTED_LAYER) ? [POINT_LAYER, CORRECTED_LAYER] : [POINT_LAYER];
+      const locationLayers = [POINT_LAYER];
       for (const feature of map.queryRenderedFeatures(rect, { layers: locationLayers })) {
         if (feature.geometry?.type !== 'Point') continue;
         const key = featureKey(feature);
@@ -3608,105 +3605,51 @@
     map.on('idle', updateBrowseList);
 
     map.on('load', () => {
-      const layer = map.getLayer(POINT_LAYER);
-      if (!layer) {
-        error('The “GE Data” layer is missing from the published Mapbox style.');
-        return;
-      }
-      // Mapbox controls can appear after the initial language selection.
-      const controlLabels = mapboxControlLabels[currentLanguage] || mapboxControlLabels.en;
-      ['zoom-in','zoom-out','compass'].forEach((name, index) => {
-        const button = document.querySelector('.mapboxgl-ctrl-' + name);
-        if (button) {
-          button.setAttribute('aria-label', controlLabels[index]);
-          button.setAttribute('title', controlLabels[index]);
-        }
+      const legacy = map.getLayer(LEGACY_POINT_LAYER);
+      if (!legacy) {error('GE Data basemap layer missing');return;}
+      const oldPaint = map.getStyle().layers.find(l=>l.id===LEGACY_POINT_LAYER)?.paint||{};
+      const oldColor = map.getPaintProperty(LEGACY_POINT_LAYER,'circle-color');
+      map.setLayoutProperty(LEGACY_POINT_LAYER,'visibility','none');
+      map.addSource(MASTER_SOURCE,{type:'geojson',data:{type:'FeatureCollection',features:masterFeatures}});
+      const paint={...oldPaint};
+      if(!paint['circle-color'])paint['circle-color']=['coalesce',['get','color'],'#F0047F'];
+      if(!paint['circle-radius'])paint['circle-radius']=6;
+      map.addLayer({id:POINT_LAYER,type:'circle',source:MASTER_SOURCE,paint});
+      const shared={type:'circle',source:MASTER_SOURCE};
+      map.addLayer({...shared,id:'sdca-selected-ring',filter:noFeatureFilter,
+        paint:{'circle-radius':18,'circle-color':'#fff','circle-opacity':.1,'circle-stroke-width':3,'circle-stroke-color':'#fff'}},POINT_LAYER);
+      selectionLayerReady=true;
+      map.addLayer({...shared,id:'sdca-hover-halo',filter:noFeatureFilter,
+        paint:{'circle-radius':20,'circle-color':'#fff','circle-opacity':.15}});
+      map.addLayer({...shared,id:'sdca-hover-dot',filter:noFeatureFilter,
+        paint:{'circle-radius':14,'circle-color':oldColor||['coalesce',['get','color'],'#F0047F'],
+          'circle-opacity':1,'circle-stroke-color':'#fff','circle-stroke-width':3}});
+      hoverLayerReady=true;
+      const labels=mapboxControlLabels[currentLanguage]||mapboxControlLabels.en;
+      ['zoom-in','zoom-out','compass'].forEach((name,index)=>{
+        const button=document.querySelector('.mapboxgl-ctrl-'+name);
+        if(button){button.setAttribute('aria-label',labels[index]);button.setAttribute('title',labels[index]);}
       });
       updateMapLanguage(currentLanguage);
-      originalFilter = layer.filter || null;
-      // Hide the original placeholders at (0,0); the verified head-office
-      // points are drawn from the corrected worldwide directory instead.
-      const hasRealPosition = ['any', ['!=', ['get','longitude'], 0], ['!=', ['get','latitude'], 0]];
-      // The published tileset has two Design Reality points. Draw only
-      // the retained St Asaph location from the curated directory overlay.
-      const suppressSupersededDesignReality = ['all',
-        ['!=', ['get','name'], 'Design Reality'],
-        ['!=', ['get','name'], 'design Reality']
-      ];
-      // Verified websites are currently held in the refreshed directory,
-      // not the legacy Mapbox tileset; render those directory features once.
-      const suppressWebsitePlaceholder = ['all',
-        ['!=', ['get','name'], 'International Digital Economy Academy'],
-        ['!=', ['get','name'], 'UW Designs Ltd'],
-        ['!=', ['get','name'], 'AIE Engineering']
-      ];
-      originalFilter = buildFilter(['all', hasRealPosition, suppressSupersededDesignReality, suppressWebsitePlaceholder]);
-      map.setFilter(POINT_LAYER, originalFilter);
-      mapIsReady = true;
+      mapIsReady=true;
       updateBrowseList();
-      // Partner directory comes from a single GitHub Pages JSON file.
-      // Use the same Mapbox colour expression as the original layer.
-      const originalColor = map.getPaintProperty(POINT_LAYER, 'circle-color');
-      if (layer.source && layer['source-layer']) {
-        const shared = { type: 'circle', source: layer.source, 'source-layer': layer['source-layer'] };
-        map.addLayer({
-          ...shared, id: 'sdca-selected-ring', filter: buildFilter(noFeatureFilter),
-          paint: {
-            'circle-radius': 18, 'circle-color': '#fff', 'circle-opacity': .1,
-            'circle-stroke-width': 3, 'circle-stroke-color': '#fff'
-          }
-        }, POINT_LAYER);
-        selectionLayerReady = true;
-        if (originalColor !== undefined) {
-          map.addLayer({
-            ...shared, id: 'sdca-hover-halo', filter: buildFilter(noFeatureFilter),
-            paint: { 'circle-radius': 20, 'circle-color': '#fff', 'circle-opacity': .15 }
-          });
-          map.addLayer({
-            ...shared, id: 'sdca-hover-dot', filter: buildFilter(noFeatureFilter),
-            paint: {
-              'circle-radius': 14, 'circle-color': originalColor,
-              'circle-opacity': 1, 'circle-stroke-color': '#fff', 'circle-stroke-width': 3
-            }
-          });
-          hoverLayerReady = true;
-        }
+      function hover(feature){
+        const key=feature?featureKey(feature):null;
+        if(key===hoveredKey)return;
+        hoveredKey=key;map.getCanvas().style.cursor=feature?'pointer':'';
+        if(hoverLayerReady){const filter=buildFilter(feature?matchFeature(feature):noFeatureFilter);
+          map.setFilter('sdca-hover-halo',filter);map.setFilter('sdca-hover-dot',filter);}
       }
-      // Keep the published Mapbox tileset untouched, while rendering corrected
-      // headquarters at their real positions with the same circle styling.
-      map.addSource(CORRECTED_SOURCE, {
-        type: 'geojson', data: { type:'FeatureCollection', features:correctedHeadOffices }
+      map.on('mousemove',event=>{
+        const points=map.queryRenderedFeatures(event.point,{layers:[POINT_LAYER]});
+        hover(points.find(f=>f.geometry?.type==='Point')||null);
       });
-      const originalPointStyle = map.getStyle().layers.find(item => item.id === POINT_LAYER);
-      map.addLayer({
-        id: CORRECTED_LAYER, type: 'circle', source: CORRECTED_SOURCE,
-        paint: { ...(originalPointStyle?.paint || {
-          'circle-color': map.getPaintProperty(POINT_LAYER, 'circle-color') || '#F0047F',
-          'circle-radius': map.getPaintProperty(POINT_LAYER, 'circle-radius') || 7
-        }) }
-      });
-      function updateHover(feature) {
-        const key = feature ? featureKey(feature) : null;
-        if (key === hoveredKey) return;
-        hoveredKey = key;
-        map.getCanvas().style.cursor = feature ? 'pointer' : '';
-        if (hoverLayerReady) {
-          const filter = buildFilter(feature ? matchFeature(feature) : noFeatureFilter);
-          map.setFilter('sdca-hover-halo', filter);
-          map.setFilter('sdca-hover-dot', filter);
-        }
-      }
-      map.on('mousemove', event => {
-        const points = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER, CORRECTED_LAYER] });
-        updateHover(points.find(f => f.geometry?.type === 'Point') || null);
-      });
-      map.getCanvas().addEventListener('mouseleave', () => updateHover(null));
-      // A larger 20–24 px hit target makes overlapping circles usable on touch and desktop.
-      map.on('click', event => {
-        const touch = window.matchMedia('(pointer: coarse)').matches;
-        const features = pointsNear(event.point, touch ? 24 : 18);
-        if (!features.length) { closePopup(); return; }
-        if (features.length > 1) showNearby(features, [event.lngLat.lng, event.lngLat.lat]);
+      map.getCanvas().addEventListener('mouseleave',()=>hover(null));
+      map.on('click',event=>{
+        const touch=window.matchMedia('(pointer: coarse)').matches;
+        const features=pointsNear(event.point,touch?24:18);
+        if(!features.length){closePopup();return;}
+        if(features.length>1)showNearby(features,[event.lngLat.lng,event.lngLat.lat]);
         else showLocation(features[0]);
       });
     });
