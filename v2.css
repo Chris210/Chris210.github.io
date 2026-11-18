@@ -397,3 +397,9 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  #v2-spotlight > *,
  #v2-tour-card.v2-partner-arrival > * {animation:none!important;}
 }
+
+/* V2 QS Art & Design ranking links: retain current typographic hierarchy. */
+#v2-root .v2-ranking-link {color:inherit;text-decoration:none;text-underline-offset:3px;cursor:pointer;}
+#v2-root .v2-ranking-link:hover {text-decoration:underline;}
+#v2-root .v2-ranking-link:focus-visible {outline:3px solid #b60069;outline-offset:4px;border-radius:2px;}
+#v2-mobile-accolade .v2-ranking-link {color:inherit;}
