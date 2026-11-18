@@ -65,6 +65,10 @@ function view(name){
   dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
   const picker=$('language-picker');if(picker)picker.hidden=name==='tour';
   $('v2-search-results').hidden=true;
+  // Secondary V2 overlays can follow this view without changing the shared map.
+  document.dispatchEvent(new CustomEvent('sdca-v2-viewchange',{
+   detail:{mode:name,minimised:panelMinimised}
+  }));
 }
 function tabs(){
  const container=home.querySelector('.v2-tabs');container.replaceChildren();
@@ -89,7 +93,12 @@ function directory(){
   col.append(element('h3','',g.title+' · '+items.length));
   items.forEach(i=>{
    const b=element('button','v2-dir-row');
-   b.append(element('strong','',i.name),element('small','',place(find(i))));
+   b.append(element('strong','',i.name));
+   // Do not clutter the directory with missing-geography placeholders.
+   const locationLabel=place(find(i));
+   if(locationLabel&&locationLabel!=='City and country unavailable'){
+    b.append(element('small','',locationLabel));
+   }
    b.addEventListener('click',()=>openPartner(i));col.append(b);
   });
   if(g.id==='design'){
