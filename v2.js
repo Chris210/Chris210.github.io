@@ -181,7 +181,11 @@ function drawSpotlight(i){
   spot.append(element('div','v2-section-label','Placement years'));
   spot.append(element('p','v2-spot-description v2-spot-years',yr));
  }
- const desc=field(p,'description','summary','notes');if(desc)spot.append(element('p','v2-spot-description',String(desc).slice(0,640)));
+ // Relationship-only labels repeat the Relationship tile; retain substantive descriptions.
+ const desc=String(field(p,'description','summary','notes')||'').trim();
+ if(desc&&!/^(?:sdca\s+)?student\s+placement\.?$/i.test(desc)){
+  spot.append(element('p','v2-spot-description',desc.slice(0,640)));
+ }
  if(link){const a=element('a','v2-spot-link','Visit '+new URL(link).hostname.replace(/^www\./,'')+' →');a.href=link;a.target='_blank';a.rel='noopener noreferrer';spot.append(a);}
  const footer=element('div','v2-spot-footer'),next=element('button','v2-link-btn','Next featured partner →');
  next.onclick=()=>openPartner(ordered[(ordered.indexOf(i)+1)%ordered.length]);
