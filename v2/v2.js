@@ -152,11 +152,11 @@ function stopTimer(){
  if(mode==='tour')renderCountdown();
 }
 function overview(){
- stopTimer();clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';if(map.loaded())map.stop();panelMinimised=false;view('home');
+ stopTimer();if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';if(map.loaded())map.stop();panelMinimised=false;view('home');
  if(map.loaded())map.easeTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,duration:650,
  padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
 }
-function openDirectory(){stopTimer();clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';directory();view('directory');}
+function openDirectory(){stopTimer();if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';directory();view('directory');}
 function search(){
  const q=$('v2-search').value.trim().toLocaleLowerCase(),box=$('v2-search-results');box.replaceChildren();
  if(!q){box.hidden=true;return;}
@@ -233,13 +233,76 @@ function clearTourArrival(){
 function clearTourMarker(){
  if(tourSiteMarker){tourSiteMarker.remove();tourSiteMarker=null;}
 }
-function siteLocation(f){
+// Locate the current pin by its city and country (never display raw coordinates).
+// Mapbox reverse-geocoding results are shown transiently, not stored in GitHub.
+function tourLocationFromRecords(f){
  const p=f?.properties||{};
- const text=field(p,'city','location','address','town','country','country_name','place');
- if(text)return String(text).replace(/\s+/g,' ').slice(0,120);
- if(!located(f))return 'Location not verified';
- const [lng,lat]=f.geometry.coordinates;
- return Math.abs(lat).toFixed(4)+'°'+(lat>=0?'N':'S')+', '+Math.abs(lng).toFixed(4)+'°'+(lng>=0?'E':'W');
+ const candidates=[p.location,...(Array.isArray(p.placement_locations)?p.placement_locations:[]),p.address_verified];
+ const countryNames={
+  'uk':'United Kingdom','united kingdom':'United Kingdom','usa':'United States',
+  'us':'United States','united states':'United States',
+  'denmark':'Denmark','sweden':'Sweden','germany':'Germany','france':'France',
+  'italy':'Italy','japan':'Japan','netherlands':'Netherlands',
+  'canada':'Canada','australia':'Australia','singapore':'Singapore',
+  'hong kong':'Hong Kong','turkey':'Turkey','norway':'Norway',
+  'spain':'Spain','finland':'Finland'
+ };
+ for(const candidate of candidates){
+  if(typeof candidate!=='string'||candidate.includes('|'))continue;
+  const parts=candidate.split(',').map(p=>p.trim()).filter(Boolean);
+  if(parts.length<2)continue;
+  const country=countryNames[parts[parts.length-1].toLowerCase()];
+  const city=parts[0];
+  if(country&&city&&!/^\d/.test(city)&&!/\b(road|street|hill|lane|drive|avenue)\b/i.test(city)){
+   return {city,country};
+  }
+ }
+ return {city:'',country:''};
+}
+function tourLocationNode(data){
+ const city=String(data?.city||'').trim(),country=String(data?.country||'').trim();
+ if(!city&&!country)return element('span','v2-tour-location-unavailable','City and country unavailable');
+ const output=document.createDocumentFragment();
+ if(city)output.append(element('span','v2-tour-city',city));
+ if(city&&country)output.append(document.createTextNode(', '));
+ if(country)output.append(element('strong','v2-tour-country',country));
+ return output;
+}
+function renderTourLocation(data){
+ const row=$('v2-tour-location');
+ if(row){
+  row.replaceChildren();
+  row.append(element('span','v2-tour-location-icon','⌖'),tourLocationNode(data));
+ }
+ const marker= tourSiteMarker?.getElement()?.querySelector('.v2-tour-marker-location');
+ if(marker)marker.replaceChildren(tourLocationNode(data));
+}
+function resolveTourLocation(feature,sequence){
+ if(!located(feature)||!mapboxgl.accessToken)return;
+ const [longitude,latitude]=feature.geometry.coordinates;
+ const query=new URLSearchParams({
+  longitude:String(longitude),latitude:String(latitude),
+  types:'place',limit:'1',language:'en',
+  access_token:mapboxgl.accessToken
+ });
+ const controller=new AbortController();
+ tourPlaceAbortController=controller;
+ fetch('https://api.mapbox.com/search/geocode/v6/reverse?'+query.toString(),{
+  signal:controller.signal,credentials:'omit',cache:'no-store'
+ }).then(response=>{
+  if(!response.ok)throw Error('Geocoding unavailable');
+  return response.json();
+ }).then(data=>{
+  if(sequence!==tourSequence||mode!=='tour')return;
+  const p=data.features?.[0]?.properties||{};
+  const city=p.name_preferred||p.name||p.context?.place?.name;
+  const country=p.context?.country?.name;
+  if(!city||!country)return;
+  activeTourPlace={city:String(city),country:String(country)};
+  renderTourLocation(activeTourPlace);
+ }).catch(error=>{
+  if(error.name!=='AbortError')console.info('Tour using partner source location where available');
+ });
 }
 function showTourMarker(item){
  clearTourMarker();
@@ -248,15 +311,18 @@ function showTourMarker(item){
  const pin=element('div','v2-tour-site-marker');
  pin.append(element('span','v2-tour-site-dot'));
  const label=element('div','v2-tour-site-label');
- label.append(element('strong','',item.name),element('small','',siteLocation(f)));
+ const markerPlace=element('small','v2-tour-marker-location');
+ markerPlace.append(tourLocationNode(activeTourPlace));
+ label.append(element('strong','',item.name),markerPlace);
  pin.append(label);
- pin.setAttribute('aria-label','Map marker for '+item.name+' at '+siteLocation(f));
+ pin.setAttribute('aria-label','Map marker for '+item.name);
  tourSiteMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
    .setLngLat(f.geometry.coordinates).addTo(map);
 }
 function beginTourStep(){
  tourSequence++;
  const token=tourSequence;
+ if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}
  clearTourArrival();
  clearTourMarker();
  if(tourTimer!==null){clearInterval(tourTimer);tourTimer=null;}
@@ -264,7 +330,9 @@ function beginTourStep(){
  tourPhase='travel';
  tourRemainingMs=TOUR_DWELL_MS;
  const item=ordered[tourIndex];
+ activeTourPlace=tourLocationFromRecords(find(item));
  tourScreen();
+ resolveTourLocation(find(item),token);
  renderCountdown();
  const arrive=()=>{
    if(token!==tourSequence||mode!=='tour'||tourPhase!=='travel')return;
