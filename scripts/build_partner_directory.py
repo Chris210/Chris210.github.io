@@ -201,6 +201,9 @@ def main():
     token = public_token()
     override_path = BASE / "head-office-overrides.json"
     corrections = json.loads(override_path.read_text(encoding="utf8"))["corrections"]
+    decisions = json.loads((BASE / "partner-location-overrides.json").read_text(encoding="utf8"))
+    removed_locations = decisions["remove"]
+    standardized_locations = decisions["standardize"]
     tilejson_url = f"https://api.mapbox.com/v4/{TILESET_ID}.json?access_token={token}"
     metadata = json.loads(get(tilejson_url))
     templates = metadata.get("tiles") or []
@@ -235,6 +238,23 @@ def main():
                 for feature in results:
                     source_name = str(feature["properties"]["name"])
                     lon, lat = feature["geometry"]["coordinates"]
+                    # Persistent, location-specific cleanup decisions for the
+                    # original Mapbox data. Never remove an entire company name
+                    # where it has a separately identified head-office record.
+                    def is_source_location(record):
+                        return (source_name == record["name"] and
+                                abs(lon - record["longitude"]) < 0.0001 and
+                                abs(lat - record["latitude"]) < 0.0001)
+
+                    if any(is_source_location(item) for item in removed_locations):
+                        continue
+                    for item in standardized_locations:
+                        if is_source_location(item):
+                            feature["properties"]["name"] = item["new_name"]
+                            feature["properties"]["url"] = item["new_url"]
+                            feature["properties"]["head_office_address"] = item["head_office_address"]
+                            feature["properties"]["directory_override"] = True
+                            break
                     # The source tileset still contains some 0,0 placeholders.
                     # Apply researched, name-matched HQ overrides only to those
                     # placeholders, retaining every non-zero Mapbox location.
@@ -248,7 +268,7 @@ def main():
                         feature["properties"]["latitude"] = lat
                         feature["properties"]["head_office_corrected"] = True
                         feature["properties"]["head_office_address"] = correction["address"]
-                    name = source_name.casefold().strip()
+                    name = str(feature["properties"]["name"]).casefold().strip()
                     # Deduplicate tile overlap / duplicate zoom-generated points.
                     key = (name, round(lon, 3), round(lat, 3))
                     old = partners.get(key)
