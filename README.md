@@ -34,11 +34,25 @@ The read-only [partner validator](scripts/validate_partner_directory.py) runs on
 - valid placement/exchange groups with no hidden BOM character in the field name;
 - explicit review notes for locations with unresolved problems.
 
-The check **does not rewrite records**, verify every company currently exists, or confirm every external website is online. That requires editorial and external-source review.
+The check also ensures the source-log row count and each organisation's academic-year flags reconcile to the imported overview rows; it never edits the data.\n\nThe check **does not rewrite records**, verify every company currently exists, or confirm every external website is online. That requires editorial and external-source review.
 
 ## Data quality and review queue
 
-As of 18 November 2026, the curated master contains **356 records**, after consolidating 13 duplicate organisation entries and correcting names, official websites and several locations. The site retains all 50 featured partners. Historical records are not proof that an exchange or placement relationship is currently active.
+As of 18 November 2026, the curated master contains **1,515 organisations/locations**: **1,488 placement records** and **27 exchange programmes**. The placement import reconciles **1,581 employer Overview rows** from both school workbooks, including source rows consolidated under a single official organisation identity. **1,459 records have documented placement-year flags**; the 29 placement records absent from both overview logs explicitly say so. The site retains all 50 featured partners. Historical records do not imply a placement or exchange opportunity is currently available.
+
+The imported source workbooks are `Creative Arts Employers Log (1).xlsx` and `Design Employers Log (1).xlsx`. Where their employer-specific information conflicts with older map data, the spreadsheet is authoritative. The original workbooks are not stored in this public repository; only employer-level metadata from their Overview sheets is published. No student, salary or staff-contact information was imported.
+
+### Placement years and popups
+
+Every partner has `placement_years` (an array of actual academic years, e.g. `["2021-22","2022-23","2025-26"]`), `placement_years_display` (the readable popup label), and `placement_years_status`. Placement employers may also include `placement_source_schools`, `programmes_of_study`, `placement_locations` and `placement_log_records` so source rows can be traced. Gaps in year flags are **not** collapsed into a fictional continuous range. `Pre-2020/21` means a legacy Design placement before 2020–21 with no particular year supplied.
+
+The popup shows a **Placement years** label under the organisation description. Exchange programmes keep their purple markers and are not given invented placement-year values.
+
+### Coordinate accuracy and website reviews
+
+Not every log supplied a verifiable office address. **243 records have unresolved `[0,0]` placeholder coordinates and are deliberately excluded from map markers** while remaining in the searchable master. Another large group uses city or region-centre coordinates **explicitly marked approximate**, not presented as verified head offices. Never arbitrarily place unknown employers in a country capital. The map's nearby-location picker includes a text filter because several genuine employers share city-centre approximate coordinates.
+
+**158 records have no verified website** and **22 carry website-review flags**. Keep their links blank or flagged rather than invent a domain or selecting the wrong similarly named business. The existing editorial review queue includes ambiguous names such as UAU Studio, ITL and Plymouth College, as well as historical records and records with unclear offices.
 
 Examples awaiting editorial review include: Elephans (unknown coordinates, kept at [0,0] but excluded from the map), Mayertorne Interiors (no verified website), StormDFX (incorrect inherited URL removed; actual location unverified), the ambiguous Academy of Fine Arts & NTNU Oslo record, ITL and Omlet multiple-office records, two distinct Stag Design locations, and MacDuff Design's generic institutional URL. Do not auto-merge unrelated businesses or legitimate offices merely because their names or websites match.
 
