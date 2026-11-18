@@ -1,0 +1,5 @@
+{
+  "description": "Placement-area centroids from Mapbox geocoding (not verified company office addresses). All location strings are sourced from employer logs.",
+  "precision": "city_or_region_approximate",
+  "coordinates": {}
+}
