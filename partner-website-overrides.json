@@ -11,17 +11,14 @@
       "url": "https://uw-designs.com/",
       "source": "https://uw-designs.com/privacy/",
       "verification": "Site privacy notice identifies UW Designs Ltd, Anglesey"
+    },
+    "AIE Engineering": {
+      "url": "https://aieengineering.com/",
+      "source": "User-specified official website, 2026-11-18",
+      "verification": "Confirmed by website choice from project owner"
     }
   },
   "unresolved": [
-    {
-      "name": "AIE Engineering",
-      "reason": "Company appears associated with aieengineering.com and aie-internship.com in historical internship listings; cannot verify a uniquely correct current company homepage.",
-      "candidates": [
-        "https://aieengineering.com/",
-        "https://aie-internship.com/"
-      ]
-    },
     {
       "name": "Mayertorne Interiors",
       "reason": "Company dissolved on 11 November 2026; no confirmed company website identified. Do not confuse it with mayertorne.co.uk (Mayertorne Cottage)."
