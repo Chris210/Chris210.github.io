@@ -103,7 +103,7 @@ function drawSpotlight(i){
    rankLink.setAttribute('aria-label',i.name+' QS World University Rankings 2027: '+qs[0]+' (opens in a new tab)');
    card.append(rankLink);
   }else{
-   card.append(element('strong','v2-qs-unavailable','Not verified'));
+   card.append(element('strong','v2-qs-unavailable','Not available'));
   }
   grid.append(card);
  }
