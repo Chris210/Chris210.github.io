@@ -282,3 +282,11 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  .v2-tour-location {font-size:11px;padding:8px 10px;}
  .v2-tour-site-label {max-width:min(170px,45vw);left:38px;font-size:11px;padding:8px 10px;}
 }
+
+/* Official institutional links: keep the Figma visual hierarchy unchanged. */
+#v2-root .v2-logo-link {display:inline-flex;align-items:center;flex:0 0 auto;max-width:100%;color:inherit;text-decoration:none;border-radius:6px;line-height:0;cursor:pointer;pointer-events:auto}
+#v2-root .v2-logo-link img {display:block;}
+#v2-root .v2-logo-link:hover img {opacity:.85}
+#v2-root .v2-school-link {display:block;width:fit-content;max-width:100%;text-decoration:none;color:#b60069;cursor:pointer;pointer-events:auto}
+#v2-root .v2-school-link:hover {text-decoration:underline;text-underline-offset:3px}
+#v2-root .v2-school-link:focus-visible,#v2-root .v2-logo-link:focus-visible {outline:3px solid #b60069;outline-offset:4px}
