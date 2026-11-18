@@ -2757,30 +2757,49 @@
       intro.id = 'sdca-nearby-intro';
       content.append(intro);
       const list = make('div', 'nearby-list');
-      for (const feature of features.slice(0, 12)) {
-        const properties = feature.properties || {};
-        const button = make('button', 'nearby-item');
-        button.type = 'button';
-        const typeLabel = searchCategoryName(properties);
-        const icon = make('span', 'swatch ' + categoryOf(properties));
-        icon.setAttribute('aria-hidden', 'true');
-        if (!typeLabel) icon.hidden = true;
-        const text = make('span', 'nearby-text');
-        text.append(make('strong', '', localizedField(properties, 'name') || t('unnamed')));
-        if (typeLabel) text.append(make('small', '', typeLabel));
-        button.append(icon, text);
-        button.addEventListener('click', () => {
-          // Return keyboard focus to the user's original trigger when the map popup closes.
-          dialog._restoreFocus = false;
-          dialog.close();
-          showLocation(feature, features, anchor, returnFocusTo);
-        });
-        list.append(button);
+      // City-level placement data can place many employers at the same pin.
+      // Make every nearby organisation reachable, not just the first twelve.
+      const sortedNearby = features.slice().sort((a,b)=>
+        String(a.properties?.name||'').localeCompare(String(b.properties?.name||'')));
+      const nearbySearch = make('input', 'nearby-filter');
+      nearbySearch.type = 'search';
+      nearbySearch.placeholder = 'Filter these locations by name';
+      nearbySearch.setAttribute('aria-label','Filter nearby organisations by name');
+      nearbySearch.autocomplete = 'off';
+      const nearbyLimit = 60;
+      const nearbyResultNote = make('p','nearby-more');
+      function drawNearbyList() {
+        const needle = nearbySearch.value.trim().toLowerCase();
+        const filtered = sortedNearby.filter(f=>
+          String(f.properties?.name||'').toLowerCase().includes(needle));
+        list.replaceChildren();
+        for (const feature of filtered.slice(0,nearbyLimit)) {
+          const properties = feature.properties || {};
+          const button = make('button', 'nearby-item');
+          button.type = 'button';
+          const typeLabel = searchCategoryName(properties);
+          const icon = make('span', 'swatch ' + categoryOf(properties));
+          icon.setAttribute('aria-hidden', 'true');
+          if (!typeLabel) icon.hidden = true;
+          const label = make('span', 'nearby-text');
+          label.append(make('strong','',localizedField(properties,'name')||t('unnamed')));
+          if (typeLabel) label.append(make('small','',typeLabel));
+          button.append(icon,label);
+          button.addEventListener('click',()=>{
+            dialog._restoreFocus=false;
+            dialog.close();
+            showLocation(feature,features,anchor,returnFocusTo);
+          });
+          list.append(button);
+        }
+        nearbyResultNote.textContent = filtered.length > nearbyLimit
+          ? 'Showing first '+nearbyLimit+' of '+filtered.length+' matches. Type to narrow the list.'
+          : filtered.length+' matching location'+(filtered.length===1?'':'s');
       }
-      content.append(list);
-      if (features.length > 12) {
-        content.append(make('p', 'nearby-more', t('moreNearby').replace('{count}', features.length)));
-      }
+      nearbySearch.addEventListener('input', drawNearbyList);
+      if (features.length > 12) content.append(nearbySearch);
+      drawNearbyList();
+      content.append(list,nearbyResultNote);
       const footer = make('div', 'nearby-dialog-footer');
       const zoom = make('button', 'quiet-action', '＋ ' + t('zoom'));
       zoom.type = 'button';
