@@ -331,6 +331,8 @@
       border-radius: 14px; color: var(--brand-grey); text-align: left; font-size: 14px; line-height: 1.4;
     }
     .browse-location:hover { background: color-mix(in srgb, var(--brand-grey) 5%, var(--brand-white)); border-color: color-mix(in srgb, var(--brand-grey) 44%, var(--brand-white)); }
+    .browse-location:disabled { cursor: wait; opacity: .68; border-style: dashed; }
+    .browse-location:disabled:hover { background: inherit; border-color: color-mix(in srgb, var(--brand-grey) 20%, var(--brand-white)); }
     .browse-location .swatch { border-color: color-mix(in srgb, var(--brand-grey) 20%, var(--brand-white)); }
     .browse-location-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
     .browse-location-text strong { font-size: 14px; font-weight: 750; }
@@ -2758,8 +2760,8 @@
     // Candidate names are drawn from Loughborough's publicly described exchange
     // and placement opportunities and the previous site's featured shortlist.
     // This is a curatorial selection, NOT a QS ranking or verification of an
-    // active institutional partnership. The menu shows ONLY organisations
-    // matched to actual map records from the published Mapbox data.
+    // active institutional partnership. Keep the shortlist visible globally;
+    // connect each entry to a mapped point only after its location is verified.
     // The order prioritises design-specific academic connections across regions,
     // followed by renowned design practices and internationally visible employers.
     const FEATURED_ORGANISATIONS = [
@@ -3108,10 +3110,12 @@
             ]
       },
       {
-            "name": "PUMA",
+            "name": "Dyson",
             "group": "employers",
             "aliases": [
-                  "Puma"
+                  "Dyson (UK)",
+                  "Dyson Ltd",
+                  "Dyson Limited"
             ]
       },
       {
@@ -3361,7 +3365,13 @@
     const worldLocations = new Map();
     let worldFeaturedState = 'loading';
     let worldIndexStarted = false;
-    const wantedWorldNames = new Set(featuredMatchers.flatMap(item => item.normalizedAliases));
+    // This explicit tileset ID identifies the School's partner data. The
+    // published style may use a composite source with different source-layer
+    // names, which is why guessing from the current map view previously failed.
+    const PARTNER_TILESET_ID = 'chrisuxd.1n1nj9bi';
+    const matchingFeaturedAlias = (featureName, alias) =>
+      featureName === alias ||
+      (alias.length >= 4 && featureName.startsWith(alias + ' '));
     const worldFeatureFrom = (properties, coordinates, id) => ({
       type:'Feature', properties, geometry:{type:'Point', coordinates}, id
     });
@@ -3375,8 +3385,17 @@
       // locations (even with the same partner name) while removing duplicates.
       const key = name + ':' + coords[0].toFixed(3) + ',' + coords[1].toFixed(3);
       if (!worldLocations.has(key)) worldLocations.set(key, feature);
-      if (wantedWorldNames.has(name) && !worldFeaturedMatches.has(name)) {
-        worldFeaturedMatches.set(name, feature);
+      for (const item of featuredMatchers) {
+        // Names in the tileset can include region labels, e.g. "Dyson (UK)".
+        // Prefer exact aliases but accept a country/site suffix; never infer
+        // that an unverified name belongs to a different organisation.
+        for (const alias of item.normalizedAliases) {
+          if (matchingFeaturedAlias(name, alias)) {
+            if (!worldFeaturedMatches.has(alias) || name === alias) {
+              worldFeaturedMatches.set(alias, feature);
+            }
+          }
+        }
       }
     };
 
@@ -3461,7 +3480,7 @@
           else if (field===5 && wire===0) extent=r.varint();
           else r.skip(wire);
         }
-        if (name !== wantedLayer) return;
+        if (wantedLayer && name !== wantedLayer) return;
         for (const bytes of features) {
           const fr=reader(bytes); let id, type=0, tagIds=[], geometry=[];
           while (fr.pos < fr.length) {
@@ -3501,26 +3520,14 @@
     const mapboxTileJsonUrl = ids =>
       'https://api.mapbox.com/v4/' + encodeURIComponent(ids).replace(/%2C/gi,',') +
       '.json?access_token=' + encodeURIComponent(mapboxPublicToken);
-    const resolvePartnerTiles = async (definition, wantedLayer) => {
-      if (Array.isArray(definition.tiles) && definition.tiles.length) return definition;
-      if (!definition.url) throw Error('Published partner source has no tile URL');
-      if (!definition.url.startsWith('mapbox://')) return getJson(definition.url);
-      // Mapbox Studio frequently combines our custom tileset with the huge
-      // Mapbox Streets source under "composite". Scan only the tileset that
-      // contains GE Data, not the entire basemap.
-      const ids = definition.url.slice('mapbox://'.length).split(',').map(s => s.trim()).filter(Boolean);
-      if (ids.length === 1) return getJson(mapboxTileJsonUrl(ids[0]));
-      const results = await Promise.allSettled(ids.map(id => getJson(mapboxTileJsonUrl(id))));
-      for (const result of results) {
-        if (result.status === 'fulfilled' &&
-            result.value.vector_layers?.some(l => l.id === wantedLayer)) return result.value;
+    const resolvePartnerTiles = async () => {
+      // Resolve the actual partner tileset, not the Mapbox Studio composite
+      // that may also contain Streets, landcover and other non-partner data.
+      const metadata = await getJson(mapboxTileJsonUrl(PARTNER_TILESET_ID));
+      if (!Array.isArray(metadata.tiles) || !metadata.tiles.length) {
+        throw Error('Partner tileset TileJSON contains no vector tiles');
       }
-      // A few older Mapbox tilesets omit vector_layers metadata. Prefer our
-      // own tileset in this case, but never search every Mapbox Streets tile.
-      const custom = ids.find(id => id.startsWith('chrisuxd.'));
-      const customIndex = ids.indexOf(custom);
-      if (customIndex >= 0 && results[customIndex].status === 'fulfilled') return results[customIndex].value;
-      throw Error('Could not identify the partner tileset in the published map style');
+      return metadata;
     };
     const scanWorldTiles = async (tileJson, sourceLayer, z) => {
       const template = tileJson.tiles?.[0];
@@ -3571,32 +3578,30 @@
       worldIndexStarted = true;
       worldFeaturedState = 'loading';
       try {
-        const layer = map.getLayer(POINT_LAYER);
-        const definition = map.getStyle().sources[layer.source];
-        if (!definition) throw Error('Published partner source is missing');
-        if (definition.type === 'geojson') {
-          const geo = typeof definition.data === 'string' ? await getJson(definition.data) : definition.data;
-          for (const feature of geo?.features || []) addWorldFeature(feature);
-          worldFeaturedState = 'ready';
-        } else if (definition.type === 'vector' && layer['source-layer']) {
-          const tileJson = await resolvePartnerTiles(definition, layer['source-layer']);
-          const minZoom = Math.ceil(tileJson.minzoom || 0);
-          // At zoom 3, 64 tiles span the whole planet; use source minzoom if
-          // higher. This avoids the original incorrect z<=3 restriction.
-          const z = Math.max(3,minZoom);
-          if (z > 5) throw Error('Source needs a dedicated global GeoJSON index (minimum zoom '+minZoom+')');
-          const scan = await scanWorldTiles(tileJson,layer['source-layer'],z);
-          if (!worldLocations.size) throw Error('No partner records found in published world tiles');
-          worldFeaturedState = scan.failed ? 'partial' : 'ready';
-          if (scan.failed) {
-            console.warn('Worldwide partner search has '+scan.failed+' unavailable tiles');
-            worldIndexStarted = false; // allow a retry when search is opened again
-          }
-        } else throw Error('Unsupported worldwide partner source format');
+        // Always use the identified public partner tileset. Composite sources
+        // and mismatched source-layer names caused earlier empty searches.
+        const tileJson = await resolvePartnerTiles();
+        const minZoom = Math.ceil(tileJson.minzoom || 0);
+        if (minZoom > 5) {
+          throw Error('Partner tileset minimum zoom is ' + minZoom +
+            ': a static worldwide partner index is required');
+        }
+        // All features can already be displayed on the zoomed-out globe.
+        // Zoom 4 scans just 256 worldwide tiles while retaining more detail
+        // than the original zoom-3 scan. Increase to 5 only if required.
+        const z = Math.max(4,minZoom);
+        const scan = await scanWorldTiles(tileJson, null, z);
+        if (!worldLocations.size) {
+          throw Error('No searchable partners decoded from ' + PARTNER_TILESET_ID);
+        }
+        worldFeaturedState = scan.failed ? 'partial' : 'ready';
+        if (scan.failed) {
+          console.warn('Worldwide partner search has ' + scan.failed + ' unavailable tiles');
+          worldIndexStarted = false; // retries are possible on next search
+        }
       } catch(e) {
-        console.warn('Worldwide partner search unavailable:',e);
+        console.warn('Worldwide partner search unavailable:', e);
         worldFeaturedState = 'error';
-        // Allow another attempt the next time someone opens search.
         worldIndexStarted = false;
       }
       updateBrowseList();
@@ -3628,7 +3633,7 @@
       return [...unique.values()].sort((a,b) => String(a.properties?.name || '').localeCompare(String(b.properties?.name || '')));
     };
     const makeBrowseItem = (feature, displayName = '', isFeatured = false) => {
-      const props = feature.properties || {};
+      const props = feature?.properties || {};
       const li = document.createElement('li');
       const button = make('button', 'browse-location');
       button.type = 'button';
@@ -3637,9 +3642,18 @@
       const labels = make('span','browse-location-text');
       labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
       button.append(labels);
-      button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
+      if (!feature?.geometry?.coordinates) {
+        // Keep every featured name in the list, even if its location is on
+        // the opposite side of the world or worldwide tiles are still loading.
+        // Do not fly to an invented coordinate for an unverified match.
+        button.disabled = true;
+        button.setAttribute('aria-label', displayName + ' — ' +
+          featuredT(worldFeaturedState === 'loading' ? 'featuredLoading' : 'featuredError'));
+      } else {
+        button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
+      }
       button.addEventListener('click', () => {
-        const coords = feature.geometry?.coordinates;
+        const coords = feature?.geometry?.coordinates;
         if (!coords) return;
         visitorMovedMap = true;
         // Reveal the selected partner on the map rather than leaving the
@@ -3695,20 +3709,20 @@
         let matchCount = 0;
         for (const item of featuredMatchers) {
           const feature = item.normalizedAliases.map(a => mappedNames.get(a)).find(Boolean);
-          if (!feature) continue; // Do not display unverified partners.
           if (item.group !== lastGroup) {
             const li = make('li', 'browse-featured-category', featuredT(item.group));
             browseList.append(li);
             lastGroup = item.group;
           }
-          browseList.append(makeBrowseItem(feature, item.name, true));
-          matchCount++;
+          browseList.append(makeBrowseItem(feature || null, item.name, true));
+          if (feature) matchCount++;
         }
+        // Always show all 50 shortlisted names, wherever the globe is centred.
+        // A name becomes clickable only after locating a real map record.
         browseCount.textContent = worldFeaturedState === 'ready'
-          ? featuredT('featuredCount').replace('{count}', matchCount)
-          : (matchCount ? featuredT('featuredCount').replace('{count}', matchCount) + ' · ' : '') +
+          ? featuredT('featuredCount').replace('{count}', matchCount) + ' / ' + FEATURED_ORGANISATIONS.length
+          : featuredT('heading') + ' (' + FEATURED_ORGANISATIONS.length + ') · ' +
             featuredT(worldFeaturedState === 'loading' ? 'featuredLoading' : 'featuredError');
-        if (!matchCount && worldFeaturedState==='ready') browseList.append(make('li','',featuredT('featuredEmpty')));
       }
     };
     const showBrowse = () => {
