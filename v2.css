@@ -171,3 +171,18 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
   #v2-tour-card h2 {font-size:28px}
   #v2-tour-card p {font-size:12px}
 }
+
+
+/* Print the entire curated directory, not the map background. */
+#language-picker[hidden] { display:none!important; }
+@media print {
+ html,body {height:auto!important;overflow:visible!important;background:white!important;color:#301052!important}
+ #map,.mapboxgl-control-container,#language-picker,#sdca-panel,#browse-panel,
+ #v2-home,#v2-compact-header,#v2-mobile-nav,#v2-mobile-accolade,#v2-start-tour,
+ #v2-legend,#v2-metrics,#v2-spotlight,#v2-overlay-scrim,#v2-tour-mode {display:none!important}
+ #v2-root {position:static!important;height:auto!important;overflow:visible!important;display:block!important}
+ #v2-directory {position:static!important;display:block!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;overflow:visible!important;border:0!important;box-shadow:none!important;break-inside:auto!important}
+ .v2-dir-grid {grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+ .v2-dir-row {break-inside:avoid;padding:5px 0!important}
+ #v2-directory-back,#v2-directory-print {display:none!important}
+}
