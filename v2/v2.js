@@ -1,0 +1,233 @@
+
+/* Loughborough Global Creative Network — Figma Iteration 2. Runs in a separate V2 only. */
+(function(){
+'use strict';
+const api=window.SDCA_V2_BRIDGE;
+if(!api){console.error('V2 bridge unavailable; original site is still functional');return;}
+const map=api.map;
+const groups=[{id:'employers',title:'Global employers',tab:'Employers'},{id:'design',title:'Design studios',tab:'Studios'},{id:'academic',title:'Universities',tab:'Universities'}];
+const featured=api.featured;
+const ordered=groups.flatMap(g=>featured.filter(i=>i.group===g.id));
+const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
+const $=id=>document.getElementById(id);
+const normalize=v=>String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
+const itemOf=f=>{const name=normalize(f?.properties?.name);return featured.find(i=>[i.name,...(i.aliases||[])].map(normalize).some(a=>name===a||(a.length>=4&&name.startsWith(a+' '))));};
+const find=i=>api.findFeature(i);
+const located=f=>Array.isArray(f?.geometry?.coordinates)&&f.geometry.coordinates.length===2&&f.geometry.coordinates.every(Number.isFinite)&&!(f.geometry.coordinates[0]===0&&f.geometry.coordinates[1]===0);
+const field=(p,...names)=>names.map(k=>p?.[k]).find(v=>v!==undefined&&v!==null&&String(v).trim());
+const place=f=>String(field(f?.properties,'location','city','address','town','country','country_name','place')|| (located(f)?'Location on map':'Location to be verified')).replace(/\s+/g,' ').slice(0,110);
+const category=i=>groups.find(g=>g.id===i.group)||groups[0];
+const root=element('div');root.id='v2-root';
+root.innerHTML="\n<div id=\"v2-home\">\n  <div class=\"v2-logo-line\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><button class=\"v2-icon-btn\" id=\"v2-collapse\" type=\"button\" aria-label=\"Minimise panel\">‹</button></div>\n  <div class=\"v2-overline\">School of Design and Creative Arts</div>\n  <h1 class=\"v2-h1\">Loughborough Global<br>Creative Network</h1>\n  <p class=\"v2-subtitle\">Connecting world-leading creativity, education and industry.</p>\n  <div class=\"v2-accolade\"><span class=\"v2-award\" aria-hidden=\"true\">♙</span><div><strong>Top 50 in the world for Art and Design</strong><small>QS World University Rankings by Subject 2026</small></div></div>\n  <div class=\"v2-search-wrap\"><label for=\"v2-search\" class=\"visually-hidden\">Search all partners worldwide</label><span class=\"v2-search-icon\" aria-hidden=\"true\">⌕</span><input class=\"v2-search-input\" id=\"v2-search\" type=\"search\" autocomplete=\"off\" placeholder=\"Search partners and places worldwide\"><div id=\"v2-search-results\" hidden role=\"listbox\" aria-label=\"Worldwide partner search results\"></div></div>\n  <div class=\"v2-heading-row\"><h2><span class=\"v2-star\" aria-hidden=\"true\">★</span>Key Partners</h2><button type=\"button\" class=\"v2-link-btn\" id=\"v2-view-all\">View all 50</button></div>\n  <div class=\"v2-tabs\" role=\"tablist\" aria-label=\"Featured partner categories\"></div>\n  <div class=\"v2-tiles\" id=\"v2-tiles\" aria-live=\"polite\"></div>\n  <div class=\"v2-data-note\"><span aria-hidden=\"true\">ⓘ</span><span>SDCA placement and exchange records · updated 18 Nov 2026</span></div>\n</div>\n<div id=\"v2-mobile-nav\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global<br>Creative Network</strong></div>\n<div id=\"v2-mobile-accolade\">♙ &nbsp;Top 50 in the world for Art and Design · QS 2026</div>\n<div class=\"v2-metrics\" id=\"v2-metrics\" aria-label=\"Global network figures\"><span><b>50</b>key partners</span><span><b id=\"v2-placement-count\">—</b>placement hosts</span><span><b id=\"v2-exchange-count\">—</b>exchange universities</span></div>\n<button type=\"button\" class=\"v2-cta\" id=\"v2-start-tour\"><span class=\"v2-play\" aria-hidden=\"true\">▶</span>Take the tour: 50 key partners</button>\n<div id=\"v2-legend\"><span><i class=\"v2-marker-dot\"></i>Key partner</span><span><i class=\"v2-marker-dot other\"></i>Other partners</span></div>\n<div id=\"v2-compact-header\" hidden><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-compact-search\" aria-label=\"Search partners\">⌕</button><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-return-home\" aria-label=\"Return to map\">›</button></div>\n<aside id=\"v2-spotlight\" hidden aria-label=\"Key partner details\"></aside>\n<div id=\"v2-overlay-scrim\" hidden></div>\n<section id=\"v2-directory\" hidden aria-label=\"50 key partners\">\n <div class=\"v2-dir-header\"><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-directory-back\" aria-label=\"Back to map\">‹</button><div class=\"v2-dir-title\"><small>Key Partners</small><h2>50 organisations our students and staff work with</h2></div><button type=\"button\" class=\"v2-pdf\" id=\"v2-directory-print\">Print / Save PDF</button></div>\n <div class=\"v2-dir-grid\" id=\"v2-dir-grid\"></div><p class=\"v2-dir-note\">Partner names and locations follow the school’s published directory. Locations marked unverified are not plotted.</p>\n</section>\n<section id=\"v2-tour-mode\" hidden aria-live=\"polite\">\n <div id=\"v2-tour-header\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"><strong>Loughborough Global Creative Network</strong></div>\n <button type=\"button\" id=\"v2-exit-tour\">✕ &nbsp; Exit tour &nbsp; Esc</button>\n <div id=\"v2-tour-card\"><div class=\"v2-spot-header\"><span class=\"v2-badge\">★ Key partner</span><span class=\"v2-spot-type\" id=\"v2-tour-kind\"></span></div><h2 id=\"v2-tour-name\"></h2><p id=\"v2-tour-desc\"></p><div class=\"v2-tour-progress\"><div id=\"v2-tour-progress-active\"></div></div><div class=\"v2-tour-step-line\"><strong id=\"v2-tour-count\"></strong><span id=\"v2-tour-next\"></span></div><div class=\"v2-tour-actions\"><button type=\"button\" id=\"v2-tour-prev\" aria-label=\"Previous partner\">‹</button><button type=\"button\" id=\"v2-tour-pause\" class=\"v2-pause\" aria-label=\"Pause tour\">Ⅱ</button><button type=\"button\" id=\"v2-tour-next-btn\" aria-label=\"Next partner\">›</button><small>Pauses on interaction · arrow keys to step</small></div></div>\n</section>";
+document.body.appendChild(root);
+let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false;
+const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
+function view(name){
+  mode=name;home.hidden=name!=='home'||panelMinimised;
+  $('v2-mobile-nav').hidden=name!=='home';$('v2-mobile-accolade').hidden=name!=='home';
+  $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';$('v2-legend').hidden=name!=='home';
+  spot.hidden=name!=='spotlight';compact.hidden=name!=='spotlight'&&!(name==='home'&&panelMinimised);
+  dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
+  const picker=$('language-picker');if(picker)picker.hidden=name==='tour';
+  $('v2-search-results').hidden=true;
+}
+function tabs(){
+ const container=home.querySelector('.v2-tabs');container.replaceChildren();
+ groups.forEach(g=>{
+  const n=featured.filter(i=>i.group===g.id).length,button=element('button','',g.tab+' '+n);
+  button.type='button';button.setAttribute('role','tab');button.setAttribute('aria-selected',g.id===tab?'true':'false');
+  button.addEventListener('click',()=>{tab=g.id;tabs();tiles();});container.append(button);
+ });
+}
+function tiles(){
+ const box=$('v2-tiles');box.replaceChildren();
+ featured.filter(i=>i.group===tab).slice(0,6).forEach(i=>{
+   const b=element('button','v2-tile');b.type='button';
+   b.append(element('strong','',i.name),element('small','',place(find(i))));
+   b.addEventListener('click',()=>openPartner(i));box.append(b);
+ });
+}
+function directory(){
+ const container=$('v2-dir-grid');container.replaceChildren();
+ groups.forEach(g=>{
+  const items=featured.filter(i=>i.group===g.id),col=element('div','v2-dir-col');
+  col.append(element('h3','',g.title+' · '+items.length));
+  items.forEach(i=>{
+   const b=element('button','v2-dir-row');
+   b.append(element('strong','',i.name),element('small','',place(find(i))));
+   b.addEventListener('click',()=>openPartner(i));col.append(b);
+  });
+  if(g.id==='design'){
+    const rank=element('div','v2-rank-panel');rank.innerHTML='<strong>Top 50 in the world for Art and Design</strong><br>QS World University Rankings by Subject 2026';col.append(rank);
+  }
+  container.append(col);
+ });
+}
+function programmes(p){
+ const raw=field(p,'programmes','programs','programme','courses','subjects');
+ if(Array.isArray(raw))return raw.map(String).slice(0,12);
+ if(typeof raw==='string'){
+   try{const obj=JSON.parse(raw);if(Array.isArray(obj))return obj.map(String).slice(0,12);}catch(e){}
+   return raw.split(/[;|]/).map(s=>s.trim()).filter(Boolean).slice(0,12);
+ }
+ return [];
+}
+function years(p){
+ const raw=field(p,'placement_years_display','placement_years','academic_years','years');
+ return Array.isArray(raw)?raw.join(', '):String(raw||'');
+}
+function website(p){
+ let raw=field(p,'website','website_url','url','partner_website');
+ if(!raw)return '';
+ try{const url=new URL(/^https?:\/\//i.test(String(raw))?String(raw):'https://'+raw);return ['https:','http:'].includes(url.protocol)?url.href:'';}catch(e){return '';}
+}
+function drawSpotlight(i){
+ spot.replaceChildren();
+ const p=find(i)?.properties||{},yr=years(p),progs=programmes(p),link=website(p);
+ const header=element('div','v2-spot-header');
+ header.append(element('span','v2-badge','★ Key partner'),element('span','v2-spot-type',i.group==='academic'?'Exchange university':i.group==='design'?'Design studio':'Global employer'));
+ const close=element('button','v2-icon-btn','×');close.type='button';close.setAttribute('aria-label','Return to map');close.onclick=overview;header.append(close);
+ spot.append(header,element('h2','',i.name),element('p','v2-spot-location',place(find(i))));
+ const grid=element('div','v2-stat-grid');
+ [['Record',find(i)?'Verified':'Pending'],['Category',category(i).tab],['Placement years',yr? 'Recorded':'Not listed']].forEach(pair=>{
+  const box=element('div','v2-stat');box.append(element('span','',pair[0]),element('strong','',pair[1]));grid.append(box);
+ });
+ spot.append(grid);
+ if(progs.length){
+  spot.append(element('div','v2-section-label','Programmes'));
+  const list=element('div','v2-chip-list');progs.forEach(p=>list.append(element('span','v2-chip',p)));spot.append(list);
+ }
+ if(yr){
+  spot.append(element('div','v2-section-label','Placement years'));
+  const bar=element('div','v2-yearbar'),active=Math.min(10,(yr.match(/\d{4}/g)||[]).length);
+  for(let j=0;j<10;j++)bar.append(element('span',j<active?'active':''));spot.append(bar,element('p','v2-spot-description',yr));
+ }
+ const desc=field(p,'description','summary','notes');if(desc)spot.append(element('p','v2-spot-description',String(desc).slice(0,640)));
+ if(link){const a=element('a','v2-spot-link','Visit '+new URL(link).hostname.replace(/^www\./,'')+' →');a.href=link;a.target='_blank';a.rel='noopener noreferrer';spot.append(a);}
+ const footer=element('div','v2-spot-footer'),next=element('button','v2-link-btn','Next key partner →');
+ next.onclick=()=>openPartner(ordered[(ordered.indexOf(i)+1)%ordered.length]);
+ footer.append(element('span','', 'Key partner '+(featured.indexOf(i)+1)+' of 50 · '),next);spot.append(footer);
+}
+function flyTo(i,touring=false){
+ const f=find(i);if(!located(f)||!map.loaded())return;
+ try{map.flyTo({center:f.geometry.coordinates,zoom:touring?3.2:5.5,bearing:0,pitch:0,
+ duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:1150,essential:false,
+ padding:touring?{left:0,right:0,top:0,bottom:0}:window.innerWidth>680?{left:65,right:290,top:0,bottom:0}:{left:0,right:0,top:0,bottom:275}});}
+ catch(e){console.warn('Map camera could not move',e);}
+}
+function openPartner(i,skip=false){stopTimer();drawSpotlight(i);view('spotlight');if(!skip)flyTo(i);}
+function stopTimer(){if(tourTimer){clearInterval(tourTimer);tourTimer=null;}playing=false;}
+function overview(){
+ stopTimer();panelMinimised=false;view('home');
+ if(map.loaded())map.easeTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,duration:650,
+ padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
+}
+function openDirectory(){stopTimer();directory();view('directory');}
+function search(){
+ const q=$('v2-search').value.trim().toLocaleLowerCase(),box=$('v2-search-results');box.replaceChildren();
+ if(!q){box.hidden=true;return;}
+ const matches=api.allFeatures().filter(f=>[f.properties?.name,f.properties?.description,f.properties?.location].join(' ').toLowerCase().includes(q)).slice(0,35);
+ matches.forEach(f=>{
+  const b=element('button','v2-search-result');
+  b.append(element('span','',f.properties?.name||'Partner'),element('small','',place(f)));
+  if(!located(f))b.disabled=true;
+  b.onclick=()=>{const item=itemOf(f);$('v2-search').value='';box.hidden=true;
+   if(item)openPartner(item);else{view('home');map.flyTo({center:f.geometry.coordinates,zoom:6,essential:false,duration:950});api.openNative(f);}
+  };box.append(b);
+ });
+ if(!matches.length)box.append(element('div','v2-empty',api.status()==='ready'?'No matching partners found.':'Loading the worldwide directory…'));
+ box.hidden=false;
+}
+function pauseTour(){stopTimer();$('v2-tour-pause').textContent='▶';$('v2-tour-pause').setAttribute('aria-label','Resume tour');}
+function playTour(){stopTimer();playing=true;$('v2-tour-pause').textContent='Ⅱ';$('v2-tour-pause').setAttribute('aria-label','Pause tour');tourTimer=setInterval(()=>stepTour(1,true),8500);}
+function tourScreen(){
+ const item=ordered[tourIndex],f=find(item),p=f?.properties||{};
+ $('v2-tour-name').textContent=item.name;$('v2-tour-kind').textContent=category(item).title;
+ $('v2-tour-desc').textContent=String(field(p,'description','summary')||place(f)+' · featured connection with the School of Design and Creative Arts.').slice(0,250);
+ $('v2-tour-count').textContent='Stop '+(tourIndex+1)+' of '+ordered.length;
+ $('v2-tour-next').textContent='Next: '+ordered[(tourIndex+1)%ordered.length].name;
+ $('v2-tour-progress-active').style.width=(100*(tourIndex+1)/ordered.length)+'%';
+ flyTo(item,true);
+}
+function stepTour(d,auto=false){if(!auto)pauseTour();tourIndex=(tourIndex+d+ordered.length)%ordered.length;tourScreen();}
+function startTour(){panelMinimised=false;tourIndex=0;view('tour');tourScreen();playTour();}
+function renderCounts(){
+ if(api.status()!=='ready')return;
+ const all=api.allFeatures(),points=all.filter(located);
+ const exchange=points.filter(f=>String(f.properties?.group||'').toLowerCase().includes('exchange')).length;
+ $('v2-placement-count').textContent=(points.length-exchange).toLocaleString('en-GB');
+ $('v2-exchange-count').textContent=exchange.toLocaleString('en-GB');
+ $('v2-search').placeholder='Search all '+all.length.toLocaleString('en-GB')+' partners and places';
+}
+function mapStyle(){
+ try{map.setProjection('globe');}catch(e){console.warn('Globe projection unavailable',e);}
+ try{map.setFog({color:'#e0d6eb','high-color':'#d9cce5','horizon-blend':0.025,'space-color':'#1c092e','star-intensity':0});}catch(e){console.warn('Globe atmosphere unavailable',e);}
+ try{
+  for(const layer of (map.getStyle().layers||[])){
+   const id=layer.id.toLowerCase();
+   if(layer.type==='background')map.setPaintProperty(layer.id,'background-color','#2c124a');
+   if(layer.type==='fill'&&/water|ocean|sea/.test(id))map.setPaintProperty(layer.id,'fill-color','#ded5e9');
+   if(layer.type==='fill'&&/land|natural|landcover/.test(id))map.setPaintProperty(layer.id,'fill-color','#ffffff');
+   if(layer.type==='line'&&/boundary|admin|border/.test(id))map.setPaintProperty(layer.id,'line-color','#d3c7e0');
+  }
+  if(map.getLayer('sdca-master-points')){
+   map.setPaintProperty('sdca-master-points','circle-color','#ad95c7');
+   map.setPaintProperty('sdca-master-points','circle-opacity',.65);
+   map.setPaintProperty('sdca-master-points','circle-radius',4.5);
+  }
+ }catch(e){console.warn('Some base layers cannot be recoloured',e);}
+ map.jumpTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,
+ padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
+}
+function highlight(){
+ if(!map.loaded()||api.status()!=='ready')return;
+ const features=featured.map(i=>{const f=find(i);return located(f)?{type:'Feature',properties:{name:i.name},geometry:f.geometry}:null;}).filter(Boolean);
+ const collection={type:'FeatureCollection',features};
+ if(!features.length)return;
+ const existing=map.getSource('v2-key-partners');
+ if(existing){existing.setData(collection);return;}
+ try{
+  map.addSource('v2-key-partners',{type:'geojson',data:collection,cluster:true,clusterRadius:54,clusterMaxZoom:5});
+  map.addLayer({id:'v2-key-clusters',type:'circle',source:'v2-key-partners',filter:['has','point_count'],paint:{
+    'circle-color':'#b90069','circle-radius':['step',['get','point_count'],15,4,21,12,29,25,33],
+    'circle-stroke-color':'#ffffff','circle-stroke-width':3}});
+  map.addLayer({id:'v2-key-count',type:'symbol',source:'v2-key-partners',filter:['has','point_count'],
+    layout:{'text-field':['get','point_count_abbreviated'],'text-size':13},paint:{'text-color':'#ffffff'}});
+  map.addLayer({id:'v2-key-points',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
+    'circle-color':'#b90069','circle-radius':8,'circle-stroke-color':'#fff','circle-stroke-width':3}});
+  map.addLayer({id:'v2-key-halo',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
+    'circle-color':'#c20070','circle-radius':13,'circle-opacity':.18}},'v2-key-points');
+  map.on('click','v2-key-clusters',e=>{
+   const f=e.features?.[0];if(!f)return;
+   map.getSource('v2-key-partners').getClusterExpansionZoom(f.properties.cluster_id,(err,zoom)=>{
+    if(!err)map.easeTo({center:f.geometry.coordinates,zoom:zoom,duration:600,essential:false});
+   });
+  });
+ }catch(e){console.warn('Featured marker cluster could not be created',e);}
+}
+window.SDCA_V2={
+ handleMapFeature(f){const item=itemOf(f);if(!item)return false;if(mode==='tour'){pauseTour();return true;}openPartner(item,true);return true;},
+ openPartner(name){const item=featured.find(i=>normalize(i.name)===normalize(name));if(item)openPartner(item);}
+};
+tabs();tiles();directory();view('home');
+$('v2-view-all').onclick=openDirectory;
+$('v2-directory-back').onclick=overview;$('v2-directory-print').onclick=()=>window.print();
+$('v2-overlay-scrim').onclick=overview;
+$('v2-compact-search').onclick=()=>{overview();$('v2-search').focus();};
+$('v2-return-home').onclick=overview;
+$('v2-collapse').onclick=()=>{panelMinimised=!panelMinimised;view('home');};
+$('v2-search').addEventListener('input',search);
+$('v2-search').addEventListener('keydown',e=>{if(e.key==='Enter')$('v2-search-results').querySelector('button:not([disabled])')?.click();});
+$('v2-start-tour').onclick=startTour;$('v2-exit-tour').onclick=overview;
+$('v2-tour-pause').onclick=()=>playing?pauseTour():playTour();
+$('v2-tour-prev').onclick=()=>stepTour(-1);$('v2-tour-next-btn').onclick=()=>stepTour(1);
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){if(mode==='tour'||mode==='directory'||mode==='spotlight'){overview();e.preventDefault();}else $('v2-search-results').hidden=true;}
+ if(mode==='tour'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+  e.preventDefault();stepTour(e.key==='ArrowLeft'?-1:1);
+ }
+});
+api.startLookup()?.then(()=>{tiles();directory();renderCounts();highlight();});
+map.on('load',()=>{mapStyle();api.startLookup()?.then(highlight);});
+if(map.loaded()){mapStyle();highlight();}
+})();
