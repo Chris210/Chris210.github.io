@@ -251,16 +251,17 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-tour-location strong {color:#3b175f;font-weight:700;}
 .v2-tour-location-icon {font-size:18px;color:#bd006b;line-height:1;}
 .v2-tour-site-marker {
- position:relative;display:block;width:30px;height:30px;
+ position:relative;display:block;width:64px;height:64px;
  pointer-events:none;
 }
 .v2-tour-site-dot {
- position:absolute;left:3px;top:3px;display:block;width:24px;height:24px;
- border:4px solid #fff;border-radius:50%;background:#FFBD00;
- box-shadow:0 0 0 5px rgba(255,189,0,.4),0 0 0 12px rgba(255,189,0,.17),0 4px 14px #2a063b4d;
+ position:absolute;left:0;top:0;display:block;box-sizing:border-box;
+ width:64px;height:64px;
+ border:8px solid #fff;border-radius:50%;background:#FFBD00;
+ box-shadow:0 0 0 7px rgba(255,189,0,.34),0 0 0 16px rgba(255,189,0,.13),0 5px 18px #2a063b4d;
 }
 .v2-tour-site-label {
- position:absolute;left:45px;top:-16px;
+ position:absolute;left:80px;top:-10px;
  display:flex;flex-direction:column;gap:3px;
  min-width:140px;max-width:min(245px,42vw);
  padding:10px 13px;
@@ -274,7 +275,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  #v2-tour-card #v2-exit-tour {top:14px;right:14px;width:38px;height:38px;min-width:38px;min-height:38px;}
  #v2-tour-card .v2-spot-header {padding-right:42px;}
  .v2-tour-location {font-size:11px;padding:8px 10px;}
- .v2-tour-site-label {max-width:min(170px,45vw);left:38px;font-size:11px;padding:8px 10px;}
+ .v2-tour-site-label {max-width:min(170px,45vw);left:72px;top:-6px;font-size:11px;padding:8px 10px;}
 }
 
 /* Official institutional links: keep the Figma visual hierarchy unchanged. */
