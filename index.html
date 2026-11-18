@@ -3421,7 +3421,8 @@
           for (const feature of directory.features) addWorldFeature(feature);
           correctedHeadOffices = directory.features.filter(feature =>
             (feature?.properties?.head_office_corrected === true ||
-             feature?.properties?.directory_override === true) &&
+             feature?.properties?.directory_override === true ||
+             feature?.properties?.website_corrected === true) &&
             feature?.geometry?.type === 'Point');
           const officeSource = map.getSource(CORRECTED_SOURCE);
           if (officeSource) officeSource.setData({ type:'FeatureCollection', features:correctedHeadOffices });
@@ -3626,7 +3627,13 @@
         ['!=', ['get','name'], 'Design Reality'],
         ['!=', ['get','name'], 'design Reality']
       ];
-      originalFilter = buildFilter(['all', hasRealPosition, suppressSupersededDesignReality]);
+      // Verified websites are currently held in the refreshed directory,
+      // not the legacy Mapbox tileset; render those directory features once.
+      const suppressWebsitePlaceholder = ['all',
+        ['!=', ['get','name'], 'International Digital Economy Academy'],
+        ['!=', ['get','name'], 'UW Designs Ltd']
+      ];
+      originalFilter = buildFilter(['all', hasRealPosition, suppressSupersededDesignReality, suppressWebsitePlaceholder]);
       map.setFilter(POINT_LAYER, originalFilter);
       mapIsReady = true;
       updateBrowseList();
