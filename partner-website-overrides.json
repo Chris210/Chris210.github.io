@@ -1,0 +1,30 @@
+{
+  "source_tileset": "chrisuxd.1n1nj9bi",
+  "purpose": "Persistent verified website additions for source records lacking a valid website. Used by directory rebuild and website display.",
+  "websites": {
+    "International Digital Economy Academy": {
+      "url": "https://www.idea.edu.cn/",
+      "source": "https://www.idea.edu.cn/about",
+      "verification": "Official site identifies International Digital Economy Academy (IDEA), 深圳"
+    },
+    "UW Designs Ltd": {
+      "url": "https://uw-designs.com/",
+      "source": "https://uw-designs.com/privacy/",
+      "verification": "Site privacy notice identifies UW Designs Ltd, Anglesey"
+    }
+  },
+  "unresolved": [
+    {
+      "name": "AIE Engineering",
+      "reason": "Company appears associated with aieengineering.com and aie-internship.com in historical internship listings; cannot verify a uniquely correct current company homepage.",
+      "candidates": [
+        "https://aieengineering.com/",
+        "https://aie-internship.com/"
+      ]
+    },
+    {
+      "name": "Mayertorne Interiors",
+      "reason": "Company dissolved on 11 November 2026; no confirmed company website identified. Do not confuse it with mayertorne.co.uk (Mayertorne Cottage)."
+    }
+  ]
+}
