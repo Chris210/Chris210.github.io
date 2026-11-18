@@ -272,7 +272,8 @@ function renderTourLocation(data){
  const row=$('v2-tour-location');
  if(row){
   row.replaceChildren();
-  row.append(element('span','v2-tour-location-icon','⌖'),tourLocationNode(data));
+  const place=element('span','v2-tour-place');place.append(tourLocationNode(data));
+  row.append(element('span','v2-tour-location-icon','⌖'),place);
  }
  const marker= tourSiteMarker?.getElement()?.querySelector('.v2-tour-marker-location');
  if(marker)marker.replaceChildren(tourLocationNode(data));
