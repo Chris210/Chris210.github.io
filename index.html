@@ -331,7 +331,7 @@
       border-radius: 14px; color: var(--brand-grey); text-align: left; font-size: 14px; line-height: 1.4;
     }
     .browse-location:hover { background: color-mix(in srgb, var(--brand-grey) 5%, var(--brand-white)); border-color: color-mix(in srgb, var(--brand-grey) 44%, var(--brand-white)); }
-    .browse-location:disabled { cursor: wait; opacity: .68; border-style: dashed; }
+    .browse-location:disabled { cursor: default; opacity: .75; border-style: dashed; }
     .browse-location:disabled:hover { background: inherit; border-color: color-mix(in srgb, var(--brand-grey) 20%, var(--brand-white)); }
     .browse-location .swatch { border-color: color-mix(in srgb, var(--brand-grey) 20%, var(--brand-white)); }
     .browse-location-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
@@ -798,7 +798,7 @@
   <section id="browse-panel" hidden aria-labelledby="browse-heading">
     <div class="browse-header"><h2 id="browse-heading" tabindex="-1">Search partners by name</h2>
       <button type="button" id="browse-close" class="browse-close" aria-label="Close locations list">×</button></div>
-    <p class="browse-hint">Use this list instead of selecting map dots. It contains locations currently visible on the map. Use the map movement controls to explore another area.</p>
+    <p class="browse-hint">Search partner locations worldwide, regardless of the current map view. “Browse all in view” shows only places currently visible.</p>
     <label id="location-search-label" for="location-search">Search partners by name</label>
     <input id="location-search" type="search" autocomplete="off" placeholder="Enter a location name">
     <div class="browse-collection-switch" id="browse-collection-switch">
@@ -1195,7 +1195,7 @@
     "tip": "Select a dot to view its details. If locations overlap, choose from the list or zoom in. Use +/− to zoom.",
     "searchButton": "Search partners by name",
     "searchHead": "Search partners by name",
-    "searchHint": "Search the locations currently visible on the map. Move the map to explore other areas.",
+    "searchHint": "Search partner locations worldwide, regardless of the current map view. “Browse all in view” shows only places currently visible.",
     "searchLabel": "Search partners by name",
     "searchPlaceholder": "Enter a location name",
     "reset": "Reset Map",
@@ -1231,7 +1231,7 @@
     "tip": "点击地图上的圆点查看详情。如果地点重叠，可从列表中选择或放大地图。使用 +/− 缩放。",
     "searchButton": "按名称搜索合作伙伴",
     "searchHead": "按名称搜索合作伙伴",
-    "searchHint": "搜索当前地图范围内的地点。移动地图可探索其他区域。",
+    "searchHint": "搜索全球合作伙伴地点，不受当前地图视野限制。“浏览当前视野全部地点”仅显示地图中可见的位置。",
     "searchLabel": "按名称搜索合作伙伴",
     "searchPlaceholder": "搜索地点名称",
     "reset": "重置地图",
@@ -1267,7 +1267,7 @@
     "tip": "點選地圖上的圓點查看詳情。地點重疊時，可從清單選擇或放大地圖。使用 +/− 縮放。",
     "searchButton": "依名稱搜尋合作夥伴",
     "searchHead": "依名稱搜尋合作夥伴",
-    "searchHint": "搜尋目前地圖範圍內的地點。移動地圖以探索其他區域。",
+    "searchHint": "搜尋全球合作夥伴地點，不受目前地圖視野限制。「瀏覽目前視野中的所有地點」僅顯示地圖上可見的位置。",
     "searchLabel": "依名稱搜尋合作夥伴",
     "searchPlaceholder": "搜尋地點名稱",
     "reset": "重設地圖",
@@ -1303,7 +1303,7 @@
     "tip": "विवरण देखने के लिए बिंदु चुनें। स्थान पास-पास हों तो सूची से चुनें या ज़ूम करें।",
     "searchButton": "नाम से साझेदार खोजें",
     "searchHead": "नाम से साझेदार खोजें",
-    "searchHint": "मानचित्र में दिख रहे स्थान खोजें। अन्य क्षेत्र देखने के लिए मानचित्र को स्थानांतरित करें।",
+    "searchHint": "दुनिया भर के साझेदार स्थान खोजें, चाहे मानचित्र पर अभी कोई भी क्षेत्र दिख रहा हो। “इस दृश्य में सभी देखें” केवल वर्तमान दृश्य के स्थान दिखाता है।",
     "searchLabel": "नाम से साझेदार खोजें",
     "searchPlaceholder": "स्थान का नाम लिखें",
     "reset": "मानचित्र रीसेट करें",
@@ -1339,7 +1339,7 @@
     "tip": "ਵੇਰਵੇ ਲਈ ਬਿੰਦੂ ਚੁਣੋ। ਥਾਵਾਂ ਇਕੱਠੀਆਂ ਹੋਣ ਤਾਂ ਸੂਚੀ ਤੋਂ ਚੁਣੋ ਜਾਂ ਜ਼ੂਮ ਕਰੋ।",
     "searchButton": "ਨਾਂ ਨਾਲ ਭਾਈਵਾਲ ਲੱਭੋ",
     "searchHead": "ਨਾਂ ਨਾਲ ਭਾਈਵਾਲ ਲੱਭੋ",
-    "searchHint": "ਇਸ ਵੇਲੇ ਨਕਸ਼ੇ ਉੱਤੇ ਦਿਖ ਰਹੀਆਂ ਥਾਵਾਂ ਲੱਭੋ।",
+    "searchHint": "ਦੁਨੀਆ ਭਰ ਦੇ ਭਾਈਵਾਲ ਸਥਾਨ ਖੋਜੋ, ਭਾਵੇਂ ਨਕਸ਼ੇ ਉੱਤੇ ਇਸ ਵੇਲੇ ਕੋਈ ਵੀ ਖੇਤਰ ਦਿਸ ਰਿਹਾ ਹੋਵੇ। ਮੌਜੂਦਾ ਦ੍ਰਿਸ਼ ਦੇ ਸਾਰੇ ਸਥਾਨ ਵੱਖਰੇ ਵੇਖੋ।",
     "searchLabel": "ਨਾਂ ਨਾਲ ਭਾਈਵਾਲ ਲੱਭੋ",
     "searchPlaceholder": "ਥਾਂ ਦਾ ਨਾਂ ਲਿਖੋ",
     "reset": "ਨਕਸ਼ਾ ਰੀਸੈੱਟ ਕਰੋ",
@@ -1375,7 +1375,7 @@
     "tip": "বিস্তারিত দেখতে বিন্দু নির্বাচন করুন। স্থানগুলো কাছাকাছি হলে তালিকা থেকে বেছে নিন বা জুম করুন।",
     "searchButton": "নাম দিয়ে অংশীদার খুঁজুন",
     "searchHead": "নাম দিয়ে অংশীদার খুঁজুন",
-    "searchHint": "মানচিত্রে বর্তমানে দেখা যাচ্ছে এমন স্থান খুঁজুন।",
+    "searchHint": "মানচিত্রে বর্তমানে যে এলাকাই দেখা যাক, সারা বিশ্বের অংশীদারদের অবস্থান খুঁজুন। “এই দৃশ্যের সব দেখুন” শুধু দৃশ্যমান স্থানগুলো দেখায়।",
     "searchLabel": "নাম দিয়ে অংশীদার খুঁজুন",
     "searchPlaceholder": "স্থানের নাম লিখুন",
     "reset": "মানচিত্র রিসেট করুন",
@@ -1411,7 +1411,7 @@
     "tip": "વિગતો માટે બિંદુ પસંદ કરો. સ્થળો નજીક હોય તો યાદીમાંથી પસંદ કરો અથવા ઝૂમ કરો.",
     "searchButton": "નામથી ભાગીદારો શોધો",
     "searchHead": "નામથી ભાગીદારો શોધો",
-    "searchHint": "હાલ નકશામાં દેખાતા સ્થળો શોધો.",
+    "searchHint": "હાલ નકશામાં જે વિસ્તાર દેખાતો હોય તેનાથી સ્વતંત્ર રીતે વિશ્વભરના ભાગીદાર સ્થળો શોધો. વર્તમાન દૃશ્યનાં તમામ સ્થળો અલગથી જુઓ.",
     "searchLabel": "નામથી ભાગીદારો શોધો",
     "searchPlaceholder": "સ્થળનું નામ લખો",
     "reset": "નકશો રીસેટ કરો",
@@ -1447,7 +1447,7 @@
     "tip": "விவரங்களை அறிய புள்ளியைத் தேர்ந்தெடுக்கவும். இடங்கள் நெருக்கமாக இருந்தால் பட்டியலைப் பயன்படுத்தவும் அல்லது பெரிதாக்கவும்.",
     "searchButton": "பெயரால் கூட்டாளர்களைத் தேடுக",
     "searchHead": "பெயரால் கூட்டாளர்களைத் தேடுக",
-    "searchHint": "தற்போது வரைபடத்தில் தெரியும் இடங்களைத் தேடலாம்.",
+    "searchHint": "வரைபடத்தில் தற்போது எந்தப் பகுதி தெரிந்தாலும் உலகெங்குமுள்ள கூட்டாளர் இடங்களைத் தேடுங்கள். தற்போதைய காட்சியிலுள்ள இடங்களைத் தனியாகப் பார்க்கலாம்.",
     "searchLabel": "பெயரால் கூட்டாளர்களைத் தேடுக",
     "searchPlaceholder": "இடப் பெயரை உள்ளிடுக",
     "reset": "வரைபடத்தை மீட்டமை",
@@ -1483,7 +1483,7 @@
     "tip": "వివరాల కోసం చుక్కను ఎంచుకోండి. దగ్గరగా ఉన్న ప్రదేశాలను జాబితాలో ఎంచుకోండి లేదా జూమ్ చేయండి.",
     "searchButton": "పేరు ద్వారా భాగస్వాములను వెతకండి",
     "searchHead": "పేరు ద్వారా భాగస్వాములను వెతకండి",
-    "searchHint": "ప్రస్తుతం పటంలో కనిపించే ప్రదేశాలను వెతకండి.",
+    "searchHint": "మ్యాప్ ప్రస్తుతం ఎక్కడ ఉన్నా ప్రపంచవ్యాప్తంగా భాగస్వాముల స్థానాలను వెతకండి. ప్రస్తుతం కనిపించే ప్రదేశాలను వేరుగా చూడవచ్చు.",
     "searchLabel": "పేరు ద్వారా భాగస్వాములను వెతకండి",
     "searchPlaceholder": "ప్రదేశం పేరు ఇవ్వండి",
     "reset": "మ్యాప్‌ను రీసెట్ చేయండి",
@@ -1519,7 +1519,7 @@
     "tip": "तपशील पाहण्यासाठी बिंदू निवडा. ठिकाणे जवळ असल्यास यादीतून निवडा किंवा झूम करा.",
     "searchButton": "नावाने भागीदार शोधा",
     "searchHead": "नावाने भागीदार शोधा",
-    "searchHint": "सध्या नकाशावर दिसणारी ठिकाणे शोधा.",
+    "searchHint": "नकाशावर सध्या कोणताही भाग दिसत असला तरी जगभरातील भागीदारांची ठिकाणे शोधा. सध्याच्या दृश्यातील ठिकाणे स्वतंत्रपणे पाहता येतील.",
     "searchLabel": "नावाने भागीदार शोधा",
     "searchPlaceholder": "ठिकाणाचे नाव लिहा",
     "reset": "नकाशा रीसेट करा",
@@ -1555,7 +1555,7 @@
     "tip": "تفصیلات کے لیے نقطہ منتخب کریں۔ مقامات قریب ہوں تو فہرست سے منتخب کریں یا زوم کریں۔",
     "searchButton": "نام سے شراکت دار تلاش کریں",
     "searchHead": "نام سے شراکت دار تلاش کریں",
-    "searchHint": "نقشے پر موجودہ نظر آنے والے مقامات تلاش کریں۔",
+    "searchHint": "نقشے پر موجودہ منظر سے قطع نظر دنیا بھر کے شراکت داروں کے مقامات تلاش کریں۔ صرف نظر آنے والے مقامات کو الگ سے دیکھ سکتے ہیں۔",
     "searchLabel": "نام سے شراکت دار تلاش کریں",
     "searchPlaceholder": "مقام کا نام لکھیں",
     "reset": "نقشہ ری سیٹ کریں",
@@ -1591,7 +1591,7 @@
     "tip": "지도에서 점을 선택하면 자세한 정보를 볼 수 있습니다. 장소가 겹치면 목록에서 선택하거나 지도를 확대하세요. +/− 버튼으로 확대하거나 축소할 수 있습니다.",
     "searchButton": "이름으로 협력 기관 검색",
     "searchHead": "이름으로 협력 기관 검색",
-    "searchHint": "현재 지도에 보이는 장소를 검색하세요. 다른 지역을 보려면 지도를 이동하세요.",
+    "searchHint": "현재 지도의 위치와 관계없이 전 세계 협력 기관을 검색할 수 있습니다. “현재 화면 전체 보기”는 화면에 보이는 장소만 표시합니다.",
     "searchLabel": "이름으로 협력 기관 검색",
     "searchPlaceholder": "장소 이름 입력",
     "reset": "지도 초기화",
@@ -1627,7 +1627,7 @@
     "tip": "地図上の点を選ぶと詳細が表示されます。地点が重なる場合は一覧から選ぶか、地図を拡大してください。+/−で拡大・縮小できます。",
     "searchButton": "名前でパートナーを検索",
     "searchHead": "名前でパートナーを検索",
-    "searchHint": "現在の地図に表示されている地点を検索できます。別の地域を見るには地図を移動してください。",
+    "searchHint": "地図の表示範囲に関係なく、世界中の連携先を検索できます。「この範囲の全地点」では現在見えている地点だけを表示します。",
     "searchLabel": "名前でパートナーを検索",
     "searchPlaceholder": "地点名を入力",
     "reset": "地図をリセット",
@@ -1663,7 +1663,7 @@
     "tip": "Pilih titik untuk melihat butirannya. Jika lokasi bertindih, pilih daripada senarai atau zum masuk. Gunakan +/− untuk zum.",
     "searchButton": "Cari rakan kerjasama mengikut nama",
     "searchHead": "Cari rakan kerjasama mengikut nama",
-    "searchHint": "Cari lokasi yang sedang kelihatan pada peta. Gerakkan peta untuk menerokai kawasan lain.",
+    "searchHint": "Cari lokasi rakan kerjasama di seluruh dunia, tanpa mengira paparan peta semasa. “Lihat semua dalam paparan” hanya menunjukkan lokasi yang kelihatan.",
     "searchLabel": "Cari rakan kerjasama mengikut nama",
     "searchPlaceholder": "Masukkan nama lokasi",
     "reset": "Tetapkan Semula Peta",
@@ -1699,7 +1699,7 @@
     "tip": "ڤيليه تيتيق اونتوق مليهت بوتيرنڽ. جک لوکاسي برتينديه، ڤيليه درڤد سناراي اتاو زوم ماسوق. ݢوناکن +/− اونتوق زوم.",
     "searchButton": "چاري راکن کرجاسام مڠيکوت نام",
     "searchHead": "چاري راکن کرجاسام مڠيکوت نام",
-    "searchHint": "چاري لوکاسي يڠ کليهتن ڤد ڤيتا. ݢرقکن ڤيتا اونتوق منروکاءي کاوسن لاءين.",
+    "searchHint": "چاري لوکاسي راکن کرجاسام د سلوروه دنيا، تيدق کيرا کاوسن يڠ سدڠ دڤاڤرکن. «ليهت سموا دالم ڤاڤرن» هاڽ منونجوقکن لوکاسي يڠ کليهتن.",
     "searchLabel": "چاري راکن کرجاسام مڠيکوت نام",
     "searchPlaceholder": "ماسوقکن نام لوکاسي",
     "reset": "تتڤ سمولا ڤيتا",
@@ -1735,7 +1735,7 @@
     "tip": "विवरण हेर्न नक्साको बिन्दु छान्नुहोस्। स्थानहरू खप्टिएका छन् भने सूचीबाट छान्नुहोस् वा नक्सा ठूलो पार्नुहोस्। +/− ले जुम गर्नुहोस्।",
     "searchButton": "नामबाट साझेदार खोज्नुहोस्",
     "searchHead": "नामबाट साझेदार खोज्नुहोस्",
-    "searchHint": "हाल नक्सामा देखिएका स्थानहरू खोज्नुहोस्। अन्य क्षेत्र हेर्न नक्सा सार्नुहोस्।",
+    "searchHint": "नक्सामा जुनसुकै क्षेत्र देखिए पनि संसारभरिका साझेदार स्थान खोज्नुहोस्। “यस दृश्यका सबै स्थान” ले हाल देखिएका स्थान मात्र देखाउँछ।",
     "searchLabel": "नामबाट साझेदार खोज्नुहोस्",
     "searchPlaceholder": "स्थानको नाम लेख्नुहोस्",
     "reset": "नक्सा रिसेट गर्नुहोस्",
@@ -1771,7 +1771,7 @@
     "tip": "اختر نقطة لعرض تفاصيلها. إذا تداخلت المواقع، فاختر من القائمة أو كبّر الخريطة. استخدم +/− للتكبير والتصغير.",
     "searchButton": "البحث عن الشركاء بالاسم",
     "searchHead": "البحث عن الشركاء بالاسم",
-    "searchHint": "ابحث في المواقع الظاهرة حاليًا على الخريطة. حرّك الخريطة لاستكشاف مناطق أخرى.",
+    "searchHint": "ابحث عن مواقع الشركاء حول العالم بغضّ النظر عن منطقة الخريطة المعروضة. يعرض «تصفح جميع المواقع الظاهرة» المواقع الموجودة في العرض الحالي فقط.",
     "searchLabel": "البحث عن الشركاء بالاسم",
     "searchPlaceholder": "أدخل اسم الموقع",
     "reset": "إعادة ضبط الخريطة",
@@ -2757,374 +2757,332 @@
     document.getElementById('reset-europe').addEventListener('click', resetMapView);
 
     // International Art & Design academic/employer reputation editorial shortlist.
-    // Candidate names are drawn from Loughborough's publicly described exchange
-    // and placement opportunities and the previous site's featured shortlist.
+    // Curated from 50 records VERIFIED in the actual global Mapbox directory,
+    // with aliases for spelling/abbreviation variants in the source dataset.
     // This is a curatorial selection, NOT a QS ranking or verification of an
     // active institutional partnership. Keep the shortlist visible globally;
     // connect each entry to a mapped point only after its location is verified.
     // The order prioritises design-specific academic connections across regions,
     // followed by renowned design practices and internationally visible employers.
     const FEATURED_ORGANISATIONS = [
-      {
-            "name": "Delft University of Technology",
-            "group": "academic",
-            "aliases": [
-                  "TU Delft",
-                  "Delft University"
-            ]
-      },
-      {
-            "name": "Politecnico di Milano",
-            "group": "academic",
-            "aliases": [
-                  "Milano Politecnico",
-                  "Polytechnic University of Milan"
-            ]
-      },
-      {
-            "name": "Design School Kolding",
-            "group": "academic",
-            "aliases": [
-                  "Designskolen Kolding",
-                  "Kolding School of Design",
-                  "Design School, Denmark"
-            ]
-      },
-      {
-            "name": "Academy of Fine Arts, Uniarts Helsinki",
-            "group": "academic",
-            "aliases": [
-                  "Academy of Fine Arts Helsinki",
-                  "Academy of Fine Arts, UniArts Helsinki",
-                  "University of the Arts Helsinki - Academy of Fine Arts"
-            ]
-      },
-      {
-            "name": "Joshibi University of Art and Design",
-            "group": "academic",
-            "aliases": [
-                  "Joshibi University",
-                  "Joshibi University of Art & Design"
-            ]
-      },
-      {
-            "name": "Mimar Sinan Fine Arts University",
-            "group": "academic",
-            "aliases": [
-                  "Mimar Sinan University of Fine Arts"
-            ]
-      },
-      {
-            "name": "Norwegian University of Science and Technology",
-            "group": "academic",
-            "aliases": [
-                  "NTNU"
-            ]
-      },
-      {
-            "name": "Middle East Technical University",
-            "group": "academic",
-            "aliases": [
-                  "METU"
-            ]
-      },
-      {
-            "name": "Shibaura Institute of Technology",
-            "group": "academic",
-            "aliases": [
-                  "SIT"
-            ]
-      },
-      {
-            "name": "University of Wuppertal",
-            "group": "academic",
-            "aliases": [
-                  "Wuppertal University",
-                  "Bergische Universität Wuppertal"
-            ]
-      },
-      {
-            "name": "RheinMain University of Applied Sciences",
-            "group": "academic",
-            "aliases": [
-                  "RheinMain University",
-                  "RheinMain University of Applied Science",
-                  "Hochschule RheinMain"
-            ]
-      },
-      {
-            "name": "Université de Montréal",
-            "group": "academic",
-            "aliases": [
-                  "University of Montreal",
-                  "Universite de Montreal"
-            ]
-      },
-      {
-            "name": "Indian Institute of Technology Bombay",
-            "group": "academic",
-            "aliases": [
-                  "IIT Bombay",
-                  "Indian Institute of Technology, Bombay",
-                  "IIT Mumbai"
-            ]
-      },
-      {
-            "name": "Indian Institute of Technology Delhi",
-            "group": "academic",
-            "aliases": [
-                  "IIT Delhi",
-                  "Indian Institute of Technology, Delhi"
-            ]
-      },
-      {
-            "name": "City University of Hong Kong",
-            "group": "academic",
-            "aliases": [
-                  "City University Hong Kong",
-                  "City University, Hong Kong",
-                  "CityU Hong Kong"
-            ]
-      },
-      {
-            "name": "Nanyang Technological University",
-            "group": "academic",
-            "aliases": [
-                  "Nanyang Technology University",
-                  "NTU Singapore"
-            ]
-      },
-      {
-            "name": "University of Technology Sydney",
-            "group": "academic",
-            "aliases": [
-                  "UTS"
-            ]
-      },
-      {
-            "name": "University of Queensland",
-            "group": "academic",
-            "aliases": [
-                  "The University of Queensland",
-                  "UQ"
-            ]
-      },
-      {
-            "name": "Curtin University",
-            "group": "academic",
-            "aliases": [
-                  "Curtin University of Technology"
-            ]
-      },
-      {
-            "name": "University of Michigan",
-            "group": "academic",
-            "aliases": [
-                  "University of Michigan Ann Arbor",
-                  "U-M"
-            ]
-      },
-      {
-            "name": "Virginia Tech",
-            "group": "academic",
-            "aliases": [
-                  "Virginia Polytechnic Institute and State University",
-                  "Virginia Technology"
-            ]
-      },
-      {
-            "name": "Purdue University",
-            "group": "academic",
-            "aliases": [
-                  "Purdue University West Lafayette"
-            ]
-      },
-      {
-            "name": "Kansai University",
-            "group": "academic",
-            "aliases": []
-      },
-      {
-            "name": "University of Zaragoza",
-            "group": "academic",
-            "aliases": [
-                  "Universidad de Zaragoza"
-            ]
-      },
-      {
-            "name": "Kansas City Art Institute",
-            "group": "academic",
-            "aliases": [
-                  "Kansas Art Institute",
-                  "KCAI"
-            ]
-      },
-      {
-            "name": "Victoria University",
-            "group": "academic",
-            "aliases": [
-                  "Victoria University Australia",
-                  "Victoria University Melbourne"
-            ]
-      },
-      {
-            "name": "New Mexico State University",
-            "group": "academic",
-            "aliases": [
-                  "NMSU"
-            ]
-      },
-      {
-            "name": "Oklahoma State University",
-            "group": "academic",
-            "aliases": [
-                  "OSU"
-            ]
-      },
-      {
-            "name": "Pentagram",
-            "group": "design",
-            "aliases": []
-      },
-      {
-            "name": "Wieden+Kennedy",
-            "group": "design",
-            "aliases": [
-                  "Wieden Kennedy",
-                  "Wieden & Kennedy"
-            ]
-      },
-      {
-            "name": "Porsche Design",
-            "group": "design",
-            "aliases": []
-      },
-      {
-            "name": "VanBerlo",
-            "group": "design",
-            "aliases": [
-                  "Van Berlo"
-            ]
-      },
-      {
-            "name": "PriestmanGoode",
-            "group": "design",
-            "aliases": [
-                  "Priestman Goode"
-            ]
-      },
-      {
-            "name": "Seymourpowell",
-            "group": "design",
-            "aliases": [
-                  "Seymour Powell"
-            ]
-      },
-      {
-            "name": "Kinneir Dufort",
-            "group": "design",
-            "aliases": [
-                  "Kinneirdufort"
-            ]
-      },
-      {
-            "name": "Cambridge Consultants",
-            "group": "design",
-            "aliases": []
-      },
-      {
-            "name": "DCA",
-            "group": "design",
-            "aliases": [
-                  "DCA Design International"
-            ]
-      },
-      {
-            "name": "PDD",
-            "group": "design",
-            "aliases": [
-                  "PDD Group"
-            ]
-      },
-      {
-            "name": "LEGO",
-            "group": "employers",
-            "aliases": [
-                  "The LEGO Group",
-                  "Lego Group"
-            ]
-      },
-      {
-            "name": "The Walt Disney Company",
-            "group": "employers",
-            "aliases": [
-                  "Walt Disney",
-                  "Disney"
-            ]
-      },
-      {
-            "name": "Microsoft",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "BMW",
-            "group": "employers",
-            "aliases": [
-                  "BMW Group"
-            ]
-      },
-      {
-            "name": "Adidas",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "Canon",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "Bosch",
-            "group": "employers",
-            "aliases": [
-                  "Robert Bosch"
-            ]
-      },
-      {
-            "name": "IBM",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "Unilever",
-            "group": "employers",
-            "aliases": []
-      },
-      {
-            "name": "L’Oréal",
-            "group": "employers",
-            "aliases": [
-                  "L'Oreal",
-                  "Loreal"
-            ]
-      },
-      {
-            "name": "Dyson",
-            "group": "employers",
-            "aliases": [
-                  "Dyson (UK)",
-                  "Dyson Ltd",
-                  "Dyson Limited"
-            ]
-      },
-      {
-            "name": "Burberry",
-            "group": "employers",
-            "aliases": [
-                  "Burberry Group"
-            ]
-      }
+    {
+        "name": "Delft University of Technology",
+        "group": "academic",
+        "aliases": [
+            "TU Delft",
+            "TU Delft, Netherlands"
+        ]
+    },
+    {
+        "name": "Politecnico di Milano",
+        "group": "academic",
+        "aliases": [
+            "Politechnico di Milano, Italy"
+        ]
+    },
+    {
+        "name": "Design School Kolding",
+        "group": "academic",
+        "aliases": [
+            "Design School Kolding, Denmark"
+        ]
+    },
+    {
+        "name": "Joshibi University of Art and Design",
+        "group": "academic",
+        "aliases": [
+            "Joshibi University of Art & Design, Japan"
+        ]
+    },
+    {
+        "name": "Nanyang Technological University",
+        "group": "academic",
+        "aliases": [
+            "Nanyang Technical University, Singapore"
+        ]
+    },
+    {
+        "name": "City University of Hong Kong",
+        "group": "academic",
+        "aliases": [
+            "City University , Hong Kong"
+        ]
+    },
+    {
+        "name": "Norwegian University of Science and Technology",
+        "group": "academic",
+        "aliases": [
+            "NTNU, Norway"
+        ]
+    },
+    {
+        "name": "Academy of Fine Arts, Finland",
+        "group": "academic",
+        "aliases": [
+            "Academy of Fine Art, Finland"
+        ]
+    },
+    {
+        "name": "Mimar Sinan Fine Arts University",
+        "group": "academic",
+        "aliases": [
+            "Mimar Sinan Fine Arts, Turkey"
+        ]
+    },
+    {
+        "name": "Middle East Technical University",
+        "group": "academic",
+        "aliases": [
+            "Middle East Technical University (METU)"
+        ]
+    },
+    {
+        "name": "Shibaura Institute of Technology",
+        "group": "academic",
+        "aliases": [
+            "Shibaura Institute of Technology, Japan"
+        ]
+    },
+    {
+        "name": "Kansai University",
+        "group": "academic",
+        "aliases": [
+            "Kansai University, Japan"
+        ]
+    },
+    {
+        "name": "University of Michigan",
+        "group": "academic",
+        "aliases": [
+            "University of Michigan, USA"
+        ]
+    },
+    {
+        "name": "Université de Montréal",
+        "group": "academic",
+        "aliases": [
+            "University of Montreal, Canada"
+        ]
+    },
+    {
+        "name": "Curtin University",
+        "group": "academic",
+        "aliases": [
+            "Curtin University, Australia"
+        ]
+    },
+    {
+        "name": "University of Navarra",
+        "group": "academic",
+        "aliases": [
+            "University of Navarra, Spain"
+        ]
+    },
+    {
+        "name": "Virginia Tech",
+        "group": "academic",
+        "aliases": [
+            "Virginia Tech, USA"
+        ]
+    },
+    {
+        "name": "RheinMain University of Applied Sciences",
+        "group": "academic",
+        "aliases": [
+            "RheinMain University of Applied Sciences, Germany"
+        ]
+    },
+    {
+        "name": "University of Zaragoza",
+        "group": "academic",
+        "aliases": [
+            "University of Zaragoza, Spain"
+        ]
+    },
+    {
+        "name": "Kansas Art Institute",
+        "group": "academic",
+        "aliases": [
+            "Kansas Art Institute, USA"
+        ]
+    },
+    {
+        "name": "Victoria University",
+        "group": "academic",
+        "aliases": [
+            "Victoria University, Australia"
+        ]
+    },
+    {
+        "name": "New Mexico State University",
+        "group": "academic",
+        "aliases": [
+            "New Mexico State, USA"
+        ]
+    },
+    {
+        "name": "University of Technology, Australia",
+        "group": "academic",
+        "aliases": [
+            "University of Technology, Australia"
+        ]
+    },
+    {
+        "name": "Frog Design",
+        "group": "design",
+        "aliases": [
+            "Frog",
+            "Frog / Capgemini"
+        ]
+    },
+    {
+        "name": "Studio F. A. Porsche",
+        "group": "design",
+        "aliases": [
+            "F.A.Porsche"
+        ]
+    },
+    {
+        "name": "Seymourpowell",
+        "group": "design",
+        "aliases": [
+            "Symore Powel"
+        ]
+    },
+    {
+        "name": "PriestmanGoode",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "Cambridge Consultants",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "DCA",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "PDD",
+        "group": "design",
+        "aliases": [
+            "PDD (Hong Kong)"
+        ]
+    },
+    {
+        "name": "Jacob Jensen Design",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "Layer Design",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "Team Consulting",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "GRO Design",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "Design Reality",
+        "group": "design",
+        "aliases": [
+            "design Reality"
+        ]
+    },
+    {
+        "name": "Dolmen design & Innovation",
+        "group": "design",
+        "aliases": []
+    },
+    {
+        "name": "LEGO",
+        "group": "employers",
+        "aliases": [
+            "Lego"
+        ]
+    },
+    {
+        "name": "The Walt Disney Company",
+        "group": "employers",
+        "aliases": [
+            "Disney"
+        ]
+    },
+    {
+        "name": "BMW",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Canon",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Bosch",
+        "group": "employers",
+        "aliases": [
+            "Bosch Power Tools"
+        ]
+    },
+    {
+        "name": "IBM",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Dyson",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Unilever",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Airbus",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "McLaren",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Louis Vuitton",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Jaguar Land Rover",
+        "group": "employers",
+        "aliases": [
+            "JLR"
+        ]
+    },
+    {
+        "name": "Nissan",
+        "group": "employers",
+        "aliases": []
+    },
+    {
+        "name": "Philips",
+        "group": "employers",
+        "aliases": [
+            "Philips Electronics"
+        ]
+    }
 ];
     const featuredLabels = {
       "en": {
@@ -3357,38 +3315,26 @@
       ...item, normalizedAliases: [item.name, ...item.aliases].map(normalizedName)
     }));
 
-    // World-wide partner directory. Mapbox queryRenderedFeatures only covers the
-    // viewport, so decode the actual published partner tiles across the whole
-    // globe once. The directory is used for BOTH typed searches and features.
-    // Never silently substitute a local-viewport search for global results.
+    // A single, verified static worldwide directory is built daily by GitHub
+    // Actions from the exact Mapbox tileset chrisuxd.1n1nj9bi. Browsers make
+    // ONE same-origin JSON request, not 256+ Mapbox tile requests per visitor.
+    // The published map continues to use Mapbox directly for rendering.
     const worldFeaturedMatches = new Map();
     const worldLocations = new Map();
     let worldFeaturedState = 'loading';
-    let worldIndexStarted = false;
-    // This explicit tileset ID identifies the School's partner data. The
-    // published style may use a composite source with different source-layer
-    // names, which is why guessing from the current map view previously failed.
-    const PARTNER_TILESET_ID = 'chrisuxd.1n1nj9bi';
+    let worldIndexPromise = null;
+    const DIRECTORY_TILESET = 'chrisuxd.1n1nj9bi';
     const matchingFeaturedAlias = (featureName, alias) =>
-      featureName === alias ||
-      (alias.length >= 4 && featureName.startsWith(alias + ' '));
-    const worldFeatureFrom = (properties, coordinates, id) => ({
-      type:'Feature', properties, geometry:{type:'Point', coordinates}, id
-    });
+      featureName === alias || (alias.length >= 4 && featureName.startsWith(alias + ' '));
     const addWorldFeature = feature => {
-      if (feature.geometry?.type !== 'Point') return;
+      if (feature?.geometry?.type !== 'Point') return;
       const props = feature.properties || {};
       const name = normalizedName(props.name);
       const coords = feature.geometry.coordinates;
       if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1])) return;
-      // Tile-edge buffers may repeat a point in adjacent tiles. Keep distinct
-      // locations (even with the same partner name) while removing duplicates.
       const key = name + ':' + coords[0].toFixed(3) + ',' + coords[1].toFixed(3);
       if (!worldLocations.has(key)) worldLocations.set(key, feature);
       for (const item of featuredMatchers) {
-        // Names in the tileset can include region labels, e.g. "Dyson (UK)".
-        // Prefer exact aliases but accept a country/site suffix; never infer
-        // that an unverified name belongs to a different organisation.
         for (const alias of item.normalizedAliases) {
           if (matchingFeaturedAlias(name, alias)) {
             if (!worldFeaturedMatches.has(alias) || name === alias) {
@@ -3398,213 +3344,32 @@
         }
       }
     };
-
-    // Tiny read-only Mapbox Vector Tile (MVT) point decoder; avoids loading an
-    // additional WebGL map or depending on a third-party script/CDN.
-    const readMvtPoints = (buffer, tileZ, tileX, tileY, wantedLayer) => {
-      const bytes = new Uint8Array(buffer);
-      const decoder = new TextDecoder();
-      const reader = (data) => {
-        let pos = 0;
-        const u8 = data instanceof Uint8Array ? data : new Uint8Array(data);
-        const varint = () => {
-          let value = 0, shift = 0, byte;
-          do {
-            if (pos >= u8.length || shift > 63) throw Error('Invalid vector tile varint');
-            byte = u8[pos++]; value += (byte & 127) * 2 ** shift; shift += 7;
-          } while (byte & 128);
-          return value;
-        };
-        const chunk = () => { const n = varint(); const end = pos + n; if (end > u8.length) throw Error('Invalid vector tile length'); const out = u8.subarray(pos,end); pos=end; return out; };
-        const skip = wire => {
-          if (wire === 0) varint();
-          else if (wire === 1) pos += 8;
-          else if (wire === 2) chunk();
-          else if (wire === 5) pos += 4;
-          else throw Error('Invalid vector tile wire type');
-          if (pos > u8.length) throw Error('Invalid vector tile field');
-        };
-        const float = (size) => {
-          const n = new DataView(u8.buffer, u8.byteOffset + pos, size);
-          const value = size === 4 ? n.getFloat32(0,true) : n.getFloat64(0,true);
-          pos += size; return value;
-        };
-        return {varint,chunk,skip,float,text:()=>decoder.decode(chunk()),get pos(){return pos},get length(){return u8.length}};
-      };
-      const valuesFrom = data => {
-        const r = reader(data); let value = null;
-        while (r.pos < r.length) {
-          const tag = r.varint(), field = tag >>> 3, wire = tag & 7;
-          if (field === 1 && wire === 2) value = r.text();
-          else if (field === 2 && wire === 5) value = r.float(4);
-          else if (field === 3 && wire === 1) value = r.float(8);
-          else if ([4,5,6,7].includes(field) && wire === 0) {
-            const v = r.varint(); value = field === 6 ? (v & 1 ? -(v+1)/2 : v/2) : field === 7 ? Boolean(v) : v;
-          } else r.skip(wire);
-        }
-        return value;
-      };
-      const packed = data => {
-        const r = reader(data), out = [];
-        while (r.pos < r.length) out.push(r.varint());
-        return out;
-      };
-      const decodeZigZag = v => v & 1 ? -(v+1)/2 : v/2;
-      const pointCoords = (geometry, extent) => {
-        const output = []; let x=0,y=0,i=0;
-        while (i < geometry.length) {
-          const op = geometry[i++], command = op & 7, n = op >>> 3;
-          if (command === 1 || command === 2) {
-            for (let j=0; j<n && i+1<geometry.length; j++) {
-              x += decodeZigZag(geometry[i++]); y += decodeZigZag(geometry[i++]);
-              if (command === 1) {
-                const lng = ((tileX + x/extent) / 2**tileZ)*360 - 180;
-                const merc = Math.PI*(1-2*(tileY + y/extent)/2**tileZ);
-                const lat = Math.atan(Math.sinh(merc))*180/Math.PI;
-                output.push([lng,lat]);
-              }
-            }
-          } else if (command !== 7) break;
-        }
-        return output;
-      };
-      const parseLayer = data => {
-        const r = reader(data); let name='', extent=4096;
-        const keys=[], values=[], features=[];
-        while (r.pos < r.length) {
-          const tag=r.varint(), field=tag>>>3, wire=tag&7;
-          if (field===1 && wire===2) name=r.text();
-          else if (field===2 && wire===2) features.push(r.chunk());
-          else if (field===3 && wire===2) keys.push(r.text());
-          else if (field===4 && wire===2) values.push(valuesFrom(r.chunk()));
-          else if (field===5 && wire===0) extent=r.varint();
-          else r.skip(wire);
-        }
-        if (wantedLayer && name !== wantedLayer) return;
-        for (const bytes of features) {
-          const fr=reader(bytes); let id, type=0, tagIds=[], geometry=[];
-          while (fr.pos < fr.length) {
-            const tag=fr.varint(), field=tag>>>3, wire=tag&7;
-            if (field===1 && wire===0) id=fr.varint();
-            else if (field===2 && wire===2) tagIds=packed(fr.chunk());
-            else if (field===3 && wire===0) type=fr.varint();
-            else if (field===4 && wire===2) geometry=packed(fr.chunk());
-            else fr.skip(wire);
-          }
-          if (type !== 1) continue; // Only partner points.
-          const props={};
-          for (let i=0;i+1<tagIds.length;i+=2) {
-            if (keys[tagIds[i]] !== undefined) props[keys[tagIds[i]]] = values[tagIds[i+1]];
-          }
-          if (!normalizedName(props.name)) continue;
-          for (const coordinates of pointCoords(geometry, extent)) addWorldFeature(worldFeatureFrom(props, coordinates, id));
-        }
-      };
-      const tile = reader(bytes);
-      while (tile.pos < tile.length) {
-        const tag = tile.varint(), field=tag>>>3, wire=tag&7;
-        if (field === 3 && wire === 2) parseLayer(tile.chunk());
-        else tile.skip(wire);
-      }
-    };
-    const mapboxPublicToken = mapboxgl.accessToken;
-    const getJson = async url => {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 12000);
-      try {
-        const response = await fetch(url, {signal:ctrl.signal});
-        if (!response.ok) throw Error('Mapbox data request failed (' + response.status + ')');
-        return response.json();
-      } finally { clearTimeout(timer); }
-    };
-    const mapboxTileJsonUrl = ids =>
-      'https://api.mapbox.com/v4/' + encodeURIComponent(ids).replace(/%2C/gi,',') +
-      '.json?access_token=' + encodeURIComponent(mapboxPublicToken);
-    const resolvePartnerTiles = async () => {
-      // Resolve the actual partner tileset, not the Mapbox Studio composite
-      // that may also contain Streets, landcover and other non-partner data.
-      const metadata = await getJson(mapboxTileJsonUrl(PARTNER_TILESET_ID));
-      if (!Array.isArray(metadata.tiles) || !metadata.tiles.length) {
-        throw Error('Partner tileset TileJSON contains no vector tiles');
-      }
-      return metadata;
-    };
-    const scanWorldTiles = async (tileJson, sourceLayer, z) => {
-      const template = tileJson.tiles?.[0];
-      if (!template) throw Error('Partner tileset has no public tile URL');
-      const jobs = [];
-      for (let x=0; x<2**z; x++) for (let y=0; y<2**z; y++) jobs.push([x,y]);
-      let next=0, completed=0, failed=0;
-      const failedJobs = [];
-      const loadTile = async (x,y) => {
-        const requestY = tileJson.scheme === 'tms' ? (2**z - 1 - y) : y;
-        const url = template.replace(/\{z\}/g,String(z)).replace(/\{x\}/g,String(x))
-          .replace(/\{y\}/g,String(requestY)).replace(/\{ratio\}/g,'');
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), 12000);
-        try {
-          const response = await fetch(url,{signal:ctrl.signal});
-          // Empty ocean tiles are normal, not evidence that global search failed.
-          if (response.status === 404 || response.status === 204) return;
-          if (!response.ok) throw Error('Tile request returned ' + response.status);
-          let buffer = await response.arrayBuffer();
-          const view = new Uint8Array(buffer);
-          if (view[0]===31 && view[1]===139) {
-            if (typeof DecompressionStream !== 'function') throw Error('Gzip unavailable');
-            buffer = await new Response(new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
-          }
-          readMvtPoints(buffer,z,x,y,sourceLayer);
-        } finally { clearTimeout(timer); }
-      };
-      await Promise.all(Array.from({length:Math.min(8,jobs.length)}, async () => {
-        while (next<jobs.length) {
-          const [x,y] = jobs[next++];
-          try { await loadTile(x,y); }
-          catch (e) { failedJobs.push([x,y]); console.warn('Partner tile failed',z,x,y,e); }
-          completed++;
-          if (completed % 16 === 0) updateBrowseList();
-        }
-      }));
-      // Retry only failed tiles rather than discarding matches from all the
-      // successfully loaded countries after one transient network error.
-      for (const [x,y] of failedJobs) {
-        try { await loadTile(x,y); }
-        catch(e) { failed++; console.warn('Partner tile retry failed',z,x,y,e); }
-      }
-      return {total:jobs.length, failed};
-    };
-    const startWorldFeaturedLookup = async () => {
-      if (worldIndexStarted || !mapIsReady) return;
-      worldIndexStarted = true;
+    const startWorldFeaturedLookup = () => {
+      if (worldIndexPromise || worldFeaturedState === 'ready') return worldIndexPromise;
       worldFeaturedState = 'loading';
-      try {
-        // Always use the identified public partner tileset. Composite sources
-        // and mismatched source-layer names caused earlier empty searches.
-        const tileJson = await resolvePartnerTiles();
-        const minZoom = Math.ceil(tileJson.minzoom || 0);
-        if (minZoom > 5) {
-          throw Error('Partner tileset minimum zoom is ' + minZoom +
-            ': a static worldwide partner index is required');
+      // In-flight requests are shared between browsing, typing and reopening.
+      worldIndexPromise = (async () => {
+        try {
+          const response = await fetch('./partner-directory.json', { cache: 'no-cache' });
+          if (!response.ok) throw Error('Partner directory HTTP ' + response.status);
+          const directory = await response.json();
+          if (directory?.type !== 'FeatureCollection' || directory.source !== DIRECTORY_TILESET ||
+              !Array.isArray(directory.features) || directory.features.length < 50) {
+            throw Error('Invalid or incomplete worldwide partner directory');
+          }
+          worldLocations.clear();
+          worldFeaturedMatches.clear();
+          for (const feature of directory.features) addWorldFeature(feature);
+          if (worldLocations.size < 50) throw Error('The partner directory contains too few locations');
+          worldFeaturedState = 'ready';
+        } catch (err) {
+          worldFeaturedState = 'error';
+          worldIndexPromise = null; // Reopen search to retry after transient failure.
+          console.warn('Partner directory unavailable:', err);
         }
-        // All features can already be displayed on the zoomed-out globe.
-        // Zoom 4 scans just 256 worldwide tiles while retaining more detail
-        // than the original zoom-3 scan. Increase to 5 only if required.
-        const z = Math.max(4,minZoom);
-        const scan = await scanWorldTiles(tileJson, null, z);
-        if (!worldLocations.size) {
-          throw Error('No searchable partners decoded from ' + PARTNER_TILESET_ID);
-        }
-        worldFeaturedState = scan.failed ? 'partial' : 'ready';
-        if (scan.failed) {
-          console.warn('Worldwide partner search has ' + scan.failed + ' unavailable tiles');
-          worldIndexStarted = false; // retries are possible on next search
-        }
-      } catch(e) {
-        console.warn('Worldwide partner search unavailable:', e);
-        worldFeaturedState = 'error';
-        worldIndexStarted = false;
-      }
-      updateBrowseList();
+        updateBrowseList();
+      })();
+      return worldIndexPromise;
     };
 
     // Ordinary typed searches and featured connections use the worldwide
@@ -3695,7 +3460,8 @@
           ' · ' + featuredT(worldFeaturedState === 'loading' ? 'featuredLoading' : 'featuredError');
         browseCount.textContent = `${matches.length} ${words[0]} · ${words[1]}.${suffix}`;
         if (!matches.length) browseList.append(make('li','',
-          worldFeaturedState==='loading' ? featuredT('featuredLoading') : t('noMatch')));
+          worldFeaturedState==='loading' ? featuredT('featuredLoading') :
+          worldFeaturedState==='error' ? featuredT('featuredError') : t('noMatch')));
       } else if (browseMode === 'all') {
         // Preserve the original keyboard-accessible list as an explicit option.
         for (const f of availableLocations) browseList.append(makeBrowseItem(f));
@@ -3786,8 +3552,8 @@
       originalFilter = layer.filter || null;
       mapIsReady = true;
       updateBrowseList();
-      // Load worldwide partner tiles when search is opened, not on every map visit.
-      // Use the same Mapbox vector tileset and colour expression as the original layer.
+      // Partner directory comes from a single GitHub Pages JSON file.
+      // Use the same Mapbox colour expression as the original layer.
       const originalColor = map.getPaintProperty(POINT_LAYER, 'circle-color');
       if (layer.source && layer['source-layer']) {
         const shared = { type: 'circle', source: layer.source, 'source-layer': layer['source-layer'] };
@@ -3840,6 +3606,7 @@
       });
     });
     updateLanguage(initialLanguage());
+    startWorldFeaturedLookup();
     map.on('error', event => { if (event.error) console.error('Mapbox:', event.error); });
   })();
   </script>
