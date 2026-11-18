@@ -1118,7 +1118,10 @@
       style: 'mapbox://styles/chrisuxd/cmmewcucc00j001qz3xo68y0z',
       center: EUROPE_CENTRE,
       zoom: europeZoom,
-      scrollZoom: false
+      scrollZoom: false,
+      // Include a linked design credit alongside Mapbox's required attribution.
+      // Keep Mapbox / OpenStreetMap / Improve this map links intact.
+      customAttribution: '<a href="https://orcid.org/0000-0002-3435-1883" target="_blank" rel="noopener noreferrer" title="Dr Chris Parker’s ORCID profile">Design by Dr Chris Parker</a>'
     });
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     // First-visit camera: locate the visitor's COUNTRY by IP, without GPS.
