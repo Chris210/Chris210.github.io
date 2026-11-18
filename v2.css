@@ -186,3 +186,11 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  .v2-dir-row {break-inside:avoid;padding:5px 0!important}
  #v2-directory-back,#v2-directory-print {display:none!important}
 }
+
+/* Vector icon refinements: rosette ribbon and understated Apple-style magnifier. */
+.v2-accolade .v2-award { display:flex; flex:0 0 34px; width:34px; align-items:center; justify-content:center; line-height:0; color:var(--v2-magenta); }
+.v2-accolade .v2-award svg { display:block; width:32px; height:42px; overflow:visible; }
+.v2-search-icon { display:grid; place-items:center; width:22px; height:22px; top:15px; left:15px; color:#65727d; font-size:inherit; }
+.v2-search-icon svg { display:block; width:20px; height:20px; }
+#v2-compact-search svg { display:block; width:21px; height:21px; }
+#v2-mobile-accolade svg { display:inline-block; width:18px; height:24px; vertical-align:middle; margin-right:5px; color:#f7bcd9; }
