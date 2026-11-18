@@ -178,7 +178,19 @@ def parse_mvt(payload, z, x, y):
                      if tags[i] < len(keys) and tags[i + 1] < len(vals)}
             if not str(props.get("name") or "").strip():
                 continue
+            # The source data retains original latitude/longitude properties.
+            # Prefer those precise values over low-zoom MVT quantised geometry;
+            # otherwise a zoom-10 popup can sit hundreds of metres from its dot.
+            accurate = None
+            try:
+                lon = float(props.get("longitude"))
+                lat = float(props.get("latitude"))
+                if math.isfinite(lon) and math.isfinite(lat) and -180 <= lon <= 180 and -90 <= lat <= 90:
+                    accurate = [lon, lat]
+            except (ValueError, TypeError):
+                pass
             for coords in decode_points(geometry, extent, z, x, y):
+                coords = accurate or coords
                 if -180 <= coords[0] <= 180 and -90 <= coords[1] <= 90:
                     results.append({"type": "Feature", "properties": props,
                                     "geometry": {"type": "Point", "coordinates": coords}, "id": fid})
