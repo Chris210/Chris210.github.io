@@ -355,3 +355,6 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 @media (max-width:680px) {
  .v2-stat-grid .v2-qs-rank {font-size:18px;}
 }
+
+/* V2 featured-spotlight location: emphasise the country. */
+.v2-spot-location strong.v2-tour-country {font-weight:800;color:#301054;}
