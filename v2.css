@@ -371,3 +371,29 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  pointer-events:none;
  z-index:10;
 }
+
+/* Refined transitions between featured partners — V2 only. */
+@keyframes v2-partner-reveal {
+ from { opacity:0; transform:translateY(8px); }
+ to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+ #v2-spotlight > h2,
+ #v2-spotlight > .v2-spot-location,
+ #v2-spotlight > .v2-stat-grid,
+ #v2-spotlight > .v2-spot-footer,
+ #v2-tour-card.v2-partner-arrival > h2,
+ #v2-tour-card.v2-partner-arrival > p,
+ #v2-tour-card.v2-partner-arrival > .v2-tour-location {
+   animation:v2-partner-reveal 720ms cubic-bezier(.22,1,.36,1) both;
+ }
+ #v2-spotlight > .v2-spot-location,
+ #v2-tour-card.v2-partner-arrival > p {animation-delay:80ms;}
+ #v2-spotlight > .v2-stat-grid,
+ #v2-tour-card.v2-partner-arrival > .v2-tour-location {animation-delay:140ms;}
+ #v2-spotlight > .v2-spot-footer {animation-delay:180ms;}
+}
+@media (prefers-reduced-motion:reduce) {
+ #v2-spotlight > *,
+ #v2-tour-card.v2-partner-arrival > * {animation:none!important;}
+}
