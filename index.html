@@ -1108,6 +1108,8 @@
     // Original public Mapbox token, style and circle data layer.
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXN1eGQiLCJhIjoiY21tZXQ3dnRpMDB5YjJwczhzaXdnZ3VmNCJ9.HLg634ycbIvgXNwmRPDCHg';
     const POINT_LAYER = 'GE Data';
+    const CORRECTED_LAYER = 'sdca-corrected-head-office-points';
+    const CORRECTED_SOURCE = 'sdca-corrected-head-office-source';
     const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const moveView = options => prefersReducedMotion() ? map.jumpTo(options) : map.flyTo(options);
     const EUROPE_CENTRE = [10, 49];
@@ -2784,7 +2786,8 @@
     }
     const pointsNear = (point, radius) => {
       const box = [[point.x - radius, point.y - radius], [point.x + radius, point.y + radius]];
-      const candidates = map.queryRenderedFeatures(box, { layers: [POINT_LAYER] });
+      const locationLayers = map.getLayer(CORRECTED_LAYER) ? [POINT_LAYER, CORRECTED_LAYER] : [POINT_LAYER];
+      const candidates = map.queryRenderedFeatures(box, { layers: locationLayers });
       const uniques = new Map();
       for (const feature of candidates) {
         if (feature.geometry?.type !== 'Point') continue;
@@ -3375,6 +3378,7 @@
     // The published map continues to use Mapbox directly for rendering.
     const worldFeaturedMatches = new Map();
     const worldLocations = new Map();
+    let correctedHeadOffices = [];
     let worldFeaturedState = 'loading';
     let worldIndexPromise = null;
     const DIRECTORY_TILESET = 'chrisuxd.1n1nj9bi';
@@ -3385,7 +3389,8 @@
       const props = feature.properties || {};
       const name = normalizedName(props.name);
       const coords = feature.geometry.coordinates;
-      if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1])) return;
+      if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1]) ||
+          (coords[0] === 0 && coords[1] === 0)) return; // Never navigate to Null Island.
       const key = name + ':' + coords[0].toFixed(3) + ',' + coords[1].toFixed(3);
       if (!worldLocations.has(key)) worldLocations.set(key, feature);
       for (const item of featuredMatchers) {
@@ -3414,6 +3419,11 @@
           worldLocations.clear();
           worldFeaturedMatches.clear();
           for (const feature of directory.features) addWorldFeature(feature);
+          correctedHeadOffices = directory.features.filter(feature =>
+            feature?.properties?.head_office_corrected === true &&
+            feature?.geometry?.type === 'Point');
+          const officeSource = map.getSource(CORRECTED_SOURCE);
+          if (officeSource) officeSource.setData({ type:'FeatureCollection', features:correctedHeadOffices });
           if (worldLocations.size < 50) throw Error('The partner directory contains too few locations');
           worldFeaturedState = 'ready';
         } catch (err) {
@@ -3444,7 +3454,8 @@
       if (!mapIsReady || !map.getLayer(POINT_LAYER)) return [];
       const rect = [[0,0], [map.getCanvas().clientWidth, map.getCanvas().clientHeight]];
       const unique = new Map();
-      for (const feature of map.queryRenderedFeatures(rect, { layers: [POINT_LAYER] })) {
+      const locationLayers = map.getLayer(CORRECTED_LAYER) ? [POINT_LAYER, CORRECTED_LAYER] : [POINT_LAYER];
+      for (const feature of map.queryRenderedFeatures(rect, { layers: locationLayers })) {
         if (feature.geometry?.type !== 'Point') continue;
         const key = featureKey(feature);
         if (!unique.has(key)) unique.set(key, feature);
@@ -3605,6 +3616,11 @@
       });
       updateMapLanguage(currentLanguage);
       originalFilter = layer.filter || null;
+      // Hide the original placeholders at (0,0); the verified head-office
+      // points are drawn from the corrected worldwide directory instead.
+      const hasRealPosition = ['any', ['!=', ['get','longitude'], 0], ['!=', ['get','latitude'], 0]];
+      originalFilter = buildFilter(hasRealPosition);
+      map.setFilter(POINT_LAYER, originalFilter);
       mapIsReady = true;
       updateBrowseList();
       // Partner directory comes from a single GitHub Pages JSON file.
@@ -3635,6 +3651,15 @@
           hoverLayerReady = true;
         }
       }
+      // Keep the published Mapbox tileset untouched, while rendering corrected
+      // headquarters at their real positions with the same circle styling.
+      map.addSource(CORRECTED_SOURCE, {
+        type: 'geojson', data: { type:'FeatureCollection', features:correctedHeadOffices }
+      });
+      map.addLayer({
+        id: CORRECTED_LAYER, type: 'circle', source: CORRECTED_SOURCE,
+        paint: { ...(layer.paint || {}) }
+      });
       function updateHover(feature) {
         const key = feature ? featureKey(feature) : null;
         if (key === hoveredKey) return;
@@ -3647,7 +3672,7 @@
         }
       }
       map.on('mousemove', event => {
-        const points = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER] });
+        const points = map.queryRenderedFeatures(event.point, { layers: [POINT_LAYER, CORRECTED_LAYER] });
         updateHover(points.find(f => f.geometry?.type === 'Point') || null);
       });
       map.getCanvas().addEventListener('mouseleave', () => updateHover(null));
