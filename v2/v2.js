@@ -193,10 +193,17 @@ function highlight(){
     'circle-stroke-color':'#ffffff','circle-stroke-width':3}});
   map.addLayer({id:'v2-key-count',type:'symbol',source:'v2-key-partners',filter:['has','point_count'],
     layout:{'text-field':['get','point_count_abbreviated'],'text-size':13},paint:{'text-color':'#ffffff'}});
+  map.addLayer({id:'v2-key-cluster-halo',type:'circle',source:'v2-key-partners',filter:['has','point_count'],paint:{
+    'circle-color':'#cb78a8','circle-opacity':.24,
+    'circle-radius':['step',['get','point_count'],23,4,31,12,39,25,44]
+  }},'v2-key-clusters');
   map.addLayer({id:'v2-key-points',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
     'circle-color':'#b90069','circle-radius':8,'circle-stroke-color':'#fff','circle-stroke-width':3}});
   map.addLayer({id:'v2-key-halo',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
     'circle-color':'#c20070','circle-radius':13,'circle-opacity':.18}},'v2-key-points');
+  map.addLayer({id:'v2-key-labels',type:'symbol',source:'v2-key-partners',filter:['!',['has','point_count']],
+    layout:{'text-field':['get','name'],'text-size':11,'text-anchor':'left','text-offset':[1.5,0],'text-max-width':17,'text-optional':true},
+    paint:{'text-color':'#34125e','text-halo-color':'#ffffff','text-halo-width':2}});
   map.on('click','v2-key-clusters',e=>{
    const f=e.features?.[0];if(!f)return;
    map.getSource('v2-key-partners').getClusterExpansionZoom(f.properties.cluster_id,(err,zoom)=>{
