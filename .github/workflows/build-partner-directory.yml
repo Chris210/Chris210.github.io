@@ -1,0 +1,42 @@
+name: Update worldwide partner directory
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'scripts/build_partner_directory.py'
+      - '.github/workflows/build-partner-directory.yml'
+  schedule:
+    - cron: '23 5 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-partner-directory
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build worldwide partner index from Mapbox tileset
+        run: python scripts/build_partner_directory.py
+      - name: Commit generated partner directory if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add partner-directory.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh worldwide partner directory from Mapbox"
+            git push
+          fi
