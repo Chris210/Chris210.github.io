@@ -199,3 +199,36 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-accolade .v2-award { flex:0 0 28px; width:28px; align-self:center; }
 .v2-accolade .v2-award svg { width:26px; height:30px; overflow:visible; }
 #v2-mobile-accolade svg { width:16px; height:19px; margin-right:4px; }
+
+/* Tour presentation: live pause-aware countdown and a clear exit control. */
+#v2-exit-tour {
+ z-index:24;
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;
+ min-height:48px;
+ padding:12px 17px;
+ background:#29103ed9;border:1px solid #ffffffb3;
+ box-shadow:0 8px 26px #13052240;
+ font-size:13px;font-weight:750;
+ transition:background .18s ease,transform .18s ease;
+}
+#v2-exit-tour:hover,#v2-exit-tour:focus-visible {background:#4e1c70;transform:translateY(-1px)}
+#v2-exit-tour svg {width:19px;height:19px;flex-shrink:0;stroke-width:2.5}
+.v2-tour-countdown {
+ display:flex;align-items:center;gap:12px;
+ margin-top:16px;padding:11px 13px;
+ border-radius:12px;background:#f5f0f9;
+ color:#4d326b;font-size:12px;font-weight:650;
+}
+.v2-countdown-track {flex:1;min-width:18px;height:6px;overflow:hidden;border-radius:99px;background:#dfd4e8}
+#v2-countdown-fill {height:100%;width:100%;background:#bb006c;border-radius:99px;transition:width .1s linear}
+#v2-tour-countdown-seconds {min-width:2.5ch;text-align:right;color:#a50065;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+@media (max-width:680px) {
+ #v2-tour-header {max-width:calc(100vw - 82px);gap:8px;overflow:hidden}
+ #v2-tour-header strong {display:none}
+ #v2-exit-tour {top:16px;right:12px;width:48px;height:48px;min-width:48px;min-height:48px;padding:0;border-radius:50%}
+ #v2-exit-tour span {display:none}
+ .v2-tour-countdown {gap:8px;margin-top:12px;padding:9px 11px}
+}
+@media (prefers-reduced-motion:reduce) {
+ #v2-exit-tour,#v2-countdown-fill {transition:none}
+}
