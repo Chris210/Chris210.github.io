@@ -101,6 +101,7 @@ function translateString(str,element){
   'Exchange Programme':native('exchangeSing')
  };
  if(nativeWords[value])return nativeWords[value];
+ if(value==='Top 50 in the world for Art and Design · QS 2026')return t('ranking')+' · QS 2026';
  if(value==='★ Featured partner'||value==='★ Featured Partner')return '★ '+t('featured');
  if(value==='★ Featured Partners')return '★ '+t('featured');
  if(value==='Featured partner')return t('featured');
@@ -132,13 +133,19 @@ function translateString(str,element){
    try{return new Intl.NumberFormat(lang()==='ms-Arab'?'ms':lang(),{style:'unit',unit:'second',unitDisplay:'narrow'}).format(Number(match[1]));}
    catch(e){return value;}
  }
- if((match=/^SDCA placement and exchange records · updated (.+)$/.exec(value)))
-   return t('updated',{date:match[1]});
+ if((match=/^SDCA placement and exchange records · updated (.+)$/.exec(value))){
+   let date=match[1];
+   try{date=new Intl.DateTimeFormat(lang()==='ms-Arab'?'ms':lang(),{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date('2026-11-18T12:00:00Z'));}
+   catch(e){}
+   return t('updated',{date});
+ }
  if((match=/^Selected partner: (.+)$/.exec(value)))return t('selectedPartner',{name:match[1]});
  if(value==='Loughborough Global Creative Network')return native('title')||value;
  if(value==='School of Design and Creative Arts')return native('school')||value;
  if(value==='Connecting world-leading creativity, education and industry.')return native('summary')||value;
- if(value==='Search partners by name')return native('searchButton')||value;
+ if(value==='Search partners by name'||value==='Search partners')return native('searchButton')||value;
+ if(value==='Visit Loughborough University website (opens in a new tab)')
+   return t('visitNamedSite',{name:'Loughborough University'});
  if(value==='50')return str; // Numbers and official names never change by accident.
  if(attr&&attr.classList?.contains('v2-tour-country'))return region(value);
  if((match=/^(.+), (United Kingdom|United States|Denmark|Germany|France|Italy|Japan|Netherlands|Sweden|Norway|Finland|Canada|Australia|Singapore|Hong Kong|Turkey|Spain|China|India|South Korea|Ireland|Belgium|Poland)$/.exec(value)))
@@ -160,6 +167,11 @@ const trailing=str=>str.match(/\s*$/)?.[0]||'';
 function applyText(node){
  if(!node||node.nodeType!==3)return;
  const current=node.nodeValue||'';
+ // Never translate official names in partner lists, selected cards or search results.
+ if(node.parentElement?.matches('.v2-tile strong,.v2-dir-row strong,.v2-search-result > span,#v2-tour-name,#v2-spotlight > h2')){
+  remembered.set(node,{source:current,rendered:current});
+  return;
+ }
  let entry=remembered.get(node);
  if(!entry||current!==entry.rendered)entry={source:current,rendered:current};
  const src=entry.source;
@@ -202,7 +214,12 @@ function applyAll(){
  for(const [selector,key] of knownTitleSelectors){
   const el=root.querySelector(selector);
   const translated=native(key);
-  if(el&&translated&&el.textContent!==translated)el.textContent=translated;
+  if(!el||!translated)continue;
+  if(key==='title'&&lang()==='en'&&
+     (selector==='#v2-home .v2-h1'||selector==='#v2-mobile-nav strong')){
+   const original='Loughborough Global<br>Creative Network';
+   if(el.innerHTML!==original)el.innerHTML=original;
+  }else if(el.textContent!==translated)el.textContent=translated;
  }
  const iterator=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
  const texts=[];while(iterator.nextNode())texts.push(iterator.currentNode);
