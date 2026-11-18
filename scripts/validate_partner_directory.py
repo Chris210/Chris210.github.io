@@ -58,7 +58,7 @@ def main() -> None:
             problems.append(f"{name}: location properties differ from geometry")
         site = props.get("url")
         if site is not None and (not isinstance(site, str) or
-                not re.fullmatch(r"https?://[^\\s/]+(?:/[^\\s]*)?", site, re.I)):
+                not re.fullmatch(r"https?://[^ ]+", site, re.I)):
             problems.append(f"{name}: invalid website URL {site!r}")
         if props.get("review_status") == "needs_review" and not props.get("review_note"):
             problems.append(f"{name}: missing review note")
