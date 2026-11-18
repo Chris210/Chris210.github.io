@@ -106,6 +106,7 @@ function translateString(str,element){
  if(value==='★ Featured Partners')return '★ '+t('featured');
  if(value==='Featured partner')return t('featured');
  if(value==='Selected partner')return t('selectedPartner',{name:''}).replace(/[:：]\s*$/,'');
+ if(value==='SDCSA Exchange programme partner')return base?.localDescription?.({description:value})?.text||str;
  if(value==='QS World Rank · 2027')return 'QS · 2027';
  let match;
  if((match=/^Search all ([\d,\s.]+) partners and places$/.exec(value)))
