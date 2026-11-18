@@ -527,3 +527,37 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
     transition:none;
   }
 }
+
+
+/* Compact mobile tour card: remove redundant description, location and timer. */
+@media screen and (max-width:680px) {
+  /* The map retains the destination marker and labels; the card needs less detail. */
+  #v2-tour-card #v2-tour-desc,
+  #v2-tour-card #v2-tour-location,
+  #v2-tour-card .v2-tour-countdown { display:none!important; }
+
+  #v2-tour-card {
+    padding:15px 18px 17px;
+    max-height:calc(100dvh - 112px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  #v2-tour-card .v2-spot-header { min-height:31px; }
+  #v2-tour-card h2 {
+    font-size:26px;
+    line-height:1.12;
+    margin:11px 0 10px;
+  }
+  #v2-tour-card .v2-tour-relationship {
+    margin:6px 0;
+    gap:4px 8px;
+    line-height:1.35;
+  }
+  #v2-root #v2-tour-website { margin:2px 0 7px;padding:2px 0; }
+  #v2-tour-card .v2-tour-progress { margin:9px 0 6px; }
+  #v2-tour-card .v2-tour-step-line { font-size:11px; }
+  #v2-tour-card .v2-tour-actions { margin-top:10px;gap:8px; }
+  #v2-tour-card .v2-tour-actions button.v2-pause { width:45px;height:45px; }
+  /* Keyboard hint is desktop-specific; controls remain fully accessible. */
+  #v2-tour-card .v2-tour-actions small { display:none; }
+}
