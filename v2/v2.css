@@ -42,7 +42,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-tabs button {border:0;border-radius:10px;flex:1;background:transparent;color:#52606e;font-size:13px;padding:11px 4px;white-space:nowrap}
 .v2-tabs button[aria-selected="true"] {background:white;color:#3e176d;font-weight:760;box-shadow:0 2px 6px #20103c10}
 .v2-tiles {flex:1;min-height:0;overflow:auto;display:grid;align-content:start;grid-template-columns:1fr 1fr;gap:8px;padding-top:6px;padding-bottom:3px;scrollbar-width:thin}
-.v2-tile {min-height:65px;position:relative;text-align:left;background:#fff;border:1px solid #d9d7de;border-radius:14px;padding:13px 10px 12px 32px;transition:transform .12s ease,border-color .12s ease}
+.v2-tile {display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;min-height:65px;position:relative;text-align:left;background:#fff;border:1px solid #d9d7de;border-radius:14px;padding:13px 10px 12px 32px;transition:transform .12s ease,border-color .12s ease}
 .v2-tile:hover {border-color:#b7006b;transform:translateY(-1px)}
 .v2-tile::before {content:"";position:absolute;top:17px;left:14px;border-radius:50%;background:#bf006e;width:9px;height:9px}
 .v2-tile strong {display:block;font-size:13px;font-weight:700;line-height:1.3;color:#23202a;overflow-wrap:anywhere}
