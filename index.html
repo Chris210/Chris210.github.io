@@ -3608,12 +3608,17 @@
       const legacy = map.getLayer(LEGACY_POINT_LAYER);
       if (!legacy) {error('GE Data basemap layer missing');return;}
       const oldPaint = map.getStyle().layers.find(l=>l.id===LEGACY_POINT_LAYER)?.paint||{};
-      const oldColor = map.getPaintProperty(LEGACY_POINT_LAYER,'circle-color');
+      // The original Mapbox style was keyed to the legacy imported data.
+      // The master GeoJSON uses a clean "group" field, so explicitly preserve
+      // Studio's purple-exchange / pink-placement rule instead of copying its
+      // potentially incompatible legacy circle-colour expression.
+      const partnerColor = ['match',['get','group'],
+        'Exchange Programme','#2D0153',
+        '#F0047F'];
       map.setLayoutProperty(LEGACY_POINT_LAYER,'visibility','none');
       map.addSource(MASTER_SOURCE,{type:'geojson',data:{type:'FeatureCollection',features:masterFeatures}});
-      const paint={...oldPaint};
-      if(!paint['circle-color'])paint['circle-color']=['coalesce',['get','color'],'#F0047F'];
-      if(!paint['circle-radius'])paint['circle-radius']=6;
+      const paint={...oldPaint,'circle-color':partnerColor};
+      if(!paint['circle-radius'])paint['circle-radius']=8;
       map.addLayer({id:POINT_LAYER,type:'circle',source:MASTER_SOURCE,paint});
       const shared={type:'circle',source:MASTER_SOURCE};
       map.addLayer({...shared,id:'sdca-selected-ring',filter:noFeatureFilter,
@@ -3622,7 +3627,7 @@
       map.addLayer({...shared,id:'sdca-hover-halo',filter:noFeatureFilter,
         paint:{'circle-radius':20,'circle-color':'#fff','circle-opacity':.15}});
       map.addLayer({...shared,id:'sdca-hover-dot',filter:noFeatureFilter,
-        paint:{'circle-radius':14,'circle-color':oldColor||['coalesce',['get','color'],'#F0047F'],
+        paint:{'circle-radius':14,'circle-color':partnerColor,
           'circle-opacity':1,'circle-stroke-color':'#fff','circle-stroke-width':3}});
       hoverLayerReady=true;
       const labels=mapboxControlLabels[currentLanguage]||mapboxControlLabels.en;
