@@ -199,6 +199,8 @@ def parse_mvt(payload, z, x, y):
 
 def main():
     token = public_token()
+    override_path = BASE / "head-office-overrides.json"
+    corrections = json.loads(override_path.read_text(encoding="utf8"))["corrections"]
     tilejson_url = f"https://api.mapbox.com/v4/{TILESET_ID}.json?access_token={token}"
     metadata = json.loads(get(tilejson_url))
     templates = metadata.get("tiles") or []
@@ -231,8 +233,22 @@ def main():
             try:
                 results = future.result()
                 for feature in results:
-                    name = str(feature["properties"]["name"]).casefold().strip()
+                    source_name = str(feature["properties"]["name"])
                     lon, lat = feature["geometry"]["coordinates"]
+                    # The source tileset still contains some 0,0 placeholders.
+                    # Apply researched, name-matched HQ overrides only to those
+                    # placeholders, retaining every non-zero Mapbox location.
+                    correction = corrections.get(source_name) if lon == 0 and lat == 0 else None
+                    if correction:
+                        lon, lat = float(correction["longitude"]), float(correction["latitude"])
+                        if not (-180 <= lon <= 180 and -90 <= lat <= 90) or (lon == 0 and lat == 0):
+                            raise ValueError(f"Invalid HQ override for {source_name}")
+                        feature["geometry"]["coordinates"] = [lon, lat]
+                        feature["properties"]["longitude"] = lon
+                        feature["properties"]["latitude"] = lat
+                        feature["properties"]["head_office_corrected"] = True
+                        feature["properties"]["head_office_address"] = correction["address"]
+                    name = source_name.casefold().strip()
                     # Deduplicate tile overlap / duplicate zoom-generated points.
                     key = (name, round(lon, 3), round(lat, 3))
                     old = partners.get(key)
