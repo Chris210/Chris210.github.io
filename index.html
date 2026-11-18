@@ -2680,10 +2680,16 @@
         desc.dir = ['ar', 'ur', 'ms-Arab'].includes(translatedDescription.lang) ? 'rtl' : 'auto';
         content.append(desc);
       }
-      if (fields.url) {
+      // Mapbox source includes bare domains (e.g. www.mimagroup.com).
+      // Add HTTPS when needed so valid sites are clickable in popups.
+      const website = typeof fields.url === 'string'
+        ? fields.url.replace(/\u00a0/g, ' ').trim() : '';
+      if (website && website !== '0') {
         try {
-          const url = new URL(String(fields.url));
-          if (url.protocol === 'https:' || url.protocol === 'http:') {
+          const address = /^https?:\/\//i.test(website) ? website : 'https://' + website;
+          const url = new URL(address);
+          if ((url.protocol === 'https:' || url.protocol === 'http:') &&
+              url.hostname.includes('.')) {
             const link = make('a', 'popup-link', t('visit'));
             link.href = url.href;
             link.target = '_blank';
