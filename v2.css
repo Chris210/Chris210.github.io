@@ -403,110 +403,18 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 #v2-root .v2-ranking-link:hover {text-decoration:underline;}
 #v2-root .v2-ranking-link:focus-visible {outline:3px solid #b60069;outline-offset:4px;border-radius:2px;}
 #v2-mobile-accolade .v2-ranking-link {color:inherit;}
-
-/* Responsive evidence-of-excellence carousel, adapted from the supplied SDCA purple/pink tiles. */
-#v2-root #v2-achievements {
- position:absolute;z-index:8;pointer-events:auto;
- left:calc(50% + 88px);bottom:144px;
- transform:translateX(-50%);
- width:min(764px,calc(100vw - 492px));
- max-width:calc(100vw - 25px);
- color:#341456;font-family:var(--font,system-ui,sans-serif);
+/* Extra evidence belongs inside the existing QS summary box, not over the map. */
+#v2-root .v2-rank-panel .v2-evidence-lines{
+ display:grid;gap:10px;margin-top:13px;padding-top:12px;
+ border-top:1px solid #ded4e9;
 }
-#v2-root #v2-achievements[hidden] {display:none!important;}
-#v2-achievements .v2-achievements-head {
- display:flex;align-items:center;justify-content:space-between;gap:12px;
- margin-bottom:8px;padding:7px 12px 7px 16px;
- background:#fbf9fdea;border:1px solid #fff;border-radius:999px;
- box-shadow:0 5px 20px #1d0a3326;backdrop-filter:blur(12px);
-}
-#v2-achievements .v2-achievements-heading{
- color:#4c2a67;text-transform:uppercase;letter-spacing:.145em;
- font-size:10px;font-weight:850;
-}
-#v2-achievements .v2-achievements-controls{
- display:flex;align-items:center;gap:8px;
- color:#5e4b70;font-size:11px;font-weight:750;
- font-variant-numeric:tabular-nums;direction:ltr;
-}
-#v2-achievements .v2-achievements-controls button{
- display:grid;place-items:center;cursor:pointer;pointer-events:auto;
- width:24px;height:24px;border:0;background:#eee8f4;border-radius:50%;
- color:#32105c;font-size:20px;line-height:1;transition:background .2s ease,transform .2s ease;
-}
-#v2-achievements .v2-achievements-controls button:hover{
- background:#e4d4ee;transform:translateY(-1px);
-}
-#v2-achievements .v2-achievements-controls button:focus-visible{
- outline:3px solid #ffbd00;outline-offset:2px;
-}
-#v2-achievements .v2-achievements-cards{
- display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
-}
-#v2-achievements .v2-achievement-card{
- display:flex;flex-direction:column;position:relative;overflow:hidden;min-width:0;
- height:182px;padding:13px 16px 13px;
- box-shadow:0 14px 33px #23083740;border-radius:13px;
- animation:v2-evidence-enter 540ms cubic-bezier(.22,1,.36,1) both;
-}
-#v2-achievements .v2-achievement-purple{
- background:#35145e;color:#f15bae;
-}
-#v2-achievements .v2-achievement-pink{
- background:#e70f82;color:#321052;
-}
-#v2-achievements .v2-achievement-rosette{
- display:flex;width:25px;height:28px;flex-shrink:0;
- color:#fff;line-height:0;
-}
-#v2-achievements .v2-achievement-rosette svg{width:25px;height:28px;display:block;}
-#v2-achievements .v2-achievement-content{
- display:flex;flex-direction:column;min-height:0;gap:1px;
- margin-top:2px;
-}
-#v2-achievements .v2-achievement-value{
- display:block;font-size:31px;font-weight:880;letter-spacing:-.055em;line-height:1.03;
-}
-#v2-achievements .v2-achievement-description{
- display:block;font-size:12.2px;line-height:1.23;font-weight:780;
+#v2-root .v2-rank-panel .v2-evidence-line{
+ margin:0;color:#4c3664;font-size:12px;line-height:1.42;
  overflow-wrap:anywhere;
 }
-#v2-achievements .v2-achievement-source{
- display:block;margin-top:auto;padding-top:7px;line-height:1.2;font-size:10px;font-weight:550;
- color:#d1b7df;
+#v2-root .v2-rank-panel .v2-evidence-value{
+ font-weight:800;color:#35145e;
 }
-#v2-achievements .v2-achievement-pink .v2-achievement-source{color:#fff;}
-@keyframes v2-evidence-enter{
- from{opacity:0;transform:translateY(9px)}
- to{opacity:1;transform:translateY(0)}
-}
-@media (max-width:1240px) {
- #v2-root #v2-achievements {width:min(372px,calc(100vw - 425px));left:calc(50% + 95px);}
- #v2-achievements .v2-achievements-cards{grid-template-columns:1fr;}
- #v2-achievements .v2-achievement-card{height:153px;}
- #v2-achievements .v2-achievement-value{font-size:31px;}
- #v2-achievements .v2-achievement-description{font-size:12.5px;}
-}
-@media (max-width:790px) and (min-width:681px){
- #v2-root #v2-achievements {width:min(298px,calc(100vw - 350px));left:calc(50% + 145px);}
- #v2-achievements .v2-achievement-description{font-size:11.5px;}
-}
-@media (max-width:680px) {
- #v2-root #v2-achievements {
-  width:min(325px,calc(100vw - 30px));
-  left:50%;bottom:calc(43dvh + 68px);
- }
- #v2-achievements .v2-achievements-head{padding:4px 9px 4px 12px;margin-bottom:5px;}
- #v2-achievements .v2-achievements-heading{font-size:9px;}
- #v2-achievements .v2-achievement-card{height:113px;padding:10px 13px;}
- #v2-achievements .v2-achievement-rosette{position:absolute;top:10px;left:11px;width:20px;height:22px;}
- #v2-achievements .v2-achievement-rosette svg{width:20px;height:22px;}
- #v2-achievements .v2-achievement-content{margin-top:0;padding-left:30px;}
- #v2-achievements .v2-achievement-value{font-size:24px;}
- #v2-achievements .v2-achievement-description{font-size:10.4px;line-height:1.16;}
- #v2-achievements .v2-achievement-source{font-size:9px;padding-top:3px;}
-}
-@media (prefers-reduced-motion:reduce){
- #v2-achievements .v2-achievement-card{animation:none!important;}
- #v2-achievements .v2-achievements-controls button{transition:none!important;}
+#v2-root .v2-rank-panel .v2-evidence-source{
+ color:#807489;font-size:10.5px;line-height:1.3;
 }
