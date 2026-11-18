@@ -2362,9 +2362,64 @@
       const el = document.querySelector(selector);
       if (el) el.textContent = t(key);
     };
+    // Match basemap place labels to the selected interface language without
+    // changing SDCA organisation names, marker layers or partner data.
+    const mapboxLanguageCodes = {
+      'zh-CN': 'zh-Hans', 'zh-TW': 'zh-Hant',
+      'ms-Arab': 'ms', 'fil': 'en', 'tl': 'en'
+    };
+    const originalBasemapLabels = new Map();
+    function updateMapLanguage(lang) {
+      if (!map.isStyleLoaded()) return;
+      const mapLanguage = mapboxLanguageCodes[lang] || lang.split('-')[0];
+      const style = map.getStyle();
+      // Mapbox Standard and other imported basemaps expose a language setting.
+      for (const entry of style.imports || []) {
+        try {
+          map.setConfigProperty(entry.id, 'language', mapLanguage);
+        } catch (err) {
+          // Custom imports may not expose a language config; handle their
+          // regular symbol layers below instead.
+        }
+      }
+      const localizedFields = lang === 'zh-CN' ? ['name_zh-Hans', 'name_zh', 'name_zh-CN']
+        : lang === 'zh-TW' ? ['name_zh-Hant', 'name_zh', 'name_zh-TW']
+        : ['name_' + mapLanguage];
+      // Preserve the style's original format, font choices and fallback values.
+      // Only replace name lookups; road numbers, shields, icons and our custom
+      // placement/exchange labels should remain exactly as designed.
+      const localize = expression => {
+        if (!Array.isArray(expression)) return expression;
+        if (expression[0] === 'get' && typeof expression[1] === 'string' &&
+            /^name(?:_[a-zA-Z-]+)?$/.test(expression[1])) {
+          return ['coalesce', ...localizedFields.map(field => ['get', field]), expression];
+        }
+        return expression.map(part => localize(part));
+      };
+      for (const layer of style.layers || []) {
+        if (layer.type !== 'symbol' || layer.id === POINT_LAYER ||
+            /sdca-|ge data/i.test(layer.id) ||
+            /chrisuxd\.1n1nj9bi/i.test(layer.source || '')) continue;
+        const textField = map.getLayoutProperty(layer.id, 'text-field');
+        if (textField === undefined) continue;
+        if (!originalBasemapLabels.has(layer.id)) originalBasemapLabels.set(layer.id, textField);
+        const original = originalBasemapLabels.get(layer.id);
+        let next = original;
+        if (lang !== 'en' && Array.isArray(original)) {
+          next = localize(original);
+        } else if (lang !== 'en' && typeof original === 'string' &&
+                   /^\{name(?:_[a-zA-Z-]+)?\}$/.test(original)) {
+          next = ['coalesce', ...localizedFields.map(field => ['get', field]),
+                  ['get', original.slice(1, -1)]];
+        }
+        try { map.setLayoutProperty(layer.id, 'text-field', next); }
+        catch (err) { console.warn('Could not localise basemap layer:', layer.id, err); }
+      }
+    }
     function updateLanguage(lang) {
       const hasInterfaceTranslation = Boolean(translations[lang]);
       currentLanguage = lang;
+      updateMapLanguage(lang);
       // Only declare the page's language when the interface strings are translated.
       document.documentElement.lang = hasInterfaceTranslation ? lang : 'en';
       document.documentElement.dir = ['ur', 'ar', 'ms-Arab'].includes(lang) ? 'rtl' : 'ltr';
@@ -3549,6 +3604,7 @@
           button.setAttribute('title', controlLabels[index]);
         }
       });
+      updateMapLanguage(currentLanguage);
       originalFilter = layer.filter || null;
       mapIsReady = true;
       updateBrowseList();
