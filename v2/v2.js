@@ -41,6 +41,28 @@ const SPOTLIGHT_TRAVEL_MS=3100;
 const CINEMATIC_EASE=t=>t*t*(3-2*t);
 let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
+// Mobile-only bottom drawer: a small, tappable handle is visible by default.
+// Keep the existing search, map key and featured-partner controls inside the drawer.
+const mobileDrawerToggle=element('button','v2-mobile-drawer-toggle');
+mobileDrawerToggle.id='v2-mobile-drawer-toggle';
+mobileDrawerToggle.type='button';
+mobileDrawerToggle.setAttribute('aria-controls','v2-home');
+const mobileDrawerLabel=element('span','v2-mobile-drawer-label','Explore partners');
+const mobileDrawerChevron=element('span','v2-mobile-drawer-chevron','⌃');
+mobileDrawerChevron.setAttribute('aria-hidden','true');
+mobileDrawerToggle.append(mobileDrawerLabel,mobileDrawerChevron);
+home.prepend(mobileDrawerToggle);
+function setMobileDrawerOpen(isOpen){
+ const open=Boolean(isOpen);
+ home.classList.toggle('v2-mobile-collapsed',!open);
+ root.classList.toggle('v2-mobile-drawer-open',open);
+ mobileDrawerToggle.setAttribute('aria-expanded',String(open));
+ mobileDrawerToggle.setAttribute('aria-label',open?'Collapse partner panel':'Expand partner panel');
+ mobileDrawerLabel.textContent=open?'Close partners':'Explore partners';
+}
+mobileDrawerToggle.addEventListener('click',()=>setMobileDrawerOpen(home.classList.contains('v2-mobile-collapsed')));
+setMobileDrawerOpen(false);
+
 let selectedPartnerMarker=null;
 function clearSelectedPartnerMarker(){
  if(selectedPartnerMarker){selectedPartnerMarker.remove();selectedPartnerMarker=null;}
@@ -58,6 +80,7 @@ function showSelectedPartnerMarker(item){
 }
 function view(name){
   if(name!=='spotlight')clearSelectedPartnerMarker();
+  if(name==='home') setMobileDrawerOpen(false);
   mode=name;home.hidden=name!=='home'||panelMinimised;
   $('v2-mobile-nav').hidden=name!=='home';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
@@ -592,7 +615,7 @@ $('v2-start-tour').onclick=startTour;$('v2-exit-tour').onclick=overview;
 $('v2-tour-pause').onclick=()=>playing?pauseTour():playTour();
 $('v2-tour-prev').onclick=()=>stepTour(-1);$('v2-tour-next-btn').onclick=()=>stepTour(1);
 document.addEventListener('keydown',e=>{
- if(e.key==='Escape'){if(mode==='tour'||mode==='directory'||mode==='spotlight'){overview();e.preventDefault();}else $('v2-search-results').hidden=true;}
+ if(e.key==='Escape'){if(mode==='tour'||mode==='directory'||mode==='spotlight'){overview();e.preventDefault();}else if(mode==='home'&&root.classList.contains('v2-mobile-drawer-open')&&window.matchMedia('(max-width:680px)').matches){setMobileDrawerOpen(false);mobileDrawerToggle.focus();e.preventDefault();}else $('v2-search-results').hidden=true;}
  if(mode==='tour'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
   e.preventDefault();stepTour(e.key==='ArrowLeft'?-1:1);
  }
