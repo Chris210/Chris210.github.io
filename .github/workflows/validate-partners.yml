@@ -1,0 +1,28 @@
+name: Validate master partner data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'partner-directory.json'
+      - 'scripts/validate_partner_directory.py'
+      - '.github/workflows/validate-partners.yml'
+  pull_request:
+    paths:
+      - 'partner-directory.json'
+      - 'scripts/validate_partner_directory.py'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check canonical partner GeoJSON
+        run: python scripts/validate_partner_directory.py
