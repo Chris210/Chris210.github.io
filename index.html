@@ -788,7 +788,6 @@
           <li class="key-item" data-key="placement"><span class="swatch placement" aria-hidden="true"></span><span class="key-label">Student placements</span></li>
           <li class="key-item" data-key="exchange"><span class="swatch exchange" aria-hidden="true"></span><span class="key-label">Exchange programmes</span></li>
         </ul>
-        <p id="translation-note" hidden>Location names and descriptions are supplied in English. Choose “Translate details” in a popup to translate them.</p>
         <p class="usage-tip"><strong>Explore the map:</strong> Select a dot to view its details. If locations overlap, choose from the list or zoom in. Use +/− to zoom.</p>
       </div>
     </details>
@@ -2449,8 +2448,6 @@
       reset.setAttribute('title',t('reset'));
       reset.querySelector('.reset-label').textContent = t('reset');
       setText('#map-move .move-label','move');
-      document.getElementById('translation-note').textContent = t('translationNote');
-      document.getElementById('translation-note').hidden = currentLanguage === 'en';
       document.getElementById('skip-locations').textContent = t('searchButton');
       // Refresh visible search results in the selected interface language.
       if (typeof updateBrowseList === 'function' && !document.getElementById('browse-panel').hidden) updateBrowseList();
@@ -2540,6 +2537,48 @@
       if (currentLanguage === 'en') return true;
       return localizedField(fields, key) !== fields[key];
     };
+    // Partner names are official data and must never be machine-translated.
+    // Both descriptions currently published in the Mapbox tileset are fixed
+    // phrases, so they can be localized accurately without a third-party
+    // request, an API key or a link opening Google Translate.
+    const exchangePartnerDescriptions = {
+      'zh-CN': '交流项目合作伙伴（SDCSA）',
+      'zh-TW': '交流計畫合作夥伴（SDCSA）',
+      hi: 'विनिमय कार्यक्रम का साझेदार (SDCSA)',
+      pa: 'ਐਕਸਚੇਂਜ ਪ੍ਰੋਗਰਾਮ ਦਾ ਭਾਈਵਾਲ (SDCSA)',
+      bn: 'বিনিময় কর্মসূচির অংশীদার (SDCSA)',
+      gu: 'વિનિમય કાર્યક્રમનો ભાગીદાર (SDCSA)',
+      ta: 'பரிமாற்றத் திட்டக் கூட்டாளர் (SDCSA)',
+      te: 'మార్పిడి కార్యక్రమ భాగస్వామి (SDCSA)',
+      mr: 'विनिमय कार्यक्रमाचा भागीदार (SDCSA)',
+      ur: 'تبادلہ پروگرام کا شراکت دار (SDCSA)',
+      ko: '교환 프로그램 협력 기관 (SDCSA)',
+      ja: '交換留学プログラムの協力機関（SDCSA）',
+      ms: 'Rakan Program Pertukaran (SDCSA)',
+      'ms-Arab': 'راکن ڤروݢرم ڤرتوقرن (SDCSA)',
+      ne: 'आदानप्रदान कार्यक्रमको साझेदार (SDCSA)',
+      ar: 'مؤسسة شريكة في برنامج التبادل (SDCSA)'
+    };
+    const popupDescription = fields => {
+      const original = String(fields.description || '');
+      // If the Mapbox data later contains a curated translated description,
+      // prioritize it over the built-in translations below.
+      if (currentLanguage !== 'en' && hasLocalizedField(fields, 'description')) {
+        return { text: localizedField(fields, 'description'), lang: currentLanguage };
+      }
+      if (currentLanguage !== 'en' && translations[currentLanguage]) {
+        if (original.trim() === 'SDCA Student Placement') {
+          return { text: translations[currentLanguage].placementSing + ' (SDCA)', lang: currentLanguage };
+        }
+        if (original.trim() === 'SDCSA Exchange programme partner' &&
+            exchangePartnerDescriptions[currentLanguage]) {
+          return { text: exchangePartnerDescriptions[currentLanguage], lang: currentLanguage };
+        }
+      }
+      // Preserve unrecognized or future source descriptions verbatim instead
+      // of showing an inaccurate or incomplete automatic translation.
+      return { text: original, lang: 'en' };
+    };
     const make = (tag, className, label) => {
       const elem = document.createElement(tag);
       if (className) elem.className = className;
@@ -2628,12 +2667,15 @@
       swatch.setAttribute('aria-hidden', 'true');
       eyebrow.append(swatch, document.createTextNode(categoryName(fields)));
       content.append(eyebrow);
-      const locationHeading = make('h2', 'popup-title', localizedField(fields, 'name') || t('unnamed'));
-      locationHeading.lang = hasLocalizedField(fields, 'name') ? currentLanguage : 'en'; locationHeading.dir = 'auto';
+      const locationHeading = make('h2', 'popup-title', fields.name || t('unnamed'));
+      locationHeading.lang = fields.name ? 'en' : currentLanguage;
+      locationHeading.dir = 'auto';
       content.append(locationHeading);
       if (fields.description) {
-        const desc = make('p', 'popup-description', localizedField(fields, 'description'));
-        desc.lang = hasLocalizedField(fields, 'description') ? currentLanguage : 'en'; desc.dir = 'auto';
+        const translatedDescription = popupDescription(fields);
+        const desc = make('p', 'popup-description', translatedDescription.text);
+        desc.lang = translatedDescription.lang;
+        desc.dir = ['ar', 'ur', 'ms-Arab'].includes(translatedDescription.lang) ? 'rtl' : 'auto';
         content.append(desc);
       }
       if (fields.url) {
@@ -2647,16 +2689,6 @@
             content.append(link);
           }
         } catch (_) { console.warn('Invalid website URL for', fields.name); }
-      }
-      if (currentLanguage !== 'en' && ((fields.name && !hasLocalizedField(fields, 'name')) || (fields.description && !hasLocalizedField(fields, 'description')))) {
-        const textToTranslate = [fields.name || '', fields.description || ''].filter(Boolean).join('\n\n');
-        const translated = make('a', 'popup-translate', t('translate'));
-        const languageCode = currentLanguage === 'zh-TW' ? 'zh-TW' : currentLanguage === 'zh-CN' ? 'zh-CN' : currentLanguage;
-        translated.href = 'https://translate.google.com/?sl=en&tl=' + encodeURIComponent(languageCode) + '&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
-        translated.target = '_blank';
-        translated.rel = 'noopener noreferrer';
-        translated.setAttribute('title', t('translate'));
-        content.append(translated);
       }
       if (nearby && nearby.length > 1) {
         content.append(make('hr', 'popup-line'));
