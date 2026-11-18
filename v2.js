@@ -8,6 +8,7 @@ const map=api.map;
 const groups=[{id:'employers',title:'Global employers',tab:'Employers'},{id:'design',title:'Design studios',tab:'Studios'},{id:'academic',title:'Universities',tab:'Universities'}];
 const featured=api.featured;
 const ordered=groups.flatMap(g=>featured.filter(i=>i.group===g.id));
+const QS_WORLD_RANKINGS_2027 = new Map([["Delft University of Technology (TU Delft)","48","https://www.topuniversities.com/universities/delft-university-technology"],["Politecnico di Milano","=87","https://www.topuniversities.com/universities/politecnico-di-milano"],["Nanyang Technological University","12","https://www.topuniversities.com/universities/nanyang-technological-university-singapore-ntu"],["City University of Hong Kong","=52","https://www.topuniversities.com/universities/city-university-hong-kong"],["University of Technology Sydney","=87","https://www.topuniversities.com/universities/university-technology-sydney"],["Middle East Technical University (METU)","305","https://www.topuniversities.com/universities/middle-east-technical-university"],["Norwegian University of Science and Technology (NTNU)","264","https://www.topuniversities.com/universities/norwegian-university-science-technology"],["Université de Montréal","=162","https://www.topuniversities.com/universities/universite-de-montreal"],["University of Michigan","51","https://www.topuniversities.com/universities/university-michigan-ann-arbor"],["Curtin University","189","https://www.topuniversities.com/universities/curtin-university"],["Virginia Tech","366","https://www.topuniversities.com/universities/virginia-polytechnic-institute-state-university"],["University of Navarra","=279","https://www.topuniversities.com/universities/university-navarra"],["University of Wuppertal","1001–1200","https://www.topuniversities.com/universities/bergische-universitat-wuppertal"]]);
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
 const $=id=>document.getElementById(id);
 const normalize=v=>String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
@@ -92,9 +93,29 @@ function drawSpotlight(i){
  const close=element('button','v2-icon-btn','×');close.type='button';close.setAttribute('aria-label','Return to map');close.onclick=overview;header.append(close);
  spot.append(header,element('h2','',i.name),element('p','v2-spot-location',place(find(i))));
  const grid=element('div','v2-stat-grid');
- [['Record',find(i)?'Verified':'Pending'],['Category',category(i).tab],['Placement years',yr? 'Recorded':'Not listed']].forEach(pair=>{
-  const box=element('div','v2-stat');box.append(element('span','',pair[0]),element('strong','',pair[1]));grid.append(box);
+ if(i.group==='academic'){
+  const qs=QS_WORLD_RANKINGS_2027.get(i.name);
+  const card=element('div','v2-stat v2-qs-stat');
+  card.append(element('span','','QS World Rank · 2027'));
+  if(qs){
+   const rankLink=element('a','v2-qs-rank','#'+qs[0]);
+   rankLink.href=qs[1];rankLink.target='_blank';rankLink.rel='noopener noreferrer';
+   rankLink.setAttribute('aria-label',i.name+' QS World University Rankings 2027: '+qs[0]+' (opens in a new tab)');
+   card.append(rankLink);
+  }else{
+   card.append(element('strong','v2-qs-unavailable','Not verified'));
+  }
+  grid.append(card);
+ }
+ const stats=i.group==='academic'?
+  [['Category','University'],['Relationship','Academic exchange']]:
+  [['Category',category(i).tab],['Relationship','Student placement']];
+ stats.forEach(pair=>{
+  const box=element('div','v2-stat');
+  box.append(element('span','',pair[0]),element('strong','',pair[1]));
+  grid.append(box);
  });
+ if(i.group!=='academic')grid.classList.add('v2-stat-grid-two');
  spot.append(grid);
  if(progs.length){
   spot.append(element('div','v2-section-label','Programmes'));
@@ -102,8 +123,7 @@ function drawSpotlight(i){
  }
  if(yr){
   spot.append(element('div','v2-section-label','Placement years'));
-  const bar=element('div','v2-yearbar'),active=Math.min(10,(yr.match(/\d{4}/g)||[]).length);
-  for(let j=0;j<10;j++)bar.append(element('span',j<active?'active':''));spot.append(bar,element('p','v2-spot-description',yr));
+  spot.append(element('p','v2-spot-description v2-spot-years',yr));
  }
  const desc=field(p,'description','summary','notes');if(desc)spot.append(element('p','v2-spot-description',String(desc).slice(0,640)));
  if(link){const a=element('a','v2-spot-link','Visit '+new URL(link).hostname.replace(/^www\./,'')+' →');a.href=link;a.target='_blank';a.rel='noopener noreferrer';spot.append(a);}
