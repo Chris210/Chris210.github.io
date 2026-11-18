@@ -3527,6 +3527,9 @@
     startWorldFeaturedLookup();
     window.SDCA_V2_BRIDGE = {
       map,
+      translate: key => t(key),
+      getLanguage: () => currentLanguage,
+      localDescription: fields => popupDescription(fields),
       featured: FEATURED_ORGANISATIONS,
       findFeature: item => {
         const found = featuredMatchers.find(entry => entry.name === item?.name);
@@ -3546,6 +3549,8 @@
     document.getElementById('browse-toggle')?.click();
   });
 </script>
-<script src="./v2.js?v=selected-partner-yellow-18"></script>
+<script src="./v2-i18n.js?v=full-ui-languages-19"></script>
+<script src="./v2.js?v=full-ui-languages-19"></script>
+<script src="./v2-localise.js?v=full-ui-languages-19"></script>
 </body>
 </html>
