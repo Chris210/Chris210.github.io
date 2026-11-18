@@ -81,6 +81,7 @@ function showSelectedPartnerMarker(item){
 function view(name){
   if(name!=='spotlight')clearSelectedPartnerMarker();
   if(name==='home') setMobileDrawerOpen(false);
+  document.body.classList.toggle('v2-guided-tour-active', name==='tour');
   mode=name;home.hidden=name!=='home'||panelMinimised;
   $('v2-mobile-nav').hidden=name!=='home';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
