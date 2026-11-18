@@ -283,9 +283,9 @@ def main():
                     # numeric/missing placeholders untouched.
                     site = feature["properties"].get("url")
                     if isinstance(site, str):
-                        site = site.replace("\\u00a0", " ").strip()
+                        site = site.replace("\u00a0", " ").strip()
                         if not re.match(r"^https?://", site, re.IGNORECASE) and re.fullmatch(
-                            r"(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:[/?#]\\S*)?", site, re.IGNORECASE
+                            r"(?:[a-z0-9-]+\.)+[a-z]{2,}(?:[/?#]\S*)?", site, re.IGNORECASE
                         ):
                             site = "https://" + site
                         feature["properties"]["url"] = site
