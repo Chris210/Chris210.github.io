@@ -38,7 +38,23 @@ const TOUR_DWELL_MS=4000;
 const TOUR_TRAVEL_MS=3700;
 let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
+let selectedPartnerMarker=null;
+function clearSelectedPartnerMarker(){
+ if(selectedPartnerMarker){selectedPartnerMarker.remove();selectedPartnerMarker=null;}
+}
+function showSelectedPartnerMarker(item){
+ clearSelectedPartnerMarker();
+ const feature=find(item);
+ if(!located(feature))return;
+ // Mapbox's HTML marker stays exactly on the partner coordinates throughout camera flights.
+ const pin=element('div','v2-selected-marker');
+ pin.setAttribute('role','img');
+ pin.setAttribute('aria-label','Selected partner: '+item.name);
+ selectedPartnerMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
+  .setLngLat(feature.geometry.coordinates).addTo(map);
+}
 function view(name){
+  if(name!=='spotlight')clearSelectedPartnerMarker();
   mode=name;home.hidden=name!=='home'||panelMinimised;
   $('v2-mobile-nav').hidden=name!=='home';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
@@ -210,7 +226,7 @@ function flyTo(i,touring=false){
    return true;
  }catch(e){console.warn('Map camera could not move',e);return false;}
 }
-function openPartner(i,skip=false){stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');if(!skip)flyTo(i);}
+function openPartner(i,skip=false){stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');showSelectedPartnerMarker(i);if(!skip)flyTo(i);}
 function renderCountdown(){
  const seconds=$('v2-tour-countdown-seconds');
  if(!seconds)return;
