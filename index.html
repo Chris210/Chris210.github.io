@@ -2681,6 +2681,26 @@
         desc.dir = ['ar', 'ur', 'ms-Arab'].includes(translatedDescription.lang) ? 'rtl' : 'auto';
         content.append(desc);
       }
+      // Academic years are sourced from the school's employer overview logs.
+      // Display actual recorded years, never an invented continuous interval.
+      if (categoryOf(fields) === 'placement') {
+        const yearLabels = {
+          en:'Placement years', 'zh-CN':'实习学年', 'zh-TW':'實習學年',
+          ja:'実習年度', fr:'Années de stage', de:'Praktikumsjahre',
+          es:'Años de prácticas', it:'Anni di tirocinio',
+          pt:'Anos de estágio', ar:'سنوات التدريب', ko:'실습 연도'
+        };
+        const yearText = String(fields.placement_years_display || '').trim();
+        const yearLine = make('p', 'popup-description');
+        yearLine.append(make('strong','', (yearLabels[currentLanguage] || yearLabels.en) + ': '));
+        yearLine.append(document.createTextNode(yearText || 'Not recorded in the supplied employer logs'));
+        content.append(yearLine);
+        if (fields.coordinate_accuracy === 'Approximate placement city/region centroid') {
+          const approx = make('p','popup-description','Map pin: approximate placement area, not a verified office');
+          approx.style.fontSize = '12px';
+          content.append(approx);
+        }
+      }
       // Mapbox source includes bare domains (e.g. www.mimagroup.com).
       // Add HTTPS when needed so valid sites are clickable in popups.
       const website = typeof fields.url === 'string'
@@ -3392,8 +3412,8 @@
       const props = feature.properties || {};
       const name = normalizedName(props.name);
       const coords = feature.geometry.coordinates;
-      if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1]) ||
-          (coords[0] === 0 && coords[1] === 0)) return; // Never navigate to Null Island.
+      if (!name || !Number.isFinite(coords?.[0]) || !Number.isFinite(coords?.[1])) return;
+      // Keep unlocated employers searchable; never draw or navigate to (0,0).
       const key = feature.id === undefined ? name + ':' + coords.join(',') : String(feature.id);
       if (!worldLocations.has(key)) worldLocations.set(key, feature);
       for (const item of featuredMatchers) {
@@ -3421,12 +3441,13 @@
             throw Error('Invalid authoritative partner dataset');
           worldLocations.clear();
           worldFeaturedMatches.clear();
-          masterFeatures = directory.features.filter(f =>
+          const allPartners = directory.features.filter(f =>
             f?.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates) &&
             f.geometry.coordinates.every(Number.isFinite) &&
-            !(f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0) &&
             f.properties?.visible !== 'No');
-          for (const feature of masterFeatures) addWorldFeature(feature);
+          masterFeatures = allPartners.filter(f =>
+            !(f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0));
+          for (const feature of allPartners) addWorldFeature(feature);
           const source = map.getSource(MASTER_SOURCE);
           if (source) source.setData({type:'FeatureCollection',features:masterFeatures});
           if (worldLocations.size < 50) throw Error('Partner dataset too small');
@@ -3477,19 +3498,20 @@
       const labels = make('span','browse-location-text');
       labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
       button.append(labels);
-      if (!feature?.geometry?.coordinates) {
-        // Keep every featured name in the list, even if its location is on
-        // the opposite side of the world or worldwide tiles are still loading.
-        // Do not fly to an invented coordinate for an unverified match.
+      const featureCoords = feature?.geometry?.coordinates;
+      const isLocated = Array.isArray(featureCoords) && featureCoords.length === 2 &&
+        featureCoords.every(Number.isFinite) &&
+        !(featureCoords[0] === 0 && featureCoords[1] === 0);
+      if (!isLocated) {
+        // All source partners remain searchable, but never zoom to (0,0).
         button.disabled = true;
-        button.setAttribute('aria-label', displayName + ' — ' +
-          featuredT(worldFeaturedState === 'loading' ? 'featuredLoading' : 'featuredError'));
+        button.setAttribute('aria-label', (displayName || props.name || '') + ' — location not yet verified');
       } else {
         button.setAttribute('aria-label', `${t('view')} ${props.name || t('unnamed')}`);
       }
       button.addEventListener('click', () => {
         const coords = feature?.geometry?.coordinates;
-        if (!coords) return;
+        if (!coords || (coords[0] === 0 && coords[1] === 0)) return;
         visitorMovedMap = true;
         // Reveal the selected partner on the map rather than leaving the
         // search panel covering its popup. Applies to featured and all results.
