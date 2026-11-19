@@ -3,9 +3,9 @@
 'use strict';
 const root=document.getElementById('v2-root');
 const home=document.getElementById('v2-home');
-const featuredTiles=home?.querySelector('.v2-tiles');
+const recordsNote=home?.querySelector('.v2-data-note');
 const languagePicker=document.getElementById('language-select');
-if(!root||!featuredTiles)return;
+if(!root||!recordsNote)return;
 
 const EMAIL_ROUTES=[
  {email:'sdca-research@lboro.ac.uk',subject:'Loughborough SDCA — Research collaboration enquiry'},
@@ -99,8 +99,8 @@ const icon=make('span','v2-collaborate-trigger-icon','✧');
 icon.setAttribute('aria-hidden','true');
 const label=make('span','v2-collaborate-trigger-label');
 trigger.append(icon,label);
-// Keep the collaboration action inside the main information card, immediately after the featured partner tiles.
-featuredTiles.after(trigger);
+// Keep this action immediately above the SDCA records date at the bottom of the card.
+recordsNote.before(trigger);
 
 const dialog=make('dialog','v2-collaborate-dialog');
 dialog.id='v2-collaborate-dialog';
