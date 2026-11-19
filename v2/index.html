@@ -2891,6 +2891,9 @@
           }
         } catch (_) { console.warn('Invalid website URL for', fields.name); }
       }
+      // V2 case-study action: same verified lookup as spotlight and guided tour.
+      const caseStudyLink = window.SDCA_V2_CASE_STUDIES?.createLink(feature, null, 'popup-link gcn-case-action');
+      if (caseStudyLink) content.append(caseStudyLink);
       if (nearby && nearby.length > 1) {
         content.append(make('hr', 'popup-line'));
         const back = make('button', 'quiet-action', '← ' + t('other'));
@@ -3629,6 +3632,8 @@
   });
 </script>
 <script src="./v2-i18n.js?v=interface-locale-audit-45"></script>
+<script src="./case-studies-data.js?v=verified-20261119"></script>
+<script src="./v2-case-studies.js?v=case-link-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
 <script src="./v2.js?v=interface-locale-audit-45"></script>
 <script src="./v2-localise.js?v=interface-locale-audit-45"></script>
