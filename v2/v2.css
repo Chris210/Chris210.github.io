@@ -485,21 +485,39 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
   .mapboxgl-ctrl-top-right { top:90px!important; }
   /* The original tall sheet is replaced with a closed-by-default drawer. */
   #v2-root #v2-home {
-    height:min(74dvh,650px);
+    /* Follow the actual contents rather than reserving 74% of the viewport. */
+    height:auto;
     max-height:min(74dvh,650px);
-    padding:9px 20px max(18px,env(safe-area-inset-bottom));
-    transition:height .28s cubic-bezier(.22,1,.36,1),max-height .28s cubic-bezier(.22,1,.36,1);
-    overflow:hidden;
+    padding:9px 20px max(12px,env(safe-area-inset-bottom));
+    transition:max-height .28s cubic-bezier(.22,1,.36,1);
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  #v2-root #v2-home::-webkit-scrollbar {display:none;}
+  #v2-home .v2-tiles {
+    /* Allow the horizontal strip to grow to its tallest partner card. */
+    flex:0 0 auto;
+    min-height:110px;
+    align-items:stretch;
+  }
+  #v2-home .v2-tile {
+    min-height:110px;
+    height:auto;
   }
   #v2-root #v2-home.v2-mobile-collapsed {
     height:var(--v2-mobile-drawer-peek);
     max-height:var(--v2-mobile-drawer-peek);
     padding:9px 18px 6px;
+    overflow:hidden;
   }
   #v2-home::before { display:none; }
   #v2-mobile-drawer-toggle {
     display:flex;flex:0 0 47px;align-items:center;justify-content:center;
-    position:relative;width:100%;min-height:47px;
+    position:sticky;top:0;z-index:2;width:100%;min-height:47px;
+    background:#fcfbff;
     border:0;background:transparent;color:var(--v2-purple);
     font-size:13px;font-weight:750;letter-spacing:.01em;
     border-radius:12px;touch-action:manipulation;
