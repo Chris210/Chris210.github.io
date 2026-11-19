@@ -460,9 +460,18 @@ body {
   line-height:1.35;
 }
 #v2-root .v2-badge .v2-badge-star {
-  display:block;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  width:28px;
+  height:28px;
+  flex:none;
   color:inherit;
-  line-height:1.35;
+  font-size:27px;
+  font-weight:900;
+  line-height:1;
+  text-align:center;
 }
 #v2-root .v2-badge .v2-badge-text {
   display:block;
