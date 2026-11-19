@@ -89,7 +89,21 @@ const staticText={
  'Student Placement':'studentPlacement',
  'Exchange Programme':'exchangeProgramme',
  'Search partners worldwide':'searchWorldwide',
- 'Minimise panel':'backMap'
+ 'Minimise panel':'backMap',
+ // Additional mobile, tour and partner-card interface strings.
+ 'Explore partners':'explorePartners',
+ 'Close partners':'closePartners',
+ 'Expand partner panel':'expandPartners',
+ 'Collapse partner panel':'collapsePartners',
+ 'Visit website ↗':'visitWebsite',
+ 'Next stop in':'nextStopIn',
+ 'Time until the next partner':'timeUntilNext',
+ 'Previous partner':'previousPartner',
+ 'Next partner':'nextPartner',
+ 'Featured partner categories':'featuredCategories',
+ 'QS World Rank · 2027':'qsRank',
+ 'View QS Art and Design subject rankings (opens in a new tab)':'qsLink',
+ 'Partner':'partnerLabel'
 };
 function translateString(str,element){
  const value=String(str||'').trim().replace(/\s+/g,' ');
@@ -108,7 +122,7 @@ function translateString(str,element){
  if(value==='Featured partner')return t('featured');
  if(value==='Selected partner')return t('selectedPartner',{name:''}).replace(/[:：]\s*$/,'');
  if(value==='SDCSA Exchange programme partner')return base?.localDescription?.({description:value})?.text||str;
- if(value==='QS World Rank · 2027')return 'QS · 2027';
+ if(value==='QS World Rank · 2027')return t('qsRank');
  let match;
  if((match=/^Search all ([\d,\s.]+) partners and places$/.exec(value)))
    return t('searchWorldwide',{count:number(Number(match[1].replace(/[\s,]/g,'')))});
@@ -125,7 +139,12 @@ function translateString(str,element){
  if((match=/^Featured partner (\d+) of (\d+)(?: ·)?$/.exec(value)))
    return t('featuredPosition',{index:number(Number(match[1])),total:number(Number(match[2]))})+(value.endsWith('·')?' ·':'');
  if(value==='Next featured partner →')return t('next')+' '+t('featured')+' →';
- if((match=/^Visit (.+) website ↗$/.exec(value)))return t('visitNamedSite',{name:match[1]});
+ if((match=/^Map marker for (.+)$/.exec(value)))return t('markerFor',{name:match[1]});
+  if((match=/^Visit (.+) website \(opens in a new tab\)$/.exec(value)))
+    return t('visitNamedSite',{name:match[1]});
+  if((match=/^(.+) QS World University Rankings 2027: (.+) \(opens in a new tab\)$/.exec(value)))
+    return match[1]+' · '+t('qsRank')+': '+match[2];
+  if((match=/^Visit (.+) website ↗$/.exec(value)))return t('visitNamedSite',{name:match[1]});
  if((match=/^Visit (.+) →$/.exec(value)))return t('website',{host:match[1]});
  if((match=/^Stop (\d+) of (\d+)$/.exec(value)))
    return t('stopPosition',{index:number(Number(match[1])),total:number(Number(match[2]))});
