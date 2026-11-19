@@ -438,3 +438,49 @@ body {
     box-shadow:none!important;
   }
 }
+
+
+/* V2 featured-partner badge: yellow evidence accent with aligned two-line label. */
+/* Matches the verified case-study accent, but remains an informational label. */
+#v2-root #v2-spotlight .v2-badge,
+#v2-root #v2-tour-card .v2-badge {
+  display:inline-grid!important;
+  grid-template-columns:max-content minmax(0,1fr);
+  align-items:start;
+  column-gap:9px;
+  flex:0 1 auto;
+  max-width:60%;
+  min-width:0;
+  padding:9px 14px!important;
+  border:1px solid var(--gcn-case-yellow,#FFBD00)!important;
+  border-radius:999px;
+  background:var(--gcn-case-yellow,#FFBD00)!important;
+  color:var(--gcn-case-label,#2D0153)!important;
+  text-align:left!important;
+  line-height:1.35;
+}
+#v2-root .v2-badge .v2-badge-star {
+  display:block;
+  color:inherit;
+  line-height:1.35;
+}
+#v2-root .v2-badge .v2-badge-text {
+  display:block;
+  min-width:0;
+  max-width:150px;
+  color:inherit;
+  text-align:left!important;
+  white-space:normal;
+  overflow-wrap:break-word;
+  line-height:1.35;
+}
+/* English keeps FEATURED and PARTNER on two lines, both aligned after the star. */
+#v2-root:lang(en) .v2-badge .v2-badge-text {max-width:92px;}
+@media (forced-colors:active) {
+  #v2-root #v2-spotlight .v2-badge,
+  #v2-root #v2-tour-card .v2-badge {
+    background:Canvas!important;
+    border-color:CanvasText!important;
+    color:CanvasText!important;
+  }
+}
