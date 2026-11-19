@@ -622,3 +622,43 @@ body.v2-guided-tour-active #map .mapboxgl-ctrl-top-right .mapboxgl-ctrl-group { 
 @media screen and (max-width:680px) {
   #v2-tour-header { display:none!important; }
 }
+
+
+/* Case-study evidence actions (V2 only): consistent across map, spotlight and tour.
+   Maintain readable button contrast in both automatic light and dark themes. */
+.sdca-popup-body > .gcn-case-action {
+ display:flex;width:100%;min-height:46px;align-items:center;justify-content:center;
+ margin-top:11px;padding-inline:13px;line-height:1.35;text-align:center;
+}
+#v2-root #v2-spotlight .gcn-case-action {
+ margin-top:14px;min-height:48px;text-align:center;
+}
+#v2-root #v2-spotlight .gcn-secondary-website {
+ background:transparent!important;
+ color:var(--v2-theme-link,#562583)!important;
+ border:1.5px solid var(--v2-theme-line,#b8aac8)!important;
+ margin-top:8px;
+ min-height:43px;
+}
+#v2-root #v2-spotlight .gcn-secondary-website:hover {
+ background:var(--v2-theme-surface-hover,#f3edf7)!important;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action {
+ display:flex;align-items:center;justify-content:center;min-height:43px;
+ max-width:100%;padding:9px 14px;margin:7px 0 9px;
+ border-radius:11px;background:var(--v2-theme-action,#85004b)!important;
+ color:#fff!important;text-decoration:none;text-align:center;
+ font-size:13px;font-weight:760;line-height:1.35;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action:hover {
+ background:var(--v2-theme-action-hover,#6d0041)!important;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action[hidden] {display:none!important}
+:is(.sdca-popup-body,#v2-root) .gcn-case-link:focus-visible {
+ outline:3px solid var(--focus,#FFBD00)!important;outline-offset:3px!important;
+}
+@media(max-width:680px){
+ #v2-root #v2-tour-card .gcn-tour-case-action {
+  min-height:40px;padding:8px 12px;margin:5px 0 6px;font-size:12px;
+ }
+}
