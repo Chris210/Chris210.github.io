@@ -85,11 +85,36 @@ function applyTheme(){
     paint(id,'text-halo-width',1.3);
    }
   }
-  // Preserve original Loughborough category hues with adequate marker outlines.
-  paint('sdca-master-points','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
+  // In dark mode the original deep university violet becomes invisible
+  // against dark land/sea. Use lighter tints of the same university hues.
+  // Light mode retains the exact original exchange and placement colours.
+  const exchangeColor=dark?'#CEB4FF':'#2D0153';
+  const placementColor=dark?'#FF78BE':'#F0047F';
+  const byGroup=['match',['get','group'],
+    'Exchange Programme',exchangeColor,placementColor];
+  const byMarkerType=['match',['get','markerType'],
+    'exchange',exchangeColor,placementColor];
+  const byClusterMajority=['case',
+    ['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],
+    exchangeColor,placementColor];
+  // All map dot layers need consistent symbols, including featured clusters
+  // and the selection/hover effect. Never modify the source feature data.
+  paint('sdca-master-points','circle-color',byGroup);
+  paint('sdca-master-points','circle-stroke-color',dark?'#F5EBFF':'#FFFFFF');
   paint('sdca-master-points','circle-stroke-width',dark?2:1.5);
-  paint('v2-key-points','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
-  paint('v2-key-clusters','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
+  paint('sdca-hover-dot','circle-color',byGroup);
+  paint('sdca-hover-dot','circle-stroke-color','#FFFFFF');
+  paint('v2-key-points','circle-color',byMarkerType);
+  paint('v2-key-points','circle-stroke-color',dark?'#F5EBFF':'#FFFFFF');
+  paint('v2-key-clusters','circle-color',byClusterMajority);
+  paint('v2-key-clusters','circle-stroke-color',dark?'#F5EBFF':
+    ['case',
+      ['all',['>', ['get','exchangeCount'],0],
+       ['<',['get','exchangeCount'],['get','point_count']]],
+      ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],
+        '#F0047F','#2D0153'],
+      '#FFFFFF']);
+  paint('v2-key-count','text-color',dark?'#21162B':'#FFFFFF');
   paint('v2-key-labels','text-color',p.label);
   paint('v2-key-labels','text-halo-color',p.labelHalo);
   paint('v2-key-labels','text-halo-width',2);
