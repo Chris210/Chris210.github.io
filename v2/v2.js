@@ -302,8 +302,8 @@ function stopTimer(){
 }
 function overview(){
  stopTimer();if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';if(map.loaded())map.stop();panelMinimised=false;view('home');
- if(map.loaded())map.easeTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,duration:650,
- padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
+ // Use the original country's reset camera, not an Atlantic placeholder.
+ if(map.loaded())api.resetToVisitorCountry();
 }
 function openDirectory(){stopTimer();if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';directory();view('directory');}
 function search(){
@@ -548,8 +548,7 @@ function mapStyle(){
    map.setPaintProperty('sdca-master-points','circle-radius',5.5);
   }
  }catch(e){console.warn('Some base layers cannot be recoloured',e);}
- map.jumpTo({center:[-25,46],zoom:2.1,bearing:0,pitch:0,
- padding:window.innerWidth>680?{left:330,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:0}});
+ // Styling must not override the country-aware initial camera in index.html.
 }
 function highlight(){
  if(!map.loaded()||api.status()!=='ready')return;
