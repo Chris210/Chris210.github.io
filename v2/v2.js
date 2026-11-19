@@ -40,6 +40,8 @@ const tourCaseAction=element('a','gcn-case-link gcn-tour-case-action');
 tourCaseAction.id='v2-tour-case-study';
 tourCaseAction.hidden=true;
 $('v2-tour-website').before(tourCaseAction);
+// Opening evidence should not let the guided tour advance in the background.
+tourCaseAction.addEventListener('click',()=>pauseTour());
 // A deliberately unhurried editorial pace: travel, settle, then linger.
 const TOUR_DWELL_MS=6000;
 const TOUR_TRAVEL_MS=7200;
@@ -245,6 +247,9 @@ function drawSpotlight(i){
  });
  if(i.group!=='academic')grid.classList.add('v2-stat-grid-two');
  spot.append(grid);
+ // Evidence is the primary next action: keep it visible before longer metadata.
+ const relatedWork=window.SDCA_V2_CASE_STUDIES?.createLink(feature,i,'v2-spot-link gcn-case-action');
+ if(relatedWork)spot.append(relatedWork);
  if(progs.length){
   spot.append(element('div','v2-section-label','Programmes'));
   const list=element('div','v2-chip-list');progs.forEach(p=>list.append(element('span','v2-chip',p)));spot.append(list);
@@ -263,8 +268,6 @@ function drawSpotlight(i){
  if(desc&&!/^(?:sdca\s+)?student\s+placement\.?$/i.test(desc)){
   spot.append(element('p','v2-spot-description',desc.slice(0,640)));
  }
- const relatedWork=window.SDCA_V2_CASE_STUDIES?.createLink(feature,i,'v2-spot-link gcn-case-action');
- if(relatedWork)spot.append(relatedWork);
  if(link){
   const a=element('a','v2-spot-link','Visit '+new URL(link).hostname.replace(/^www\./,'')+' →');
   a.href=link;a.target='_blank';a.rel='noopener noreferrer';
