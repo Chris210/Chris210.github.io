@@ -2527,18 +2527,31 @@
     const mapboxLanguageCodes = {
       'zh-CN': 'zh-Hans',
       'zh-TW': 'zh-Hant',
-      'ms-Arab': 'ms',
       'fil': 'tl'
     };
+    // Keep the basemap in English where Mapbox has no translation for the
+    // interface language. Browser/visitor preference still controls the UI.
+    // Source: https://docs.mapbox.com/help/dive-deeper/maps-internationalization/#available-languages
+    const supportedMapboxLanguages = new Set([
+      'ar','bg','bs','ca','cs','da','de','el','en','es','et','fa',
+      'fi','fr','he','hr','hu','id','it','ja','ka','ko','lv','ms',
+      'nb','nl','no','pl','pt','ro','ru','sk','sl','sq','sr','sv',
+      'th','tl','tr','uk','vi','zh-Hans','zh-Hant'
+    ]);
     function updateMapLanguage(lang) {
       // When a saved language is restored before the map finishes loading,
       // map.on('load') applies it once the style is ready.
       if (!map.isStyleLoaded()) return;
-      const mapLanguage = mapboxLanguageCodes[lang] || lang;
+      const requested = mapboxLanguageCodes[lang] || lang;
+      const mapLanguage = supportedMapboxLanguages.has(requested) ? requested : 'en';
       try {
         map.setLanguage(mapLanguage);
       } catch (err) {
         console.warn('Mapbox could not switch basemap labels to', mapLanguage, err);
+        if (mapLanguage !== 'en') {
+          try { map.setLanguage('en'); }
+          catch (fallbackError) { console.warn('Mapbox English label fallback failed', fallbackError); }
+        }
       }
     }
     function updateLanguage(lang) {
