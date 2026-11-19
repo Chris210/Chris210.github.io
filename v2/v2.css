@@ -518,7 +518,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
     display:flex;flex:0 0 47px;align-items:center;justify-content:center;
     position:sticky;top:0;z-index:2;width:100%;min-height:47px;
     background:#fcfbff;
-    border:0;background:transparent;color:var(--v2-purple);
+    border:0;color:var(--v2-purple);
     font-size:13px;font-weight:750;letter-spacing:.01em;
     border-radius:12px;touch-action:manipulation;
   }
