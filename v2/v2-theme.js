@@ -85,11 +85,12 @@ function applyTheme(){
     paint(id,'text-halo-width',1.3);
    }
   }
-  // In dark mode the original deep university violet becomes invisible
-  // against dark land/sea. Use lighter tints of the same university hues.
-  // Light mode retains the exact original exchange and placement colours.
-  const exchangeColor=dark?'#CEB4FF':'#2D0153';
-  const placementColor=dark?'#FF78BE':'#F0047F';
+  // Dark theme: restrained sea-glass (derived from Loughborough's green)
+  // versus muted mulberry rose (derived from Loughborough's magenta).
+  // Different hues AND marker rings distinguish categories without relying
+  // on brightness alone. Original purple/pink are retained in light mode.
+  const exchangeColor=dark?'#6FA99E':'#2D0153';
+  const placementColor=dark?'#C77795':'#F0047F';
   const byGroup=['match',['get','group'],
     'Exchange Programme',exchangeColor,placementColor];
   const byMarkerType=['match',['get','markerType'],
@@ -100,20 +101,36 @@ function applyTheme(){
   // All map dot layers need consistent symbols, including featured clusters
   // and the selection/hover effect. Never modify the source feature data.
   paint('sdca-master-points','circle-color',byGroup);
-  paint('sdca-master-points','circle-stroke-color',dark?'#F5EBFF':'#FFFFFF');
-  paint('sdca-master-points','circle-stroke-width',dark?2:1.5);
+  // An understated ring for university markers, a thinner ring for employers.
+  // Emissive fills ensure night lighting never makes either group disappear.
+  const masterStroke=dark?
+    ['match',['get','group'],'Exchange Programme','#B9CFC9','#C59CAD']:
+    '#FFFFFF';
+  const featuredStroke=dark?
+    ['match',['get','markerType'],'exchange','#B9CFC9','#C59CAD']:
+    '#FFFFFF';
+  paint('sdca-master-points','circle-stroke-color',masterStroke);
+  paint('sdca-master-points','circle-stroke-width',
+    dark?['match',['get','group'],'Exchange Programme',2.1,1.0]:1.5);
   paint('sdca-hover-dot','circle-color',byGroup);
-  paint('sdca-hover-dot','circle-stroke-color','#FFFFFF');
+  paint('sdca-hover-dot','circle-stroke-color',dark?masterStroke:'#FFFFFF');
+  paint('sdca-hover-dot','circle-stroke-width',dark?2:3);
   paint('v2-key-points','circle-color',byMarkerType);
-  paint('v2-key-points','circle-stroke-color',dark?'#F5EBFF':'#FFFFFF');
+  paint('v2-key-points','circle-stroke-color',featuredStroke);
+  paint('v2-key-points','circle-stroke-width',
+    dark?['match',['get','markerType'],'exchange',2.4,1.2]:3);
   paint('v2-key-clusters','circle-color',byClusterMajority);
-  paint('v2-key-clusters','circle-stroke-color',dark?'#F5EBFF':
+  paint('v2-key-clusters','circle-stroke-color',dark?'#B9AABE':
     ['case',
       ['all',['>', ['get','exchangeCount'],0],
        ['<',['get','exchangeCount'],['get','point_count']]],
       ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],
         '#F0047F','#2D0153'],
       '#FFFFFF']);
+  paint('v2-key-clusters','circle-stroke-width',dark?1.5:3);
+  // Suppress luminous white haloes around the dark-mode clusters.
+  paint('v2-key-halo','circle-opacity',dark?0.035:0.12);
+  paint('v2-key-cluster-halo','circle-opacity',dark?0.035:0.13);
   paint('v2-key-count','text-color',dark?'#21162B':'#FFFFFF');
   paint('v2-key-labels','text-color',p.label);
   paint('v2-key-labels','text-halo-color',p.labelHalo);
