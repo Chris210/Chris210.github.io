@@ -1,8 +1,8 @@
-/* Public, reviewed V2 case-study links. Monthly research agent: preserve verified IDs, one-sentence summaries and source URLs. */
+/* Curator-reviewed V2 evidence. Preserve verified partner IDs and descriptions; external research audit is separate. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
   "generated": "2026-11-19",
-  "source": "CHRIS - GE Map / Partner Research; verified links updated from versioned research catalogue",
+  "source": "CHRIS - GE Map / Partner Research v1.2 (64 curated total; 59 published); master inventory 1515 records",
   "matching": "Exact normalized names, curated aliases, optional feature IDs; no fuzzy matching",
   "partners": [
     {
@@ -806,6 +806,127 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "priority": "P1",
           "relationship": "Student industry placement",
           "summary": "Charles Elson described a UX placement at Dutch start-up Polytential developing interfaces and product-design work for automated plastic-waste analysis."
+        }
+      ]
+    },
+    {
+      "name": "Graphic Packaging International (GPI)",
+      "aliases": [
+        "Graphic Packaging International"
+      ],
+      "featureIds": [
+        1339,
+        136
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-058",
+          "title": "Theo Dormer: conceptual packaging design placement",
+          "url": "https://sdcashow2025.lboro.ac.uk/student/theo-dormer/",
+          "kind": "placement",
+          "year": "2025 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Theo Dormer documented a 12-month placement in Graphic Packaging International’s conceptual team creating graphics, technical drawings and food-packaging prototypes."
+        }
+      ]
+    },
+    {
+      "name": "Sage Automotive Interiors Ltd",
+      "aliases": [
+        "Sage Automotive Interiors"
+      ],
+      "featureIds": [
+        989,
+        988
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-059",
+          "title": "Angelica Barlaan: textiles and automotive trim design internship",
+          "url": "https://sdcashow2021.lboro.ac.uk/students/angelica-barlaan/",
+          "kind": "placement",
+          "year": "2019–2020",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Angelica Barlaan described a Sage Automotive Interiors design placement covering colour trends, CAD, material testing and textile development for customers."
+        },
+        {
+          "id": "GCN-CS-060",
+          "title": "Hannah Morten: textiles placement with automotive supplier",
+          "url": "https://sdcashow2023.lboro.ac.uk/student/hannah-morten/",
+          "kind": "placement",
+          "year": "2021–2022",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Hannah Morten documented a textile design placement at Sage Automotive Interiors from September 2021 to June 2022."
+        },
+        {
+          "id": "GCN-CS-064",
+          "title": "Lola Bate: automotive textile design placement",
+          "url": "https://sdcashow2026.lboro.ac.uk/student/lola-bate/",
+          "kind": "placement",
+          "year": "2024–2025",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Textile designer Lola Bate documented a September 2024 to July 2025 placement at SAGE Automotive Interiors in her Loughborough degree-show profile."
+        }
+      ]
+    },
+    {
+      "name": "London Embroidery Studio",
+      "aliases": [],
+      "featureIds": [
+        793
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-061",
+          "title": "Elizabeth Tanner: digital embroidery studio internship",
+          "url": "https://sdcashow2023.lboro.ac.uk/student/elizabeth-tanner/",
+          "kind": "placement",
+          "year": "2021",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Elizabeth Tanner documented her London Embroidery Studio placement assisting with fashion, costume and interior embroidery using industrial machines."
+        }
+      ]
+    },
+    {
+      "name": "PA Consulting Group",
+      "aliases": [],
+      "featureIds": [
+        1444
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-062",
+          "title": "Lucy Mitchell: industrial design internship at PA Consulting",
+          "url": "https://designshow.lboro.ac.uk/students/lucy-mitchell/",
+          "kind": "placement",
+          "year": "2019",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Lucy Mitchell documented an industrial-design internship at PA Consulting during her Loughborough placement year."
+        }
+      ]
+    },
+    {
+      "name": "Hannah Simpson Studio",
+      "aliases": [],
+      "featureIds": [
+        643
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-063",
+          "title": "Ellie Robins: ceramics placement informing award-winning art",
+          "url": "https://www.potclays.co.uk/2024-award-winner-lboro-robins/",
+          "kind": "placement",
+          "year": "2024 profile",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "In a 2024 Potclays graduate-award interview, Loughborough Fine Art graduate Ellie Robins explained that she learned ceramics on placement at Hannah Simpson Studio."
         }
       ]
     }
