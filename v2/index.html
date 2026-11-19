@@ -3602,6 +3602,7 @@
       allFeatures: () => Array.from(worldLocations.values()),
       startLookup: () => startWorldFeaturedLookup(),
       status: () => worldFeaturedState,
+      resetToVisitorCountry: () => resetMapView(),
       openNative: feature => showLocation(feature)
     };
     map.on('error', event => { if (event.error) console.error('Mapbox:', event.error); });
@@ -3615,7 +3616,7 @@
 </script>
 <script src="./v2-i18n.js?v=download-pdf-label-31"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=consistent-mobile-tour-header-39"></script>
+<script src="./v2.js?v=country-aware-camera-40"></script>
 <script src="./v2-localise.js?v=download-pdf-label-31"></script>
 </body>
 </html>
