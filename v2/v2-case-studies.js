@@ -206,7 +206,7 @@ function renderChoices(entry){
   anchor.href=study.url;
   anchor.target='_blank';
   anchor.rel='noopener noreferrer';
-  anchor.setAttribute('aria-label',study.title+' — '+menu.original);
+  // Add the evidence summary to the accessible name after constructing the card.
   const copy=document.createElement('div');
   copy.className='gcn-case-choice-copy';
   const meta=document.createElement('p');
@@ -230,6 +230,7 @@ function renderChoices(entry){
   description.className='gcn-case-choice-summary';
   // Summary comes from verified case-study research, not an inferred relationship.
   description.textContent=String(study.summary||('This case study describes '+study.title+'.')).replace(/\s+/g,' ').trim();
+  anchor.setAttribute('aria-label',study.title+'. '+description.textContent+' ('+menu.original+')');
   description.lang='en';
   description.dir='auto';
   copy.append(meta,title,description);
