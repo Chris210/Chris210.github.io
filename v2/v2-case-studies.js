@@ -187,6 +187,12 @@ function modalStructure(){
  });
  return chooser;
 }
+// Use the most recent recorded year for ranges (e.g. 2019–2020 -> 2020).
+// Missing or undated years go last; stable sorting preserves ties.
+function caseStudySortYear(study){
+ const years=String(study.year||'').match(/(?:19|20)\d{2}/g)||[];
+ return years.length?Math.max(...years.map(Number)):-1;
+}
 function renderChoices(entry){
  const menu=words(),locale=currentLanguage(),rtl=['ar','ur','ms-Arab'].includes(locale);
  const dialog=modalStructure();
@@ -198,7 +204,7 @@ function renderChoices(entry){
  chooserClose.setAttribute('aria-label',menu.close);
  chooserClose.title=menu.close;
  chooserItems.replaceChildren();
- for(const study of entry.cases){
+ for(const study of entry.cases.slice().sort((a,b)=>caseStudySortYear(b)-caseStudySortYear(a))){
   const li=document.createElement('li');
   li.className='gcn-case-dialog-list-item';
   const anchor=document.createElement('a');
