@@ -1,6 +1,8 @@
 /* Collaboration routes for V2. Keep the action immediately before the records footer. */
 /* Let desktop tiles use the available vertical space while the action stays above the date. */
 #v2-root #v2-home .v2-tiles { flex:1 1 auto; }
+/* Keep the records note visually adjacent to the collaboration action. */
+#v2-root #v2-home .v2-data-note {margin-top:0;}
 #v2-root #v2-home #v2-collaborate-trigger {
   position:relative;
   display:flex;
