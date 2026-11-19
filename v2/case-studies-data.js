@@ -1,8 +1,8 @@
-/* Public, reviewed V2 case-study links. Monthly research agent: preserve verified IDs, one-sentence evidence summaries and source URLs. */
+/* Public, reviewed V2 case-study links. Monthly research agent: preserve verified IDs, one-sentence summaries and source URLs. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
   "generated": "2026-11-19",
-  "source": "CHRIS - GE Map / Partner Research; curator-verified entries",
+  "source": "CHRIS - GE Map / Partner Research; verified links updated from versioned research catalogue",
   "matching": "Exact normalized names, curated aliases, optional feature IDs; no fuzzy matching",
   "partners": [
     {
@@ -10,7 +10,9 @@ window.SDCA_V2_CASE_STUDY_DATA = {
       "aliases": [
         "Joshibi University of Art & Design, Japan"
       ],
-      "featureIds": [],
+      "featureIds": [
+        173
+      ],
       "cases": [
         {
           "id": "GCN-CS-001",
@@ -41,6 +43,16 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "priority": "P1",
           "relationship": "Direct academic-creative collaboration",
           "summary": "Students at both universities made artworks for the Cultivate exhibition; Joshibi students selected and interpreted pairings."
+        },
+        {
+          "id": "GCN-CS-055",
+          "title": "Csilla Budai: media art exchange in Japan",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/study/undergraduate/our-students/csilla-budai/",
+          "kind": "exchange",
+          "year": "Undated alumni profile",
+          "priority": "P0",
+          "relationship": "Fine Art academic exchange",
+          "summary": "Fine Art alumna Csilla Budai described studying Media Art and Design at Joshibi and experimenting with AR/VR tools and digital fabrication."
         }
       ]
     },
@@ -415,7 +427,9 @@ window.SDCA_V2_CASE_STUDY_DATA = {
     {
       "name": "IBM",
       "aliases": [],
-      "featureIds": [],
+      "featureIds": [
+        151
+      ],
       "cases": [
         {
           "id": "GCN-CS-029",
@@ -426,6 +440,16 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "priority": "P1",
           "relationship": "Student industry placement",
           "summary": "Student portfolio describes design work undertaken at IBM and an IBM Hursley hackathon win."
+        },
+        {
+          "id": "GCN-CS-057",
+          "title": "Charles Elson: UX design placement at IBM iX",
+          "url": "https://designshow.lboro.ac.uk/students/charles-elson/",
+          "kind": "placement",
+          "year": "2019",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Charles Elson documented work as a UX designer at IBM iX designing and developing a new online presence for a publishing-company client."
         }
       ]
     },
@@ -481,6 +505,310 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "summary": "Student portfolio documents an industrial-design internship at McLaren Applied Technologies, covering engineering and concept development."
         }
       ]
+    },
+    {
+      "name": "Middle East Technical University (METU)",
+      "aliases": [],
+      "featureIds": [
+        204
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-038",
+          "title": "D.Doc: international doctoral design education research",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/research-innovation/projects/d-doc/",
+          "kind": "research",
+          "year": "2019–2023",
+          "priority": "P0",
+          "relationship": "Direct funded SDCA research collaboration",
+          "summary": "Loughborough led the EU-funded D.Doc partnership with Middle East Technical University and other institutions to map and improve doctoral design education across Europe."
+        }
+      ]
+    },
+    {
+      "name": "Delft University of Technology (TU Delft)",
+      "aliases": [
+        "Delft University of Technology (TU Delft), Netherlands"
+      ],
+      "featureIds": [
+        80
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-039",
+          "title": "Georgia Seymour: Designing Sustainable Transitions exchange",
+          "url": "https://sdcashow2023.lboro.ac.uk/student/georgia-seymour/",
+          "kind": "exchange",
+          "year": "2023 profile",
+          "priority": "P0",
+          "relationship": "Student design exchange",
+          "summary": "Georgia Seymour documented six months studying the Designing Sustainable Transitions minor at TU Delft’s Faculty of Industrial Design Engineering."
+        },
+        {
+          "id": "GCN-CS-040",
+          "title": "Charles Elson: interaction design at TU Delft",
+          "url": "https://designshow.lboro.ac.uk/students/charles-elson/",
+          "kind": "exchange",
+          "year": "2018–2019",
+          "priority": "P1",
+          "relationship": "Student design exchange",
+          "summary": "Charles Elson documented an Erasmus design exchange at TU Delft that included a multidisciplinary team project producing an installed meeting-organisation prototype."
+        }
+      ]
+    },
+    {
+      "name": "University of Michigan",
+      "aliases": [
+        "University of Michigan, USA"
+      ],
+      "featureIds": [
+        324
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-041",
+          "title": "Holly Reed: study abroad shaping ceramic art practice",
+          "url": "https://www.lboro.ac.uk/arts/features/sdca-student-vlogs-2024/",
+          "kind": "exchange",
+          "year": "2024 profile",
+          "priority": "P0",
+          "relationship": "Fine Art academic exchange",
+          "summary": "Fine Art student Holly Reed described how studying at the University of Michigan influenced her haptic and ceramic sculpture practice."
+        }
+      ]
+    },
+    {
+      "name": "RheinMain University of Applied Sciences",
+      "aliases": [
+        "RheinMain University of Applied Sciences, Germany"
+      ],
+      "featureIds": [
+        260
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-042",
+          "title": "Aysha Lilani: Communication Design exchange at RheinMain",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/study/undergraduate/our-students/aysha-lilani/",
+          "kind": "exchange",
+          "year": "Undated alumni profile",
+          "priority": "P0",
+          "relationship": "Graphic Design academic exchange",
+          "summary": "Graphic Design alumna Aysha Lilani described two semesters of Communication Design at Hochschule RheinMain involving practical work for local clients."
+        }
+      ]
+    },
+    {
+      "name": "SharkNinja",
+      "aliases": [],
+      "featureIds": [
+        280
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-043",
+          "title": "Alev Giray: motorised product design engineering internship",
+          "url": "https://sdcashow2026.lboro.ac.uk/student/alev-giray/",
+          "kind": "placement",
+          "year": "2026 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Alev Giray documented a 13-month SharkNinja internship as a Product Design Engineer in its Motorised Advanced Development team."
+        },
+        {
+          "id": "GCN-CS-044",
+          "title": "Harry Ford: cross-functional prototyping and user testing",
+          "url": "https://sdcashow2025.lboro.ac.uk/student/harry-ford/",
+          "kind": "placement",
+          "year": "2025 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Harry Ford described working on nine SharkNinja placement projects involving early concepts, prototypes, user testing and consumer insights."
+        },
+        {
+          "id": "GCN-CS-045",
+          "title": "Oliver Joyce: design engineering internship",
+          "url": "https://designshow.lboro.ac.uk/students/oliver-joyce/",
+          "kind": "placement",
+          "year": "2018–2019",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Oliver Joyce documented a SharkNinja design engineering internship during his Loughborough Product Design and Technology degree."
+        }
+      ]
+    },
+    {
+      "name": "Bosch Lawn & Garden",
+      "aliases": [],
+      "featureIds": [
+        41
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-046",
+          "title": "Antoine Graham: product engineering and prototyping at Bosch",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/study/undergraduate/our-students/antoine-graham/",
+          "kind": "placement",
+          "year": "Undated alumni profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Antoine Graham described researching, prototyping, testing and benchmarking international consumer power tools during his placement with Bosch Lawn and Garden."
+        }
+      ]
+    },
+    {
+      "name": "Diageo",
+      "aliases": [],
+      "featureIds": [
+        89
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-047",
+          "title": "Oliver Garton: prototyping and concepts in Diageo R&D",
+          "url": "https://sdcashow2021.lboro.ac.uk/students/oliver-garton/",
+          "kind": "placement",
+          "year": "2021 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Oliver Garton described an Innovation R&D placement at Diageo involving concept development, CAD, prototyping and 3D printing for global brands."
+        }
+      ]
+    },
+    {
+      "name": "PUMA",
+      "aliases": [],
+      "featureIds": [
+        902
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-048",
+          "title": "Libby Feller: graphic design placement at PUMA",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/study/undergraduate/our-students/libby-feller/section2/",
+          "kind": "placement",
+          "year": "2024 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Libby Feller described a paid graphic-design internship at PUMA in Germany supporting apparel graphics, market research and seasonal design packs."
+        },
+        {
+          "id": "GCN-CS-049",
+          "title": "Milo Fitzsimons: sportstyle footwear design internship",
+          "url": "https://designshow.lboro.ac.uk/students/milo-fitzsimons/",
+          "kind": "placement",
+          "year": "2018–2019",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Milo Fitzsimons documented a year as a Sportstyle Footwear Design Intern at PUMA during his industrial design studies."
+        }
+      ]
+    },
+    {
+      "name": "Sony Europe Ltd",
+      "aliases": [],
+      "featureIds": [
+        1024
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-050",
+          "title": "Sarah Moustafa: graphic design and online marketing at Sony",
+          "url": "https://sdcashow2024.lboro.ac.uk/student/sarah-moustafa/",
+          "kind": "placement",
+          "year": "2022–2023",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Sarah Moustafa recorded her 2022–2023 Graphic Design and Online Marketing placement at Sony Europe in her Loughborough degree-show portfolio."
+        },
+        {
+          "id": "GCN-CS-051",
+          "title": "Jessica Grindon: online marketing and graphics placement",
+          "url": "https://artshow2019.lboro.ac.uk/students/jessica-grindon/",
+          "kind": "placement",
+          "year": "2017–2018",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Jessica Grindon documented a year designing online marketing graphics, video and photography during her placement at Sony Europe."
+        }
+      ]
+    },
+    {
+      "name": "Rolls Royce Motor Cars - Goodwood",
+      "aliases": [],
+      "featureIds": [
+        976
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-052",
+          "title": "Rachael Denton-Snape: textile interior trim experience",
+          "url": "https://sdcashow2025.lboro.ac.uk/student/rachael-denton-snape/",
+          "kind": "placement",
+          "year": "2025 profile",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Textile Design graduate Rachael Denton-Snape identified professional experience in the Interior Trim team at Rolls-Royce Motor Cars."
+        }
+      ]
+    },
+    {
+      "name": "Rolls Royce",
+      "aliases": [],
+      "featureIds": [
+        263
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-053",
+          "title": "Alice McCutcheon: Innovation and Future Technologies placement",
+          "url": "https://sdcashow2021.lboro.ac.uk/students/alice-mccutcheon/",
+          "kind": "placement",
+          "year": "2019",
+          "priority": "P0",
+          "relationship": "Student industry placement",
+          "summary": "Alice McCutcheon documented work in Rolls-Royce Innovation and Future Technologies and receipt of a Rolls-Royce Yellow Belt Award during her 2019 placement."
+        }
+      ]
+    },
+    {
+      "name": "Exxentric AB",
+      "aliases": [],
+      "featureIds": [
+        117
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-054",
+          "title": "Georgia Seymour: sports technology design internship",
+          "url": "https://sdcashow2023.lboro.ac.uk/student/georgia-seymour/",
+          "kind": "placement",
+          "year": "2023 profile",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Georgia Seymour reported a six-month Research and Development Design internship at Exxentric AB in Stockholm."
+        }
+      ]
+    },
+    {
+      "name": "Polytential",
+      "aliases": [],
+      "featureIds": [
+        1458
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-056",
+          "title": "Charles Elson: UX design for plastic-waste analysis",
+          "url": "https://designshow.lboro.ac.uk/students/charles-elson/",
+          "kind": "placement",
+          "year": "2019",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Charles Elson described a UX placement at Dutch start-up Polytential developing interfaces and product-design work for automated plastic-waste analysis."
+        }
+      ]
     }
-  ]
+  ],
+  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete."
 };
