@@ -1,0 +1,124 @@
+/* V2-only map appearance. Responds to OS appearance changes without altering
+   Mapbox sources, markers, partner directory, language, map camera or V1. */
+(function(){
+'use strict';
+const map=window.SDCA_V2_BRIDGE?.map;
+if(!map||typeof window.matchMedia!=='function')return;
+const preference=window.matchMedia('(prefers-color-scheme: dark)');
+const palettes={
+ light:{
+  land:'#FAF8FC',water:'#DBD2E7',park:'#E3E6DF',building:'#F0EAF5',
+  background:'#EDE7F3',road:'#FFFFFF',boundary:'#B8A7C8',
+  label:'#362248',labelHalo:'#FFFFFF',muted:'#79648A',
+  atmosphere:{color:'#EDE5F4','high-color':'#D9CDE5','horizon-blend':0.025,'space-color':'#EDE7F3','star-intensity':0}
+ },
+ dark:{
+  land:'#2B2137',water:'#171A30',park:'#29362F',building:'#36283D',
+  background:'#110D18',road:'#52445C',boundary:'#776487',
+  label:'#F5EFFB',labelHalo:'#181020',muted:'#D3C5DD',
+  atmosphere:{color:'#231A32','high-color':'#1A1425','horizon-blend':0.025,'space-color':'#110D18','star-intensity':0}
+ }
+};
+let lastFogMode=null,queued=false,applying=false,styleReady=false;
+const noChange=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const skip=id=>/^(?:sdca-|v2-key-|GE Data|sdca-master-points)/i.test(id);
+function paint(id,prop,value){
+ try{
+  if(!map.getLayer(id))return;
+  if(!noChange(map.getPaintProperty(id,prop),value))map.setPaintProperty(id,prop,value);
+ }catch(e){/* Custom or imported layer paint may not support this property. */}
+}
+function configureStandard(p,dark){
+ const imports=map.getStyle()?.imports||[];
+ if(typeof map.setConfigProperty!=='function'||typeof map.getConfigProperty!=='function')return;
+ for(const imp of imports){
+  if(!imp.id||!/standard|basemap|mapbox/i.test(String(imp.id+' '+(imp.url||''))))continue;
+  const props={
+   lightPreset:dark?'night':'day',
+   theme:'custom',
+   colorLand:p.land,
+   colorWater:p.water,
+   colorRoads:p.road,
+   colorPlaceLabels:p.label,
+   colorRoadLabels:p.label,
+   colorAdminBoundaries:p.boundary,
+   colorBuildings:p.building,
+   colorGreenspace:p.park
+  };
+  for(const [key,value] of Object.entries(props)){
+   try{
+    if(!noChange(map.getConfigProperty(imp.id,key),value))
+      map.setConfigProperty(imp.id,key,value);
+   }catch(_){/* The specific Studio style may not expose this Standard option. */}
+  }
+ }
+}
+function applyTheme(){
+ if(applying)return;
+ const dark=preference.matches;
+ document.documentElement.dataset.v2Theme=dark?'dark':'light';
+ const p=dark?palettes.dark:palettes.light;
+ if(!map.getStyle()?.layers?.length)return;
+ applying=true;
+ try{
+  // Prefer Mapbox Standard's supported native theming for imported basemaps.
+  configureStandard(p,dark);
+  // Custom Mapbox Studio vector layers need explicit matching paint overrides.
+  // Crucially, circle layers (purple exchanges/pink placements) are untouched.
+  for(const layer of map.getStyle().layers){
+   const id=String(layer.id||'');
+   if(skip(id))continue;
+   const name=id.toLowerCase();
+   if(layer.type==='background'){
+    paint(id,'background-color',p.background);
+   }else if(layer.type==='fill'){
+    const color=/water|ocean|sea|river|lake/.test(name)?p.water:
+      /grass|park|wood|forest|green|vegetation/.test(name)?p.park:
+      /building|structure|construction/.test(name)?p.building:p.land;
+    paint(id,'fill-color',color);
+   }else if(layer.type==='line'){
+    const color=/boundary|admin|border|coast/.test(name)?p.boundary:p.road;
+    paint(id,'line-color',color);
+   }else if(layer.type==='symbol'&&(layer.layout?.['text-field']!==undefined||/label|place|country|city|name/.test(name))){
+    paint(id,'text-color',p.label);
+    paint(id,'text-halo-color',p.labelHalo);
+    paint(id,'text-halo-width',1.3);
+   }
+  }
+  // Preserve original Loughborough category hues with adequate marker outlines.
+  paint('sdca-master-points','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
+  paint('sdca-master-points','circle-stroke-width',dark?2:1.5);
+  paint('v2-key-points','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
+  paint('v2-key-clusters','circle-stroke-color',dark?'#F4E9FF':'#FFFFFF');
+  paint('v2-key-labels','text-color',p.label);
+  paint('v2-key-labels','text-halo-color',p.labelHalo);
+  paint('v2-key-labels','text-halo-width',2);
+  if(lastFogMode!==(dark?'dark':'light')){
+   try{map.setFog(p.atmosphere);lastFogMode=dark?'dark':'light';}
+   catch(_){/* Mapbox builds without atmospheric fog still function. */}
+  }
+ }catch(e){console.warn('V2 map appearance could not be fully applied',e);}
+ finally{applying=false;}
+}
+function schedule(){
+ if(queued)return;
+ queued=true;
+ window.requestAnimationFrame(()=>{
+  queued=false;
+  if(typeof map.getStyle==='function')applyTheme();
+ });
+}
+function changed(){
+ // CSS responds immediately; Mapbox vector tiles update without replacing sources.
+ lastFogMode=null;
+ schedule();
+}
+if(typeof preference.addEventListener==='function')
+ preference.addEventListener('change',changed);
+else if(typeof preference.addListener==='function')
+ preference.addListener(changed);
+map.on('style.load',()=>{lastFogMode=null;styleReady=true;schedule();});
+map.on('load',()=>{styleReady=true;schedule();});
+map.on('styledata',schedule); // Also catches dynamically added featured layers.
+schedule();
+})();
