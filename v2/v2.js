@@ -616,6 +616,7 @@ function highlight(){
  }catch(e){console.warn('Featured marker cluster could not be created',e);}
 }
 window.SDCA_V2={
+ pauseTour(){pauseTour();},
  handleMapClick(e){
   if(!map.getLayer('v2-key-points')||!map.getLayer('v2-key-clusters'))return false;
   const hits=map.queryRenderedFeatures(e.point,{layers:['v2-key-points','v2-key-clusters']});
@@ -651,6 +652,8 @@ $('v2-start-tour').onclick=startTour;$('v2-exit-tour').onclick=overview;
 $('v2-tour-pause').onclick=()=>playing?pauseTour():playTour();
 $('v2-tour-prev').onclick=()=>stepTour(-1);$('v2-tour-next-btn').onclick=()=>stepTour(1);
 document.addEventListener('keydown',e=>{
+ // The native case-study dialog owns Escape and arrow keys while open.
+ if(document.getElementById('gcn-case-dialog')?.open)return;
  if(e.key==='Escape'){if(mode==='tour'||mode==='directory'||mode==='spotlight'){overview();e.preventDefault();}else if(mode==='home'&&root.classList.contains('v2-mobile-drawer-open')&&window.matchMedia('(max-width:680px)').matches){setMobileDrawerOpen(false);mobileDrawerToggle.focus();e.preventDefault();}else $('v2-search-results').hidden=true;}
  if(mode==='tour'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
   e.preventDefault();stepTour(e.key==='ArrowLeft'?-1:1);
