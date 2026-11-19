@@ -118,6 +118,19 @@ function applyTheme(){
   paint('v2-key-labels','text-color',p.label);
   paint('v2-key-labels','text-halo-color',p.labelHalo);
   paint('v2-key-labels','text-halo-width',2);
+  // Mapbox Standard's 3D 'night' lighting dims every custom circle,
+  // including bright pink/lilac paint colours, unless it emits light.
+  // Set emissive strength on every partner dot and its highlight/halo.
+  // Daylight uses the original default (0) to preserve light-mode styling.
+  const emissive=dark?1:0;
+  for(const id of [
+    'sdca-master-points','sdca-hover-dot','sdca-hover-halo',
+    'sdca-selected-ring','v2-key-points','v2-key-clusters',
+    'v2-key-halo','v2-key-cluster-halo'
+  ]) paint(id,'circle-emissive-strength',emissive);
+  // Cluster counts and featured labels also need legible colours at night.
+  for(const id of ['v2-key-count','v2-key-labels'])
+    paint(id,'text-emissive-strength',emissive);
   if(lastFogMode!==(dark?'dark':'light')){
    try{map.setFog(p.atmosphere);lastFogMode=dark?'dark':'light';}
    catch(_){/* Mapbox builds without atmospheric fog still function. */}
