@@ -154,10 +154,14 @@ function translateString(str,element){
    try{return new Intl.NumberFormat(lang()==='ms-Arab'?'ms':lang(),{style:'unit',unit:'second',unitDisplay:'narrow'}).format(Number(match[1]));}
    catch(e){return value;}
  }
- if((match=/^SDCA placement and exchange records · updated (.+)$/.exec(value))){
+ if((match=/^SDCA records updated (.+)$/.exec(value))){
+   // The partner-added date comes from the authoritative master, not a fixed display date.
+   const iso=attr?.getAttribute('data-added-iso');
    let date=match[1];
-   try{date=new Intl.DateTimeFormat(lang()==='ms-Arab'?'ms':lang(),{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date('2026-11-18T12:00:00Z'));}
-   catch(e){}
+   if(/^\d{4}-\d{2}-\d{2}$/.test(iso||'')){
+     try{date=new Intl.DateTimeFormat(lang()==='ms-Arab'?'ms':lang(),{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T12:00:00Z'));}
+     catch(e){}
+   }
    return t('updated',{date});
  }
  if((match=/^Selected partner: (.+)$/.exec(value)))return t('selectedPartner',{name:match[1]});
