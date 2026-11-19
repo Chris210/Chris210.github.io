@@ -497,6 +497,13 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
     scrollbar-width:none;
   }
   #v2-root #v2-home::-webkit-scrollbar {display:none;}
+  /* Match the label-to-search gap to the 10px gap below the search box. */
+  #v2-home .v2-school-link {
+    margin-bottom:10px;
+    font-size:12px;
+    line-height:1.4;
+    letter-spacing:.12em;
+  }
   #v2-home .v2-tiles {
     /* Allow the horizontal strip to grow to its tallest partner card. */
     flex:0 0 auto;
