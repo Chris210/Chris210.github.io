@@ -1,6 +1,6 @@
-/* Collaboration routes for V2. Position in the main partner card below the tiles. */
-/* The tile grid sizes to content, rather than stretching the button to the bottom of the card. */
-#v2-root #v2-home .v2-tiles { flex:0 1 auto; }
+/* Collaboration routes for V2. Keep the action immediately before the records footer. */
+/* Let desktop tiles use the available vertical space while the action stays above the date. */
+#v2-root #v2-home .v2-tiles { flex:1 1 auto; }
 #v2-root #v2-home #v2-collaborate-trigger {
   position:relative;
   display:flex;
@@ -13,7 +13,7 @@
   width:100%;
   max-width:100%;
   min-height:46px;
-  margin:14px 0 0;
+  margin:0 0 3px;
   padding:10px 16px;
   border:1.5px solid var(--v2-theme-strong-line,#9E87B2);
   border-radius:999px;
@@ -42,7 +42,7 @@
   outline-offset:3px!important;
 }
 @media(max-width:680px){
-  /* Expanded bottom card keeps this action immediately below its horizontal tiles. */
+  /* The expanded bottom card keeps the action immediately above the records date. */
   #v2-root #v2-home .v2-tiles { flex:0 0 auto; }
   #v2-root #v2-home #v2-collaborate-trigger {
     margin:12px 0 3px;
