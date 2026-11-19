@@ -338,6 +338,10 @@ body {
   /* Deep-purple partner pins keep their original hue; a pale ring makes them
      visible against dark basemap areas without introducing a purple overlay. */
   #map .v2-selected-marker {box-shadow:0 0 0 3px #E8D9F5,0 0 0 9px rgba(255,189,0,.24),0 4px 18px #0008!important;}
+  /* Retain the original violet/pink category fills, but make the violet
+     swatch boundary visible against a similarly dark card background. */
+  #v2-root .v2-category-dot.exchange {box-shadow:0 0 0 2px #F5E8FF!important;}
+  #v2-root .v2-category-dot.placement {box-shadow:0 0 0 2px #FFC0DC!important;}
 }
 @media (prefers-contrast:more) {
   #v2-root :is(.v2-tile,.v2-search-input,.v2-pdf),
