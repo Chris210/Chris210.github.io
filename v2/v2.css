@@ -108,7 +108,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 #v2-tour-card .v2-tour-progress {height:5px;overflow:hidden;background:#d6d7da;border-radius:999px;margin:15px 0 8px}
 #v2-tour-progress-active {height:100%;background:var(--v2-magenta);width:2%}
 .v2-tour-step-line {display:flex;justify-content:space-between;color:#596773;font-size:12px}
-.v2-tour-actions {display:flex;align-items:center;gap:12px;margin-top:18px}
+.v2-tour-actions {display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
 .v2-tour-actions button {background:transparent;color:#3b126a;border:0;padding:8px;font-size:20px}
 .v2-tour-actions button.v2-pause {background:var(--v2-magenta);color:white;border-radius:50%;width:52px;height:52px;font-size:19px}
 .v2-tour-actions small {color:#71808a;font-size:11px;margin-left:8px}
