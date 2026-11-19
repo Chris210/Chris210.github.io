@@ -78,9 +78,28 @@ function textFor(key){
  const locale=TEXT[lang]||TEXT.en;
  return locale[KEYS.indexOf(key)]||TEXT.en[KEYS.indexOf(key)]||key;
 }
-const KIND_KEY={research:'caseResearch',creative:'caseCreative',placement:'casePlacement',exchange:'caseExchange',project:'caseProject'};
+// Consistent discoverable CTA: evidence type remains in the accessible case-study title.
+const CASE_STUDY_LABEL={
+ en:'View case study',
+ 'zh-CN':'查看案例',
+ 'zh-TW':'查看案例',
+ ja:'事例を見る',
+ ko:'사례 보기',
+ ms:'Lihat kajian kes',
+ 'ms-Arab':'ليهت کاجين کيس',
+ hi:'केस स्टडी देखें',
+ pa:'ਕੇਸ ਅਧਿਐਨ ਵੇਖੋ',
+ bn:'কেস স্টাডি দেখুন',
+ gu:'કેસ સ્ટડી જુઓ',
+ ta:'கேஸ் ஸ்டடியைப் பார்க்கவும்',
+ te:'కేస్ స్టడీని చూడండి',
+ mr:'केस स्टडी पाहा',
+ ur:'کیس اسٹڈی دیکھیں',
+ ne:'केस स्टडी हेर्नुहोस्',
+ ar:'عرض دراسة الحالة'
+};
 function applyLanguage(anchor,study){
- const label=textFor(KIND_KEY[study.kind]||'caseProject');
+ const label=CASE_STUDY_LABEL[currentLanguage()]||CASE_STUDY_LABEL.en;
  anchor.textContent=label+' ↗';
  anchor.setAttribute('aria-label',label+' — '+study.title+' ('+textFor('caseNewTab')+')');
  anchor.setAttribute('title',study.title);
