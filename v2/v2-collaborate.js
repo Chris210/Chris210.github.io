@@ -2,9 +2,10 @@
 (function(){
 'use strict';
 const root=document.getElementById('v2-root');
-const tourButton=document.getElementById('v2-start-tour');
+const home=document.getElementById('v2-home');
+const featuredTiles=home?.querySelector('.v2-tiles');
 const languagePicker=document.getElementById('language-select');
-if(!root||!tourButton)return;
+if(!root||!featuredTiles)return;
 
 const EMAIL_ROUTES=[
  {email:'sdca-research@lboro.ac.uk',subject:'Loughborough SDCA — Research collaboration enquiry'},
@@ -98,7 +99,8 @@ const icon=make('span','v2-collaborate-trigger-icon','✧');
 icon.setAttribute('aria-hidden','true');
 const label=make('span','v2-collaborate-trigger-label');
 trigger.append(icon,label);
-tourButton.before(trigger);
+// Keep the collaboration action inside the main information card, immediately after the featured partner tiles.
+featuredTiles.after(trigger);
 
 const dialog=make('dialog','v2-collaborate-dialog');
 dialog.id='v2-collaborate-dialog';
@@ -167,12 +169,7 @@ function translate(){
   entry.link.setAttribute('aria-label',values[0]+'. '+entry.route.email+'. '+strings.hint);
  });
 }
-function syncVisible(){
- trigger.hidden=tourButton.hidden;
-}
-const visibilityObserver=new MutationObserver(syncVisible);
-visibilityObserver.observe(tourButton,{attributes:true,attributeFilter:['hidden']});
-syncVisible();
+// The main card's existing view and mobile-drawer visibility control this button automatically.
 function open(){
  previousFocus=document.activeElement;
  translate();
