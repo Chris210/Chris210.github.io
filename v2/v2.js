@@ -11,6 +11,7 @@ const ordered=groups.flatMap(g=>featured.filter(i=>i.group===g.id));
 const QS_WORLD_RANKINGS_2027 = new Map([["Delft University of Technology (TU Delft)","48","https://www.topuniversities.com/universities/delft-university-technology"],["Politecnico di Milano","=87","https://www.topuniversities.com/universities/politecnico-di-milano"],["Nanyang Technological University","12","https://www.topuniversities.com/universities/nanyang-technological-university-singapore-ntu"],["City University of Hong Kong","=52","https://www.topuniversities.com/universities/city-university-hong-kong"],["University of Technology Sydney","=87","https://www.topuniversities.com/universities/university-technology-sydney"],["Middle East Technical University (METU)","305","https://www.topuniversities.com/universities/middle-east-technical-university"],["Norwegian University of Science and Technology (NTNU)","264","https://www.topuniversities.com/universities/norwegian-university-science-technology"],["Université de Montréal","=162","https://www.topuniversities.com/universities/universite-de-montreal"],["University of Michigan","51","https://www.topuniversities.com/universities/university-michigan-ann-arbor"],["Curtin University","189","https://www.topuniversities.com/universities/curtin-university"],["Virginia Tech","366","https://www.topuniversities.com/universities/virginia-polytechnic-institute-state-university"],["University of Navarra","=279","https://www.topuniversities.com/universities/university-navarra"],["University of Wuppertal","1001–1200","https://www.topuniversities.com/universities/bergische-universitat-wuppertal"]]);
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
 const $=id=>document.getElementById(id);
+const ui=(key,vars={})=>window.SDCA_V2_I18N?.translate($('language-select')?.value||'en',key,vars)||key;
 const normalize=v=>String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
 const itemOf=f=>{const name=normalize(f?.properties?.name);return featured.find(i=>[i.name,...(i.aliases||[])].map(normalize).some(a=>name===a||(a.length>=4&&name.startsWith(a+' '))));};
 const find=i=>api.findFeature(i);
@@ -39,7 +40,7 @@ const TOUR_DWELL_MS=6000;
 const TOUR_TRAVEL_MS=7200;
 const SPOTLIGHT_TRAVEL_MS=3100;
 const CINEMATIC_EASE=t=>t*t*(3-2*t);
-let tab='employers',panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
+let tab='employers',activeSpotlightItem=null,panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
 // Mobile-only bottom drawer: a small, tappable handle is visible by default.
 // Keep the existing search, map key and featured-partner controls inside the drawer.
@@ -74,7 +75,7 @@ function showSelectedPartnerMarker(item){
  // Mapbox's HTML marker stays exactly on the partner coordinates throughout camera flights.
  const pin=element('div','v2-selected-marker');
  pin.setAttribute('role','img');
- pin.setAttribute('aria-label','Selected partner: '+item.name);
+ pin.setAttribute('aria-label',ui('selectedPartner',{name:item.name}));
  selectedPartnerMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
   .setLngLat(feature.geometry.coordinates).addTo(map);
 }
@@ -248,7 +249,12 @@ function drawSpotlight(i){
   spot.append(element('p','v2-spot-description v2-spot-years',yr));
  }
  // Relationship-only labels repeat the Relationship tile; retain substantive descriptions.
- const desc=String(field(p,'description','summary','notes')||'').trim();
+ const rawDescription=String(field(p,'description','summary','notes')||'').trim();
+ // Reuse the original popup's curated field translations when available.
+ // Organisation names and source data are never machine-translated.
+ const localDescription=typeof api.localDescription==='function'&&p.description
+   ? api.localDescription(p)?.text : null;
+ const desc=String(localDescription||rawDescription).trim();
  if(desc&&!/^(?:sdca\s+)?student\s+placement\.?$/i.test(desc)){
   spot.append(element('p','v2-spot-description',desc.slice(0,640)));
  }
@@ -277,7 +283,7 @@ function flyTo(i,touring=false){
    return true;
  }catch(e){console.warn('Map camera could not move',e);return false;}
 }
-function openPartner(i,skip=false){stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');showSelectedPartnerMarker(i);if(!skip)flyTo(i);}
+function openPartner(i,skip=false){activeSpotlightItem=i;stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');showSelectedPartnerMarker(i);if(!skip)flyTo(i);}
 function renderCountdown(){
  const seconds=$('v2-tour-countdown-seconds');
  if(!seconds)return;
@@ -357,7 +363,9 @@ function tourScreen(){
  const item=ordered[tourIndex],f=find(item),p=f?.properties||{};
  $('v2-tour-name').textContent=item.name;
  $('v2-tour-kind').textContent=category(item).title;
- $('v2-tour-desc').textContent=String(field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,250);
+ const localDescription=typeof api.localDescription==='function'&&p.description
+   ? api.localDescription(p)?.text : null;
+ $('v2-tour-desc').textContent=String(localDescription||field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,250);
  renderTourLocation(activeTourPlace);
  const yearsRow=$('v2-tour-relationship');
  yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Exchange Programme'?'Exchange years':'Placement years'),
@@ -465,7 +473,7 @@ function showTourMarker(item){
  markerPlace.append(tourLocationNode(activeTourPlace));
  label.append(element('strong','',item.name),markerPlace);
  pin.append(label);
- pin.setAttribute('aria-label','Map marker for '+item.name);
+ pin.setAttribute('aria-label',ui('markerFor',{name:item.name}));
  tourSiteMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
    .setLngLat(f.geometry.coordinates).addTo(map);
 }
@@ -609,7 +617,14 @@ $('v2-overlay-scrim').onclick=overview;
 $('v2-compact-search').onclick=()=>{overview();$('v2-search').focus();};
 $('v2-return-home').onclick=overview;
 $('v2-collapse').onclick=()=>{panelMinimised=!panelMinimised;view('home');};
-$('language-select')?.addEventListener('change',()=>{if(mode==='directory')directory();});
+$('language-select')?.addEventListener('change',()=>{
+  if(mode==='directory')directory();
+  if(mode==='spotlight'&&activeSpotlightItem){
+    drawSpotlight(activeSpotlightItem);
+    const marker=selectedPartnerMarker?.getElement();
+    if(marker)marker.setAttribute('aria-label',ui('selectedPartner',{name:activeSpotlightItem.name}));
+  }
+});
 $('v2-search').addEventListener('input',search);
 $('v2-search').addEventListener('keydown',e=>{if(e.key==='Enter')$('v2-search-results').querySelector('button:not([disabled])')?.click();});
 $('v2-start-tour').onclick=startTour;$('v2-exit-tour').onclick=overview;
