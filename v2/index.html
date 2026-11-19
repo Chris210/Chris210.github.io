@@ -918,7 +918,7 @@
 </style>
 <link rel="stylesheet" href="./v2.css?v=tour-centred-controls-46">
 <link rel="stylesheet" href="./v2-theme.css?v=case-study-chooser-1">
-<link rel="stylesheet" href="./v2-collaborate.css?v=collaboration-in-card-2">
+<link rel="stylesheet" href="./v2-collaborate.css?v=collaboration-footer-3">
 </head>
 <body>
   <div class="v2-metrics" aria-label="Featured partners showcase"><span><b>50</b> featured partners</span><span>Global creative network</span></div>
@@ -3327,6 +3327,7 @@
     const worldFeaturedMatches = new Map();
     const worldLocations = new Map();
     let masterFeatures = [];
+    let worldLastPartnerAdded = null;
     let worldFeaturedState = 'loading';
     let worldIndexPromise = null;
     const matchingFeaturedAlias = (featureName, alias) =>
@@ -3363,6 +3364,8 @@
               !Array.isArray(directory.features) || directory.features.length < 50 ||
               directory.feature_count !== directory.features.length)
             throw Error('Invalid authoritative partner dataset');
+          // Stable metadata: last NEW partner record, not the latest URL/address correction.
+          worldLastPartnerAdded = /^\d{4}-\d{2}-\d{2}$/.test(directory.last_partner_added||'') ? directory.last_partner_added : null;
           worldLocations.clear();
           worldFeaturedMatches.clear();
           const allPartners = directory.features.filter(f =>
@@ -3618,6 +3621,7 @@
         return found?.normalizedAliases.map(alias => worldFeaturedMatches.get(alias)).find(Boolean) || null;
       },
       allFeatures: () => Array.from(worldLocations.values()),
+      lastPartnerAdded: () => worldLastPartnerAdded,
       startLookup: () => startWorldFeaturedLookup(),
       status: () => worldFeaturedState,
       resetToVisitorCountry: () => resetMapView(),
@@ -3639,6 +3643,6 @@
 <script src="./v2.js?v=tour-preflight-marker-2"></script>
 <script src="./v2-localise.js?v=interface-locale-audit-45"></script>
 <script src="./v2-theme.js?v=dark-marker-refinement-4"></script>
-<script src="./v2-collaborate.js?v=collaboration-in-card-2"></script>
+<script src="./v2-collaborate.js?v=collaboration-footer-3"></script>
 </body>
 </html>
