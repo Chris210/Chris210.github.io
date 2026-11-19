@@ -1,4 +1,4 @@
-/* Public, reviewed V2 case-study links. Monthly agent: change the data only, not the runtime. Never publish unreviewed records. */
+/* Public, reviewed V2 case-study links. Monthly research agent: preserve verified IDs, one-sentence evidence summaries and source URLs. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
   "generated": "2026-11-19",
@@ -19,7 +19,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "creative",
           "year": "2026",
           "priority": "P0",
-          "relationship": "Direct academic-creative collaboration"
+          "relationship": "Direct academic-creative collaboration",
+          "summary": "Loughborough says its 2026 Scintilla exhibition combined work and activities with Joshibi; annual two-way exchange and 11 years of exhibitions reported."
         },
         {
           "id": "GCN-CS-002",
@@ -28,7 +29,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "creative",
           "year": "2023",
           "priority": "P0",
-          "relationship": "Direct academic-creative collaboration"
+          "relationship": "Direct academic-creative collaboration",
+          "summary": "Both schools produced themed responses and Joshibi curation students paired images and offered curatorial insights."
         },
         {
           "id": "GCN-CS-003",
@@ -37,7 +39,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "creative",
           "year": "2022",
           "priority": "P1",
-          "relationship": "Direct academic-creative collaboration"
+          "relationship": "Direct academic-creative collaboration",
+          "summary": "Students at both universities made artworks for the Cultivate exhibition; Joshibi students selected and interpreted pairings."
         }
       ]
     },
@@ -55,7 +58,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "2020",
           "priority": "P0",
-          "relationship": "Direct funded research collaboration"
+          "relationship": "Direct funded research collaboration",
+          "summary": "British Council/Newton Fund SIDe project lists Loughborough and Mimar Sinan as university leads; documents joint training and research with disability groups."
         },
         {
           "id": "GCN-CS-005",
@@ -64,7 +68,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "2022/2023",
           "priority": "P0",
-          "relationship": "Co-authored research publication"
+          "relationship": "Co-authored research publication",
+          "summary": "Publisher lists Loughborough SDCA and Mimar Sinan co-authors on a peer-reviewed design article about inclusive social design education."
         }
       ]
     },
@@ -80,7 +85,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "2026",
           "priority": "P0",
-          "relationship": "Direct industry research collaboration"
+          "relationship": "Direct industry research collaboration",
+          "summary": "SDCA Environmental Ergonomics Research Centre tested an adidas cooling overshoe in climatic chambers to assess thermal and perceived-exertion benefits."
         },
         {
           "id": "GCN-CS-007",
@@ -89,7 +95,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "2023",
           "priority": "P0",
-          "relationship": "Direct industry research collaboration"
+          "relationship": "Direct industry research collaboration",
+          "summary": "Loughborough reports joint development of thermal body maps and virtual human thermal modelling; collaboration shortlisted for Royal Academy of Engineering award."
         }
       ]
     },
@@ -105,7 +112,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "Undated profile",
           "priority": "P0",
-          "relationship": "Doctoral research with industry"
+          "relationship": "Doctoral research with industry",
+          "summary": "Loughborough doctoral researcher Lexy Martin states her research works with Jaguar Land Rover on interfaces for Level 4 autonomous vehicles."
         },
         {
           "id": "GCN-CS-009",
@@ -114,7 +122,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "research",
           "year": "2024",
           "priority": "P1",
-          "relationship": "Historic industry-linked research"
+          "relationship": "Historic industry-linked research",
+          "summary": "Loughborough reports Dr Emilene Zitkus has developed inclusive-design expertise through projects with automotive industry partners including JLR."
         }
       ]
     },
@@ -132,7 +141,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "creative",
           "year": "2025",
           "priority": "P0",
-          "relationship": "Loughborough work exhibited at partner institution"
+          "relationship": "Loughborough work exhibited at partner institution",
+          "summary": "Loughborough student Fraser Rollafson documents a project displayed at the Interdependence 2025 exhibition at Politecnico di Milano."
         },
         {
           "id": "GCN-CS-011",
@@ -141,7 +151,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "exchange",
           "year": "2019–2020",
           "priority": "P1",
-          "relationship": "Documented student exchange experience"
+          "relationship": "Documented student exchange experience",
+          "summary": "Loughborough student Danielle Thompson records a six-month study period at Politecnico di Milano, combining architecture and interior/spatial design."
         }
       ]
     },
@@ -159,7 +170,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "exchange",
           "year": "2025",
           "priority": "P0",
-          "relationship": "Documented student exchange experience"
+          "relationship": "Documented student exchange experience",
+          "summary": "Loughborough SDCA reports Naomi Vladuceanu spent a year studying at Shibaura Institute of Technology, reflecting on Japanese design principles."
         }
       ]
     },
@@ -175,7 +187,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2019–2020",
           "priority": "P0",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Loughborough design showcase describes Freddie/Freddy Charters’s toy-design internship in Billund designing LEGO NINJAGO sets."
         },
         {
           "id": "GCN-CS-014",
@@ -184,7 +197,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2018–2019",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Student portfolio documents a model-making design placement at LEGO Group, exploring functionality, detailing and physical product quality."
         },
         {
           "id": "GCN-CS-015",
@@ -193,7 +207,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2026 profile",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "2026 SDCA degree-show portfolio lists a four-month Play Invention internship at LEGO Group Creative Play Lab."
         }
       ]
     },
@@ -209,7 +224,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "project",
           "year": "2021",
           "priority": "P0",
-          "relationship": "Partner-set design education project"
+          "relationship": "Partner-set design education project",
+          "summary": "Loughborough SDCA reports DCA set a seven-day brief for students to develop a fitness product designed to blend into domestic environments."
         },
         {
           "id": "GCN-CS-017",
@@ -218,7 +234,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "project",
           "year": "2025",
           "priority": "P0",
-          "relationship": "Partner-set design education project"
+          "relationship": "Partner-set design education project",
+          "summary": "SDCA 2025 portfolio records a DCA × Nestlé live project addressing adolescent nutrition access using a portable educational hub."
         }
       ]
     },
@@ -234,7 +251,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "project",
           "year": "2021",
           "priority": "P0",
-          "relationship": "Partner-set design education project"
+          "relationship": "Partner-set design education project",
+          "summary": "Cambridge Consultants set a design brief for consumer or medical products that could improve wellbeing; Loughborough named winning students."
         },
         {
           "id": "GCN-CS-019",
@@ -243,7 +261,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "project",
           "year": "2023",
           "priority": "P0",
-          "relationship": "Partner-set design education project"
+          "relationship": "Partner-set design education project",
+          "summary": "Student showcase documents a third-place Cambridge Consultants live brief concept for making contactless payments more tangible through haptics and visualisation."
         },
         {
           "id": "GCN-CS-020",
@@ -252,7 +271,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2018–2019",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Design showcase confirms UX placement at Cambridge Consultants and notes an iF Design Award for a digital assistant for visually impaired users."
         }
       ]
     },
@@ -268,7 +288,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "project",
           "year": "2020",
           "priority": "P0",
-          "relationship": "Partner-set design education project"
+          "relationship": "Partner-set design education project",
+          "summary": "Loughborough student Isaac Broad documents the Orpheus modular electric-bike platform created for a Seymourpowell design brief."
         }
       ]
     },
@@ -284,7 +305,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2019–2020 profile",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Student Ed Sawford portfolio describes branded Snapchat and Formula 1 promo creative work undertaken while working at Wieden+Kennedy."
         }
       ]
     },
@@ -300,7 +322,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2021–2022",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Student Dhruv Patel documents a year at PDD involving medical device concept development and usability-driven design processes."
         }
       ]
     },
@@ -316,7 +339,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2021–2022",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Student showcase describes a placement at PriestmanGoode contributing across cabin interiors, wayfinding, branding and onboard services for an airline client."
         }
       ]
     },
@@ -332,7 +356,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2020–2021",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "SDCA degree-show portfolio describes working within Kinneir Dufort’s front-end design team on user research, human factors and concept development."
         }
       ]
     },
@@ -348,7 +373,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2023–2024",
           "priority": "P0",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "2025 SDCA portfolio describes placement at Disney Consumer Products including product catalogue, approvals and retail design activities."
         }
       ]
     },
@@ -364,7 +390,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2025 profile",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Loughborough student vlog documents design placement at L’Oréal in visual merchandising, combined with an independent upcycling design project."
         }
       ]
     },
@@ -380,7 +407,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2025",
           "priority": "P0",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "SDCA industrial-design portfolio confirms Dyson placement across Haircare and Floorcare product teams and subsequent independent accessibility design work."
         }
       ]
     },
@@ -396,7 +424,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2020 profile",
           "priority": "P1",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Student portfolio describes design work undertaken at IBM and an IBM Hursley hackathon win."
         }
       ]
     },
@@ -414,7 +443,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2020 profile",
           "priority": "P2",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Arts degree-show portfolio identifies a placement with Frog Design during its Altran ownership period."
         }
       ]
     },
@@ -430,7 +460,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2019",
           "priority": "P2",
-          "relationship": "Student industry placement"
+          "relationship": "Student industry placement",
+          "summary": "Arts degree-show portfolio documents a one-month Burberry fabric internship as part of a year of textile industry experience."
         }
       ]
     },
@@ -446,7 +477,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "2019",
           "priority": "P2",
-          "relationship": "Student industry placement, related group"
+          "relationship": "Student industry placement, related group",
+          "summary": "Student portfolio documents an industrial-design internship at McLaren Applied Technologies, covering engineering and concept development."
         }
       ]
     }
