@@ -92,7 +92,7 @@ function applyTheme(){
   const exchangeColor=dark?'#6FA99E':'#2D0153';
   const placementColor=dark?'#C77795':'#F0047F';
   const byGroup=['match',['get','group'],
-    'Exchange Programme',exchangeColor,placementColor];
+    'Exchange Programme',exchangeColor,'Academic Collaboration',exchangeColor,placementColor];
   const byMarkerType=['match',['get','markerType'],
     'exchange',exchangeColor,placementColor];
   const byClusterMajority=['case',
@@ -104,14 +104,14 @@ function applyTheme(){
   // An understated ring for university markers, a thinner ring for employers.
   // Emissive fills ensure night lighting never makes either group disappear.
   const masterStroke=dark?
-    ['match',['get','group'],'Exchange Programme','#B9CFC9','#C59CAD']:
+    ['match',['get','group'],'Exchange Programme','#B9CFC9','Academic Collaboration','#B9CFC9','#C59CAD']:
     '#FFFFFF';
   const featuredStroke=dark?
     ['match',['get','markerType'],'exchange','#B9CFC9','#C59CAD']:
     '#FFFFFF';
   paint('sdca-master-points','circle-stroke-color',masterStroke);
   paint('sdca-master-points','circle-stroke-width',
-    dark?['match',['get','group'],'Exchange Programme',2.1,1.0]:1.5);
+    dark?['match',['get','group'],'Exchange Programme',2.1,'Academic Collaboration',2.1,1.0]:1.5);
   paint('sdca-hover-dot','circle-color',byGroup);
   paint('sdca-hover-dot','circle-stroke-color',dark?masterStroke:'#FFFFFF');
   paint('sdca-hover-dot','circle-stroke-width',dark?2:3);
