@@ -105,12 +105,17 @@ const reputationScore=f=>{
  else if(overall!==null&&overall>0)score+=Math.round(12*Math.exp(-(overall-1)/170));
  // A source-linked outcome makes the relationship credible to academics/employers.
  if(cases.length){
-  score+=25+Math.min(9,Math.max(0,cases.length-1)*3);
-  if(academic&&cases.some(c=>/direct |joint |co.authored|funded |academic.creative|co.organised/i.test(String(c.relationship||''))&&!/university.wide|placement|student exchange/i.test(String(c.relationship||''))))
+  // School-level evidence counts more than university-wide or related-group links.
+  const directlyRelevant=cases.filter(c=>!/university.wide|related group|not SDCA.specific/i.test(String(c.relationship||'')));
+  score+=directlyRelevant.length
+   ?25+Math.min(9,Math.max(0,directlyRelevant.length-1)*3)
+   :10;
+  if(academic&&directlyRelevant.some(c=>/direct |joint |co.authored|funded |academic.creative|co.organised/i.test(String(c.relationship||''))&&!/placement|student exchange/i.test(String(c.relationship||''))))
    score+=10;
  }
  if(feature)score+=22; // Already-curated shortlist, not a newly invented prestige list.
- if(theme.basis?.startsWith('case_study'))score+=9;
+ if(theme.basis==='case_study_university_wide')score+=3;
+ else if(theme.basis?.startsWith('case_study'))score+=9;
  else if(theme.basis==='official_design_school')score+=7;
  else if(theme.basis==='official_organisation')score+=6;
  else if(theme.basis==='sector_inferred_pending_website'||theme.basis==='school_strategy_pending')score-=6;
@@ -138,16 +143,21 @@ function openPartnerFeature(f){
 }
 function matchesFor(tag,current){
  const selectedName=norm(current?.properties?.name);
+ const selectedCase=casesFor(current);
  const selectedId=String(themes.get(current)?.id??current?.id??'');
  const byName=new Map();
  for(const f of api.allFeatures()){
   const record=themes.get(f);
   if(!record?.tags.includes(tag))continue;
   const name=String(f?.properties?.name||'').trim();
-  const key=norm(name);
-  if(!key||key===selectedName||String(record.id)===selectedId)continue;
+  // Treat two placements with the same curated case-study partner as one organisation.
+  const canonical=casesFor(f);
+  const key=norm(canonical?.name||name);
+  if(!key||norm(name)===selectedName||String(record.id)===selectedId||
+     (selectedCase&&canonical===selectedCase))continue;
   const previous=byName.get(key);
-  if(!previous||(!mapped(previous)&&mapped(f))||basisRank(themes.get(previous)?.basis)>basisRank(record.basis))
+  if(!previous||reputationScore(f)>reputationScore(previous)||
+     (reputationScore(f)===reputationScore(previous)&&mapped(f)&&!mapped(previous)))
    byName.set(key,f);
  }
  return [...byName.values()].sort((a,b)=>
