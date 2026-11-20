@@ -24,10 +24,17 @@ const iso={
 // Regional terminology is presentation-only: keep official partner records intact.
 // Mainland Simplified Chinese uses the requested "中国台湾" display name.
 const isTaiwanRegion=name=>/^(?:Taiwan|Taiwan,?\s*(?:China|Province of China)|Taiwan\s*\(China\)|TW|台湾|台灣|臺灣|中国台湾)$/i.test(String(name||'').trim());
+const isHongKongRegion=name=>/^(?:hk|hong kong(?:\\s+(?:sar|special administrative region))?(?:,\\s*china)?|香港(?:特别行政区|特別行政區)?|中国香港特别行政区|中國香港特別行政區)$/i.test(String(name||'').trim());
 const region=(name)=>{
  if(lang()==='zh-CN'&&isTaiwanRegion(name))return '中国台湾';
- if(lang()==='en'||!iso[name])return name;
- try{return new Intl.DisplayNames([lang()==='ms-Arab'?'ms':lang()],{type:'region'}).of(iso[name])||name;}
+ // Hong Kong's distinct SAR identity is represented in the three requested locales.
+ const hk=isHongKongRegion(name);
+ if(hk&&lang()==='en')return 'Hong Kong SAR, China';
+ if(hk&&lang()==='zh-CN')return '中国香港特别行政区';
+ if(hk&&lang()==='zh-TW')return '香港特別行政區';
+ const lookup=hk?'Hong Kong':name;
+ if(lang()==='en'||!iso[lookup])return name;
+ try{return new Intl.DisplayNames([lang()==='ms-Arab'?'ms':lang()],{type:'region'}).of(iso[lookup])||name;}
  catch(e){return name;}
 };
 const staticText={
@@ -180,6 +187,10 @@ function translateString(str,element){
    return t('visitNamedSite',{name:'Loughborough University'});
  if(value==='50')return str; // Numbers and official names never change by accident.
  if(attr&&attr.classList?.contains('v2-tour-country'))return region(value);
+ // Format *location* strings, never official institution or research names.
+ if(isHongKongRegion(value))return region(value);
+ if((match=/^(.+),\\s*(Hong Kong(?:\\s+SAR)?,\\s*China|Hong Kong|香港)$/i.exec(value)))
+   return match[1]+', '+region(match[2]);
  // Recognise Taiwan in city/country text without rewriting named institutions.
  if(lang()==='zh-CN'&&(match=/^(.+),\s*(Taiwan|Taiwan,\s*China|Taiwan,\s*Province of China|Taiwan\s*\(China\)|台湾|台灣|臺灣)$/i.exec(value)))
    return match[1]+', 中国台湾';
