@@ -3407,7 +3407,7 @@
       // in the Mapbox record and are shown only in the location popup.
       const labels = make('span','browse-location-text');
       labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
-      const tagList=window.SDCA_V2_THEMES?.forFeature(feature)||[];
+      const tagList=window.SDCA_V2_THEMES?.displayForFeature(feature)||[];
       if(tagList.length)labels.append(make('small','gcn-native-browse-themes',tagList.join(' · ')));
       button.append(labels);
       const featureCoords = feature?.geometry?.coordinates;
