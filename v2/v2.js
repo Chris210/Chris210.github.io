@@ -82,7 +82,7 @@ const partnerPlaceFromRecords=f=>{
 };
 const place=f=>{
  const location=partnerPlaceFromRecords(f);
- return [location.city,location.country].filter(Boolean).join(', ')||'City and country unavailable';
+ return [location.city,location.country].filter(Boolean).join(', ')||'Location unavailable';
 };
 const category=i=>groups.find(g=>g.id===i.group)||groups[0];
 const root=element('div');root.id='v2-root';
@@ -182,7 +182,7 @@ function directory(){
    b.append(element('strong','',i.name));
    // Do not clutter the directory with missing-geography placeholders.
    const locationLabel=place(find(i));
-   if(locationLabel&&locationLabel!=='City and country unavailable'){
+   if(locationLabel&&locationLabel!=='Location unavailable'){
     b.append(element('small','',locationLabel));
    }
    b.addEventListener('click',()=>openPartner(i));col.append(b);
@@ -553,7 +553,7 @@ function tourLocationFromRecords(f){
 }
 function tourLocationNode(data){
  const city=String(data?.city||'').trim(),country=String(data?.country||'').trim();
- if(!city&&!country)return element('span','v2-tour-location-unavailable','City and country unavailable');
+ if(!city&&!country)return element('span','v2-tour-location-unavailable','Location unavailable');
  const output=document.createDocumentFragment();
  if(city)output.append(element('span','v2-tour-city',city));
  if(city&&country)output.append(document.createTextNode(', '));
