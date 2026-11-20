@@ -9,6 +9,14 @@ const groups=[{id:'academic',title:'Universities',tab:'Universities'},{id:'desig
 const featured=api.featured;
 const ordered=featured.slice(); // Strategically ranked order: top university first in tour and featured navigation.
 const QS_WORLD_RANKINGS_2027 = new Map([["Delft University of Technology (TU Delft)","48","https://www.topuniversities.com/universities/delft-university-technology"],["Politecnico di Milano","=87","https://www.topuniversities.com/universities/politecnico-di-milano"],["Nanyang Technological University","12","https://www.topuniversities.com/universities/nanyang-technological-university-singapore-ntu"],["City University of Hong Kong","=52","https://www.topuniversities.com/universities/city-university-hong-kong"],["University of Technology Sydney","=87","https://www.topuniversities.com/universities/university-technology-sydney"],["Middle East Technical University (METU)","305","https://www.topuniversities.com/universities/middle-east-technical-university"],["Norwegian University of Science and Technology (NTNU)","264","https://www.topuniversities.com/universities/norwegian-university-science-technology"],["Université de Montréal","=162","https://www.topuniversities.com/universities/universite-de-montreal"],["University of Michigan","51","https://www.topuniversities.com/universities/university-michigan-ann-arbor"],["Curtin University","189","https://www.topuniversities.com/universities/curtin-university"],["Virginia Tech","366","https://www.topuniversities.com/universities/virginia-polytechnic-institute-state-university"],["University of Navarra","=279","https://www.topuniversities.com/universities/university-navarra"],["University of Wuppertal","1001–1200","https://www.topuniversities.com/universities/bergische-universitat-wuppertal"]]);
+// Subject-specific QS ordering supports academic reputation; do not confuse with overall world rank.
+const QS_ART_DESIGN_2026 = new Map([
+ ['Politecnico di Milano','7'],
+ ['Delft University of Technology (TU Delft)','13'],
+ ['Central Academy of Fine Arts (CAFA)','14'],
+ ['Tongji University','16']
+]);
+const QS_SUBJECT_URL='https://www.topuniversities.com/university-subject-rankings/art-design';
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
 const $=id=>document.getElementById(id);
 const ui=(key,vars={})=>window.SDCA_V2_I18N?.translate($('language-select')?.value||'en',key,vars)||key;
@@ -219,7 +227,7 @@ function drawSpotlight(i){
  const badge=element('span','v2-badge');
  badge.append(element('span','v2-badge-star','★'),element('span','v2-badge-text','Featured partner'));
  badge.querySelector('.v2-badge-star').setAttribute('aria-hidden','true');
- header.append(badge,element('span','v2-spot-type',i.group==='academic'?'Exchange university':i.group==='design'?'Design studio':'Global employer'));
+ header.append(badge,element('span','v2-spot-type',i.group==='academic'?(p.group==='Academic Collaboration'?'Academic collaborator':'University partner'):i.group==='design'?'Design studio':'Global employer'));
  const close=element('button','v2-icon-btn','×');close.type='button';close.setAttribute('aria-label','Return to map');close.onclick=overview;header.append(close);
  const locationLine=element('p','v2-spot-location');
  locationLine.append(tourLocationNode(partnerPlaceFromRecords(feature)));
@@ -227,10 +235,16 @@ function drawSpotlight(i){
  resolveSpotlightLocation(feature,locationLine,sequence);
  const grid=element('div','v2-stat-grid');
  if(i.group==='academic'){
+  const subjectRank=QS_ART_DESIGN_2026.get(i.name);
   const qs=QS_WORLD_RANKINGS_2027.get(i.name);
   const card=element('div','v2-stat v2-qs-stat');
-  card.append(element('span','','QS World Rank · 2027'));
-  if(qs){
+  card.append(element('span','',subjectRank?'QS Art & Design · 2026':'QS World Rank · 2027'));
+  if(subjectRank){
+   const rankLink=element('a','v2-qs-rank','#'+subjectRank);
+   rankLink.href=QS_SUBJECT_URL;rankLink.target='_blank';rankLink.rel='noopener noreferrer';
+   rankLink.setAttribute('aria-label',i.name+' QS Art & Design ranking 2026: '+subjectRank+' (opens in a new tab)');
+   card.append(rankLink);
+  }else if(qs){
    const rankLink=element('a','v2-qs-rank','#'+qs[0]);
    rankLink.href=qs[1];rankLink.target='_blank';rankLink.rel='noopener noreferrer';
    rankLink.setAttribute('aria-label',i.name+' QS World University Rankings 2027: '+qs[0]+' (opens in a new tab)');
@@ -241,7 +255,7 @@ function drawSpotlight(i){
   grid.append(card);
  }
  const stats=i.group==='academic'?
-  [['Category','University'],['Relationship','Academic exchange']]:
+  [['Category','University'],['Relationship',p.group==='Academic Collaboration'?'Academic collaboration':'Academic exchange']]:
   [['Category',category(i).tab],['Relationship','Student placement']];
  stats.forEach(pair=>{
   const box=element('div','v2-stat');
@@ -257,8 +271,11 @@ function drawSpotlight(i){
   spot.append(element('div','v2-section-label','Programmes'));
   const list=element('div','v2-chip-list');progs.forEach(p=>list.append(element('span','v2-chip',p)));spot.append(list);
  }
- if(yr){
-  spot.append(element('div','v2-section-label','Placement years'));
+ if(p.relationship_years_display){
+  spot.append(element('div','v2-section-label','Documented activity'));
+  spot.append(element('p','v2-spot-description v2-spot-years',p.relationship_years_display));
+ }else if(yr){
+  spot.append(element('div','v2-section-label',i.group==='academic'?'Exchange years':'Placement years'));
   spot.append(element('p','v2-spot-description v2-spot-years',yr));
  }
  // Relationship-only labels repeat the Relationship tile; retain substantive descriptions.
@@ -386,8 +403,8 @@ function tourScreen(){
  $('v2-tour-desc').textContent=String(localDescription||field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,250);
  renderTourLocation(activeTourPlace);
  const yearsRow=$('v2-tour-relationship');
- yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Exchange Programme'?'Exchange years':'Placement years'),
-  element('strong','v2-tour-meta-value',years(p)||'Years not recorded'));
+ yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Academic Collaboration'?'Documented activity':p.group==='Exchange Programme'?'Exchange years':'Placement years'),
+  element('strong','v2-tour-meta-value',p.relationship_years_display||years(p)||'Years not recorded'));
  window.SDCA_V2_CASE_STUDIES?.updateLink($('v2-tour-case-study'),f,item);
  const official=website(p),link=$('v2-tour-website');
  link.hidden=!official;
