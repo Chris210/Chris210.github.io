@@ -116,7 +116,10 @@ function translateString(str,element){
   'Exchange Programme':native('exchangeSing')
  };
  if(nativeWords[value])return nativeWords[value];
- if(value==='Top 50 in the world for Art and Design · QS 2026')return t('ranking')+' · QS 2026';
+ let qsYearMatch;
+ if((qsYearMatch=/^Top 50 in the world for Art and Design · QS (20\d{2})$/.exec(value)))return t('ranking')+' · QS '+qsYearMatch[1];
+ if((qsYearMatch=/^QS World University Rankings by Subject (20\d{2})$/.exec(value)))return t('rankSource').replace(/20\d{2}/,qsYearMatch[1]);
+ if((qsYearMatch=/^QS World Rank · (20\d{2})$/.exec(value)))return t('qsRank').replace(/20\d{2}/,qsYearMatch[1]);
  if(value==='★ Featured partner'||value==='★ Featured Partner')return '★ '+t('featured');
  if(value==='★ Featured Partners')return '★ '+t('featured');
  if(value==='Featured partner')return t('featured');
