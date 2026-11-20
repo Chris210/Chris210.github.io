@@ -68,6 +68,7 @@
   </script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
+  <script src="./v2-featured-additions.js?v=20261120"></script>
   <style>
 
     /* SDCA design system: calm, layered, accessible, and responsive. */
@@ -940,7 +941,7 @@
         <h2 class="filter-heading" id="key-heading">Map key</h2>
         <ul id="sdca-key" aria-labelledby="key-heading">
           <li class="key-item" data-key="placement"><span class="swatch placement" aria-hidden="true"></span><span class="key-label">Student placements</span></li>
-          <li class="key-item" data-key="exchange"><span class="swatch exchange" aria-hidden="true"></span><span class="key-label">Exchange programmes</span></li>
+          <li class="key-item" data-key="exchange"><span class="swatch exchange" aria-hidden="true"></span><span class="key-label">University partners</span></li>
         </ul>
         <p class="usage-tip"><strong>Explore the map:</strong> Select a dot to view its details. If locations overlap, choose from the list or zoom in. Use +/− to zoom.</p>
       </div>
@@ -2604,7 +2605,7 @@
       setText('.filter-heading','filterTitle');
       for (const [kind,key] of [['placement','placement'],['exchange','exchange']]) {
         const label = document.querySelector(`.key-item[data-key="${kind}"] .key-label`);
-        if (label) label.textContent = t(key);
+        if (label) label.textContent = kind === "exchange" ? (({en:"University partners","zh-CN":"大学合作伙伴","zh-TW":"大學合作夥伴",ja:"大学パートナー",hi:"विश्वविद्यालय साझेदार",ar:"شركاء الجامعات"})[currentLanguage] || "University partners") : t(key);
       }
       const tip = document.querySelector('.usage-tip');
       tip.replaceChildren();
@@ -2678,21 +2679,25 @@
       const group = String(fields.group || '').trim().toLowerCase();
       if (group.includes('placement')) return 'placement';
       if (group.includes('exchange')) return 'exchange';
+      if (group.includes('academic collaboration')) return 'academic';
       const description = String(fields.description || '').toLowerCase();
       if (/\b(student )?placements?\b/.test(description)) return 'placement';
       if (/\bexchange (programme|program|partner|student|students)\b/.test(description)) return 'exchange';
       return 'other';
     };
+    const academicLabel = () => ({en:'Academic collaboration','zh-CN':'学术合作','zh-TW':'學術合作',ar:'تعاون أكاديمي',hi:'शैक्षणिक सहयोग',ja:'学術連携'})[currentLanguage] || 'Academic collaboration';
     const searchCategoryName = fields => {
       const type = categoryOf(fields);
       if (type === 'placement') return t('placementSing');
       if (type === 'exchange') return t('exchangeSing');
+      if (type === 'academic') return academicLabel();
       return ''; // No generic, uninformative “Global Engagement” subtitle.
     };
     const categoryName = fields => {
       const type = categoryOf(fields);
       if (type === 'placement') return t('placementSing');
       if (type === 'exchange') return t('exchangeSing');
+      if (type === 'academic') return academicLabel();
       return fields.group || t('globalCat');
     };
     // If the published Mapbox tileset later includes name_<locale> / description_<locale>
@@ -3040,58 +3045,7 @@
     // the authoritative partner-directory.json. Selection highlights established
     // global exchange links, leading design practices and recognisable employers.
     // The shortlist is not a QS ranking or a claim that every placement is current.
-    const FEATURED_ORGANISATIONS = [
-      {"name":"Delft University of Technology (TU Delft)","group":"academic","aliases":["Delft University of Technology (TU Delft), Netherlands"]},
-      {"name":"Politecnico di Milano","group":"academic","aliases":["Politecnico di Milano, Italy"]},
-      {"name":"Design School Kolding","group":"academic","aliases":["Design School Kolding, Denmark"]},
-      {"name":"Nanyang Technological University","group":"academic","aliases":["Nanyang Technological University, Singapore"]},
-      {"name":"City University of Hong Kong","group":"academic","aliases":["City University , Hong Kong"]},
-      {"name":"Joshibi University of Art and Design","group":"academic","aliases":["Joshibi University of Art & Design, Japan"]},
-      {"name":"University of Technology Sydney","group":"academic","aliases":["University of Technology Sydney, Australia"]},
-      {"name":"Academy of Fine Arts, Helsinki","group":"academic","aliases":["Academy of Fine Art, Finland"]},
-      {"name":"Kansas City Art Institute","group":"academic","aliases":["Kansas City Art Institute, USA"]},
-      {"name":"Mimar Sinan Fine Arts University","group":"academic","aliases":["Mimar Sinan Fine Arts, Turkey"]},
-      {"name":"Middle East Technical University (METU)","group":"academic","aliases":[]},
-      {"name":"Norwegian University of Science and Technology (NTNU)","group":"academic","aliases":["NTNU, Norway"]},
-      {"name":"Université de Montréal","group":"academic","aliases":["University of Montreal, Canada"]},
-      {"name":"University of Michigan","group":"academic","aliases":["University of Michigan, USA"]},
-      {"name":"Curtin University","group":"academic","aliases":["Curtin University, Australia"]},
-      {"name":"Shibaura Institute of Technology","group":"academic","aliases":["Shibaura Institute of Technology, Japan"]},
-      {"name":"Virginia Tech","group":"academic","aliases":["Virginia Tech, USA"]},
-      {"name":"Kansai University","group":"academic","aliases":["Kansai University, Japan"]},
-      {"name":"University of Navarra","group":"academic","aliases":["University of Navarra, Spain"]},
-      {"name":"University of Wuppertal","group":"academic","aliases":["University of Wuppertal, Germany"]},
-      {"name":"RheinMain University of Applied Sciences","group":"academic","aliases":["RheinMain University of Applied Sciences, Germany"]},
-      {"name":"Frog (Capgemini Invent)","group":"design","aliases":["Frog"]},
-      {"name":"Seymourpowell","group":"design","aliases":[]},
-      {"name":"PriestmanGoode","group":"design","aliases":[]},
-      {"name":"DCA","group":"design","aliases":[]},
-      {"name":"PDD","group":"design","aliases":[]},
-      {"name":"Kinneir Dufort","group":"design","aliases":[]},
-      {"name":"Pearson Lloyd","group":"design","aliases":[]},
-      {"name":"Form Us With Love","group":"design","aliases":[]},
-      {"name":"Jacob Jensen Design","group":"design","aliases":[]},
-      {"name":"Cambridge Consultants","group":"design","aliases":[]},
-      {"name":"AKQA","group":"design","aliases":[]},
-      {"name":"Wieden+Kennedy","group":"design","aliases":[]},
-      {"name":"LEGO","group":"employers","aliases":[]},
-      {"name":"The Walt Disney Company","group":"employers","aliases":[]},
-      {"name":"Dyson","group":"employers","aliases":[]},
-      {"name":"Adidas","group":"employers","aliases":[]},
-      {"name":"BMW","group":"employers","aliases":[]},
-      {"name":"Adobe","group":"employers","aliases":[]},
-      {"name":"IBM","group":"employers","aliases":[]},
-      {"name":"McLaren","group":"employers","aliases":[]},
-      {"name":"Alexander McQueen","group":"employers","aliases":[]},
-      {"name":"Burberry","group":"employers","aliases":[]},
-      {"name":"Iris van Herpen","group":"employers","aliases":[]},
-      {"name":"Louis Vuitton","group":"employers","aliases":[]},
-      {"name":"Warner Bros.","group":"employers","aliases":[]},
-      {"name":"Zandra Rhodes","group":"employers","aliases":[]},
-      {"name":"L'Oréal","group":"employers","aliases":[]},
-      {"name":"Jaguar Land Rover","group":"employers","aliases":[]},
-      {"name":"Unilever","group":"employers","aliases":[]}
-    ];
+    const FEATURED_ORGANISATIONS = [{"name":"Politecnico di Milano","group":"academic","aliases":["Politecnico di Milano, Italy"]},{"name":"Delft University of Technology (TU Delft)","group":"academic","aliases":["Delft University of Technology (TU Delft), Netherlands"]},{"name":"Central Academy of Fine Arts (CAFA)","group":"academic","aliases":["Central Academy of Fine Arts","CAFA"]},{"name":"Tongji University","group":"academic","aliases":["Tongji University, Shanghai"]},{"name":"Indian Institute of Technology Bombay (IIT Bombay)","group":"academic","aliases":["Indian Institute of Technology Bombay","IIT Bombay"]},{"name":"China Academy of Art (CAA)","group":"academic","aliases":["China Academy of Art"]},{"name":"Princess Nourah bint Abdulrahman University (PNU)","group":"academic","aliases":["Princess Nourah bint Abdulrahman University","Princess Nourah Bint Abdulrahman University","PNU Saudi Arabia"]},{"name":"Joshibi University of Art and Design","group":"academic","aliases":["Joshibi University of Art & Design, Japan"]},{"name":"Nanyang Technological University","group":"academic","aliases":["Nanyang Technological University, Singapore"]},{"name":"Middle East Technical University (METU)","group":"academic","aliases":[]},{"name":"Design School Kolding","group":"academic","aliases":["Design School Kolding, Denmark"]},{"name":"City University of Hong Kong","group":"academic","aliases":["City University , Hong Kong"]},{"name":"University of Technology Sydney","group":"academic","aliases":["University of Technology Sydney, Australia"]},{"name":"Academy of Fine Arts, Helsinki","group":"academic","aliases":["Academy of Fine Art, Finland"]},{"name":"Mimar Sinan Fine Arts University","group":"academic","aliases":["Mimar Sinan Fine Arts, Turkey"]},{"name":"Norwegian University of Science and Technology (NTNU)","group":"academic","aliases":["NTNU, Norway"]},{"name":"Université de Montréal","group":"academic","aliases":["University of Montreal, Canada"]},{"name":"University of Michigan","group":"academic","aliases":["University of Michigan, USA"]},{"name":"Shibaura Institute of Technology","group":"academic","aliases":["Shibaura Institute of Technology, Japan"]},{"name":"Kansai University","group":"academic","aliases":["Kansai University, Japan"]},{"name":"RheinMain University of Applied Sciences","group":"academic","aliases":["RheinMain University of Applied Sciences, Germany"]},{"name":"Frog (Capgemini Invent)","group":"design","aliases":["Frog"]},{"name":"Seymourpowell","group":"design","aliases":[]},{"name":"PriestmanGoode","group":"design","aliases":[]},{"name":"DCA","group":"design","aliases":[]},{"name":"PDD","group":"design","aliases":[]},{"name":"Kinneir Dufort","group":"design","aliases":[]},{"name":"Pearson Lloyd","group":"design","aliases":[]},{"name":"Form Us With Love","group":"design","aliases":[]},{"name":"Jacob Jensen Design","group":"design","aliases":[]},{"name":"Cambridge Consultants","group":"design","aliases":[]},{"name":"AKQA","group":"design","aliases":[]},{"name":"Wieden+Kennedy","group":"design","aliases":[]},{"name":"LEGO","group":"employers","aliases":[]},{"name":"The Walt Disney Company","group":"employers","aliases":[]},{"name":"Dyson","group":"employers","aliases":[]},{"name":"Adidas","group":"employers","aliases":[]},{"name":"BMW","group":"employers","aliases":[]},{"name":"Adobe","group":"employers","aliases":[]},{"name":"IBM","group":"employers","aliases":[]},{"name":"McLaren","group":"employers","aliases":[]},{"name":"Alexander McQueen","group":"employers","aliases":[]},{"name":"Burberry","group":"employers","aliases":[]},{"name":"Iris van Herpen","group":"employers","aliases":[]},{"name":"Louis Vuitton","group":"employers","aliases":[]},{"name":"Warner Bros.","group":"employers","aliases":[]},{"name":"Zandra Rhodes","group":"employers","aliases":[]},{"name":"L'Oréal","group":"employers","aliases":[]},{"name":"Jaguar Land Rover","group":"employers","aliases":[]},{"name":"Unilever","group":"employers","aliases":[]}];
     const featuredLabels = {
       "en": {
             "heading": "Featured connections",
@@ -3368,7 +3322,7 @@
           worldLastPartnerAdded = /^\d{4}-\d{2}-\d{2}$/.test(directory.last_partner_added||'') ? directory.last_partner_added : null;
           worldLocations.clear();
           worldFeaturedMatches.clear();
-          const allPartners = directory.features.filter(f =>
+          const allPartners = [...directory.features, ...(window.SDCA_V2_ADDITIONAL_PARTNERS?.features || [])].filter(f =>
             f?.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates) &&
             f.geometry.coordinates.every(Number.isFinite) &&
             f.properties?.visible !== 'No');
@@ -3563,6 +3517,7 @@
       // potentially incompatible legacy circle-colour expression.
       const partnerColor = ['match',['get','group'],
         'Exchange Programme','#2D0153',
+        'Academic Collaboration','#2D0153',
         '#F0047F'];
       map.setLayoutProperty(LEGACY_POINT_LAYER,'visibility','none');
       map.addSource(MASTER_SOURCE,{type:'geojson',data:{type:'FeatureCollection',features:masterFeatures}});
