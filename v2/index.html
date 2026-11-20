@@ -3320,6 +3320,8 @@
             throw Error('Invalid authoritative partner dataset');
           // Stable metadata: last NEW partner record, not the latest URL/address correction.
           worldLastPartnerAdded = /^\d{4}-\d{2}-\d{2}$/.test(directory.last_partner_added||'') ? directory.last_partner_added : null;
+          const v2PartnerDate=window.SDCA_V2_ADDITIONAL_PARTNERS?.generated;
+          if(/^\d{4}-\d{2}-\d{2}$/.test(v2PartnerDate||'')&&(!worldLastPartnerAdded||v2PartnerDate>worldLastPartnerAdded))worldLastPartnerAdded=v2PartnerDate;
           worldLocations.clear();
           worldFeaturedMatches.clear();
           const allPartners = [...directory.features, ...(window.SDCA_V2_ADDITIONAL_PARTNERS?.features || [])].filter(f =>
@@ -3595,7 +3597,7 @@
 <script src="./case-studies-data.js?v=featured-international-20261120"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=featured-international-20261120"></script>
+<script src="./v2.js?v=featured-international-20261120b"></script>
 <script src="./v2-localise.js?v=partner-add-date-1"></script>
 <script src="./v2-theme.js?v=featured-international-20261120"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
