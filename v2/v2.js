@@ -16,8 +16,18 @@ const homeArtPosition=parseInt(String(homeArt?.rank||'').replace(/^[^0-9]*/,''),
 const homeTop50=Number.isInteger(homeArtPosition)&&homeArtPosition<=50;
 const artClaim=homeTop50?'Top 50 in the world for Art and Design':'QS-ranked in Art and Design';
 const qsArtUrl='https://www.topuniversities.com/university-subject-rankings/art-design';
+const qsLabels={
+ en:{world:'QS World Ranking',art:'QS Art & Design',missing:'Rank not available',worldScore:'Overall score',artScore:'Art & Design score',na:'not available'},
+ 'zh-CN':{world:'QS 世界大学排名',art:'QS 艺术与设计',missing:'暂无排名数据',worldScore:'综合得分',artScore:'艺术与设计得分',na:'暂无数据'},
+ 'zh-TW':{world:'QS 世界大學排名',art:'QS 藝術與設計',missing:'暫無排名資料',worldScore:'綜合得分',artScore:'藝術與設計得分',na:'暫無資料'},
+ ja:{world:'QS世界大学ランキング',art:'QSアート＆デザイン',missing:'順位情報なし',worldScore:'総合スコア',artScore:'アート＆デザインのスコア',na:'データなし'},
+ hi:{world:'QS विश्व विश्वविद्यालय रैंकिंग',art:'QS कला एवं डिज़ाइन',missing:'रैंक उपलब्ध नहीं',worldScore:'समग्र स्कोर',artScore:'कला एवं डिज़ाइन स्कोर',na:'उपलब्ध नहीं'},
+ ar:{world:'تصنيف QS العالمي',art:'QS للفنون والتصميم',missing:'لا يوجد تصنيف متاح',worldScore:'الدرجة الإجمالية',artScore:'درجة الفنون والتصميم',na:'غير متاحة'}
+};
 const makeQsRankingCard=(institution,kind,ranking)=>{
- const qs=kind==='overall'?'QS World Ranking':'QS Art & Design';
+ const locale=document.getElementById('language-select')?.value||'en';
+ const words=qsLabels[locale]||qsLabels.en;
+ const qs=kind==='overall'?words.world:words.art;
  const card=element('div','v2-stat v2-qs-stat');
  const year=Number.isInteger(ranking?.edition)?' · '+ranking.edition:'';
  card.append(element('span','',qs+year));
@@ -29,10 +39,11 @@ const makeQsRankingCard=(institution,kind,ranking)=>{
   rankLink.setAttribute('aria-label',institution+' '+qs+(ranking.edition?' '+ranking.edition:'')+' rank '+rank+' (opens source in a new tab)');
   card.append(rankLink);
  }else{
-  card.append(element('strong','v2-qs-unavailable','Rank not available'));
+  card.append(element('strong','v2-qs-unavailable',words.missing));
  }
  const score=qsRankingData?.formatScore(ranking?.score);
- card.append(element('small','v2-qs-score',score!==null&&score!==undefined?'Overall score: '+score+'/100':'Overall score: not available'));
+ const scoreTitle=kind==='overall'?words.worldScore:words.artScore;
+ card.append(element('small','v2-qs-score',scoreTitle+': '+(score!==null&&score!==undefined?score+'/100':words.na)));
  return card;
 };
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
