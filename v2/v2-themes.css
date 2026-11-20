@@ -189,3 +189,19 @@ dialog.gcn-theme-discovery-dialog::backdrop{
  }
  button.gcn-theme-chip{border:1px solid ButtonText;background:Canvas;color:CanvasText}
 }
+
+/* Editorial QS-relevance sort context; never looks like an official rank badge. */
+.gcn-theme-discovery-order{
+  margin:0 0 15px;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:12px;
+  font-weight:620;
+  line-height:1.5;
+}
+.gcn-theme-discovery-qs{
+  font-weight:720;
+  color:var(--v2-theme-ink,#2D0153);
+}
+.gcn-theme-discovery-evidence{
+  color:var(--v2-theme-muted,#55475F);
+}
