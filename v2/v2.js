@@ -80,8 +80,19 @@ const partnerPlaceFromRecords=f=>{
  const aliases={'uk':'United Kingdom','gb':'United Kingdom','us':'United States','usa':'United States','de':'Germany','dk':'Denmark','fr':'France'};
  return {city,country:aliases[rawCountry.toLowerCase()]||rawCountry};
 };
+// A regional display convention only; original directory properties stay intact.
+const isHongKongLocation=value=>/^(?:hk|hong kong(?:\\s+(?:sar|special administrative region))?(?:,\\s*china)?|香港(?:特别行政区|特別行政區)?|中国香港特别行政区|中國香港特別行政區)$/i.test(String(value||'').trim());
+const locationParts=data=>{
+ const originalCity=String(data?.city||'').trim();
+ const originalCountry=String(data?.country||'').trim();
+ const hk=isHongKongLocation(originalCountry);
+ return {
+  city:hk&&isHongKongLocation(originalCity)?'':originalCity,
+  country:hk?'Hong Kong SAR, China':originalCountry
+ };
+};
 const place=f=>{
- const location=partnerPlaceFromRecords(f);
+ const location=locationParts(partnerPlaceFromRecords(f));
  return [location.city,location.country].filter(Boolean).join(', ')||'Location unavailable';
 };
 const category=i=>groups.find(g=>g.id===i.group)||groups[0];
@@ -552,7 +563,7 @@ function tourLocationFromRecords(f){
  return {city:'',country:''};
 }
 function tourLocationNode(data){
- const city=String(data?.city||'').trim(),country=String(data?.country||'').trim();
+ const {city,country}=locationParts(data);
  if(!city&&!country)return element('span','v2-tour-location-unavailable','Location unavailable');
  const output=document.createDocumentFragment();
  if(city)output.append(element('span','v2-tour-city',city));
