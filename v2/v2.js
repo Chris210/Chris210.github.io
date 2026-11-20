@@ -299,6 +299,8 @@ function drawSpotlight(i){
  });
  if(i.group!=='academic')grid.classList.add('v2-stat-grid-two');
  spot.append(grid);
+ const partnerThemes=window.SDCA_V2_THEMES?.render(feature);
+ if(partnerThemes)spot.append(partnerThemes);
  // Evidence is the primary next action: keep it visible before longer metadata.
  const relatedWork=window.SDCA_V2_CASE_STUDIES?.createLink(feature,i,'v2-spot-link gcn-case-action');
  if(relatedWork)spot.append(relatedWork);
@@ -385,16 +387,38 @@ function openDirectory(){stopTimer();if(tourPlaceAbortController){tourPlaceAbort
 function search(){
  const q=$('v2-search').value.trim().toLocaleLowerCase(),box=$('v2-search-results');box.replaceChildren();
  if(!q){box.hidden=true;return;}
- const matches=api.allFeatures().filter(f=>[f.properties?.name,f.properties?.description,f.properties?.location].join(' ').toLowerCase().includes(q)).slice(0,35);
- matches.forEach(f=>{
+ // Search the entire authoritative world index; the map viewport never limits results.
+ const themes=window.SDCA_V2_THEMES;
+ const candidates=api.allFeatures().map(f=>{
+  const p=f.properties||{};
+  const ordinary=[p.name,p.description,p.location,p.city,p.country].join(' ').toLocaleLowerCase().includes(q);
+  const tagMatches=themes?.matchingTags(f,q)||[];
+  return {f,ordinary,tagMatches};
+ }).filter(x=>x.ordinary||x.tagMatches.length);
+ // When a user types a theme, partners with directly matching themes surface first.
+ candidates.sort((a,b)=>Number(b.tagMatches.length>0)-Number(a.tagMatches.length>0) ||
+    Number(b.ordinary)-Number(a.ordinary) ||
+    String(a.f.properties?.name||'').localeCompare(String(b.f.properties?.name||'')));
+ const matches=candidates.slice(0,35);
+ if(candidates.length>35){
+  const count=element('div','v2-empty',candidates.length+' matching partners · showing first 35. Refine your search to narrow results.');
+  box.append(count);
+ }
+ matches.forEach(({f,tagMatches})=>{
   const b=element('button','v2-search-result');
   b.append(element('span','',f.properties?.name||'Partner'),element('small','',place(f)));
+  if(tagMatches.length){
+    b.append(element('small','gcn-search-result-themes gcn-search-result-theme-match',tagMatches.join(' · ')));
+  }else{
+    const listed=themes?.forFeature(f)||[];
+    if(listed.length)b.append(element('small','gcn-search-result-themes',listed.join(' · ')));
+  }
   if(!located(f))b.disabled=true;
   b.onclick=()=>{const item=itemOf(f);$('v2-search').value='';box.hidden=true;
    if(item)openPartner(item);else{view('home');map.flyTo({center:f.geometry.coordinates,zoom:6,essential:false,duration:950});api.openNative(f);}
   };box.append(b);
  });
- if(!matches.length)box.append(element('div','v2-empty',api.status()==='ready'?'No matching partners found.':'Loading the worldwide directory…'));
+ if(!candidates.length)box.append(element('div','v2-empty',api.status()==='ready'?'No matching partners found.':'Loading the worldwide directory…'));
  box.hidden=false;
 }
 function pauseTour(){
