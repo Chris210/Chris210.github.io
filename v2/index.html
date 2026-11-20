@@ -2856,8 +2856,9 @@
       content.append(locationHeading);
       if (fields.description) {
         const translatedDescription = popupDescription(fields);
-        const desc = make('p', 'popup-description', translatedDescription.text);
-        desc.lang = translatedDescription.lang;
+        const editorial = window.SDCA_V2_ACTIVITY?.forFeature(feature);
+        const desc = make('p', 'popup-description', editorial || translatedDescription.text);
+        desc.lang = editorial ? 'en' : translatedDescription.lang;
         desc.dir = ['ar', 'ur', 'ms-Arab'].includes(translatedDescription.lang) ? 'rtl' : 'auto';
         content.append(desc);
       }
@@ -3624,6 +3625,7 @@
 </script>
 <script src="./v2-i18n.js?v=partner-add-date-1"></script>
 <script src="./case-studies-data.js?v=featured-international-20261120"></script>
+<script src="./v2-activity-stories.js?v=editorial-activity-20261120"></script>
 <script src="./partner-themes-data.js?v=20261120-1"></script>
 <script src="./v2-themes.js?v=20261120-1"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
