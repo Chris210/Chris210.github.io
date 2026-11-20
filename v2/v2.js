@@ -8,15 +8,33 @@ const map=api.map;
 const groups=[{id:'academic',title:'Universities',tab:'Universities'},{id:'design',title:'Design studios',tab:'Studios'},{id:'employers',title:'Global employers',tab:'Employers'}];
 const featured=api.featured;
 const ordered=featured.slice(); // Strategically ranked order: top university first in tour and featured navigation.
-const QS_WORLD_RANKINGS_2027 = new Map([["Delft University of Technology (TU Delft)","48","https://www.topuniversities.com/universities/delft-university-technology"],["Politecnico di Milano","=87","https://www.topuniversities.com/universities/politecnico-di-milano"],["Nanyang Technological University","12","https://www.topuniversities.com/universities/nanyang-technological-university-singapore-ntu"],["City University of Hong Kong","=52","https://www.topuniversities.com/universities/city-university-hong-kong"],["University of Technology Sydney","=87","https://www.topuniversities.com/universities/university-technology-sydney"],["Middle East Technical University (METU)","305","https://www.topuniversities.com/universities/middle-east-technical-university"],["Norwegian University of Science and Technology (NTNU)","264","https://www.topuniversities.com/universities/norwegian-university-science-technology"],["Université de Montréal","=162","https://www.topuniversities.com/universities/universite-de-montreal"],["University of Michigan","51","https://www.topuniversities.com/universities/university-michigan-ann-arbor"],["Curtin University","189","https://www.topuniversities.com/universities/curtin-university"],["Virginia Tech","366","https://www.topuniversities.com/universities/virginia-polytechnic-institute-state-university"],["University of Navarra","=279","https://www.topuniversities.com/universities/university-navarra"],["University of Wuppertal","1001–1200","https://www.topuniversities.com/universities/bergische-universitat-wuppertal"]]);
-// Subject-specific QS ordering supports academic reputation; do not confuse with overall world rank.
-const QS_ART_DESIGN_2026 = new Map([
- ['Politecnico di Milano','7'],
- ['Delft University of Technology (TU Delft)','13'],
- ['Central Academy of Fine Arts (CAFA)','14'],
- ['Tongji University','16']
-]);
-const QS_SUBJECT_URL='https://www.topuniversities.com/university-subject-rankings/art-design';
+// All QS values and years are stored separately from presentation in the V2 data file.
+const qsRankingData=window.SDCA_V2_QS_RANKINGS;
+const homeArt=qsRankingData?.home()?.art_design||null;
+const homeArtYear=Number.isInteger(homeArt?.edition)?homeArt.edition:2026;
+const homeArtPosition=parseInt(String(homeArt?.rank||'').replace(/^[^0-9]*/,''),10);
+const homeTop50=Number.isInteger(homeArtPosition)&&homeArtPosition<=50;
+const artClaim=homeTop50?'Top 50 in the world for Art and Design':'QS-ranked in Art and Design';
+const qsArtUrl='https://www.topuniversities.com/university-subject-rankings/art-design';
+const makeQsRankingCard=(institution,kind,ranking)=>{
+ const qs=kind==='overall'?'QS World Ranking':'QS Art & Design';
+ const card=element('div','v2-stat v2-qs-stat');
+ const year=Number.isInteger(ranking?.edition)?' · '+ranking.edition:'';
+ card.append(element('span','',qs+year));
+ const rank=ranking?.rank;
+ if(rank!==undefined&&rank!==null&&String(rank).trim()){
+  const rankLink=element('a','v2-qs-rank',qsRankingData?.formatRank(rank)||('#'+rank));
+  rankLink.href=ranking.source_url||(kind==='overall'?'https://www.topuniversities.com/world-university-rankings':qsArtUrl);
+  rankLink.target='_blank';rankLink.rel='noopener noreferrer';
+  rankLink.setAttribute('aria-label',institution+' '+qs+(ranking.edition?' '+ranking.edition:'')+' rank '+rank+' (opens source in a new tab)');
+  card.append(rankLink);
+ }else{
+  card.append(element('strong','v2-qs-unavailable','Rank not available'));
+ }
+ const score=qsRankingData?.formatScore(ranking?.score);
+ card.append(element('small','v2-qs-score',score!==null&&score!==undefined?'Overall score: '+score+'/100':'Overall score: not available'));
+ return card;
+};
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
 const $=id=>document.getElementById(id);
 const ui=(key,vars={})=>window.SDCA_V2_I18N?.translate($('language-select')?.value||'en',key,vars)||key;
@@ -42,6 +60,10 @@ const place=f=>{
 const category=i=>groups.find(g=>g.id===i.group)||groups[0];
 const root=element('div');root.id='v2-root';
 root.innerHTML="\n<div id=\"v2-home\">\n  <div class=\"v2-logo-line\"><a class=\"v2-logo-link\" href=\"https://www.lboro.ac.uk/\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Visit Loughborough University website (opens in a new tab)\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"></a><button class=\"v2-icon-btn\" id=\"v2-collapse\" type=\"button\" aria-label=\"Minimise panel\">›</button></div>\n  <a class=\"v2-overline v2-school-link\" href=\"https://www.lboro.ac.uk/schools/design-creative-arts/\" target=\"_blank\" rel=\"noopener noreferrer\">School of Design and Creative Arts</a>\n  <h1 class=\"v2-h1\">Loughborough Global<br>Creative Network</h1>\n  <p class=\"v2-subtitle\">Connecting world-leading creativity, education and industry.</p>\n  <div class=\"v2-accolade\"><span class=\"v2-award\" aria-hidden=\"true\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg></span><div><a class=\"v2-ranking-link\" href=\"https://www.topuniversities.com/university-subject-rankings/art-design?page=1\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"View QS Art and Design subject rankings (opens in a new tab)\"><strong>Top 50 in the world for Art and Design</strong></a><small>QS World University Rankings by Subject 2026</small></div></div>\n  <div class=\"v2-search-wrap\"><label for=\"v2-search\" class=\"visually-hidden\">Search all partners worldwide</label><span class=\"v2-search-icon\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></span><input class=\"v2-search-input\" id=\"v2-search\" type=\"search\" autocomplete=\"off\" placeholder=\"Search partners and places worldwide\"><div id=\"v2-search-results\" hidden role=\"listbox\" aria-label=\"Worldwide partner search results\"></div></div>\n  <div class=\"v2-category-legend\" role=\"group\" aria-label=\"Map marker colours\"><span><i class=\"v2-category-dot exchange\" aria-hidden=\"true\"></i>University partners</span><span><i class=\"v2-category-dot placement\" aria-hidden=\"true\"></i>Employers &amp; placements</span></div>\n  <div class=\"v2-heading-row\"><h2><span class=\"v2-star\" aria-hidden=\"true\">★</span>Featured Partners</h2><button type=\"button\" class=\"v2-link-btn\" id=\"v2-view-all\">View all 50</button></div>\n  <div class=\"v2-tabs\" role=\"tablist\" aria-label=\"Featured partner categories\"></div>\n  <div class=\"v2-tiles\" id=\"v2-tiles\" aria-live=\"polite\"></div>\n  <div class=\"v2-data-note\"><span aria-hidden=\"true\">ⓘ</span><span id=\"v2-records-updated\" data-added-iso=\"2026-11-18\">SDCA records updated 18 Nov 2026</span></div>\n</div>\n<div id=\"v2-mobile-nav\"><a class=\"v2-logo-link\" href=\"https://www.lboro.ac.uk/\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Visit Loughborough University website (opens in a new tab)\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"></a><strong>Loughborough Global<br>Creative Network</strong></div>\n<div id=\"v2-mobile-accolade\"><svg viewBox=\"0 0 28 30\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m14 2.5 2.7 2.4 3.4-.2.6 3.4 2.7 2-1.7 3 1.1 3.3-3.3 1.3-1.7 2.8-3.8-1-3.8 1-1.7-2.8-3.3-1.3 1.1-3.3-1.7-3 2.7-2 .6-3.4 3.4.2Z\"/><circle cx=\"14\" cy=\"12.6\" r=\"4.3\"/><path d=\"m10.5 20.4-2.2 7 5.7-2.7 5.7 2.7-2.2-7\"/></svg> &nbsp;<a class=\"v2-ranking-link\" href=\"https://www.topuniversities.com/university-subject-rankings/art-design?page=1\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"View QS Art and Design subject rankings (opens in a new tab)\">Top 50 in the world for Art and Design · QS 2026</a></div>\n<div class=\"v2-metrics\" id=\"v2-metrics\" aria-label=\"Global network figures\"><span><b>50</b>featured partners</span><span><b id=\"v2-placement-count\">—</b>placement hosts</span><span><b id=\"v2-exchange-count\">—</b>exchange universities</span></div>\n<button type=\"button\" class=\"v2-cta\" id=\"v2-start-tour\"><span class=\"v2-play\" aria-hidden=\"true\">▶</span>Take the tour: 50 featured partners</button>\n<div id=\"v2-compact-header\" hidden><a class=\"v2-logo-link\" href=\"https://www.lboro.ac.uk/\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Visit Loughborough University website (opens in a new tab)\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"></a><strong>Loughborough Global Creative Network</strong><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-compact-search\" aria-label=\"Search partners\"><svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"10.9\" cy=\"10.9\" r=\"6.8\"/><path d=\"m16 16 5 5\"/></svg></button><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-return-home\" aria-label=\"Return to map\">‹</button></div>\n<aside id=\"v2-spotlight\" hidden aria-label=\"Featured partner details\"></aside>\n<div id=\"v2-overlay-scrim\" hidden></div>\n<section id=\"v2-directory\" hidden aria-label=\"50 featured partners\">\n <div class=\"v2-dir-header\"><button type=\"button\" class=\"v2-icon-btn\" id=\"v2-directory-back\" aria-label=\"Back to map\">‹</button><div class=\"v2-dir-title\"><small>Featured Partners</small><h2>50 organisations our students and staff work with</h2></div><button type=\"button\" class=\"v2-pdf\" id=\"v2-directory-print\">Download PDF</button></div>\n <div class=\"v2-dir-grid\" id=\"v2-dir-grid\"></div>\n</section>\n<section id=\"v2-tour-mode\" hidden aria-live=\"polite\">\n <div id=\"v2-tour-header\"><a class=\"v2-logo-link\" href=\"https://www.lboro.ac.uk/\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Visit Loughborough University website (opens in a new tab)\"><img class=\"v2-brand-logo\" src=\"https://chris210.github.io/LU-logo-white.png\" alt=\"Loughborough University\"></a><strong>Loughborough Global Creative Network</strong></div>\n \n <div id=\"v2-tour-card\"><button type=\"button\" id=\"v2-exit-tour\" aria-label=\"Exit guided tour\" title=\"Exit guided tour\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M6 6 18 18M18 6 6 18\"/></svg><span>Exit tour</span></button><div class=\"v2-spot-header\"><span class=\"v2-badge\"><span class=\"v2-badge-star\" aria-hidden=\"true\">★</span><span class=\"v2-badge-text\">Featured partner</span></span><span class=\"v2-spot-type\" id=\"v2-tour-kind\"></span></div><h2 id=\"v2-tour-name\"></h2><p id=\"v2-tour-desc\"></p><div id=\"v2-tour-location\" class=\"v2-tour-location\"></div><div id=\"v2-tour-relationship\" class=\"v2-tour-relationship\"></div><a id=\"v2-tour-website\" class=\"v2-tour-website\" target=\"_blank\" rel=\"noopener noreferrer\" hidden>Visit website ↗</a><div class=\"v2-tour-progress\"><div id=\"v2-tour-progress-active\"></div></div><div class=\"v2-tour-step-line\"><strong id=\"v2-tour-count\"></strong><span id=\"v2-tour-next\"></span></div><div class=\"v2-tour-countdown\" role=\"timer\" aria-label=\"Time until the next partner\"><span id=\"v2-tour-countdown-status\">Next stop in</span><div class=\"v2-countdown-track\" aria-hidden=\"true\"><div id=\"v2-countdown-fill\"></div></div><strong id=\"v2-tour-countdown-seconds\">9s</strong></div><div class=\"v2-tour-actions\"><button type=\"button\" id=\"v2-tour-prev\" aria-label=\"Previous partner\">‹</button><button type=\"button\" id=\"v2-tour-pause\" class=\"v2-pause\" aria-label=\"Pause tour\">Ⅱ</button><button type=\"button\" id=\"v2-tour-next-btn\" aria-label=\"Next partner\">›</button></div></div>\n</section>";
+// Match the displayed edition to Loughborough's source-backed Art & Design result.
+root.innerHTML=root.innerHTML.replace(/QS World University Rankings by Subject 2026/g,'QS World University Rankings by Subject '+homeArtYear)
+ .replace(/QS 2026/g,'QS '+homeArtYear);
+if(!homeTop50)root.innerHTML=root.innerHTML.replace(/Top 50 in the world for Art and Design/g,artClaim);
 document.body.appendChild(root);
 // Tour and ordinary partner popups share the same vetted case-study destination.
 const tourCaseAction=element('a','gcn-case-link gcn-tour-case-action');
@@ -140,7 +162,7 @@ function directory(){
   });
   if(g.id==='design'){
     const rank=element('div','v2-rank-panel');
-    rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>Top 50 in the world for Art and Design</strong></a><br>QS World University Rankings by Subject 2026';
+    rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>'+artClaim+'</strong></a><br>QS World University Rankings by Subject '+homeArtYear;
     // Simply expand the original pale-purple QS box with text, not a second panel.
     const evidence=window.SDCA_V2_EXCELLENCE;
     if(evidence){
@@ -235,24 +257,10 @@ function drawSpotlight(i){
  resolveSpotlightLocation(feature,locationLine,sequence);
  const grid=element('div','v2-stat-grid');
  if(i.group==='academic'){
-  const subjectRank=QS_ART_DESIGN_2026.get(i.name);
-  const qs=QS_WORLD_RANKINGS_2027.get(i.name);
-  const card=element('div','v2-stat v2-qs-stat');
-  card.append(element('span','',subjectRank?'QS Art & Design · 2026':'QS World Rank · 2027'));
-  if(subjectRank){
-   const rankLink=element('a','v2-qs-rank','#'+subjectRank);
-   rankLink.href=QS_SUBJECT_URL;rankLink.target='_blank';rankLink.rel='noopener noreferrer';
-   rankLink.setAttribute('aria-label',i.name+' QS Art & Design ranking 2026: '+subjectRank+' (opens in a new tab)');
-   card.append(rankLink);
-  }else if(qs){
-   const rankLink=element('a','v2-qs-rank','#'+qs[0]);
-   rankLink.href=qs[1];rankLink.target='_blank';rankLink.rel='noopener noreferrer';
-   rankLink.setAttribute('aria-label',i.name+' QS World University Rankings 2027: '+qs[0]+' (opens in a new tab)');
-   card.append(rankLink);
-  }else{
-   card.append(element('strong','v2-qs-unavailable','Not available'));
-  }
-  grid.append(card);
+  grid.classList.add('v2-stat-grid-two','v2-stat-grid-academic');
+  const qs=qsRankingData?.lookup(i.name,feature?.id);
+  grid.append(makeQsRankingCard(i.name,'overall',qs?.overall));
+  grid.append(makeQsRankingCard(i.name,'art_design',qs?.art_design));
  }
  const stats=i.group==='academic'?
   [['Category','University'],['Relationship',p.group==='Academic Collaboration'?'Academic collaboration':'Academic exchange']]:
