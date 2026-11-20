@@ -70,7 +70,9 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-spot-description {color:#606d79;font-size:13px;line-height:1.55}
 .v2-spot-link {display:flex;align-items:center;justify-content:center;background:var(--v2-magenta);color:white!important;border-radius:999px;text-decoration:none;min-height:48px;padding:13px;font-size:13px;font-weight:780;margin-top:18px}
 .v2-spot-link:hover {background:#91005b}
-.v2-spot-footer {border-top:1px solid #ded9e4;margin-top:14px;padding-top:14px;color:#65717d;font-size:11px}
+.v2-spot-footer {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;border-top:1px solid #ded9e4;margin-top:14px;padding-top:14px;color:#65717d;font-size:11px}
+.v2-spot-footer > span {flex:0 1 auto;min-width:0}
+.v2-spot-footer > .v2-link-btn {display:block;flex:0 1 auto;max-width:100%;margin-left:auto;text-align:right;white-space:normal}
 #v2-compact-header {pointer-events:auto;position:absolute;top:24px;left:24px;display:flex;align-items:center;gap:15px;background:#faf9fc;border-radius:24px;padding:13px 19px;box-shadow:0 12px 38px #1b053a32;max-width:calc(100vw - 260px)}
 #v2-compact-header .v2-brand-logo {width:113px}
 #v2-compact-header strong {border-left:1px solid #dad3e2;padding-left:15px;font-size:17px;white-space:nowrap}
