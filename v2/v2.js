@@ -93,7 +93,7 @@ const locationParts=data=>{
 };
 const place=f=>{
  const location=locationParts(partnerPlaceFromRecords(f));
- return [location.city,location.country].filter(Boolean).join(', ')||'Location unavailable';
+ return [location.city,location.country].filter(Boolean).join(', ');
 };
 const category=i=>groups.find(g=>g.id===i.group)||groups[0];
 const root=element('div');root.id='v2-root';
@@ -179,7 +179,9 @@ function tiles(){
  const box=$('v2-tiles');box.replaceChildren();
  featured.filter(i=>i.group===tab).slice(0,6).forEach(i=>{
    const b=element('button','v2-tile');b.type='button';
-   b.append(element('strong','',i.name),element('small','',place(find(i))));
+   b.append(element('strong','',i.name));
+   const locationLabel=place(find(i));
+   if(locationLabel)b.append(element('small','',locationLabel));
    b.addEventListener('click',()=>openPartner(i));box.append(b);
  });
 }
@@ -193,7 +195,7 @@ function directory(){
    b.append(element('strong','',i.name));
    // Do not clutter the directory with missing-geography placeholders.
    const locationLabel=place(find(i));
-   if(locationLabel&&locationLabel!=='Location unavailable'){
+   if(locationLabel){
     b.append(element('small','',locationLabel));
    }
    b.addEventListener('click',()=>openPartner(i));col.append(b);
@@ -434,7 +436,9 @@ function search(){
  }
  matches.forEach(({f,tagMatches})=>{
   const b=element('button','v2-search-result');
-  b.append(element('span','',f.properties?.name||'Partner'),element('small','',place(f)));
+  b.append(element('span','',f.properties?.name||'Partner'));
+  const locationLabel=place(f);
+  if(locationLabel)b.append(element('small','',locationLabel));
   if(tagMatches.length){
     b.append(element('small','gcn-search-result-themes gcn-search-result-theme-match',tagMatches.map(tag=>themes.displayLabel(tag)).join(' · ')));
   }else{
@@ -564,7 +568,7 @@ function tourLocationFromRecords(f){
 }
 function tourLocationNode(data){
  const {city,country}=locationParts(data);
- if(!city&&!country)return element('span','v2-tour-location-unavailable','Location unavailable');
+ if(!city&&!country)return document.createDocumentFragment();
  const output=document.createDocumentFragment();
  if(city)output.append(element('span','v2-tour-city',city));
  if(city&&country)output.append(document.createTextNode(', '));
@@ -572,14 +576,22 @@ function tourLocationNode(data){
  return output;
 }
 function renderTourLocation(data){
+ const {city,country}=locationParts(data);
+ const hasLocation=Boolean(city||country);
  const row=$('v2-tour-location');
  if(row){
   row.replaceChildren();
-  const place=element('span','v2-tour-place');place.append(tourLocationNode(data));
-  row.append(element('span','v2-tour-location-icon','⌖'),place);
+  row.style.display=hasLocation?'':'none';
+  if(hasLocation){
+   const place=element('span','v2-tour-place');place.append(tourLocationNode(data));
+   row.append(element('span','v2-tour-location-icon','⌖'),place);
+  }
  }
- const marker= tourSiteMarker?.getElement()?.querySelector('.v2-tour-marker-location');
- if(marker)marker.replaceChildren(tourLocationNode(data));
+ const marker=tourSiteMarker?.getElement()?.querySelector('.v2-tour-marker-location');
+ if(marker){
+  marker.replaceChildren(tourLocationNode(data));
+  marker.style.display=hasLocation?'':'none';
+ }
 }
 function resolveTourLocation(feature,sequence){
  if(!located(feature)||!mapboxgl.accessToken)return;
@@ -617,6 +629,7 @@ function showTourMarker(item){
  const label=element('div','v2-tour-site-label');
  const markerPlace=element('small','v2-tour-marker-location');
  markerPlace.append(tourLocationNode(activeTourPlace));
+ markerPlace.style.display=locationParts(activeTourPlace).city||locationParts(activeTourPlace).country?'':'none';
  label.append(element('strong','',item.name),markerPlace);
  pin.append(label);
  pin.setAttribute('aria-label',ui('markerFor',{name:item.name}));
