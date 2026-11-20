@@ -41,3 +41,151 @@
     padding:12px 11px;
   }
 }
+
+/* Theme chips are actions; retain the existing restrained tag appearance. */
+button.gcn-theme-chip{
+ appearance:none;-webkit-appearance:none;cursor:pointer;
+ font-family:inherit;color:inherit;text-align:start;
+ transition:background-color .16s ease,border-color .16s ease;
+}
+button.gcn-theme-chip:hover{background:var(--v2-theme-surface-hover,#EDE5F4);opacity:1}
+button.gcn-theme-chip:focus-visible{
+ outline:3px solid var(--v2-theme-focus,#2D0153);
+ outline-offset:3px;opacity:1;
+}
+dialog.gcn-theme-discovery-dialog{
+ position:fixed;inset:0;
+ box-sizing:border-box;margin:auto;padding:0;
+ width:min(690px,calc(100vw - 32px));
+ max-width:min(690px,calc(100vw - 32px));
+ height:min(82dvh,760px);max-height:calc(100dvh - 32px);
+ overflow:hidden;border:1px solid var(--v2-theme-strong-line,#9E87B2);
+ border-radius:23px;
+ background:var(--v2-theme-surface,#fff);
+ color:var(--v2-theme-body,#302439);
+ box-shadow:0 28px 100px rgba(17,7,31,.40);
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Arial,sans-serif;
+}
+dialog.gcn-theme-discovery-dialog:not([open]){display:none}
+dialog.gcn-theme-discovery-dialog::backdrop{
+ background:rgba(16,9,25,.70);
+ -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)
+}
+.gcn-theme-discovery-shell{display:flex;flex-direction:column;height:100%;min-height:0;min-width:0}
+.gcn-theme-discovery-header{
+ display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+ flex-shrink:0;padding:20px 24px 18px;border-top:6px solid #FFBD00;
+ border-bottom:1px solid var(--v2-theme-line,#D3C5DD);
+ background:var(--v2-theme-surface,#fff)
+}
+.gcn-theme-discovery-headings{min-width:0;flex:1}
+.gcn-theme-discovery-eyebrow{
+ display:block;font-size:11px;font-weight:750;letter-spacing:.12em;
+ color:var(--v2-theme-muted,#55475F);margin-bottom:6px
+}
+.gcn-theme-discovery-header h2{
+ color:var(--v2-theme-ink,#2D0153);font-size:clamp(20px,3.5vw,27px);
+ letter-spacing:-.025em;line-height:1.25;overflow-wrap:break-word;
+ margin:0;font-weight:790
+}
+.gcn-theme-discovery-close{
+ display:grid;place-items:center;flex-shrink:0;
+ width:42px;height:42px;border-radius:50%;
+ border:1px solid var(--v2-theme-line,#D3C5DD);
+ background:var(--v2-theme-surface-alt,#F5F0F9);
+ color:var(--v2-theme-ink,#2D0153);font-size:25px;
+ cursor:pointer
+}
+.gcn-theme-discovery-close:hover{background:var(--v2-theme-surface-hover,#EDE5F4)}
+.gcn-theme-discovery-body{
+ display:flex;flex-direction:column;min-height:0;
+ overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+ padding:17px 24px 24px
+}
+.gcn-theme-discovery-count{
+ margin:0 0 13px;font-size:13px;font-weight:700;
+ color:var(--v2-theme-muted,#55475F)
+}
+.gcn-theme-discovery-search-label{
+ display:flex;flex-direction:column;gap:6px;
+ font-weight:700;font-size:12px;
+ color:var(--v2-theme-ink,#2D0153);margin-bottom:14px
+}
+.gcn-theme-discovery-search{
+ display:block;width:100%;min-height:47px;box-sizing:border-box;
+ padding:10px 13px;border:1.5px solid var(--v2-theme-strong-line,#9E87B2);
+ border-radius:12px;outline-offset:2px;
+ background:var(--v2-theme-input,#fff);
+ color:var(--v2-theme-body,#302439);font:inherit;font-size:14px
+}
+.gcn-theme-discovery-search::placeholder{color:var(--v2-theme-field-placeholder,#65586D);opacity:1}
+.gcn-theme-discovery-list{
+ display:grid;gap:8px;margin:0;padding:0;list-style:none
+}
+.gcn-theme-discovery-list-item{min-width:0}
+.gcn-theme-discovery-result{
+ width:100%;display:flex;justify-content:space-between;
+ align-items:center;gap:14px;text-align:start;cursor:pointer;
+ padding:12px 14px;background:var(--v2-theme-surface-alt,#F5F0F9);
+ border:1px solid var(--v2-theme-line,#D3C5DD);
+ border-radius:13px;color:var(--v2-theme-body,#302439);font:inherit
+}
+.gcn-theme-discovery-result:hover:not(:disabled){
+ background:var(--v2-theme-surface-hover,#EDE5F4);
+ border-color:var(--v2-theme-strong-line,#9E87B2)
+}
+.gcn-theme-discovery-result:disabled{cursor:default;opacity:.64}
+.gcn-theme-discovery-result-content{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+.gcn-theme-discovery-result-name{
+ font-size:14px;line-height:1.36;font-weight:740;
+ color:var(--v2-theme-ink,#2D0153);overflow-wrap:break-word
+}
+.gcn-theme-discovery-result-meta{
+ display:flex;flex-wrap:wrap;column-gap:9px;row-gap:2px;
+ color:var(--v2-theme-muted,#55475F);font-size:11px;line-height:1.45
+}
+.gcn-theme-discovery-result-meta span+span::before{content:"·";margin-inline-end:9px}
+.gcn-theme-discovery-provisional{font-style:italic}
+.gcn-theme-discovery-result-arrow{
+ display:grid;place-items:center;flex-shrink:0;width:26px;height:26px;
+ border:1px solid var(--v2-theme-line,#D3C5DD);
+ border-radius:50%;font-size:16px;color:var(--v2-theme-ink,#2D0153)
+}
+.gcn-theme-discovery-result:disabled .gcn-theme-discovery-result-arrow{display:none}
+.gcn-theme-discovery-more{
+ align-self:stretch;min-height:44px;margin-top:14px;border-radius:12px;
+ background:var(--v2-theme-surface,#fff);
+ color:var(--v2-theme-link,#990054);
+ border:1.5px solid var(--v2-theme-strong-line,#9E87B2);
+ font-size:13px;font-weight:750;cursor:pointer
+}
+.gcn-theme-discovery-more:hover{background:var(--v2-theme-surface-hover,#EDE5F4)}
+.gcn-theme-discovery-note{
+ margin:17px 0 0;padding:13px 0 0;
+ border-top:1px solid var(--v2-theme-line,#D3C5DD);
+ font-size:12px;line-height:1.55;color:var(--v2-theme-muted,#55475F)
+}
+.gcn-theme-discovery-empty{
+ padding:17px 0;margin:0;font-size:13px;color:var(--v2-theme-muted,#55475F)
+}
+.gcn-theme-discovery-dialog :is(button,input):focus-visible{
+ outline:3px solid var(--v2-theme-focus,#2D0153);
+ outline-offset:3px
+}
+@media(max-width:680px){
+ dialog.gcn-theme-discovery-dialog{
+  width:calc(100vw - 20px);max-width:calc(100vw - 20px);
+  height:min(88dvh,760px);border-radius:18px
+ }
+ .gcn-theme-discovery-header{padding:15px 15px 13px}
+ .gcn-theme-discovery-body{padding:14px 15px 20px}
+ .gcn-theme-discovery-result{padding:12px 10px}
+}
+@media(prefers-reduced-motion:reduce){button.gcn-theme-chip{transition:none}}
+@media(forced-colors:active){
+ dialog.gcn-theme-discovery-dialog{border:2px solid CanvasText;background:Canvas;color:CanvasText}
+ .gcn-theme-discovery-result,.gcn-theme-discovery-close,.gcn-theme-discovery-more{
+  border:1px solid ButtonText;background:Canvas;color:CanvasText;forced-color-adjust:auto
+ }
+ button.gcn-theme-chip{border:1px solid ButtonText;background:Canvas;color:CanvasText}
+}
