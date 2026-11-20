@@ -955,7 +955,7 @@
     <div class="browse-header"><h2 id="browse-heading" tabindex="-1">Search partners by name</h2>
       <button type="button" id="browse-close" class="browse-close" aria-label="Close locations list">×</button></div>
     <p class="browse-hint">Search partner locations worldwide, regardless of the current map view. “Browse all in view” shows only places currently visible.</p>
-    <label id="location-search-label" for="location-search">Search partners by name</label>
+    <label id="location-search-label" for="location-search">Search partners by name or theme</label>
     <input id="location-search" type="search" autocomplete="off" placeholder="Enter a location name">
     <div class="browse-collection-switch" id="browse-collection-switch">
       <h3 id="browse-collection-title">Featured connections</h3>
@@ -3407,6 +3407,8 @@
       // in the Mapbox record and are shown only in the location popup.
       const labels = make('span','browse-location-text');
       labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
+      const tagList=window.SDCA_V2_THEMES?.forFeature(feature)||[];
+      if(tagList.length)labels.append(make('small','gcn-native-browse-themes',tagList.join(' · ')));
       button.append(labels);
       const featureCoords = feature?.geometry?.coordinates;
       const isLocated = Array.isArray(featureCoords) && featureCoords.length === 2 &&
