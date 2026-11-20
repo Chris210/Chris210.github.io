@@ -418,9 +418,9 @@ function search(){
   const b=element('button','v2-search-result');
   b.append(element('span','',f.properties?.name||'Partner'),element('small','',place(f)));
   if(tagMatches.length){
-    b.append(element('small','gcn-search-result-themes gcn-search-result-theme-match',tagMatches.join(' · ')));
+    b.append(element('small','gcn-search-result-themes gcn-search-result-theme-match',tagMatches.map(tag=>themes.displayLabel(tag)).join(' · ')));
   }else{
-    const listed=themes?.forFeature(f)||[];
+    const listed=themes?.displayForFeature(f)||[];
     if(listed.length)b.append(element('small','gcn-search-result-themes',listed.join(' · ')));
   }
   if(!located(f))b.disabled=true;
