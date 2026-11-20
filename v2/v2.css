@@ -386,6 +386,15 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
  .v2-stat-grid .v2-qs-rank {font-size:18px;}
 }
 
+/* QS: two separately dated ranking-series cards. Scores are only displayed when sourced. */
+.v2-stat-grid.v2-stat-grid-academic {grid-template-columns:repeat(2,minmax(0,1fr));}
+.v2-stat-grid-academic .v2-qs-stat {min-width:0;padding:11px 12px;}
+.v2-stat-grid .v2-qs-score {display:block;margin-top:7px;font-size:11px;line-height:1.45;color:#524a62;overflow-wrap:anywhere;}
+.v2-stat-grid-academic .v2-qs-stat > span:first-child {display:block;font-size:11px;line-height:1.4;color:#53495f;}
+.sdca-popup-rankings {border-top:1px solid var(--stroke);margin-top:10px;padding-top:6px;}
+.sdca-popup-rankings .popup-description {font-size:12px;line-height:1.55;}
+@media (max-width:390px) { .v2-stat-grid-academic .v2-qs-stat {padding:10px 8px;} }
+
 /* V2 featured-spotlight location: emphasise the country. */
 .v2-spot-location strong.v2-tour-country {font-weight:800;color:#301054;}
 
