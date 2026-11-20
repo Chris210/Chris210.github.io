@@ -671,3 +671,37 @@ body.v2-guided-tour-active #map .mapboxgl-ctrl-top-right .mapboxgl-ctrl-group { 
   min-height:40px;padding:8px 12px;margin:5px 0 6px;font-size:12px;
  }
 }
+
+/* Featured university QS rank in the guided-tour card. */
+#v2-root #v2-tour-card .v2-tour-qs {
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+ gap:5px 12px;margin:8px 0 10px;padding:10px 13px;
+ border:1px solid #e6d9ef;border-radius:11px;
+ background:#f5f0fa;color:#352052;
+}
+#v2-root #v2-tour-card .v2-tour-qs[hidden] {display:none!important;}
+#v2-root #v2-tour-card .v2-tour-qs-label {
+ font-size:12px;line-height:1.4;font-weight:680;color:#514061;
+}
+#v2-root #v2-tour-card .v2-tour-qs-rank {
+ color:#41136e;font-size:18px;line-height:1.15;font-weight:850;
+ text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+}
+#v2-root #v2-tour-card .v2-tour-qs-rank:hover {color:#a40062;}
+#v2-root #v2-tour-card .v2-tour-qs-rank:focus-visible {
+ outline:3px solid #a40062;outline-offset:3px;border-radius:3px;
+}
+@media (max-width:680px) {
+ #v2-root #v2-tour-card .v2-tour-qs {padding:7px 10px;margin:6px 0;gap:4px 8px;}
+ #v2-root #v2-tour-card .v2-tour-qs-label {font-size:11px;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank {font-size:16px;}
+}
+@media (prefers-color-scheme:dark) {
+ #v2-root #v2-tour-card .v2-tour-qs {
+  background:#392943;border-color:#6d5777;color:#f8edf8;
+ }
+ #v2-root #v2-tour-card .v2-tour-qs-label {color:#f0e6f3;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank {color:#f9d5fb;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank:hover {color:#ffffff;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank:focus-visible {outline-color:#ffb5e0;}
+}
