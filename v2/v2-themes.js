@@ -44,7 +44,7 @@ const matchingTags=(feature,q)=>{
  const record=get(feature);return record?record.tags.filter(tag=>themeMatches(tag,q)):[];
 };
 const matches=(feature,q)=>matchingTags(feature,q).length>0;
-const isProvisional=record=>record&&!/^(case_study|case_study_university_wide|official_design_school)$/.test(record.basis);
+const isProvisional=record=>record&&!/^(case_study|case_study_university_wide|official_design_school|official_organisation)$/.test(record.basis);
 const render=(feature)=>{
  const record=get(feature);if(!record||record.tags.length!==3)return null;
  const wrap=document.createElement('section');wrap.className='gcn-themes';wrap.setAttribute('aria-label','Partner themes');
