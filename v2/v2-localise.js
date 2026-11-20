@@ -23,7 +23,7 @@ const iso={
 };
 // Regional terminology is presentation-only: keep official partner records intact.
 // Mainland Simplified Chinese uses the requested "中国台湾" display name.
-const isTaiwanRegion=name=>/^(?:Taiwan|Taiwan,?\\s*(?:China|Province of China)|Taiwan\\s*\\(China\\)|TW|台湾|台灣|臺灣|中国台湾)$/i.test(String(name||'').trim());
+const isTaiwanRegion=name=>/^(?:Taiwan|Taiwan,?\s*(?:China|Province of China)|Taiwan\s*\(China\)|TW|台湾|台灣|臺灣|中国台湾)$/i.test(String(name||'').trim());
 const region=(name)=>{
  if(lang()==='zh-CN'&&isTaiwanRegion(name))return '中国台湾';
  if(lang()==='en'||!iso[name])return name;
@@ -181,7 +181,7 @@ function translateString(str,element){
  if(value==='50')return str; // Numbers and official names never change by accident.
  if(attr&&attr.classList?.contains('v2-tour-country'))return region(value);
  // Recognise Taiwan in city/country text without rewriting named institutions.
- if(lang()==='zh-CN'&&(match=/^(.+),\\s*(Taiwan|Taiwan,\\s*China|Taiwan,\\s*Province of China|Taiwan\\s*\\(China\\)|台湾|台灣|臺灣)$/i.exec(value)))
+ if(lang()==='zh-CN'&&(match=/^(.+),\s*(Taiwan|Taiwan,\s*China|Taiwan,\s*Province of China|Taiwan\s*\(China\)|台湾|台灣|臺灣)$/i.exec(value)))
    return match[1]+', 中国台湾';
  if((match=/^(.+), (United Kingdom|United States|Denmark|Germany|France|Italy|Japan|Netherlands|Sweden|Norway|Finland|Canada|Australia|Singapore|Hong Kong|Turkey|Spain|China|India|South Korea|Ireland|Belgium|Poland)$/.exec(value)))
    return match[1]+', '+region(match[2]);
