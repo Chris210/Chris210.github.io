@@ -1,10 +1,138 @@
-/* Curator-reviewed V2 evidence. Preserve verified partner IDs and descriptions; external research audit is separate. */
+/* Curator-reviewed V2 evidence. Original master partner directory and V1 remain unchanged. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
-  "generated": "2026-11-19",
-  "source": "CHRIS - GE Map / Partner Research v1.2 (64 curated total; 59 published); master inventory 1515 records",
+  "generated": "2026-11-20",
+  "source": "CHRIS - GE Map curated case studies + 2026-11-20 source-documented V2 academic partner additions; canonical 1515-feature master remains unchanged",
   "matching": "Exact normalized names, curated aliases, optional feature IDs; no fuzzy matching",
   "partners": [
+    {
+      "name": "Central Academy of Fine Arts (CAFA)",
+      "aliases": [
+        "Central Academy of Fine Arts",
+        "CAFA"
+      ],
+      "featureIds": [
+        20001
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-065",
+          "title": "Joint Design Thinking and UX Design virtual courses",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/people/fangjin-zhang/",
+          "kind": "project",
+          "year": "Date not specified",
+          "priority": "P0",
+          "relationship": "Direct SDCA academic teaching collaboration",
+          "summary": "Loughborough's School of Design and Creative Arts documents joint virtual courses with the Central Academy of Fine Arts in Design Thinking and UX Design. The page does not specify ongoing course availability."
+        },
+        {
+          "id": "GCN-CS-066",
+          "title": "Inclusive design teaching visit to CAFA",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/people/sharon-cook/",
+          "kind": "project",
+          "year": "Date not specified",
+          "priority": "P0",
+          "relationship": "Documented SDCA teaching visit",
+          "summary": "A Loughborough academic profile records a colleague's teaching visit to the City Design School at CAFA, sharing inclusive design methods. The visit date is not stated."
+        }
+      ]
+    },
+    {
+      "name": "Tongji University",
+      "aliases": [
+        "Tongji University, Shanghai"
+      ],
+      "featureIds": [
+        20002
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-067",
+          "title": "Repositioning Graphic Heritage: UK–China design research",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/research-innovation/projects/repositioning-graphic-heritage/",
+          "kind": "research",
+          "year": "Historical research project",
+          "priority": "P0",
+          "relationship": "Direct SDCA–Tongji design research collaboration",
+          "summary": "Loughborough School of Design and Creative Arts and Tongji College of Design and Innovation collaborated on urban graphic heritage, using practice-led research, fieldwork and exhibitions."
+        },
+        {
+          "id": "GCN-CS-068",
+          "title": "Tracing Shanghai: creative education collaboration",
+          "url": "https://www.lboro.ac.uk/schools/design-creative-arts/research-innovation/projects/tracing-shanghai/",
+          "kind": "creative",
+          "year": "Historical education initiative",
+          "priority": "P0",
+          "relationship": "Direct SDCA–Tongji educational collaboration",
+          "summary": "Tracing Shanghai is an SDCA and Tongji creative education initiative turning research on Shanghai's visual heritage into graphic design concepts."
+        }
+      ]
+    },
+    {
+      "name": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "aliases": [
+        "Indian Institute of Technology Bombay",
+        "IIT Bombay"
+      ],
+      "featureIds": [
+        20003
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-069",
+          "title": "UK–India Data Stewardship for Climate research workshop",
+          "url": "https://www.lboro.ac.uk/research/digital-decarbonisation/news/uk-india-data-stewardship-for-climate/",
+          "kind": "research",
+          "year": "2024",
+          "priority": "P0",
+          "relationship": "University-wide academic research engagement, not SDCA-specific",
+          "summary": "Loughborough researchers presented Digital Decarbonisation research at an international workshop hosted by IIT Bombay and co-organised with UK and Indian partners. IIT Bombay is separately listed by SDCA as a university-wide study-abroad destination."
+        }
+      ]
+    },
+    {
+      "name": "China Academy of Art (CAA)",
+      "aliases": [
+        "China Academy of Art"
+      ],
+      "featureIds": [
+        20004
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-070",
+          "title": "The New Normal: joint international design research seminar",
+          "url": "https://urban-graphic-object.lboro.ac.uk/event/new-normal-international-design-research-seminar/",
+          "kind": "research",
+          "year": "2021",
+          "priority": "P0",
+          "relationship": "Direct SDCA–CAA design research event",
+          "summary": "China Academy of Art's School of Design and Loughborough's School of Design and Creative Arts co-organised a Design Research Society seminar in 2021, with ten institutional speakers and 136 participants."
+        }
+      ]
+    },
+    {
+      "name": "Princess Nourah bint Abdulrahman University (PNU)",
+      "aliases": [
+        "Princess Nourah bint Abdulrahman University",
+        "Princess Nourah Bint Abdulrahman University"
+      ],
+      "featureIds": [
+        20005
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-071",
+          "title": "International female sport-technology design hackathon",
+          "url": "https://www.lboro.ac.uk/internal/news/2026/january/international-female-sport-tech-hackathon/",
+          "kind": "project",
+          "year": "2025",
+          "priority": "P0",
+          "relationship": "University-wide interdisciplinary student innovation collaboration",
+          "summary": "In November 2025 Loughborough University and Princess Nourah bint Abdulrahman University held an international all-female sport-technology hackathon with mixed university teams and wearable/wellbeing concepts. No SDCA-specific formal exchange is asserted."
+        }
+      ]
+    },
     {
       "name": "Joshibi University of Art and Design",
       "aliases": [
@@ -931,5 +1059,5 @@ window.SDCA_V2_CASE_STUDY_DATA = {
       ]
     }
   ],
-  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete."
+  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete. Added seven university evidence records citing Loughborough sources, distinguishing SDCA from university-wide collaborations."
 };
