@@ -81,7 +81,7 @@ const partnerPlaceFromRecords=f=>{
  return {city,country:aliases[rawCountry.toLowerCase()]||rawCountry};
 };
 // A regional display convention only; original directory properties stay intact.
-const isHongKongLocation=value=>/^(?:hk|hong kong(?:\\s+(?:sar|special administrative region))?(?:,\\s*china)?|香港(?:特别行政区|特別行政區)?|中国香港特别行政区|中國香港特別行政區)$/i.test(String(value||'').trim());
+const isHongKongLocation=value=>/^(?:hk|hong kong(?:\s+(?:sar|special administrative region))?(?:,\s*china)?|香港(?:特别行政区|特別行政區)?|中国香港特别行政区|中國香港特別行政區)$/i.test(String(value||'').trim());
 const locationParts=data=>{
  const originalCity=String(data?.city||'').trim();
  const originalCountry=String(data?.country||'').trim();
