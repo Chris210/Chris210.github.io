@@ -55,7 +55,7 @@ const staticText={
  'Programmes':'programmes',
  'Placement years':'placementYears',
  'Exchange years':'exchangeYears',
- 'City and country unavailable':'cityUnavailable',
+ 'Location unavailable':'cityUnavailable',
  'No matching partners found.':'noMatches',
  'Loading the worldwide directory…':'loadingDirectory',
  'Print / Save PDF':'printPdf',
