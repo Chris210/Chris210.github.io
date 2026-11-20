@@ -57,9 +57,6 @@ const makeQsRankingCard=(institution,kind,ranking)=>{
  }else{
   card.append(element('strong','v2-qs-unavailable',words.missing));
  }
- const score=qsRankingData?.formatScore(ranking?.score);
- const scoreTitle=kind==='overall'?words.worldScore:words.artScore;
- card.append(element('small','v2-qs-score',scoreTitle+': '+(score!==null&&score!==undefined?score+'/100':words.na)));
  return card;
 };
 const element=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e;};
