@@ -921,6 +921,7 @@
 <link rel="stylesheet" href="./v2.css?v=tour-best-qs-20261120">
 <link rel="stylesheet" href="./v2-theme.css?v=badge-no-word-break-20261120">
 <link rel="stylesheet" href="./v2-collaborate.css?v=records-footer-4">
+<link rel="stylesheet" href="./v2-themes.css?v=20261120-1">
 </head>
 <body>
   <div class="v2-metrics" aria-label="Featured partners showcase"><span><b>50</b> featured partners</span><span>Global creative network</span></div>
@@ -2860,6 +2861,9 @@
         desc.dir = ['ar', 'ur', 'ms-Arab'].includes(translatedDescription.lang) ? 'rtl' : 'auto';
         content.append(desc);
       }
+      // V2 partner discovery themes, derived from case studies or separately qualified profiles.
+      const themeChips = window.SDCA_V2_THEMES?.render(feature);
+      if (themeChips) content.append(themeChips);
       // Academic years are sourced from the school's employer overview logs.
       // Display actual recorded years, never an invented continuous interval.
       if (categoryOf(fields) === 'placement') {
@@ -3450,7 +3454,7 @@
         // the globe is shown. Do not query rendered features or use the viewport.
         const matches = [...worldLocations.values()].filter(f => {
           const p = f.properties || {};
-          return `${p.name || ''} ${p.group || ''} ${p.description || ''}`.toLowerCase().includes(term);
+          return `${p.name || ''} ${p.group || ''} ${p.description || ''}`.toLowerCase().includes(term) || Boolean(window.SDCA_V2_THEMES?.matches(f,term));
         }).sort((a,b) => String(a.properties?.name||'').localeCompare(String(b.properties?.name||'')));
         for (const f of matches) browseList.append(makeBrowseItem(f, '', true));
         const words = searchCountLanguage[currentLanguage] || searchCountLanguage.en;
@@ -3618,6 +3622,8 @@
 </script>
 <script src="./v2-i18n.js?v=partner-add-date-1"></script>
 <script src="./case-studies-data.js?v=featured-international-20261120"></script>
+<script src="./partner-themes-data.js?v=20261120-1"></script>
+<script src="./v2-themes.js?v=20261120-1"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
 <script src="./v2.js?v=tour-best-qs-20261120"></script>
