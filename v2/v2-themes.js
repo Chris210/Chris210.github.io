@@ -76,7 +76,15 @@ const render=(feature)=>{
  label.textContent=record.basis.startsWith('case_study')?words[0]:words[1];
  wrap.append(label);
  const chips=document.createElement('div');chips.className='gcn-theme-chips';
- for(const tag of record.tags){const chip=document.createElement('span');chip.className='gcn-theme-chip';chip.textContent=displayLabel(tag,lang);chip.lang=lang;chips.append(chip);}
+ for(const tag of record.tags){
+  const chip=document.createElement('button');
+  chip.type='button';chip.className='gcn-theme-chip';
+  chip.textContent=displayLabel(tag,lang);chip.lang=lang;
+  chip.setAttribute('aria-haspopup','dialog');
+  chip.setAttribute('aria-label',(lang==='zh-CN'?'查看其他具有此主题的合作伙伴：':lang==='zh-TW'?'查看其他具有此主題的合作夥伴：':lang==='ja'?'同じテーマの他のパートナーを見る：':lang==='ar'?'عرض الشركاء الآخرين في موضوع: ':lang==='hi'?'इस विषय के अन्य साझेदार देखें: ':'View other partners with theme: ')+displayLabel(tag,lang));
+  chip.addEventListener('click',()=>window.SDCA_V2_THEME_DISCOVERY?.open(tag,feature,chip));
+  chips.append(chip);
+ }
  wrap.append(chips);
  if(isProvisional(record)){
   const note=document.createElement('p');note.className='gcn-themes-note';
