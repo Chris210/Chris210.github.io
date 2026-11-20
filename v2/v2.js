@@ -49,10 +49,10 @@ const makeQsRankingCard=(institution,kind,ranking)=>{
  card.append(element('span','',qs+year));
  const rank=ranking?.rank;
  if(rank!==undefined&&rank!==null&&String(rank).trim()){
-  const rankLink=element('a','v2-qs-rank',qsRankingData?.formatRank(rank)||('#'+rank));
+  const rankLink=element('a','v2-qs-rank',qsRankingData?.formatRank(rank)||('#'+String(rank).replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'')));
   rankLink.href=ranking.source_url||(kind==='overall'?'https://www.topuniversities.com/world-university-rankings':qsArtUrl);
   rankLink.target='_blank';rankLink.rel='noopener noreferrer';
-  rankLink.setAttribute('aria-label',institution+' '+qs+(ranking.edition?' '+ranking.edition:'')+' rank '+rank+' (opens source in a new tab)');
+  rankLink.setAttribute('aria-label',institution+' '+qs+(ranking.edition?' '+ranking.edition:'')+' rank '+String(rank).replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'')+' (opens source in a new tab)');
   card.append(rankLink);
  }else{
   card.append(element('strong','v2-qs-unavailable',words.missing));
@@ -502,7 +502,7 @@ function tourScreen(){
    const words=qsLabels[locale]||qsLabels.en;
    const typeLabel=selected.kind==='art_design'?words.art:words.world;
    const edition=Number.isInteger(selected.ranking.edition)?' · '+selected.ranking.edition:'';
-   const rankText=qsRankingData?.formatRank(selected.ranking.rank)||('#'+selected.ranking.rank);
+   const rankText=qsRankingData?.formatRank(selected.ranking.rank)||('#'+String(selected.ranking.rank).replace(/^#?\s*=\s*/,'').replace(/^#\s*/,''));
    const link=element('a','v2-tour-qs-rank',rankText);
    link.href=selected.ranking.source_url||
      (selected.kind==='art_design'?qsArtUrl:'https://www.topuniversities.com/world-university-rankings');
