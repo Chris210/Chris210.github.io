@@ -309,8 +309,14 @@ function drawSpotlight(i){
   const list=element('div','v2-chip-list');progs.forEach(p=>list.append(element('span','v2-chip',p)));spot.append(list);
  }
  if(p.relationship_years_display){
-  spot.append(element('div','v2-section-label','Documented activity'));
-  spot.append(element('p','v2-spot-description v2-spot-years',p.relationship_years_display));
+  spot.append(element('div','v2-section-label','Activity'));
+  const friendlyDates={
+   'Documented; dates unspecified':'Shared activity is recorded; dates have not been published.',
+   '2019–2020 documented; ongoing status not asserted':'Research and teaching projects documented in 2019–2020; current status unconfirmed.',
+   'Study-abroad listing reviewed 2026':'University-wide study-abroad listing · reviewed in 2026',
+   '2021 documented seminar':'International design research seminar · 2021'
+  };
+  spot.append(element('p','v2-spot-description v2-spot-years',friendlyDates[p.relationship_years_display]||p.relationship_years_display));
  }else if(yr){
   spot.append(element('div','v2-section-label',i.group==='academic'?'Exchange years':'Placement years'));
   spot.append(element('p','v2-spot-description v2-spot-years',yr));
@@ -321,7 +327,8 @@ function drawSpotlight(i){
  // Organisation names and source data are never machine-translated.
  const localDescription=typeof api.localDescription==='function'&&p.description
    ? api.localDescription(p)?.text : null;
- const desc=String(localDescription||rawDescription).trim();
+ const editorial=window.SDCA_V2_ACTIVITY?.forFeature(feature);
+ const desc=String(editorial||localDescription||rawDescription).trim();
  if(desc&&!/^(?:sdca\s+)?student\s+placement\.?$/i.test(desc)){
   spot.append(element('p','v2-spot-description',desc.slice(0,640)));
  }
@@ -469,7 +476,7 @@ function tourScreen(){
  $('v2-tour-kind').textContent=category(item).title;
  const localDescription=typeof api.localDescription==='function'&&p.description
    ? api.localDescription(p)?.text : null;
- $('v2-tour-desc').textContent=String(localDescription||field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,250);
+ $('v2-tour-desc').textContent=String(window.SDCA_V2_ACTIVITY?.forFeature(f)||localDescription||field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,370);
  renderTourLocation(activeTourPlace);
  // Show the strongest recorded QS position for university stops, including
  // the correct separate edition year; other types have no QS element.
@@ -495,7 +502,7 @@ function tourScreen(){
   }
  }
  const yearsRow=$('v2-tour-relationship');
- yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Academic Collaboration'?'Documented activity':p.group==='Exchange Programme'?'Exchange years':'Placement years'),
+ yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Academic Collaboration'?'Activity':p.group==='Exchange Programme'?'Exchange years':'Placement years'),
   element('strong','v2-tour-meta-value',p.relationship_years_display||years(p)||'Years not recorded'));
  window.SDCA_V2_CASE_STUDIES?.updateLink($('v2-tour-case-study'),f,item);
  const official=website(p),link=$('v2-tour-website');
