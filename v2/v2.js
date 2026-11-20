@@ -536,7 +536,7 @@ function tourLocationFromRecords(f){
   'denmark':'Denmark','sweden':'Sweden','germany':'Germany','france':'France',
   'italy':'Italy','japan':'Japan','netherlands':'Netherlands',
   'canada':'Canada','australia':'Australia','singapore':'Singapore',
-  'hong kong':'Hong Kong','turkey':'Turkey','norway':'Norway',
+  'hong kong':'Hong Kong','taiwan':'Taiwan','tw':'Taiwan','turkey':'Turkey','norway':'Norway',
   'spain':'Spain','finland':'Finland'
  };
  for(const candidate of candidates){
