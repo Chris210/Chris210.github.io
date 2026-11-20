@@ -69,6 +69,7 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
   <script src="./v2-featured-additions.js?v=20261120"></script>
+  <script src="./qs-university-rankings.js?v=20261120a"></script>
   <style>
 
     /* SDCA design system: calm, layered, accessible, and responsive. */
@@ -2897,6 +2898,28 @@
           }
         } catch (_) { console.warn('Invalid website URL for', fields.name); }
       }
+      // Keep QS's overall-world and Art & Design editions separate for every academic partner.
+      if (fields.group === 'Exchange Programme' || fields.group === 'Academic Collaboration') {
+        const rankRecord = window.SDCA_V2_QS_RANKINGS?.lookup(fields.name, feature.id);
+        if (rankRecord) {
+          const rankSection=make('div','sdca-popup-rankings');
+          for (const [kind,datum] of [['World',rankRecord.overall],['Art & Design',rankRecord.art_design]]) {
+            if (!datum || (!datum.rank && !Number.isFinite(datum.score))) continue;
+            const line=make('p','popup-description');
+            const year=Number.isInteger(datum.edition)?' '+datum.edition:'';
+            line.append(make('strong','', 'QS '+kind+year+': '));
+            if (datum.rank) line.append(document.createTextNode('Rank '+datum.rank));
+            if (Number.isFinite(datum.score)) line.append(document.createTextNode((datum.rank?' · ':'')+'Overall score '+datum.score.toFixed(1)+'/100'));
+            if (datum.source_url) {
+              const url=make('a','', ' · Source');
+              url.href=datum.source_url;url.target='_blank';url.rel='noopener noreferrer';
+              line.append(url);
+            }
+            rankSection.append(line);
+          }
+          if (rankSection.childElementCount) content.append(rankSection);
+        }
+      }
       // V2 case-study action: same verified lookup as spotlight and guided tour.
       const caseStudyLink = window.SDCA_V2_CASE_STUDIES?.createLink(feature, null, 'popup-link gcn-case-action');
       if (caseStudyLink) content.append(caseStudyLink);
@@ -3597,7 +3620,7 @@
 <script src="./case-studies-data.js?v=featured-international-20261120"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=featured-international-20261120b"></script>
+<script src="./v2.js?v=qs-edition-dynamic-20261120"></script>
 <script src="./v2-localise.js?v=partner-add-date-1"></script>
 <script src="./v2-theme.js?v=featured-international-20261120"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
