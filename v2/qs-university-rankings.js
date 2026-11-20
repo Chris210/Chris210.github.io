@@ -442,7 +442,7 @@ window.SDCA_V2_QS_RANKINGS={
   return byName.get(normalize(name))||null;
  },
  home(){return data.home_university},
- formatRank(value){const text=String(value??'').trim();return text?(text.startsWith('=')?'#'+text:'#'+text):null;},
+ formatRank(value){const text=String(value??'').trim().replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'');return text?'#'+text:null;},
  formatScore(value){return Number.isFinite(value)?value.toFixed(1):null;}
 };
 })();
