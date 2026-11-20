@@ -48,3 +48,34 @@ window.SDCA_V2_ACTIVITY_STORIES = Object.freeze({
   "PA Consulting Group": "A Loughborough student’s published portfolio records an industrial-design internship at PA Consulting. This is a documented route into consultancy practice, although the available account does not establish a specific joint research project.",
   "Hannah Simpson Studio": "A Loughborough Fine Art graduate traced the development of her ceramic practice to a placement at Hannah Simpson Studio. In a published graduate-award interview, she described learning ceramics through that hands-on studio experience."
 });
+
+/* Match the case-study catalogue using exact feature IDs or curated names.
+   Avoid fuzzy matches between separate brands and universities. */
+(function(){
+'use strict';
+const copy=window.SDCA_V2_ACTIVITY_STORIES||{};
+const catalogue=window.SDCA_V2_CASE_STUDY_DATA?.partners||[];
+const key=value=>String(value||'').normalize('NFKD')
+ .replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ')
+ .replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+const byId=new Map(),byName=new Map();
+for(const partner of catalogue){
+ const text=copy[partner.name];
+ if(!text)continue;
+ for(const id of partner.featureIds||[])byId.set(String(id),text);
+ for(const n of [partner.name,...(partner.aliases||[])]){
+  const name=key(n);if(name&&!byName.has(name))byName.set(name,text);
+ }
+}
+const forFeature=feature=>{
+ // Existing translations remain in charge of the non-English experience
+ // until source-backed translated editorial summaries are prepared.
+ if((document.getElementById('language-select')?.value||'en')!=='en')return null;
+ const p=feature?.properties||{};
+ for(const id of [feature?.id,p.feature_id,p.partner_id,p.id]){
+  if(id!==undefined&&id!==null&&byId.has(String(id)))return byId.get(String(id));
+ }
+ return byName.get(key(p.name||feature?.name))||null;
+};
+window.SDCA_V2_ACTIVITY=Object.freeze({forFeature});
+})();
