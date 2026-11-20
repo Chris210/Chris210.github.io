@@ -350,7 +350,7 @@ function drawSpotlight(i){
  }
  const footer=element('div','v2-spot-footer'),next=element('button','v2-link-btn','Next featured partner →');
  next.onclick=()=>openPartner(ordered[(ordered.indexOf(i)+1)%ordered.length]);
- footer.append(element('span','', 'Featured partner '+(featured.indexOf(i)+1)+' of 50 · '),next);spot.append(footer);
+ footer.append(element('span','', 'Featured partner '+(featured.indexOf(i)+1)+' of 50'),next);spot.append(footer);
 }
 function flyTo(i,touring=false){
  const f=find(i);
