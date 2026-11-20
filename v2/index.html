@@ -69,7 +69,7 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
   <script src="./v2-featured-additions.js?v=20261120"></script>
-  <script src="./qs-university-rankings.js?v=20261120a"></script>
+  <script src="./qs-university-rankings.js?v=rank-hash-only-20261120"></script>
   <style>
 
     /* SDCA design system: calm, layered, accessible, and responsive. */
@@ -2913,7 +2913,7 @@
             const line=make('p','popup-description');
             const year=Number.isInteger(datum.edition)?' '+datum.edition:'';
             line.append(make('strong','', 'QS '+kind+year+': '));
-            if (datum.rank) line.append(document.createTextNode('Rank '+datum.rank));
+            if (datum.rank) line.append(document.createTextNode('Rank '+(window.SDCA_V2_QS_RANKINGS?.formatRank(datum.rank)||('#'+String(datum.rank).trim().replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'')))));
             if (datum.source_url) {
               const url=make('a','', ' · Source');
               url.href=datum.source_url;url.target='_blank';url.rel='noopener noreferrer';
@@ -3630,7 +3630,7 @@
 <script src="./v2-theme-discovery.js?v=qs-reputation-sorted-20261120"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=qs-rank-only-20261120"></script>
+<script src="./v2.js?v=rank-hash-only-20261120"></script>
 <script src="./v2-localise.js?v=hongkong-sar-20261120"></script>
 <script src="./v2-theme.js?v=featured-international-20261120"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
