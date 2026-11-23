@@ -205,3 +205,15 @@ dialog.gcn-theme-discovery-dialog::backdrop{
 .gcn-theme-discovery-evidence{
   color:var(--v2-theme-muted,#55475F);
 }
+
+/* Theme-explorer featured partners use the same Loughborough yellow star as navigation. */
+.gcn-theme-discovery-title-row{
+ display:flex;align-items:flex-start;gap:8px;min-width:0
+}
+.gcn-theme-discovery-title-row .gcn-theme-discovery-result-name{min-width:0;flex:1}
+.gcn-theme-discovery-featured-star{
+ display:inline-grid;place-items:center;flex:0 0 19px;
+ height:23px;color:#FFBD00;font-family:Arial,sans-serif;
+ font-size:21px;font-weight:900;line-height:1
+}
+@media(forced-colors:active){.gcn-theme-discovery-featured-star{color:CanvasText}}
