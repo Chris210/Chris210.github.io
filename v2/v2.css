@@ -117,6 +117,15 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-dir-title h2 {font-size:29px;letter-spacing:-.026em;margin:3px 0 0}
 .v2-pdf {border:1.5px solid #4b1b72;border-radius:999px;background:white;color:#381663;padding:13px 21px;font-size:13px;font-weight:760}
 .v2-dir-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:27px}
+/* The featured master directory is one country-aware order, split into columns
+   only for readability; categories never override audience priority. */
+.v2-dir-audience {grid-column:1/-1;margin:0;color:#5c4f69;font-size:12px;line-height:1.5}
+.v2-dir-position {flex:0 0 22px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:#5d2a7b;align-self:flex-start;padding-top:1px}
+.v2-dir-partner {display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:3px;text-align:left}
+.v2-dir-row .v2-dir-category {font-size:10px;font-weight:600;color:#746781;text-align:left;line-height:1.25;flex:none}
+.v2-dir-row .v2-dir-location {flex:0 1 33%;text-align:right;overflow-wrap:anywhere}
+.v2-dir-evidence {grid-column:1/-1;margin-top:6px}
+
 .v2-dir-col h3 {font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#64717b;margin:0 0 14px}
 .v2-dir-row {width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:transparent;border:0;border-bottom:1px solid #d8d4dc;padding:8px 0;color:#27232a;font-size:12px;min-height:34px}
 .v2-dir-row:hover strong {color:var(--v2-magenta)}
