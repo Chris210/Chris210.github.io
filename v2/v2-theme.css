@@ -80,9 +80,11 @@ body {
   border-color:var(--v2-theme-line)!important;
   box-shadow:var(--v2-theme-shadow);
 }
+/* Brand artwork switches natively using <picture>: purple in light, white in dark.
+   Never tint the institutional logo with a CSS colour filter. */
 #v2-root .v2-brand-logo,
 #v2-tour-header .v2-brand-logo {
-  filter:brightness(0) saturate(100%) invert(14%) sepia(100%) saturate(2485%) hue-rotate(263deg) brightness(80%) contrast(113%)!important;
+  filter:none!important;
 }
 #v2-mobile-nav strong,
 #v2-compact-header strong,
@@ -332,7 +334,7 @@ body {
   }
   #v2-root .v2-brand-logo,
   #v2-tour-header .v2-brand-logo {
-    filter:none!important; /* asset is the university's original white logo */
+    filter:none!important; /* <picture> supplies original white artwork in dark mode */
   }
   #map .mapboxgl-ctrl-group .mapboxgl-ctrl-icon {filter:invert(1)!important;}
   /* Deep-purple partner pins keep their original hue; a pale ring makes them
