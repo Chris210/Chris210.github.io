@@ -171,6 +171,9 @@
     .swatch.placement { background: var(--placement); }
     .swatch.exchange { background: var(--exchange); }
     .swatch.all { background: linear-gradient(90deg, var(--placement) 50%, var(--exchange) 50%); }
+    /* Featured partners use the same university yellow as featured map pins. */
+    .swatch.featured-location { background: #FFBD00 !important; }
+    .browse-location .swatch.other { background: var(--placement); }
     .usage-tip { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--panel-line); font-size: 13px; line-height: 1.6; color: var(--panel-subtle); }
     .usage-tip strong { color: white; }
     .browse-button {
@@ -2967,8 +2970,7 @@
       const list = make('div', 'nearby-list');
       // City-level placement data can place many employers at the same pin.
       // Make every nearby organisation reachable, not just the first twelve.
-      const sortedNearby = features.slice().sort((a,b)=>
-        String(a.properties?.name||'').localeCompare(String(b.properties?.name||'')));
+      const sortedNearby = sortLocationsFeaturedFirst(features);
       const nearbySearch = make('input', 'nearby-filter');
       nearbySearch.type = 'search';
       nearbySearch.placeholder = 'Filter these locations by name';
@@ -2986,9 +2988,10 @@
           const button = make('button', 'nearby-item');
           button.type = 'button';
           const typeLabel = searchCategoryName(properties);
-          const icon = make('span', 'swatch ' + categoryOf(properties));
+          const isFeatured = featuredRankOf(feature) !== -1;
+          const icon = make('span', 'swatch ' + categoryOf(properties) + (isFeatured ? ' featured-location' : ''));
           icon.setAttribute('aria-hidden', 'true');
-          if (!typeLabel) icon.hidden = true;
+          if (!typeLabel && !isFeatured) icon.hidden = true;
           const label = make('span', 'nearby-text');
           label.append(make('strong','',localizedField(properties,'name')||t('unnamed')));
           if (typeLabel) label.append(make('small','',typeLabel));
@@ -3313,6 +3316,23 @@
     let worldIndexPromise = null;
     const matchingFeaturedAlias = (featureName, alias) =>
       featureName === alias || (alias.length >= 4 && featureName.startsWith(alias + ' '));
+    // Use the site's curated featured list (including aliases) consistently in
+    // nearby choices, worldwide searches and the visible-location browser.
+    const featuredRankOf = feature => {
+      const name = normalizedName(feature?.properties?.name);
+      if (!name) return -1;
+      return featuredMatchers.findIndex(item =>
+        item.normalizedAliases.some(alias => matchingFeaturedAlias(name, alias)));
+    };
+    const sortLocationsFeaturedFirst = features => features.map(feature => {
+      const rank = featuredRankOf(feature);
+      return {
+        feature,
+        rank: rank < 0 ? FEATURED_ORGANISATIONS.length : rank,
+        name: String(feature?.properties?.name || '')
+      };
+    }).sort((a,b) => a.rank - b.rank || a.name.localeCompare(b.name))
+      .map(item => item.feature);
     const addWorldFeature = feature => {
       if (feature?.geometry?.type !== 'Point') return;
       const props = feature.properties || {};
@@ -3396,20 +3416,23 @@
         const key = featureKey(feature);
         if (!unique.has(key)) unique.set(key, feature);
       }
-      return [...unique.values()].sort((a,b) => String(a.properties?.name || '').localeCompare(String(b.properties?.name || '')));
+      return sortLocationsFeaturedFirst([...unique.values()]);
     };
     const makeBrowseItem = (feature, displayName = '', isFeatured = false) => {
       const props = feature?.properties || {};
+      const featuredPartner = isFeatured || featuredRankOf(feature) !== -1;
       const li = document.createElement('li');
       const button = make('button', 'browse-location');
       button.type = 'button';
       // The name links to a VERIFIED map feature; descriptions/categories stay
       // in the Mapbox record and are shown only in the location popup.
+      const dot = make('span', 'swatch ' + categoryOf(props) + (featuredPartner ? ' featured-location' : ''));
+      dot.setAttribute('aria-hidden', 'true');
       const labels = make('span','browse-location-text');
       labels.append(make('strong','', displayName || String(props.name || t('unnamed'))));
       const tagList=window.SDCA_V2_THEMES?.displayForFeature(feature)||[];
       if(tagList.length)labels.append(make('small','gcn-native-browse-themes',tagList.join(' · ')));
-      button.append(labels);
+      button.append(dot, labels);
       const featureCoords = feature?.geometry?.coordinates;
       const isLocated = Array.isArray(featureCoords) && featureCoords.length === 2 &&
         featureCoords.every(Number.isFinite) &&
@@ -3431,7 +3454,7 @@
         browseToggle.setAttribute('aria-expanded', 'false');
         // Featured partners get a city-scale view even if they were on the
         // opposite side of the planet; ordinary results keep prior behaviour.
-        const destinationZoom = isFeatured ? 10 : Math.max(map.getZoom(),4);
+        const destinationZoom = featuredPartner ? 10 : Math.max(map.getZoom(),4);
         const destination = {center: coords, zoom: destinationZoom, essential: false};
         const reveal = () => showLocation(feature, null, null, map.getCanvas());
         // Open the popup after the camera settles, or Mapbox's auto-pan could
@@ -3454,11 +3477,11 @@
       if (searching) {
         // Search the complete worldwide directory regardless of which side of
         // the globe is shown. Do not query rendered features or use the viewport.
-        const matches = [...worldLocations.values()].filter(f => {
+        const matches = sortLocationsFeaturedFirst([...worldLocations.values()].filter(f => {
           const p = f.properties || {};
           return `${p.name || ''} ${p.group || ''} ${p.description || ''}`.toLowerCase().includes(term) || Boolean(window.SDCA_V2_THEMES?.matches(f,term));
-        }).sort((a,b) => String(a.properties?.name||'').localeCompare(String(b.properties?.name||'')));
-        for (const f of matches) browseList.append(makeBrowseItem(f, '', true));
+        }));
+        for (const f of matches) browseList.append(makeBrowseItem(f));
         const words = searchCountLanguage[currentLanguage] || searchCountLanguage.en;
         const suffix = worldFeaturedState === 'ready' ? '' :
           ' · ' + featuredT(worldFeaturedState === 'loading' ? 'featuredLoading' : 'featuredError');
