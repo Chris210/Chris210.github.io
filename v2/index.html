@@ -171,8 +171,23 @@
     .swatch.placement { background: var(--placement); }
     .swatch.exchange { background: var(--exchange); }
     .swatch.all { background: linear-gradient(90deg, var(--placement) 50%, var(--exchange) 50%); }
-    /* Featured partners use the same university yellow as featured map pins. */
-    .swatch.featured-location { background: #FFBD00 !important; }
+    /* Featured partners are yellow stars in nearby and browse lists; ordinary locations stay dots.
+       Use the same filled star glyph as the Featured Partners navigation. */
+    .swatch.featured-location {
+      display: inline-grid; place-items: center;
+      width: 18px; height: 18px;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0;
+      color: #FFBD00;
+    }
+    .swatch.featured-location::before {
+      content: '★';
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 21px; font-weight: 900;
+      line-height: 1;
+    }
     .browse-location .swatch.other { background: var(--placement); }
     .usage-tip { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--panel-line); font-size: 13px; line-height: 1.6; color: var(--panel-subtle); }
     .usage-tip strong { color: white; }
