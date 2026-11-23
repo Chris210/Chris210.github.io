@@ -216,8 +216,9 @@ body {
 #v2-root .v2-tour-meta-value,
 #v2-root .v2-tour-location strong {color:var(--v2-theme-ink)!important;}
 #v2-root .v2-tour-location-icon,
-#v2-root .v2-star,
 #v2-root .v2-award {color:var(--v2-theme-link)!important;}
+/* Keep the home-page Featured Partners star in Loughborough yellow in both themes. */
+#v2-root #v2-home .v2-heading-row .v2-star {color:#FFBD00!important;}
 #v2-root .v2-countdown-track,
 #v2-root .v2-tour-progress {background:var(--v2-theme-line)!important;}
 #v2-root .v2-countdown-track #v2-countdown-fill,
