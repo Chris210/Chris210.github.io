@@ -19,7 +19,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 #v2-root [hidden] {display:none!important}
 #v2-home {pointer-events:auto;position:absolute;left:24px;top:24px;bottom:24px;width:400px;max-height:calc(100dvh - 48px);display:flex;flex-direction:column;gap:0;padding:23px 25px 18px;background:#faf9fcf5;border:1px solid #ffffffd9;border-radius:28px;box-shadow:0 22px 60px #1b053c50;overflow:hidden;backdrop-filter:blur(18px)}
 .v2-logo-line {display:flex;justify-content:space-between;align-items:center;gap:14px}
-.v2-brand-logo {display:block;width:145px;height:auto;filter:brightness(0) saturate(100%) invert(13%) sepia(42%) saturate(2835%) hue-rotate(247deg) brightness(85%) contrast(108%)}
+.v2-brand-logo {display:block;width:145px;height:auto;filter:none}
 .v2-icon-btn {display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border:0;border-radius:50%;background:#f4f2f7;color:var(--v2-purple);font-size:21px;line-height:1}
 .v2-icon-btn:hover {background:#e8e3f0}
 .v2-overline {margin-top:22px;color:#b60069;font-size:11px;font-weight:780;letter-spacing:.15em;text-transform:uppercase}
@@ -101,7 +101,7 @@ body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#522
 .v2-empty {padding:14px;color:#687583;font-size:12px}
 #v2-tour-mode {pointer-events:none;position:absolute;inset:0}
 #v2-tour-header {position:absolute;top:30px;left:30px;display:flex;align-items:center;gap:14px;background:#2d1547eb;border-radius:16px;color:white;padding:13px 19px;box-shadow:0 6px 30px #1e043b3d}
-#v2-tour-header .v2-brand-logo {filter:brightness(0) invert(1);width:117px}
+#v2-tour-header .v2-brand-logo {width:117px}
 #v2-tour-header strong {border-left:1px solid #ffffff77;padding-left:14px;font-size:16px}
 #v2-exit-tour {pointer-events:auto;position:absolute;top:32px;right:34px;background:#2411399c;border:1px solid #ffffff87;color:white;border-radius:999px;padding:12px 20px;font-size:13px}
 #v2-tour-card {pointer-events:auto;position:absolute;bottom:32px;left:32px;width:min(560px,calc(100vw - 64px));border-radius:27px;background:#fcfbfe;padding:27px 32px;box-shadow:0 15px 45px #16042c3d}
