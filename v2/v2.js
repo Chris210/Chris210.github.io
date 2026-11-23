@@ -7,7 +7,8 @@ if(!api){console.error('V2 bridge unavailable; original site is still functional
 const map=api.map;
 const groups=[{id:'academic',title:'Universities',tab:'Universities'},{id:'design',title:'Design studios',tab:'Studios'},{id:'employers',title:'Global employers',tab:'Employers'}];
 const featured=api.featured;
-const ordered=featured.slice(); // Strategically ranked order: top university first in tour and featured navigation.
+const ordered=window.SDCA_V2_REPUTATION?.sort(featured,item=>api.findFeature(item),window.SDCA_V2_REPUTATION.visitorCountry())||featured.slice();
+// One editorial order follows the visitor's country, without changing the featured 50.
 // All QS values and years are stored separately from presentation in the V2 data file.
 const qsRankingData=window.SDCA_V2_QS_RANKINGS;
 const homeArt=qsRankingData?.home()?.art_design||null;
@@ -174,7 +175,7 @@ function tabs(){
 }
 function tiles(){
  const box=$('v2-tiles');box.replaceChildren();
- featured.filter(i=>i.group===tab).slice(0,6).forEach(i=>{
+ ordered.filter(i=>i.group===tab).slice(0,6).forEach(i=>{
    const b=element('button','v2-tile');b.type='button';
    b.append(element('strong','',i.name));
    const locationLabel=place(find(i));
@@ -185,7 +186,7 @@ function tiles(){
 function directory(){
  const container=$('v2-dir-grid');container.replaceChildren();
  groups.forEach(g=>{
-  const items=featured.filter(i=>i.group===g.id),col=element('div','v2-dir-col');
+  const items=ordered.filter(i=>i.group===g.id),col=element('div','v2-dir-col');
   col.append(element('h3','',g.title+' · '+items.length));
   items.forEach(i=>{
    const b=element('button','v2-dir-row');
@@ -219,6 +220,26 @@ function directory(){
   }
   container.append(col);
  });
+}
+// Refresh when country detection and the full partner index are ready.
+// Preserve the active tour's sequence if a slow country lookup finishes mid-flight.
+function refreshAudienceOrder(){
+ const model=window.SDCA_V2_REPUTATION;
+ if(!model||mode==='tour')return;
+ const country=model.visitorCountry();
+ const ranked=model.sort(featured,find,country);
+ const changed=!ranked.every((item,index)=>item===ordered[index]);
+ if(changed){
+  ordered.splice(0,ordered.length,...ranked);
+  tiles();
+  if(mode==='directory')directory();
+  if(mode==='spotlight'&&activeSpotlightItem){
+   const position=spot.querySelector('.v2-spot-footer > span');
+   if(position)position.textContent='Featured partner '+(ordered.indexOf(activeSpotlightItem)+1)+' of 50';
+  }
+ }
+ const header=home.querySelector('.v2-heading-row h2');
+ if(header&&country)header.title='Featured partners curated for the '+country+' audience; editorial relevance, not QS survey scores';
 }
 function programmes(p){
  const raw=field(p,'programmes','programs','programme','courses','subjects');
@@ -350,7 +371,7 @@ function drawSpotlight(i){
  }
  const footer=element('div','v2-spot-footer'),next=element('button','v2-link-btn','Next featured partner →');
  next.onclick=()=>openPartner(ordered[(ordered.indexOf(i)+1)%ordered.length]);
- footer.append(element('span','', 'Featured partner '+(featured.indexOf(i)+1)+' of 50'),next);spot.append(footer);
+ footer.append(element('span','', 'Featured partner '+(ordered.indexOf(i)+1)+' of 50'),next);spot.append(footer);
 }
 function flyTo(i,touring=false){
  const f=find(i);
@@ -776,7 +797,8 @@ window.SDCA_V2={
  handleMapFeature(f){const item=itemOf(f);if(!item)return false;if(mode==='tour'){pauseTour();return true;}openPartner(item,true);return true;},
  openPartner(name){const item=featured.find(i=>normalize(i.name)===normalize(name));if(item)openPartner(item);}
 };
-tabs();tiles();directory();view('home');
+tabs();refreshAudienceOrder();tiles();directory();view('home');
+Promise.resolve(window.__sdcaV2IpCountryPromise).then(refreshAudienceOrder).catch(()=>{ /* Keep global order if lookup fails. */ });
 $('v2-view-all').onclick=openDirectory;
 $('v2-directory-back').onclick=overview;$('v2-directory-print').onclick=()=>window.print();
 $('v2-overlay-scrim').onclick=overview;
@@ -805,7 +827,7 @@ document.addEventListener('keydown',e=>{
   e.preventDefault();stepTour(e.key==='ArrowLeft'?-1:1);
  }
 });
-api.startLookup()?.then(()=>{tiles();directory();renderCounts();highlight();});
+api.startLookup()?.then(()=>{refreshAudienceOrder();tiles();directory();renderCounts();highlight();});
 map.on('load',()=>{mapStyle();api.startLookup()?.then(highlight);});
 if(map.loaded()){mapStyle();highlight();}
 })();
