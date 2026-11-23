@@ -185,41 +185,62 @@ function tiles(){
 }
 function directory(){
  const container=$('v2-dir-grid');container.replaceChildren();
- groups.forEach(g=>{
-  const items=ordered.filter(i=>i.group===g.id),col=element('div','v2-dir-col');
-  col.append(element('h3','',g.title+' · '+items.length));
-  items.forEach(i=>{
+ // A single audience-aware priority across ALL 50 featured partners.
+ // Splitting into balanced columns is presentation only: read down each
+ // column, then continue at the top of the next one.
+ const model=window.SDCA_V2_REPUTATION;
+ const audience=model?.visitorCountry();
+ let audienceName='';
+ if(audience){
+  try{audienceName=new Intl.DisplayNames(['en'],{type:'region'}).of(audience)||audience;}
+  catch(_){audienceName=audience;}
+ }
+ const intro=element('p','v2-dir-audience',
+  audienceName
+   ?'Featured partners prioritised for audiences in '+audienceName+'. Editorial relevance to Art & Design, not QS survey results.'
+   :'Featured partners in the global editorial order. A detected country personalises this list.');
+ container.append(intro);
+ const columnSize=Math.ceil(ordered.length/3);
+ for(let start=0;start<ordered.length;start+=columnSize){
+  const col=element('div','v2-dir-col');
+  col.append(element('h3','','Priority '+(start+1)+'–'+Math.min(start+columnSize,ordered.length)));
+  ordered.slice(start,start+columnSize).forEach((item,offset)=>{
+   const priority=start+offset+1;
    const b=element('button','v2-dir-row');
-   b.append(element('strong','',i.name));
-   // Do not clutter the directory with missing-geography placeholders.
-   const locationLabel=place(find(i));
-   if(locationLabel){
-    b.append(element('small','',locationLabel));
-   }
-   b.addEventListener('click',()=>openPartner(i));col.append(b);
+   b.type='button';
+   b.setAttribute('aria-label','Featured priority '+priority+': '+item.name);
+   b.append(element('span','v2-dir-position',String(priority).padStart(2,'0')));
+   const details=element('span','v2-dir-partner');
+   details.append(element('strong','',item.name));
+   const category=groups.find(g=>g.id===item.group);
+   if(category)details.append(element('small','v2-dir-category',category.title));
+   b.append(details);
+   // Do not display placeholder geography for partners with no location.
+   const locationLabel=place(find(item));
+   if(locationLabel)b.append(element('small','v2-dir-location',locationLabel));
+   b.addEventListener('click',()=>openPartner(item));
+   col.append(b);
   });
-  if(g.id==='design'){
-    const rank=element('div','v2-rank-panel');
-    rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>'+artClaim+'</strong></a><br>QS World University Rankings by Subject '+homeArtYear;
-    // Simply expand the original pale-purple QS box with text, not a second panel.
-    const evidence=window.SDCA_V2_EXCELLENCE;
-    if(evidence){
-      const lang=$('language-select')?.value||'en';
-      const localized=evidence.translations[lang]||evidence.translations.en;
-      const list=element('div','v2-evidence-lines');
-      evidence.facts.forEach(fact=>{
-        const line=element('p','v2-evidence-line');
-        line.append(element('strong','v2-evidence-value',fact.value));
-        line.append(document.createTextNode(' '+(localized[fact.key]||evidence.translations.en[fact.key])));
-        if(fact.source)line.append(element('small','v2-evidence-source',' · '+fact.source));
-        list.append(line);
-      });
-      rank.append(list);
-    }
-    col.append(rank);
-  }
   container.append(col);
- });
+ }
+ // Retain the existing QS evidence panel, below the ranked master list.
+ const rank=element('div','v2-rank-panel v2-dir-evidence');
+ rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>'+artClaim+'</strong></a><br>QS World University Rankings by Subject '+homeArtYear;
+ const evidence=window.SDCA_V2_EXCELLENCE;
+ if(evidence){
+  const lang=$('language-select')?.value||'en';
+  const localized=evidence.translations[lang]||evidence.translations.en;
+  const list=element('div','v2-evidence-lines');
+  evidence.facts.forEach(fact=>{
+   const line=element('p','v2-evidence-line');
+   line.append(element('strong','v2-evidence-value',fact.value));
+   line.append(document.createTextNode(' '+(localized[fact.key]||evidence.translations.en[fact.key])));
+   if(fact.source)line.append(element('small','v2-evidence-source',' · '+fact.source));
+   list.append(line);
+  });
+  rank.append(list);
+ }
+ container.append(rank);
 }
 // Refresh when country detection and the full partner index are ready.
 // Preserve the active tour's sequence if a slow country lookup finishes mid-flight.
