@@ -70,6 +70,7 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.35.0/mapbox-gl.js"></script>
   <script src="./v2-featured-additions.js?v=20261120"></script>
   <script src="./qs-university-rankings.js?v=rank-hash-only-20261120"></script>
+  <script src="./v2-reputation.js?v=country-audience-20261123"></script>
   <style>
 
     /* SDCA design system: calm, layered, accessible, and responsive. */
@@ -3339,15 +3340,18 @@
       return featuredMatchers.findIndex(item =>
         item.normalizedAliases.some(alias => matchingFeaturedAlias(name, alias)));
     };
-    const sortLocationsFeaturedFirst = features => features.map(feature => {
-      const rank = featuredRankOf(feature);
-      return {
+    // Rank featured locations for the relevant audience country; keep all other
+    // locations below featured partners without asserting a QS-derived score.
+    const sortLocationsFeaturedFirst = features =>
+      window.SDCA_V2_REPUTATION?.sortFeatures(features, FEATURED_ORGANISATIONS) ||
+      features.map(feature => ({
         feature,
-        rank: rank < 0 ? FEATURED_ORGANISATIONS.length : rank,
+        rank: featuredRankOf(feature),
         name: String(feature?.properties?.name || '')
-      };
-    }).sort((a,b) => a.rank - b.rank || a.name.localeCompare(b.name))
-      .map(item => item.feature);
+      })).sort((a,b) =>
+        Number(b.rank >= 0) - Number(a.rank >= 0) ||
+        (a.rank < 0 ? 0 : a.rank) - (b.rank < 0 ? 0 : b.rank) ||
+        a.name.localeCompare(b.name)).map(item => item.feature);
     const addWorldFeature = feature => {
       if (feature?.geometry?.type !== 'Point') return;
       const props = feature.properties || {};
@@ -3668,7 +3672,7 @@
 <script src="./v2-theme-discovery.js?v=qs-reputation-sorted-20261120"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=logo-brand-20261123"></script>
+<script src="./v2.js?v=country-audience-20261123"></script>
 <script src="./v2-localise.js?v=hongkong-sar-20261120"></script>
 <script src="./v2-theme.js?v=featured-international-20261120"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
