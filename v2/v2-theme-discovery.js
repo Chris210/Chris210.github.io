@@ -150,7 +150,35 @@ function openPartnerFeature(f){
   }
  }else api.openNative(f);
 }
+// Use the same country-audience scores and full featured-master-list indices as
+// the homepage and world tour. A featured partner always precedes a non-featured
+// partner, even if the latter has a stronger published QS subject rank.
+const featuredOrderScore=(f,partner,country)=>{
+ const index=(api.featured||[]).indexOf(partner);
+ const model=window.SDCA_V2_REPUTATION;
+ return country&&model?.score?model.score(partner,f,country,index):-index;
+};
+const comparePartners=(a,b,country)=>{
+ const first=featuredFor(a),second=featuredFor(b);
+ if(Boolean(first)!==Boolean(second))return first?-1:1;
+ if(first&&second){
+  const countryGap=featuredOrderScore(b,second,country)-featuredOrderScore(a,first,country);
+  if(countryGap)return countryGap;
+  const masterGap=(api.featured||[]).indexOf(first)-(api.featured||[]).indexOf(second);
+  if(masterGap)return masterGap;
+ }else{
+  const evidenceGap=reputationScore(b)-reputationScore(a);
+  if(evidenceGap)return evidenceGap;
+ }
+ // Prefer a navigable map record when an organisation has duplicate locations.
+ if(mapped(a)!==mapped(b))return mapped(a)?-1:1;
+ return basisRank(themes.get(a)?.basis)-basisRank(themes.get(b)?.basis)||
+  String(a.properties?.name||'').localeCompare(String(b.properties?.name||''),undefined,{sensitivity:'base'});
+};
 function matchesFor(tag,current){
+ // This reads the country detected at page load (cached for 30 minutes) and
+ // recalculates against the current featured master list whenever opened.
+ const country=window.SDCA_V2_REPUTATION?.visitorCountry()||null;
  const selectedName=norm(current?.properties?.name);
  const selectedCase=casesFor(current);
  const selectedId=String(themes.get(current)?.id??current?.id??'');
@@ -165,15 +193,9 @@ function matchesFor(tag,current){
   if(!key||norm(name)===selectedName||String(record.id)===selectedId||
      (selectedCase&&canonical===selectedCase))continue;
   const previous=byName.get(key);
-  if(!previous||reputationScore(f)>reputationScore(previous)||
-     (reputationScore(f)===reputationScore(previous)&&mapped(f)&&!mapped(previous)))
-   byName.set(key,f);
+  if(!previous||comparePartners(f,previous,country)<0)byName.set(key,f);
  }
- return [...byName.values()].sort((a,b)=>
-  reputationScore(b)-reputationScore(a)||
-  basisRank(themes.get(a)?.basis)-basisRank(themes.get(b)?.basis)||
-  String(a.properties?.name||'').localeCompare(String(b.properties?.name||''),undefined,{sensitivity:'base'})
- );
+ return [...byName.values()].sort((a,b)=>comparePartners(a,b,country));
 }
 function open(tag,current,origin){
  if(!themes.forFeature(current).includes(tag))return;
@@ -236,11 +258,21 @@ function open(tag,current,origin){
    const p=f.properties||{},title=String(p.name||'Partner'),location=locFor(f,lang);
    const item=elem('button','gcn-theme-discovery-result');
    item.type='button';
-   const canOpen=mapped(f);
+   const featured=featuredFor(f);
+   // Unmapped featured partners still have an accessible featured-partner panel.
+   const canOpen=mapped(f)||Boolean(featured&&window.SDCA_V2?.openPartner);
    item.disabled=!canOpen;
    item.setAttribute('aria-label',canOpen?w.view+': '+title:title+' — '+w.unmapped);
    const info=elem('span','gcn-theme-discovery-result-content');
+   const titleRow=elem('span','gcn-theme-discovery-title-row');
+   if(featured){
+    const star=elem('span','gcn-theme-discovery-featured-star','★');
+    star.setAttribute('role','img');
+    star.setAttribute('aria-label',({en:'Featured partner','zh-CN':'精选合作伙伴','zh-TW':'精選合作夥伴',ja:'注目パートナー',ar:'شريك مميز',hi:'विशेष साझेदार'})[lang]||'Featured partner');
+    titleRow.append(star);
+   }
    const name=elem('strong','gcn-theme-discovery-result-name',title);
+   titleRow.append(name);
    const meta=elem('span','gcn-theme-discovery-result-meta');
    const isUniversity=/academic|exchange/i.test(String(p.group||''));
    meta.append(elem('span','',isUniversity?w.university:w.industry));
@@ -256,7 +288,7 @@ function open(tag,current,origin){
    const evidence=casesFor(f)?.cases?.length||0;
    if(evidence)meta.append(elem('span','gcn-theme-discovery-evidence',evidence+' '+(evidence===1?w.study:w.studies)));
    if(isProvisional(record?.basis))meta.append(elem('span','gcn-theme-discovery-provisional',w.provisional));
-   info.append(name,meta);
+   info.append(titleRow,meta);
    item.append(info,elem('span','gcn-theme-discovery-result-arrow','→'));
    if(canOpen)item.addEventListener('click',()=>{
     restore=false;
@@ -281,13 +313,14 @@ function open(tag,current,origin){
  };
  more.addEventListener('click',addBatch);
  input.addEventListener('input',update);
- Promise.resolve(api.startLookup?.()).then(()=>{
+ // Wait for both the directory and the page-load country detection to settle,
+ // so the first visible order already reflects the correct audience country.
+ // If either service fails, use available data and the global editorial order.
+ Promise.allSettled([
+  Promise.resolve().then(()=>api.startLookup?.()),
+  Promise.resolve(window.__sdcaV2IpCountryPromise)
+ ]).then(()=>{
   if(!dialog.open)return;
-  all=matchesFor(tag,current);
-  update();
- }).catch(()=>{
-  if(!dialog.open)return;
-  // Render any already indexed partners even if reloading the directory failed.
   all=matchesFor(tag,current);
   update();
  });
