@@ -48,7 +48,7 @@ const listKeys=Object.fromEntries(Object.entries(C).map(([code,names])=>[
 ]));
 function countryCode(value){
  const raw=String(value||'').trim();
- if(/^[A-Z]{2}$/.test(raw))return raw;
+ if(/^[A-Z]{2}$/.test(raw))return raw==='UK'?'GB':raw;
  const norm=normalise(raw);
  if(aliases[norm])return aliases[norm];
  if(norm.includes('hong kong'))return 'HK';
@@ -129,10 +129,11 @@ function sortFeatures(features,featured,country){
   const n=normalise(feature?.properties?.name);
   const found=matches.find(([,names])=>names.some(a=>n===a||(a.length>=4&&n.startsWith(a+' '))));
   const curated=found?(featured||[]).indexOf(found[0]):-1;
-  return {feature,index,curated,score:curated>=0?score(found[0],feature,code,curated):-Infinity};
+  return {feature,index,curated,score:curated>=0?(code?score(found[0],feature,code,curated):-curated):-Infinity};
  }).sort((a,b)=>Number(b.curated>=0)-Number(a.curated>=0)||
-  b.score-a.score||a.index-b.index||
-  String(a.feature.properties?.name||'').localeCompare(String(b.feature.properties?.name||'')))
+  (a.curated>=0?b.score-a.score:
+   String(a.feature.properties?.name||'').localeCompare(String(b.feature.properties?.name||'')))||
+  a.index-b.index)
   .map(row=>row.feature);
 }
 window.SDCA_V2_REPUTATION=Object.freeze({visitorCountry,featureCountry,contextCountry,score,sort,sortFeatures,marketCodes:Object.freeze(Object.keys(C))});
