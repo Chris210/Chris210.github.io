@@ -14,11 +14,17 @@
   <script>
   (() => {
     'use strict';
-    // Resolve the current public IP country on EVERY page load. A browser-tab
-    // cache can become incorrect when a visitor switches VPN endpoints, and
-    // refreshing the page must not retain an earlier country's map or ranking.
-    // Never store an IP address or a country value between page loads.
-    window.__sdcaV2IpCountryCode=null;
+    // Cache a country code, not an IP address, in this tab for at most 30 minutes.
+    const key='sdca-v2-ip-country-v1', maxAge=30*60*1000;
+    let cached=null;
+    try {
+      const value=JSON.parse(sessionStorage.getItem(key)||'null');
+      if(value&&Number.isFinite(value.time)&&Date.now()-value.time>=0&&
+         Date.now()-value.time<maxAge&&typeof value.code==='string'&&
+         /^[A-Z]{2}$/.test(value.code)) cached=value.code;
+    } catch (_) { /* Session storage may be restricted. */ }
+    window.__sdcaV2IpCountryCode=cached;
+    if(cached){window.__sdcaV2IpCountryPromise=Promise.resolve(cached);return;}
     const controllers=new Set();
     let backupTimer=null;
     const request=(url,extract)=>{
@@ -51,7 +57,7 @@
       .then(code=>{
         if(code){
           window.__sdcaV2IpCountryCode=code;
-          // Keep this result only in memory for the current page.
+          try{sessionStorage.setItem(key,JSON.stringify({code,time:Date.now()}));}catch(_){}
         }
         return code;
       }).finally(()=>{
@@ -1343,7 +1349,7 @@
     });
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     // Look up an approximate IP country without GPS or saving any raw IP address.
-    // Country is freshly detected on every reload, including after a VPN switch.
+    // The ISO country code is cached briefly in sessionStorage for faster reloads.
     let detectedCountryView = initialCountryView;
     let visitorMovedMap = false; // Allow IP-country centring until the visitor first navigates
     // Never interrupt someone who has already started navigating the map.
