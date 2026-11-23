@@ -114,6 +114,15 @@ const reputationScore=f=>{
    score+=10;
  }
  if(feature)score+=22; // Already-curated shortlist, not a newly invented prestige list.
+ // Align featured partners with the visitor-country relevance used in V2's
+ // homepage and tour. Retain the existing QS/evidence model for non-featured.
+ const countryModel=window.SDCA_V2_REPUTATION;
+ const audience=countryModel?.visitorCountry();
+ if(feature&&audience){
+  const worldwide=countryModel.score(feature,f,null);
+  const local=countryModel.score(feature,f,audience);
+  score+=local-worldwide;
+ }
  if(theme.basis==='case_study_university_wide')score+=3;
  else if(theme.basis?.startsWith('case_study'))score+=9;
  else if(theme.basis==='official_design_school')score+=7;
