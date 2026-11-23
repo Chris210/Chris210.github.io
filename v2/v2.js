@@ -185,9 +185,8 @@ function tiles(){
 }
 function directory(){
  const container=$('v2-dir-grid');container.replaceChildren();
- // A single audience-aware priority across ALL 50 featured partners.
- // Splitting into balanced columns is presentation only: read down each
- // column, then continue at the top of the next one.
+ // Maintain the three established partner categories. Within each one, use
+ // the same evidence-led, country-aware ranking as the home tiles and tour.
  const model=window.SDCA_V2_REPUTATION;
  const audience=model?.visitorCountry();
  let audienceName='';
@@ -197,32 +196,32 @@ function directory(){
  }
  const intro=element('p','v2-dir-audience',
   audienceName
-   ?'Featured partners prioritised for audiences in '+audienceName+'. Editorial relevance to Art & Design, not QS survey results.'
-   :'Featured partners in the global editorial order. A detected country personalises this list.');
+   ?'Featured partners ranked within each category for audiences in '+audienceName+'. Editorial Art & Design relevance, not QS survey results.'
+   :'Featured partners ranked within each category in the global editorial order. A detected country personalises each list.');
  container.append(intro);
- const columnSize=Math.ceil(ordered.length/3);
- for(let start=0;start<ordered.length;start+=columnSize){
-  const col=element('div','v2-dir-col');
-  col.append(element('h3','','Priority '+(start+1)+'–'+Math.min(start+columnSize,ordered.length)));
-  ordered.slice(start,start+columnSize).forEach((item,offset)=>{
-   const priority=start+offset+1;
+ groups.forEach(group=>{
+  const partners=ordered.filter(item=>item.group===group.id);
+  const col=element('section','v2-dir-col');
+  const heading=element('h3','',group.title);
+  heading.append(element('span','v2-dir-count',String(partners.length)));
+  col.append(heading);
+  partners.forEach((item,index)=>{
+   const priority=index+1;
    const b=element('button','v2-dir-row');
    b.type='button';
-   b.setAttribute('aria-label','Featured priority '+priority+': '+item.name);
+   b.setAttribute('aria-label',group.title+' priority '+priority+': '+item.name);
    b.append(element('span','v2-dir-position',String(priority).padStart(2,'0')));
    const details=element('span','v2-dir-partner');
    details.append(element('strong','',item.name));
-   const category=groups.find(g=>g.id===item.group);
-   if(category)details.append(element('small','v2-dir-category',category.title));
    b.append(details);
-   // Do not display placeholder geography for partners with no location.
+   // Never display placeholder geography for partners with no location.
    const locationLabel=place(find(item));
    if(locationLabel)b.append(element('small','v2-dir-location',locationLabel));
    b.addEventListener('click',()=>openPartner(item));
    col.append(b);
   });
   container.append(col);
- }
+ });
  // Retain the existing QS evidence panel, below the ranked master list.
  const rank=element('div','v2-rank-panel v2-dir-evidence');
  rank.innerHTML='<a class="v2-ranking-link" href="https://www.topuniversities.com/university-subject-rankings/art-design?page=1" target="_blank" rel="noopener noreferrer" aria-label="View QS Art and Design subject rankings (opens in a new tab)"><strong>'+artClaim+'</strong></a><br>QS World University Rankings by Subject '+homeArtYear;
@@ -253,12 +252,13 @@ function refreshAudienceOrder(){
  if(changed){
   ordered.splice(0,ordered.length,...ranked);
   tiles();
-  if(mode==='directory')directory();
   if(mode==='spotlight'&&activeSpotlightItem){
    const position=spot.querySelector('.v2-spot-footer > span');
    if(position)position.textContent='Featured partner '+(ordered.indexOf(activeSpotlightItem)+1)+' of 50';
   }
  }
+ // Also refresh the audience label if a country becomes known but its order ties.
+ if(mode==='directory')directory();
  const header=home.querySelector('.v2-heading-row h2');
  if(header&&country)header.title='Featured partners curated for the '+country+' audience; editorial relevance, not QS survey scores';
 }
