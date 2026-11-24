@@ -787,3 +787,7 @@ body.v2-exhibition .v2-tour-site-marker{transform-origin:center}
  body.v2-exhibition #v2-root #v2-tour-header strong{font-size:12px}
 }
 @media print{body.v2-exhibition #v2-exhibition-info{display:none!important}}
+
+#v2-root .v2-exhibition-entry[hidden],#v2-root .v2-exhibition-story[hidden],body.v2-exhibition #v2-root #v2-tour-desc[hidden],body.v2-exhibition #v2-root #v2-tour-relationship[hidden]{display:none!important}
+body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:#fff;border-radius:5px;padding:6px;box-sizing:content-box}
+@media(prefers-color-scheme:dark){body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:transparent}}
