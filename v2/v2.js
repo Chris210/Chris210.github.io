@@ -5,6 +5,10 @@
 const api=window.SDCA_V2_BRIDGE;
 if(!api){console.error('V2 bridge unavailable; original site is still functional');return;}
 const map=api.map;
+const exhibitionRequested=['tv','exhibition'].includes(new URLSearchParams(location.search).get('mode'));
+let exhibition=exhibitionRequested;
+let exhibitionReady=false, exhibitionStarted=false;
+const exhibitionHome='https://chris210.github.io/v2/';
 const groups=[{id:'academic',title:'Universities',tab:'Universities'},{id:'design',title:'Design studios',tab:'Studios'},{id:'employers',title:'Global employers',tab:'Employers'}];
 const featured=api.featured;
 const ordered=window.SDCA_V2_REPUTATION?.sort(featured,item=>api.findFeature(item),window.SDCA_V2_REPUTATION.visitorCountry())||featured.slice();
@@ -101,6 +105,36 @@ root.innerHTML=root.innerHTML.replace(/QS World University Rankings by Subject 2
  .replace(/QS 2026/g,'QS '+homeArtYear);
 if(!homeTop50)root.innerHTML=root.innerHTML.replace(/Top 50 in the world for Art and Design/g,artClaim);
 document.body.appendChild(root);
+const exhibitionEntry=element('a','v2-exhibition-entry','Exhibition mode ↗');
+exhibitionEntry.href='?mode=tv'; homeEntry();
+function homeEntry(){document.getElementById('v2-start-tour').after(exhibitionEntry);}
+const exhibitionInfo=element('div','v2-exhibition-info');
+exhibitionInfo.id='v2-exhibition-info';
+const exhibitionStory=element('p','v2-exhibition-story');
+exhibitionStory.hidden=true;
+document.getElementById('v2-tour-relationship').after(exhibitionStory);
+const exhibitionFooter=element('div','v2-exhibition-footer');
+const exhibitionLink=element('a','v2-exhibition-link');
+exhibitionLink.href=exhibitionHome;
+const exhibitionQr=element('img','v2-exhibition-qr');exhibitionQr.src='./exhibition-qr.svg';exhibitionQr.alt='QR code to explore the interactive map';
+const exhibitionInvite=element('span','v2-exhibition-invite','Explore the network on your phone');
+exhibitionLink.append(exhibitionQr,exhibitionInvite);
+const exhibitionControls=element('div','v2-exhibition-controls');
+const exhibitionFullscreen=element('button','','Full screen');exhibitionFullscreen.type='button';
+exhibitionFullscreen.addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen?.();}else document.documentElement.requestFullscreen?.().catch(()=>{});});
+const exhibitionExit=element('a','','Exit exhibition');exhibitionExit.href=exhibitionHome;
+const exhibitionLanguage=element('select');exhibitionLanguage.setAttribute('aria-label','Exhibition language');
+const originalLanguage=document.getElementById('language-select');
+for(const option of originalLanguage.options)exhibitionLanguage.append(option.cloneNode(true));
+const requestedLang=new URLSearchParams(location.search).get('lang');
+if(requestedLang&&Array.from(originalLanguage.options).some(o=>o.value===requestedLang)){originalLanguage.value=requestedLang;originalLanguage.dispatchEvent(new Event('change',{bubbles:true}));}
+exhibitionLanguage.value=originalLanguage.value;
+exhibitionLanguage.addEventListener('change',()=>{originalLanguage.value=exhibitionLanguage.value;originalLanguage.dispatchEvent(new Event('change',{bubbles:true}));});
+exhibitionControls.append(exhibitionLanguage,exhibitionFullscreen,exhibitionExit);
+exhibitionFooter.append(exhibitionLink,exhibitionControls);exhibitionInfo.append(exhibitionFooter);
+document.getElementById('v2-tour-mode').append(exhibitionInfo);
+if(exhibition){document.body.classList.add('v2-exhibition'); const loading=element('div','v2-exhibition-loading','Preparing the global creative network…');loading.id='v2-exhibition-loading';document.body.append(loading);}
+
 // Tour and ordinary partner popups share the same vetted case-study destination.
 const tourCaseAction=element('a','gcn-case-link gcn-tour-case-action');
 tourCaseAction.id='v2-tour-case-study';
@@ -109,7 +143,7 @@ $('v2-tour-website').before(tourCaseAction);
 // Opening evidence should not let the guided tour advance in the background.
 tourCaseAction.addEventListener('click',()=>pauseTour());
 // A deliberately unhurried editorial pace: travel, settle, then linger.
-const TOUR_DWELL_MS=6000;
+const TOUR_DWELL_MS=exhibitionRequested?15000:6000;
 const TOUR_TRAVEL_MS=7200;
 const SPOTLIGHT_TRAVEL_MS=3100;
 const CINEMATIC_EASE=t=>t*t*(3-2*t);
@@ -400,13 +434,13 @@ function flyTo(i,touring=false){
  try{
    map.flyTo({
      center:f.geometry.coordinates,
-     zoom:touring?(i.group==='employers'?10.5:8.5):11.5,
+     zoom:touring?(exhibition?5.2:(i.group==='employers'?10.5:8.5)):11.5,
      bearing:0,pitch:0,
      duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:(touring?TOUR_TRAVEL_MS:SPOTLIGHT_TRAVEL_MS),
      easing:CINEMATIC_EASE,
      essential:false,
      padding:touring?
-       (window.innerWidth>680?{left:180,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:145}):
+       (exhibition&&window.innerWidth>680?{left:Math.round(window.innerWidth*.44),right:30,top:80,bottom:75}:window.innerWidth>680?{left:180,right:0,top:0,bottom:0}:{left:0,right:0,top:0,bottom:145}):
        (window.innerWidth>680?
          {left:45,right:Math.ceil(spot.getBoundingClientRect().width+Math.max(0,window.innerWidth-spot.getBoundingClientRect().right)+25),top:45,bottom:45}:
          {left:20,right:20,top:24,bottom:Math.ceil(window.innerHeight-spot.getBoundingClientRect().top+15)})
@@ -438,6 +472,7 @@ function stopTimer(){
  if(mode==='tour')renderCountdown();
 }
 function overview(){
+ if(exhibition){location.href=exhibitionHome;return;}
  stopTimer();if(tourPlaceAbortController){tourPlaceAbortController.abort();tourPlaceAbortController=null;}clearTourArrival();clearTourMarker();tourSequence++;tourPhase='idle';if(map.loaded())map.stop();panelMinimised=false;view('home');
  // Use the original country's reset camera, not an Atlantic placeholder.
  if(map.loaded())api.resetToVisitorCountry();
@@ -526,6 +561,12 @@ function playTour(){
 }
 function tourScreen(){
  const item=ordered[tourIndex],f=find(item),p=f?.properties||{};
+ if(exhibition){
+  const evidence=window.SDCA_V2_CASE_STUDIES?.findPartner(f,item)?.cases?.[0];
+  exhibitionStory.textContent=evidence?.summary||'';
+  exhibitionStory.hidden=!evidence?.summary;
+  if(evidence?.summary)exhibitionStory.setAttribute('lang','en');
+ }
  $('v2-tour-name').textContent=item.name;
  $('v2-tour-kind').textContent=category(item).title;
  const localDescription=typeof api.localDescription==='function'&&p.description
@@ -556,6 +597,7 @@ function tourScreen(){
   }
  }
  const yearsRow=$('v2-tour-relationship');
+ yearsRow.hidden=exhibition&&!Boolean(p.relationship_years_display||years(p));
  yearsRow.replaceChildren(element('span','v2-tour-meta-label',p.group==='Academic Collaboration'?'Activity':p.group==='Exchange Programme'?'Exchange years':'Placement years'),
   element('strong','v2-tour-meta-value',p.relationship_years_display||years(p)||'Years not recorded'));
  window.SDCA_V2_CASE_STUDIES?.updateLink($('v2-tour-case-study'),f,item);
@@ -718,6 +760,7 @@ function stepTour(d,auto=false){
  beginTourStep();
 }
 function startTour(){
+ if(exhibition){document.getElementById('v2-exhibition-loading')?.remove();}
  stopTimer();
  clearTourArrival();
  clearTourMarker();
@@ -848,7 +891,23 @@ document.addEventListener('keydown',e=>{
   e.preventDefault();stepTour(e.key==='ArrowLeft'?-1:1);
  }
 });
-api.startLookup()?.then(()=>{refreshAudienceOrder();tiles();directory();renderCounts();highlight();});
-map.on('load',()=>{mapStyle();api.startLookup()?.then(highlight);});
-if(map.loaded()){mapStyle();highlight();}
+function maybeStartExhibition(){
+ if(!exhibition||exhibitionStarted||!exhibitionReady||api.status()!=='ready'||!map.isStyleLoaded())return;
+ exhibitionStarted=true;
+ refreshAudienceOrder();
+ const usable=ordered.filter(item=>located(find(item)));
+ if(!usable.length){document.getElementById('v2-exhibition-loading').textContent='No featured locations available. Reload to retry.';return;}
+ ordered.splice(0,ordered.length,...usable);
+ startTour();
+}
+api.startLookup()?.then(()=>{refreshAudienceOrder();tiles();directory();renderCounts();highlight();if(exhibition&&api.status()!=='ready')document.getElementById('v2-exhibition-loading').textContent='Partner directory unavailable. Reload to retry.';maybeStartExhibition();});
+Promise.resolve(window.__sdcaV2IpCountryPromise).catch(()=>null).then(()=>{exhibitionReady=true;maybeStartExhibition();});
+map.on('load',()=>{mapStyle();api.startLookup()?.then(()=>{highlight();maybeStartExhibition();});});
+map.on('idle',maybeStartExhibition);
+if(map.loaded()){mapStyle();highlight();maybeStartExhibition();}
+if(exhibition){
+ for(const handler of ['dragPan','scrollZoom','boxZoom','dragRotate','doubleClickZoom','touchZoomRotate','keyboard'])map[handler]?.disable();
+ document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body&&mode==='tour'){e.preventDefault();playing?pauseTour():playTour();}});
+ setTimeout(()=>{const loading=document.getElementById('v2-exhibition-loading');if(loading)loading.textContent='Still loading the network. Check the connection or reload.';},25000);
+}
 })();
