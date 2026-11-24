@@ -127,10 +127,12 @@ const exhibitionLanguage=element('select');exhibitionLanguage.setAttribute('aria
 const originalLanguage=document.getElementById('language-select');
 for(const option of originalLanguage.options)exhibitionLanguage.append(option.cloneNode(true));
 const requestedLang=new URLSearchParams(location.search).get('lang');
-if(requestedLang&&Array.from(originalLanguage.options).some(o=>o.value===requestedLang)){originalLanguage.value=requestedLang;originalLanguage.dispatchEvent(new Event('change',{bubbles:true}));}
+if(exhibition&&requestedLang&&Array.from(originalLanguage.options).some(o=>o.value===requestedLang)){originalLanguage.value=requestedLang;originalLanguage.dispatchEvent(new Event('change',{bubbles:true}));}
 exhibitionLanguage.value=originalLanguage.value;
 exhibitionLanguage.addEventListener('change',()=>{originalLanguage.value=exhibitionLanguage.value;originalLanguage.dispatchEvent(new Event('change',{bubbles:true}));});
-exhibitionControls.append(exhibitionLanguage,exhibitionFullscreen,exhibitionExit);
+const exhibitionPause=element('button','','Pause');exhibitionPause.type='button';
+exhibitionPause.addEventListener('click',()=>playing?pauseTour():playTour());
+exhibitionControls.append(exhibitionLanguage,exhibitionPause,exhibitionFullscreen,exhibitionExit);
 exhibitionFooter.append(exhibitionLink,exhibitionControls);exhibitionInfo.append(exhibitionFooter);
 document.getElementById('v2-tour-mode').append(exhibitionInfo);
 if(exhibition){document.body.classList.add('v2-exhibition'); const loading=element('div','v2-exhibition-loading','Preparing the global creative network…');loading.id='v2-exhibition-loading';document.body.append(loading);}
@@ -191,6 +193,7 @@ function view(name){
   if(name==='home') setMobileDrawerOpen(false);
   document.body.classList.toggle('v2-guided-tour-active', name==='tour');
   mode=name;home.hidden=name!=='home'||panelMinimised;
+  exhibitionEntry.hidden=name!=='home'||panelMinimised||exhibition;
   // Reuse the identical white mobile masthead in home and guided-tour views.
   $('v2-mobile-nav').hidden=name!=='home'&&name!=='tour';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
@@ -450,6 +453,7 @@ function flyTo(i,touring=false){
 }
 function openPartner(i,skip=false){activeSpotlightItem=i;stopTimer();clearTourArrival();clearTourMarker();tourPhase='idle';drawSpotlight(i);view('spotlight');showSelectedPartnerMarker(i);if(!skip)flyTo(i);}
 function renderCountdown(){
+ if(exhibition)exhibitionPause.textContent=playing?'Pause':'Resume';
  const seconds=$('v2-tour-countdown-seconds');
  if(!seconds)return;
  const status=$('v2-tour-countdown-status');
@@ -572,6 +576,8 @@ function tourScreen(){
  const localDescription=typeof api.localDescription==='function'&&p.description
    ? api.localDescription(p)?.text : null;
  $('v2-tour-desc').textContent=String(window.SDCA_V2_ACTIVITY?.forFeature(f)||localDescription||field(p,'description','summary')||'Featured connection with the School of Design and Creative Arts.').slice(0,370);
+ if(exhibition&&exhibitionStory.textContent) $('v2-tour-desc').hidden=true;
+ else $('v2-tour-desc').hidden=false;
  renderTourLocation(activeTourPlace);
  // Show the strongest recorded QS position for university stops, including
  // the correct separate edition year; other types have no QS element.
@@ -717,6 +723,30 @@ function showTourMarker(item){
  tourSiteMarker=new mapboxgl.Marker({element:pin,anchor:'center'})
    .setLngLat(f.geometry.coordinates).addTo(map);
 }
+// A great-circle line visually connects each destination with Loughborough.
+function drawExhibitionConnection(feature){
+ if(!located(feature)||!map.isStyleLoaded())return;
+ const start=[-1.2284,52.7653],end=feature.geometry.coordinates;
+ const rad=Math.PI/180,vec=p=>[Math.cos(p[1]*rad)*Math.cos(p[0]*rad),Math.cos(p[1]*rad)*Math.sin(p[0]*rad),Math.sin(p[1]*rad)];
+ const a=vec(start),b=vec(end),omega=Math.acos(Math.max(-1,Math.min(1,a.reduce((sum,v,i)=>sum+v*b[i],0))));
+ const points=[];
+ for(let n=0;n<=96;n++){
+  const t=n/96,den=Math.sin(omega);
+  const v=Math.abs(den)<1e-7?a.map((x,i)=>x*(1-t)+b[i]*t):a.map((x,i)=>(Math.sin((1-t)*omega)*x+Math.sin(t*omega)*b[i])/den);
+  points.push([Math.atan2(v[1],v[0])/rad,Math.atan2(v[2],Math.hypot(v[0],v[1]))/rad]);
+ }
+ const segments=[[points[0]]];
+ for(let i=1;i<points.length;i++){
+  const p=points[i-1],q=points[i],diff=q[0]-p[0];
+  if(Math.abs(diff)>180){const edge=diff>0?-180:180,adjusted=q[0]+(diff>0?-360:360),lat=p[1]+(q[1]-p[1])*(edge-p[0])/(adjusted-p[0]);segments.at(-1).push([edge,lat]);segments.push([[-edge,lat]]);}
+  segments.at(-1).push(q);
+ }
+ const data={type:'Feature',geometry:{type:'MultiLineString',coordinates:segments},properties:{}};
+ try{
+  if(map.getSource('v2-exhibition-connection'))map.getSource('v2-exhibition-connection').setData(data);
+  else {map.addSource('v2-exhibition-connection',{type:'geojson',data});map.addLayer({id:'v2-exhibition-connection',type:'line',source:'v2-exhibition-connection',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffbd00','line-width':3,'line-opacity':0.8}});}
+ }catch(e){console.warn('Exhibition connection unavailable',e);}
+}
 function beginTourStep(){
  tourSequence++;
  const token=tourSequence;
@@ -730,6 +760,7 @@ function beginTourStep(){
  const item=ordered[tourIndex];
  activeTourPlace=tourLocationFromRecords(find(item));
  // Render the destination marker before the camera starts its flight.
+ if(exhibition)drawExhibitionConnection(find(item));
  showTourMarker(item);
  tourScreen();
  // The new partner details enter with a restrained reveal as the camera begins.
