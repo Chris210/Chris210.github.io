@@ -7,7 +7,7 @@ if(!api){console.error('V2 bridge unavailable; original site is still functional
 const map=api.map;
 const exhibitionRequested=['tv','exhibition'].includes(new URLSearchParams(location.search).get('mode'));
 let exhibition=exhibitionRequested;
-let exhibitionReady=false, exhibitionStarted=false;
+let exhibitionReady=false, exhibitionStarted=false, exhibitionMapReady=map.isStyleLoaded()===true;
 const exhibitionHome='https://chris210.github.io/v2/';
 const groups=[{id:'academic',title:'Universities',tab:'Universities'},{id:'design',title:'Design studios',tab:'Studios'},{id:'employers',title:'Global employers',tab:'Employers'}];
 const featured=api.featured;
@@ -149,7 +149,7 @@ const TOUR_DWELL_MS=exhibitionRequested?15000:6000;
 const TOUR_TRAVEL_MS=7200;
 const SPOTLIGHT_TRAVEL_MS=3100;
 const CINEMATIC_EASE=t=>t*t*(3-2*t);
-let tab='academic',activeSpotlightItem=null,panelMinimised=false,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
+let tab='academic',activeSpotlightItem=null,panelMinimised=exhibition,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
 // Mobile-only bottom drawer: a small, tappable handle is visible by default.
 // Keep the existing search, map key and featured-partner controls inside the drawer.
@@ -192,12 +192,12 @@ function view(name){
   if(name!=='spotlight')clearSelectedPartnerMarker();
   if(name==='home') setMobileDrawerOpen(false);
   document.body.classList.toggle('v2-guided-tour-active', name==='tour');
-  mode=name;home.hidden=name!=='home'||panelMinimised;
+  mode=name;home.hidden=exhibition||name!=='home'||panelMinimised;
   exhibitionEntry.hidden=name!=='home'||panelMinimised||exhibition;
   // Reuse the identical white mobile masthead in home and guided-tour views.
   $('v2-mobile-nav').hidden=name!=='home'&&name!=='tour';$('v2-mobile-accolade').hidden=name!=='home';
   $('v2-metrics').hidden=name!=='home';$('v2-start-tour').hidden=name!=='home';
-  spot.hidden=name!=='spotlight';compact.hidden=name!=='spotlight'&&!(name==='home'&&panelMinimised);
+  spot.hidden=name!=='spotlight';compact.hidden=exhibition||(name!=='spotlight'&&!(name==='home'&&panelMinimised));
   dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
   const picker=$('language-picker');if(picker)picker.hidden=name==='tour';
   $('v2-search-results').hidden=true;
@@ -433,7 +433,7 @@ function drawSpotlight(i){
 }
 function flyTo(i,touring=false){
  const f=find(i);
- if(!located(f)||!map.loaded())return false;
+ if(!located(f)||!(touring&&exhibition?exhibitionMapReady:map.loaded()))return false;
  try{
    map.flyTo({
      center:f.geometry.coordinates,
@@ -779,7 +779,7 @@ function beginTourStep(){
    else renderCountdown();
  };
  const f=find(item);
- if(!located(f)||!map.loaded()){arrive();return;}
+ if(!located(f)||!(exhibition?exhibitionMapReady:map.loaded())){arrive();return;}
  tourArrivalHandler=arrive;
  map.on('moveend',arrive);
  if(!flyTo(item,true))arrive();
@@ -795,7 +795,7 @@ function startTour(){
  stopTimer();
  clearTourArrival();
  clearTourMarker();
- panelMinimised=false;
+ panelMinimised=exhibition;
  tourIndex=0;
  playing=true;
  tourRemainingMs=TOUR_DWELL_MS;
@@ -923,20 +923,22 @@ document.addEventListener('keydown',e=>{
  }
 });
 function maybeStartExhibition(){
- if(!exhibition||exhibitionStarted||!exhibitionReady||api.status()!=='ready'||!map.isStyleLoaded())return;
- exhibitionStarted=true;
+ if(!exhibition||exhibitionStarted||!exhibitionReady||api.status()!=='ready'||!exhibitionMapReady)return;
  refreshAudienceOrder();
  const usable=ordered.filter(item=>located(find(item)));
  if(!usable.length){document.getElementById('v2-exhibition-loading').textContent='No featured locations available. Reload to retry.';return;}
+ exhibitionStarted=true;
  ordered.splice(0,ordered.length,...usable);
  startTour();
 }
 api.startLookup()?.then(()=>{refreshAudienceOrder();tiles();directory();renderCounts();highlight();if(exhibition&&api.status()!=='ready')document.getElementById('v2-exhibition-loading').textContent='Partner directory unavailable. Reload to retry.';maybeStartExhibition();});
 Promise.resolve(window.__sdcaV2IpCountryPromise).catch(()=>null).then(()=>{exhibitionReady=true;maybeStartExhibition();});
-map.on('load',()=>{mapStyle();api.startLookup()?.then(()=>{highlight();maybeStartExhibition();});});
-map.on('idle',maybeStartExhibition);
+map.on('load',()=>{exhibitionMapReady=true;mapStyle();api.startLookup()?.then(()=>{highlight();maybeStartExhibition();});maybeStartExhibition();});
+if(exhibition)map.on('idle',()=>{exhibitionMapReady=true;maybeStartExhibition();});
 if(map.loaded()){mapStyle();highlight();maybeStartExhibition();}
 if(exhibition){
+ const startupRetry=setInterval(()=>{if(exhibitionStarted){clearInterval(startupRetry);return;}if(map.isStyleLoaded())exhibitionMapReady=true;maybeStartExhibition();},250);
+ setTimeout(()=>{exhibitionReady=true;maybeStartExhibition();},3500);
  for(const handler of ['dragPan','scrollZoom','boxZoom','dragRotate','doubleClickZoom','touchZoomRotate','keyboard'])map[handler]?.disable();
  document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body&&mode==='tour'){e.preventDefault();playing?pauseTour():playTour();}});
  setTimeout(()=>{const loading=document.getElementById('v2-exhibition-loading');if(loading)loading.textContent='Still loading the network. Check the connection or reload.';},25000);
