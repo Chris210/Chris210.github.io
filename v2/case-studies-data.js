@@ -1,7 +1,7 @@
 /* Curator-reviewed V2 evidence. Original master partner directory and V1 remain unchanged. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
-  "generated": "2026-11-20",
+  "generated": "2026-11-24",
   "source": "CHRIS - GE Map curated case studies + 2026-11-20 source-documented V2 academic partner additions; canonical 1515-feature master remains unchanged",
   "matching": "Exact normalized names, curated aliases, optional feature IDs; no fuzzy matching",
   "partners": [
@@ -1055,6 +1055,29 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "priority": "P1",
           "relationship": "Student industry placement",
           "summary": "In a 2024 Potclays graduate-award interview, Loughborough Fine Art graduate Ellie Robins explained that she learned ceramics on placement at Hannah Simpson Studio."
+        }
+      ]
+    },
+    {
+      "name": "Mitsubishi Electric Trane HVAC US (METUS)",
+      "aliases": [
+        "Mitsubishi Electric Trane US",
+        "Mitsubishi Electric Trane HVAC US",
+        "METUS"
+      ],
+      "featureIds": [
+        20006
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-072",
+          "title": "Emmaline Kim: UX design internship at Mitsubishi Electric Trane US (SCAD)",
+          "url": "https://www.scad.edu/scadtv/video/my-internship-story-emmaline-kim-scad-user-experience-ux-design-student",
+          "kind": "placement",
+          "year": "Date not specified",
+          "priority": "P1",
+          "relationship": "External SCAD student internship; not a Loughborough placement",
+          "summary": "SCAD UX design student Emmaline Kim researched the company's connected-device ecosystem and pitched an app feature during her internship. This is an external example, not evidence of SDCA collaboration."
         }
       ]
     }
