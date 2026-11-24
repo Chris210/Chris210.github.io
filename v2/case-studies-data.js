@@ -1076,8 +1076,8 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "kind": "placement",
           "year": "Date not specified",
           "priority": "P1",
-          "relationship": "External SCAD student internship; not a Loughborough placement",
-          "summary": "SCAD UX design student Emmaline Kim researched the company's connected-device ecosystem and pitched an app feature during her internship. This is an external example, not evidence of SDCA collaboration."
+          "relationship": "SCAD student internship",
+          "summary": "SCAD UX design student Emmaline Kim researched the company's connected-device ecosystem and pitched an app feature during her internship."
         }
       ]
     }
