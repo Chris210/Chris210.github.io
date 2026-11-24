@@ -750,3 +750,40 @@ body.v2-guided-tour-active #map .mapboxgl-ctrl-top-right .mapboxgl-ctrl-group { 
  #v2-root #v2-tour-card .v2-tour-qs-rank:hover {color:#ffffff;}
  #v2-root #v2-tour-card .v2-tour-qs-rank:focus-visible {outline-color:#ffb5e0;}
 }
+
+/* Exhibition mode: scoped to explicit ?mode=tv, never inferred from screen size. */
+#v2-root .v2-exhibition-entry{display:block;text-align:center;color:var(--v2-theme-ink,#35125e);font-size:13px;text-decoration:underline;margin-top:10px;pointer-events:auto}
+#v2-exhibition-info,.v2-exhibition-story{display:none}
+body.v2-exhibition #v2-exhibition-info{display:block;position:absolute;right:3vw;bottom:3vh;pointer-events:auto}
+body.v2-exhibition #v2-home,body.v2-exhibition #v2-mobile-nav,body.v2-exhibition #v2-mobile-accolade,body.v2-exhibition #v2-start-tour,body.v2-exhibition #language-picker,body.v2-exhibition #reset-europe,body.v2-exhibition .mapboxgl-ctrl-top-right,body.v2-exhibition .mapboxgl-ctrl-top-left{display:none!important}
+body.v2-exhibition #v2-root #v2-tour-card{left:3vw;bottom:5vh;top:auto;width:41vw;max-width:none;max-height:77dvh;overflow:auto;padding:clamp(20px,2vw,46px);border-radius:clamp(16px,1.8vw,36px);box-sizing:border-box;background:#21162bee!important;color:#fff!important;border:1px solid #ffffff40;box-shadow:0 20px 80px #0006}
+body.v2-exhibition #v2-root #v2-tour-card h2{font-size:clamp(28px,3.15vw,76px);line-height:1.07;margin:.35em 0;color:#fff!important}
+body.v2-exhibition #v2-root #v2-tour-card p{font-size:clamp(16px,1.48vw,34px);line-height:1.42;color:#f0e8f5!important;margin:.5em 0}
+body.v2-exhibition #v2-root #v2-tour-card .v2-exhibition-story:not([hidden]){display:block;border-left:4px solid #ffbd00;padding-left:.7em;margin:.8em 0}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-location{font-size:clamp(15px,1.35vw,30px);background:transparent!important;padding:0;color:#fff!important;margin:.5em 0}
+body.v2-exhibition #v2-root #v2-tour-card :is(.v2-tour-country,.v2-tour-meta-value,.v2-tour-step-line strong){color:#fff!important}
+body.v2-exhibition #v2-root #v2-tour-card :is(.v2-tour-relationship,.v2-tour-step-line,.v2-spot-type,.v2-tour-qs-label){font-size:clamp(12px,1.1vw,26px);color:#e3d7ec!important}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-qs-rank{font-size:clamp(28px,3.4vw,80px);color:#ffbd00!important}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-qs{background:transparent!important;border-color:#ffffff40}
+body.v2-exhibition #v2-root #v2-tour-card :is(#v2-tour-website,#v2-tour-case-study,.v2-tour-countdown,.v2-tour-actions,#v2-exit-tour){display:none!important}
+body.v2-exhibition #v2-root #v2-tour-header{display:flex!important;left:3vw;top:3vh;padding:1.1vw 1.6vw;background:#21162bee!important;color:#fff!important;max-width:90vw}
+body.v2-exhibition #v2-root #v2-tour-header picture img{width:clamp(100px,10vw,240px)}
+body.v2-exhibition #v2-root #v2-tour-header strong{display:block;font-size:clamp(14px,1.5vw,32px);color:#fff!important}
+body.v2-exhibition .v2-tour-site-label{display:none}
+body.v2-exhibition .v2-tour-site-marker{transform-origin:center}
+.v2-exhibition-footer{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.v2-exhibition-link{display:flex;align-items:center;gap:12px;background:#21162bee;border:1px solid #ffffff40;border-radius:16px;color:white;text-decoration:none;padding:12px;max-width:25vw}
+.v2-exhibition-qr{width:clamp(70px,6vw,144px);height:auto;background:white}
+.v2-exhibition-invite{font-size:clamp(12px,1.1vw,24px);font-weight:650;max-width:12ch}
+.v2-exhibition-controls{display:flex;gap:8px;align-items:center;opacity:.75}
+.v2-exhibition-controls :is(button,a,select){background:#21162bee;color:#fff;border:1px solid #ffffff60;border-radius:8px;padding:8px;font:inherit;font-size:12px;text-decoration:none}
+.v2-exhibition-controls:hover,.v2-exhibition-controls:focus-within{opacity:1}
+.v2-exhibition-loading{position:fixed;inset:0;z-index:10000;background:#21162b;color:white;display:grid;place-items:center;text-align:center;padding:24px;font-size:clamp(18px,2vw,42px)}
+@media(max-width:680px){
+ body.v2-exhibition #v2-root #v2-tour-card{left:3vw;bottom:15vh;width:94vw;max-height:64dvh;padding:18px}
+ body.v2-exhibition #v2-root #v2-tour-card #v2-tour-desc{display:block!important}
+ body.v2-exhibition #v2-exhibition-info{bottom:2vh;right:3vw}
+ body.v2-exhibition .v2-exhibition-link{display:none}
+ body.v2-exhibition #v2-root #v2-tour-header strong{font-size:12px}
+}
+@media print{body.v2-exhibition #v2-exhibition-info{display:none!important}}
