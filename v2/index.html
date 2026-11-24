@@ -258,7 +258,7 @@
     /* Light location cards: strong type hierarchy and clear action. */
     .mapboxgl-popup { z-index: 8; }
     .mapboxgl-popup-content {
-      max-height: min(68dvh, 510px); overflow-y: auto;
+      max-height: calc(100dvh - 48px); overflow-y: auto;
       border: 1px solid color-mix(in srgb, var(--brand-grey) 12%, var(--brand-white)); border-radius: 21px; background: #FFFFFF;
       padding: 25px 24px 23px; box-shadow: 0 16px 50px rgba(0,0,0,.28), 0 2px 7px rgba(0,0,0,.10);
       font: 15px/1.55 var(--font); color: var(--ink);
@@ -270,7 +270,7 @@
       position: fixed !important; top: 50% !important; left: 50% !important;
       right: auto !important; bottom: auto !important;
       transform: translate(-50%, -50%) !important;
-      max-width: calc(100vw - 28px) !important;
+      max-width: min(540px, calc(100vw - 28px)) !important;
       max-height: calc(100dvh - 32px) !important;
     }
     .mapboxgl-popup.sdca-popup-contained .mapboxgl-popup-content {
@@ -528,8 +528,8 @@
         border-radius: 22px;
       }
       #browse-heading { font-size: 21px; }
-      .mapboxgl-popup { max-width: calc(100vw - 22px) !important; }
-      .mapboxgl-popup-content { padding: 22px 19px 19px; max-height: 60dvh; }
+      .mapboxgl-popup { max-width: min(540px, calc(100vw - 22px)) !important; }
+      .mapboxgl-popup-content { padding: 22px 19px 19px; max-height: calc(100dvh - 48px); }
       .popup-title { font-size: 21px; }
       #error { left: 10px; right: 10px; bottom: 14px; }
     }
@@ -2866,7 +2866,7 @@
       if (nearbyDialog) dismissNearbyDialog(false);
       popupReturnFocusTo = returnFocusTo;
       removePopupSilently();
-      const instance = new mapboxgl.Popup({ offset: 17, maxWidth: '355px', closeOnClick: false, closeButton: true })
+      const instance = new mapboxgl.Popup({ offset: 17, maxWidth: 'min(540px, calc(100vw - 28px))', closeOnClick: false, closeButton: true })
         .setLngLat(coordinates).setDOMContent(content).addTo(map);
       popup = instance;
       // Keep even unusually long single-location popups within the viewport.
