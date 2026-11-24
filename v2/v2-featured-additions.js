@@ -162,7 +162,7 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
       "properties": {
         "name": "Mitsubishi Electric Trane HVAC US (METUS)",
         "group": "Prospective employer",
-        "description": "External UX internship example: SCAD student Emmaline Kim researched connected HVAC products and pitched an app feature at METUS. A direct Loughborough SDCA relationship has not been established.",
+        "description": "External UX internship example: SCAD student Emmaline Kim researched connected HVAC products and pitched an app feature at METUS.",
         "url": "https://www.mitsubishicomfort.com/",
         "visible": "Yes",
         "city": "Suwanee",
