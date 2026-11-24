@@ -791,3 +791,11 @@ body.v2-exhibition .v2-tour-site-marker{transform-origin:center}
 #v2-root .v2-exhibition-entry[hidden],#v2-root .v2-exhibition-story[hidden],body.v2-exhibition #v2-root #v2-tour-desc[hidden],body.v2-exhibition #v2-root #v2-tour-relationship[hidden]{display:none!important}
 body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:#fff;border-radius:5px;padding:6px;box-sizing:content-box}
 @media(prefers-color-scheme:dark){body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:transparent}}
+
+/* Use the same gold five-point star for selected partners and tour stops. */
+body #map .v2-selected-marker,
+body .v2-tour-site-marker .v2-tour-site-dot {
+ background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4 40 23 61 25 45 39 50 60 32 49 14 60 19 39 3 25 24 23Z' fill='%23FFBD00' stroke='%23FFFFFF' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M32 4 40 23 61 25 45 39 50 60 32 49 14 60 19 39 3 25 24 23Z' fill='none' stroke='%232D0153' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ filter:drop-shadow(0 0 5px rgba(255,189,0,.65)) drop-shadow(0 3px 5px rgba(45,1,83,.35));
+}

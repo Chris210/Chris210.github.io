@@ -978,7 +978,7 @@
     }
 
 </style>
-<link rel="stylesheet" href="./v2.css?v=exhibition-20261124-2">
+<link rel="stylesheet" href="./v2.css?v=map-featured-stars-20261124">
 <link rel="stylesheet" href="./v2-theme.css?v=featured-star-yellow-20261123">
 <link rel="stylesheet" href="./v2-collaborate.css?v=records-footer-4">
 <link rel="stylesheet" href="./v2-themes.css?v=featured-country-theme-20261123">
@@ -3441,7 +3441,8 @@
             f.geometry.coordinates.every(Number.isFinite) &&
             f.properties?.visible !== 'No');
           masterFeatures = allPartners.filter(f =>
-            !(f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0));
+            !(f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0))
+            .map(f => ({...f, properties:{...f.properties, sdcaFeatured: featuredRankOf(f) !== -1}}));
           for (const feature of allPartners) addWorldFeature(feature);
           const source = map.getSource(MASTER_SOURCE);
           if (source) source.setData({type:'FeatureCollection',features:masterFeatures});
@@ -3640,7 +3641,11 @@
         '#F0047F'];
       map.setLayoutProperty(LEGACY_POINT_LAYER,'visibility','none');
       map.addSource(MASTER_SOURCE,{type:'geojson',data:{type:'FeatureCollection',features:masterFeatures}});
-      const paint={...oldPaint,'circle-color':partnerColor};
+      // Featured locations are drawn by the gold-star layer; keep master
+      // points queryable for nearby selection and the in-view directory.
+      const ordinaryOpacity=['case',['==',['get','sdcaFeatured'],true],0,1];
+      const paint={...oldPaint,'circle-color':partnerColor,
+        'circle-opacity':ordinaryOpacity,'circle-stroke-opacity':ordinaryOpacity};
       if(!paint['circle-radius'])paint['circle-radius']=8;
       map.addLayer({id:POINT_LAYER,type:'circle',source:MASTER_SOURCE,paint});
       const shared={type:'circle',source:MASTER_SOURCE};
@@ -3666,7 +3671,8 @@
         if(key===hoveredKey)return;
         hoveredKey=key;map.getCanvas().style.cursor=feature?'pointer':'';
         if(hoverLayerReady){const filter=buildFilter(feature?matchFeature(feature):noFeatureFilter);
-          map.setFilter('sdca-hover-halo',filter);map.setFilter('sdca-hover-dot',filter);}
+          map.setFilter('sdca-hover-halo',filter);
+          map.setFilter('sdca-hover-dot',['all',filter,['!=',['get','sdcaFeatured'],true]]);}
       }
       map.on('mousemove',event=>{
         const points=map.queryRenderedFeatures(event.point,{layers:[POINT_LAYER]});
@@ -3718,9 +3724,9 @@
 <script src="./v2-theme-discovery.js?v=featured-country-theme-20261123"></script>
 <script src="./v2-case-studies.js?v=case-chooser-year-sort-1"></script>
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
-<script src="./v2.js?v=exhibition-autoplay-20261124"></script>
+<script src="./v2.js?v=map-featured-stars-20261124"></script>
 <script src="./v2-localise.js?v=hongkong-sar-20261120"></script>
-<script src="./v2-theme.js?v=featured-international-20261120"></script>
+<script src="./v2-theme.js?v=map-featured-stars-20261124"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
 </body>
 </html>

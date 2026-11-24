@@ -833,7 +833,7 @@ function mapStyle(){
   }
   if(map.getLayer('sdca-master-points')){
    map.setPaintProperty('sdca-master-points','circle-color',['match',['get','group'],'Exchange Programme','#2D0153','Academic Collaboration','#2D0153','#F0047F']);
-   map.setPaintProperty('sdca-master-points','circle-opacity',1);
+   map.setPaintProperty('sdca-master-points','circle-opacity',['case',['==',['get','sdcaFeatured'],true],0,1]);
    map.setPaintProperty('sdca-master-points','circle-radius',5.5);
   }
  }catch(e){console.warn('Some base layers cannot be recoloured',e);}
@@ -841,7 +841,17 @@ function mapStyle(){
 }
 function highlight(){
  if(!map.loaded()||api.status()!=='ready')return;
- const features=featured.map(i=>{const f=find(i);return located(f)?{type:'Feature',properties:{name:i.name,markerType:/^(Exchange Programme|Academic Collaboration)$/.test(String(f.properties?.group||''))?'exchange':'placement'},geometry:f.geometry}:null;}).filter(Boolean);
+ // Match the master layer's featured aliases, including additional locations
+ // of a featured organisation; deduplicate coincident records for that partner.
+ const seen=new Set(),features=[];
+ for(const f of api.allFeatures()){
+  const i=itemOf(f);
+  if(!i||!located(f))continue;
+  const key=JSON.stringify([i.name,f.geometry.coordinates]);
+  if(seen.has(key))continue;
+  seen.add(key);
+  features.push({type:'Feature',properties:{name:i.name,markerType:/^(Exchange Programme|Academic Collaboration)$/.test(String(f.properties?.group||''))?'exchange':'placement'},geometry:f.geometry});
+ }
  const collection={type:'FeatureCollection',features};
  if(!features.length)return;
  const existing=map.getSource('v2-key-partners');
@@ -862,8 +872,26 @@ function highlight(){
     'circle-color':'#ffffff','circle-opacity':.13,
     'circle-radius':['step',['get','point_count'],23,4,31,12,39,25,44]
   }},'v2-key-clusters');
-  map.addLayer({id:'v2-key-points',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
-    'circle-color':['match',['get','markerType'],'exchange','#2D0153','#F0047F'],'circle-radius':8,'circle-stroke-color':'#fff','circle-stroke-width':3}});
+  // Draw a crisp five-point star at 2x resolution, independent of basemap fonts.
+  const starId='v2-featured-gold-star';
+  if(!map.hasImage(starId)){
+   const canvas=document.createElement('canvas');canvas.width=canvas.height=56;
+   const ctx=canvas.getContext('2d');
+   ctx.beginPath();
+   for(let n=0;n<10;n++){
+    const a=-Math.PI/2+n*Math.PI/5,r=n%2===0?23:10;
+    const x=28+Math.cos(a)*r,y=28+Math.sin(a)*r;
+    if(n===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+   }
+   ctx.closePath();ctx.lineJoin='round';
+   ctx.strokeStyle='#FFFFFF';ctx.lineWidth=6;ctx.stroke();
+   ctx.strokeStyle='#2D0153';ctx.lineWidth=2.5;ctx.stroke();
+   ctx.fillStyle='#FFBD00';ctx.fill();
+   map.addImage(starId,ctx.getImageData(0,0,56,56),{pixelRatio:2});
+  }
+  map.addLayer({id:'v2-key-points',type:'symbol',source:'v2-key-partners',filter:['!',['has','point_count']],
+   layout:{'icon-image':starId,'icon-size':1,'icon-allow-overlap':true,'icon-ignore-placement':true},
+   paint:{'icon-emissive-strength':1}});
   map.addLayer({id:'v2-key-halo',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
     'circle-color':'#ffffff','circle-radius':13,'circle-opacity':.12}},'v2-key-points');
   map.addLayer({id:'v2-key-labels',type:'symbol',source:'v2-key-partners',filter:['!',['has','point_count']],
@@ -934,6 +962,8 @@ function maybeStartExhibition(){
 api.startLookup()?.then(()=>{refreshAudienceOrder();tiles();directory();renderCounts();highlight();if(exhibition&&api.status()!=='ready')document.getElementById('v2-exhibition-loading').textContent='Partner directory unavailable. Reload to retry.';maybeStartExhibition();});
 Promise.resolve(window.__sdcaV2IpCountryPromise).catch(()=>null).then(()=>{exhibitionReady=true;maybeStartExhibition();});
 map.on('load',()=>{exhibitionMapReady=true;mapStyle();api.startLookup()?.then(()=>{highlight();maybeStartExhibition();});maybeStartExhibition();});
+// A data load can briefly make map.loaded() false; retry once the map settles.
+map.on('idle',()=>{if(!map.getLayer('v2-key-points'))highlight();});
 if(exhibition)map.on('idle',()=>{exhibitionMapReady=true;maybeStartExhibition();});
 if(map.loaded()){mapStyle();highlight();maybeStartExhibition();}
 if(exhibition){

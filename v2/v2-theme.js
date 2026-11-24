@@ -115,10 +115,8 @@ function applyTheme(){
   paint('sdca-hover-dot','circle-color',byGroup);
   paint('sdca-hover-dot','circle-stroke-color',dark?masterStroke:'#FFFFFF');
   paint('sdca-hover-dot','circle-stroke-width',dark?2:3);
-  paint('v2-key-points','circle-color',byMarkerType);
-  paint('v2-key-points','circle-stroke-color',featuredStroke);
-  paint('v2-key-points','circle-stroke-width',
-    dark?['match',['get','markerType'],'exchange',2.4,1.2]:3);
+  // Featured partners keep the same gold star in both colour themes.
+  paint('v2-key-points','icon-emissive-strength',1);
   paint('v2-key-clusters','circle-color',byClusterMajority);
   paint('v2-key-clusters','circle-stroke-color',dark?'#B9AABE':
     ['case',
@@ -142,7 +140,7 @@ function applyTheme(){
   const emissive=dark?1:0;
   for(const id of [
     'sdca-master-points','sdca-hover-dot','sdca-hover-halo',
-    'sdca-selected-ring','v2-key-points','v2-key-clusters',
+    'sdca-selected-ring','v2-key-clusters',
     'v2-key-halo','v2-key-cluster-halo'
   ]) paint(id,'circle-emissive-strength',emissive);
   // Cluster counts and featured labels also need legible colours at night.
