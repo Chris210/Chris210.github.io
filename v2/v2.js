@@ -839,6 +839,59 @@ function mapStyle(){
  }catch(e){console.warn('Some base layers cannot be recoloured',e);}
  // Styling must not override the country-aware initial camera in index.html.
 }
+// The clustering index decides where bubbles appear, not what their labels count.
+let lastCoverageSignature='',lastCoverageData='';
+function updateDiskCoverage(){
+ if(!map.getLayer('v2-key-cluster-seeds')||!map.getSource('v2-key-disk-coverage'))return;
+ const seeds=new Map();
+ for(const f of map.queryRenderedFeatures({layers:['v2-key-cluster-seeds']})){
+  if(f.geometry?.type==='Point')seeds.set(f.properties.cluster_id,f);
+ }
+ const sorted=[...seeds.values()].sort((a,b)=>a.properties.cluster_id-b.properties.cluster_id);
+ const center=map.getCenter(),canvas=map.getCanvas();
+ const signature=JSON.stringify([center.lng,center.lat,map.getZoom(),map.getBearing(),map.getPitch(),canvas.clientWidth,canvas.clientHeight,sorted.map(f=>[f.properties.cluster_id,f.properties.point_count,f.geometry.coordinates])]);
+ if(signature===lastCoverageSignature)return;
+ lastCoverageSignature=signature;
+ const globe=map.getProjection()?.name==='globe'&&map.getZoom()<6;
+ const projectVisible=coords=>{
+  const p=map.project(coords);
+  if(!Number.isFinite(p.x)||!Number.isFinite(p.y))return null;
+  // A location behind the globe can project into the visible hemisphere.
+  // The inverse projection must recover the same geographic location.
+  if(globe){
+   const ll=map.unproject(p);
+   const longitudeError=Math.abs(((ll.lng-coords[0]+540)%360+360)%360-180);
+   if(!Number.isFinite(ll.lat)||longitudeError>.05||Math.abs(ll.lat-coords[1])>.05)return null;
+  }
+  return p;
+ };
+ const partners=sorted.length?api.allFeatures().filter(located).map(f=>({
+  point:projectVisible(f.geometry.coordinates),
+  name:normalize(itemOf(f)?.name||f.properties?.name)||String(f.properties?.name||f.id),
+  exchange:/^(Exchange Programme|Academic Collaboration)$/.test(String(f.properties?.group||''))
+ })).filter(f=>f.point):[];
+ const disks=[];
+ for(const seed of sorted){
+  const p=seed.properties,coords=seed.geometry.coordinates,point=projectVisible(coords);
+  if(!point)continue;
+  // Preserve existing bubble and halo sizes, independent of the new count.
+  const n=Number(p.point_count),diskRadius=n>=25?33:n>=12?29:n>=4?21:15;
+  const haloRadius=n>=25?44:n>=12?39:n>=4?31:23;
+  const strokeWidth=window.matchMedia('(prefers-color-scheme: dark)').matches?1.5:3;
+  const radiusSquared=(diskRadius+strokeWidth)**2;
+  const included=new Map();
+  for(const partner of partners){
+   const dx=partner.point.x-point.x,dy=partner.point.y-point.y;
+   if(dx*dx+dy*dy<=radiusSquared)included.set(partner.name,Boolean(included.get(partner.name)||partner.exchange));
+  }
+  const exchangeCount=[...included.values()].filter(Boolean).length;
+  disks.push({type:'Feature',geometry:{type:'Point',coordinates:coords},properties:{cluster:true,cluster_id:p.cluster_id,point_count:included.size,exchangeCount,diskRadius,haloRadius}});
+ }
+ const data=JSON.stringify(disks);
+ if(data===lastCoverageData)return;
+ lastCoverageData=data;
+ map.getSource('v2-key-disk-coverage').setData({type:'FeatureCollection',features:disks});
+}
 function highlight(){
  if(!map.loaded()||api.status()!=='ready')return;
  // Match the master layer's featured aliases, including additional locations
@@ -855,22 +908,27 @@ function highlight(){
  const collection={type:'FeatureCollection',features};
  if(!features.length)return;
  const existing=map.getSource('v2-key-partners');
- if(existing){existing.setData(collection);return;}
+ if(existing){lastCoverageSignature='';existing.setData(collection);return;}
  try{
   map.addSource('v2-key-partners',{type:'geojson',data:collection,cluster:true,clusterRadius:54,clusterMaxZoom:5,clusterProperties:{exchangeCount:['+',['case',['==',['get','markerType'],'exchange'],1,0]]}});
-  map.addLayer({id:'v2-key-clusters',type:'circle',source:'v2-key-partners',filter:['has','point_count'],paint:{
-    'circle-color':['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#2D0153','#F0047F'],
+  // Transparent seed circles remain queryable; the displayed disks use a separate source.
+  map.addLayer({id:'v2-key-cluster-seeds',type:'circle',source:'v2-key-partners',filter:['has','point_count'],paint:{
     'circle-radius':['step',['get','point_count'],15,4,21,12,29,25,33],
+    'circle-stroke-width':3,'circle-opacity':0,'circle-stroke-opacity':0,'circle-pitch-scale':'viewport','circle-pitch-alignment':'viewport'}});
+  map.addSource('v2-key-disk-coverage',{type:'geojson',data:{type:'FeatureCollection',features:[]},buffer:128});
+  map.addLayer({id:'v2-key-clusters',type:'circle',source:'v2-key-disk-coverage',paint:{
+    'circle-color':['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#2D0153','#F0047F'],
+    'circle-radius':['get','diskRadius'],'circle-pitch-scale':'viewport','circle-pitch-alignment':'viewport',
     'circle-stroke-color':['case',
       ['all',['>', ['get','exchangeCount'],0],['<',['get','exchangeCount'],['get','point_count']]],
       ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#F0047F','#2D0153'],
       '#ffffff'],
     'circle-stroke-width':3}});
-  map.addLayer({id:'v2-key-count',type:'symbol',source:'v2-key-partners',filter:['has','point_count'],
-    layout:{'text-field':['get','point_count_abbreviated'],'text-size':13},paint:{'text-color':'#ffffff'}});
-  map.addLayer({id:'v2-key-cluster-halo',type:'circle',source:'v2-key-partners',filter:['has','point_count'],paint:{
+  map.addLayer({id:'v2-key-count',type:'symbol',source:'v2-key-disk-coverage',
+    layout:{'text-field':['to-string',['get','point_count']],'text-size':13,'text-allow-overlap':true,'text-ignore-placement':true,'text-pitch-alignment':'viewport','text-rotation-alignment':'viewport'},paint:{'text-color':'#ffffff'}});
+  map.addLayer({id:'v2-key-cluster-halo',type:'circle',source:'v2-key-disk-coverage',paint:{
     'circle-color':'#ffffff','circle-opacity':.13,
-    'circle-radius':['step',['get','point_count'],23,4,31,12,39,25,44]
+    'circle-radius':['get','haloRadius'],'circle-pitch-scale':'viewport','circle-pitch-alignment':'viewport'
   }},'v2-key-clusters');
   // Draw a crisp five-point star at 2x resolution, independent of basemap fonts.
   const starId='v2-featured-gold-star';
@@ -897,10 +955,13 @@ function highlight(){
   map.addLayer({id:'v2-key-labels',type:'symbol',source:'v2-key-partners',filter:['!',['has','point_count']],
     layout:{'text-field':['get','name'],'text-size':11,'text-anchor':'left','text-offset':[1.5,0],'text-max-width':17,'text-optional':true},
     paint:{'text-color':'#34125e','text-halo-color':'#ffffff','text-halo-width':2}});
+  map.on('render',updateDiskCoverage);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{lastCoverageSignature='';map.triggerRepaint();});
+  updateDiskCoverage();
   map.on('click','v2-key-clusters',e=>{
    const f=e.features?.[0];if(!f)return;
    map.getSource('v2-key-partners').getClusterExpansionZoom(f.properties.cluster_id,(err,zoom)=>{
-    if(!err)map.easeTo({center:f.geometry.coordinates,zoom:zoom,duration:600,essential:false});
+    if(!err)map.easeTo({center:f.geometry.coordinates,zoom:Math.max(zoom,map.getZoom()+1),duration:600,essential:false});
    });
   });
  }catch(e){console.warn('Featured marker cluster could not be created',e);}
