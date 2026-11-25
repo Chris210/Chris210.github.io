@@ -7,10 +7,10 @@ if(!map||typeof window.matchMedia!=='function')return;
 const preference=window.matchMedia('(prefers-color-scheme: dark)');
 const palettes={
  light:{
-  land:'#FAF8FC',water:'#DBD2E7',park:'#E3E6DF',building:'#F0EAF5',
-  background:'#EDE7F3',road:'#FFFFFF',boundary:'#B8A7C8',
-  label:'#362248',labelHalo:'#FFFFFF',muted:'#79648A',
-  atmosphere:{color:'#EDE5F4','high-color':'#D9CDE5','horizon-blend':0.025,'space-color':'#EDE7F3','star-intensity':0}
+  land:'#FAF9FC',water:'#CFC6DD',park:'#E8E7E3',building:'#F0EAF5',
+  background:'#1A0833',road:'#FFFFFF',boundary:'#D1C7E0',
+  label:'#361163',labelHalo:'#FFFFFF',muted:'#525E66',
+  atmosphere:{color:'#E6DEF1','high-color':'#CFC6DD','horizon-blend':0.045,'space-color':'#1A0833','star-intensity':0}
  },
  dark:{
   land:'#2B2137',water:'#171A30',park:'#29362F',building:'#36283D',

@@ -711,3 +711,12 @@ dialog.gcn-case-dialog :is(button,a):focus-visible {
   .gcn-case-choice {border:2px solid LinkText;background:Canvas;color:CanvasText;}
   .gcn-case-choice-category,.gcn-case-choice-arrow {background:ButtonFace;color:ButtonText;border:1px solid ButtonText;}
 }
+
+/* V2 map-only backport from V3; UI surfaces, fonts and controls are unchanged. */
+body:not(.v2-exhibition) {
+  background:radial-gradient(ellipse at 63% 44%,#361163 0%,#241047 48%,#1A0833 82%)!important;
+}
+body:not(.v2-exhibition) #map {background:transparent!important;}
+@media (prefers-color-scheme:dark) {
+  body:not(.v2-exhibition) {background:radial-gradient(ellipse at 63% 44%,#302046 0%,#1A1425 50%,#110D18 82%)!important;}
+}
