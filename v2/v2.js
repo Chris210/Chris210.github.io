@@ -151,6 +151,34 @@ const SPOTLIGHT_TRAVEL_MS=3100;
 const CINEMATIC_EASE=t=>t*t*(3-2*t);
 let tab='academic',activeSpotlightItem=null,panelMinimised=exhibition,mode='home',tourIndex=0,tourTimer=null,playing=false,tourRemainingMs=TOUR_DWELL_MS,tourDeadline=0,tourPhase='idle',tourSequence=0,tourArrivalHandler=null,tourSiteMarker=null,tourPlaceAbortController=null,activeTourPlace=null;
 const home=$('v2-home'),spot=$('v2-spotlight'),dir=$('v2-directory'),compact=$('v2-compact-header'),tour=$('v2-tour-mode');
+// Centre the camera in the actual unobstructed map area. Unlike a fixed
+// offset, measured padding works at every viewport width and language.
+let homePaddingFrame=0;
+function syncHomePadding(){
+ if(exhibition||mode!=='home')return;
+ const canvas=map.getCanvas().getBoundingClientRect(),panel=home.getBoundingClientRect();
+ const padding={left:0,right:0,top:0,bottom:0};
+ if(!home.hidden&&panel.width>0&&panel.height>0){
+  if(window.matchMedia('(max-width:680px)').matches){
+   if(!home.classList.contains('v2-mobile-collapsed'))
+    padding.bottom=Math.max(0,Math.min(canvas.height-1,Math.round(canvas.bottom-panel.top)));
+  }else{
+   padding.left=Math.max(0,Math.min(canvas.width-1,Math.round(panel.right-canvas.left)));
+  }
+ }
+ const current=map.getPadding();
+ if(Object.keys(padding).some(k=>current[k]!==padding[k]))map.setPadding(padding);
+}
+function queueHomePadding(){
+ if(homePaddingFrame)return;
+ homePaddingFrame=requestAnimationFrame(()=>{homePaddingFrame=0;syncHomePadding();});
+}
+map.on('resize',queueHomePadding);
+if(typeof ResizeObserver==='function'){
+ const homeLayoutObserver=new ResizeObserver(queueHomePadding);
+ homeLayoutObserver.observe(home);
+}
+window.addEventListener('resize',queueHomePadding);
 // Mobile-only bottom drawer: a small, tappable handle is visible by default.
 // Keep the existing search, map key and featured-partner controls inside the drawer.
 const mobileDrawerToggle=element('button','v2-mobile-drawer-toggle');
@@ -169,6 +197,7 @@ function setMobileDrawerOpen(isOpen){
  mobileDrawerToggle.setAttribute('aria-expanded',String(open));
  mobileDrawerToggle.setAttribute('aria-label',open?'Collapse partner panel':'Expand partner panel');
  mobileDrawerLabel.textContent=open?'Close partners':'Explore partners';
+ queueHomePadding();
 }
 mobileDrawerToggle.addEventListener('click',()=>setMobileDrawerOpen(home.classList.contains('v2-mobile-collapsed')));
 setMobileDrawerOpen(false);
@@ -201,6 +230,7 @@ function view(name){
   dir.hidden=name!=='directory';$('v2-overlay-scrim').hidden=name!=='directory';tour.hidden=name!=='tour';
   const picker=$('language-picker');if(picker)picker.hidden=name==='tour';
   $('v2-search-results').hidden=true;
+  if(name==='home'){syncHomePadding();queueHomePadding();}
 }
 function tabs(){
  const container=home.querySelector('.v2-tabs');container.replaceChildren();
@@ -985,8 +1015,8 @@ Promise.resolve(window.__sdcaV2IpCountryPromise).then(refreshAudienceOrder).catc
 $('v2-view-all').onclick=openDirectory;
 $('v2-directory-back').onclick=overview;$('v2-directory-print').onclick=()=>window.print();
 $('v2-overlay-scrim').onclick=overview;
-$('v2-compact-search').onclick=()=>{overview();$('v2-search').focus();};
-$('v2-return-home').onclick=overview;
+$('v2-compact-search').onclick=()=>{if(mode==='home'&&panelMinimised){panelMinimised=false;view('home');}else overview();$('v2-search').focus();};
+$('v2-return-home').onclick=()=>{if(mode==='home'&&panelMinimised){panelMinimised=false;view('home');}else overview();};
 $('v2-collapse').onclick=()=>{panelMinimised=!panelMinimised;view('home');};
 $('language-select')?.addEventListener('change',()=>{
   if(mode==='directory')directory();
