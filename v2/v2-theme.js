@@ -133,6 +133,9 @@ function applyTheme(){
   paint('v2-key-labels','text-color',p.label);
   paint('v2-key-labels','text-halo-color',p.labelHalo);
   paint('v2-key-labels','text-halo-width',2);
+  paint('sdca-hover-label','text-color',p.label);
+  paint('sdca-hover-label','text-halo-color',p.labelHalo);
+  paint('sdca-hover-label','text-halo-width',2);
   // Mapbox Standard's 3D 'night' lighting dims every custom circle,
   // including bright pink/lilac paint colours, unless it emits light.
   // Set emissive strength on every partner dot and its highlight/halo.
@@ -144,7 +147,7 @@ function applyTheme(){
     'v2-key-halo','v2-key-cluster-halo'
   ]) paint(id,'circle-emissive-strength',emissive);
   // Cluster counts and featured labels also need legible colours at night.
-  for(const id of ['v2-key-count','v2-key-labels'])
+  for(const id of ['v2-key-count','v2-key-labels','sdca-hover-label'])
     paint(id,'text-emissive-strength',emissive);
   if(lastFogMode!==(dark?'dark':'light')){
    try{map.setFog(p.atmosphere);lastFogMode=dark?'dark':'light';}
