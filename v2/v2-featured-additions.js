@@ -162,7 +162,7 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
       "properties": {
         "name": "Mitsubishi Electric Trane HVAC US (METUS)",
         "group": "Prospective employer",
-        "description": "External UX internship example: SCAD student Emmaline Kim researched connected HVAC products and pitched an app feature at METUS.",
+        "description": "",
         "url": "https://www.mitsubishicomfort.com/",
         "visible": "Yes",
         "city": "Suwanee",
@@ -174,8 +174,7 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
         "verification_source": "https://us.mitsubishielectric.com/en/about/local/locations/us010/",
         "coordinate_accuracy": "Approximate business address coordinates",
         "location_source": "https://www.whereorg.com/mitsubishi-electric-22065373",
-        "relationship_scope": "External SCAD internship; prospective SDCA employer",
-        "source_class": "SCAD published external example; not established SDCA relationship",
+        "relationship_scope": "Prospective employer",
         "color": "#b70062"
       }
     },
