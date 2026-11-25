@@ -840,7 +840,7 @@ function mapStyle(){
  // Styling must not override the country-aware initial camera in index.html.
 }
 // The clustering index decides where bubbles appear, not what their labels count.
-let lastCoverageSignature='',lastCoverageData='';
+let lastCoverageSignature='',lastCoverageData='',coveragePartners=[];
 function updateDiskCoverage(){
  if(!map.getLayer('v2-key-cluster-seeds')||!map.getSource('v2-key-disk-coverage'))return;
  const seeds=new Map();
@@ -865,11 +865,7 @@ function updateDiskCoverage(){
   }
   return p;
  };
- const partners=sorted.length?api.allFeatures().filter(located).map(f=>({
-  point:projectVisible(f.geometry.coordinates),
-  name:normalize(itemOf(f)?.name||f.properties?.name)||String(f.properties?.name||f.id),
-  exchange:/^(Exchange Programme|Academic Collaboration)$/.test(String(f.properties?.group||''))
- })).filter(f=>f.point):[];
+ const partners=sorted.length?coveragePartners.map(f=>({...f,point:projectVisible(f.coords)})).filter(f=>f.point):[];
  const disks=[];
  for(const seed of sorted){
   const p=seed.properties,coords=seed.geometry.coordinates,point=projectVisible(coords);
@@ -897,9 +893,12 @@ function highlight(){
  // Match the master layer's featured aliases, including additional locations
  // of a featured organisation; deduplicate coincident records for that partner.
  const seen=new Set(),features=[];
+ coveragePartners=[];
  for(const f of api.allFeatures()){
+  if(!located(f))continue;
   const i=itemOf(f);
-  if(!i||!located(f))continue;
+  coveragePartners.push({coords:f.geometry.coordinates,name:normalize(i?.name||f.properties?.name)||String(f.properties?.name||f.id),exchange:/^(Exchange Programme|Academic Collaboration)$/.test(String(f.properties?.group||''))});
+  if(!i)continue;
   const key=JSON.stringify([i.name,f.geometry.coordinates]);
   if(seen.has(key))continue;
   seen.add(key);
