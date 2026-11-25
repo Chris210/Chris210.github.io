@@ -1,7 +1,7 @@
 /* V2-only academically evidenced additions; not an amendment to the V1 exchange database. */
 window.SDCA_V2_ADDITIONAL_PARTNERS = {
   "schema_version": 1,
-  "generated": "2026-11-24",
+  "generated": "2026-11-25",
   "review_required_when_relationship_status_changes": true,
   "features": [
     {
@@ -177,6 +177,236 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
         "relationship_scope": "External SCAD internship; prospective SDCA employer",
         "source_class": "SCAD published external example; not established SDCA relationship",
         "color": "#b70062"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20007,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.926,
+          51.315
+        ]
+      },
+      "properties": {
+        "name": "Bombus Ltd",
+        "group": "Student Placement",
+        "description": "Tara Janes — Industrial Design and Technology. Manufacturing internship in personalised gift production, following an earlier internship. Janes describes learning to meet real customer deadlines and work collaboratively.",
+        "url": "https://www.bombus.co.uk/",
+        "visible": "Yes",
+        "city": "Faversham",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.315,
+        "longitude": 0.926,
+        "programmes": "Industrial Design and Technology",
+        "placement_years_display": "July–August 2019",
+        "relationship_years_display": "July–August 2019",
+        "relationship_scope": "Loughborough design student; Manufacturing internship",
+        "verification_source": "https://designshow.lboro.ac.uk/students/tara-janes/",
+        "location_source": "https://find-and-update.company-information.service.gov.uk/company/04621019",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "1st Floor Well Oast, Brenley Farm, Boughton, Faversham, Kent ME13 9LY"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20008,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.157,
+          53.41
+        ]
+      },
+      "properties": {
+        "name": "Motor Technology Ltd",
+        "group": "Student Placement",
+        "description": "Naomi Vladuceanu — Product Design and Technology. Vladuceanu completed a short placement with the engineering-focused motion-control company during her second year.",
+        "url": "https://www.motortechnology.uk/",
+        "visible": "Yes",
+        "city": "Stockport",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 53.41,
+        "longitude": -2.157,
+        "programmes": "Product Design and Technology",
+        "placement_years_display": "Second year; 2026 graduate showcase",
+        "relationship_years_display": "Second year; 2026 graduate showcase",
+        "relationship_scope": "Loughborough design student; Short student placement",
+        "verification_source": "https://sdcashow2026.lboro.ac.uk/student/naomi-vladuceanu/",
+        "location_source": "https://www.motortechnology.uk/contact-us/",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "Motec House, Chadkirk Business Park, Romiley, Stockport SK6 3NE"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20009,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.316,
+          51.0629
+        ]
+      },
+      "properties": {
+        "name": "EPLS Design",
+        "group": "Student Placement",
+        "description": "Olivia Marsh — Graphic Design. Marsh adapted existing Thirtyone:eight character illustrations for seasonal campaigns during her placement year at EPLS Design.",
+        "url": "https://epls.design/",
+        "visible": "Yes",
+        "city": "Winchester",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.0629,
+        "longitude": -1.316,
+        "programmes": "Graphic Design",
+        "placement_years_display": "2026 graduate showcase; dates not stated",
+        "relationship_years_display": "2026 graduate showcase; dates not stated",
+        "relationship_scope": "Loughborough design student; Student industry placement",
+        "verification_source": "https://sdcashow2026.lboro.ac.uk/student/olivia-marsh/",
+        "location_source": "https://epls.design/contact/",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "1 Moorside Place, Moorside Road, Winchester SO23 7FX"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20010,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.9781,
+          51.4543
+        ]
+      },
+      "properties": {
+        "name": "Co:lab Design Agency",
+        "group": "Student Placement",
+        "description": "Rebecca Harvey — Graphic Design BA (Hons). Harvey reports seven months of graphic design work at the Reading agency alongside an international study exchange and other work experience. Exact placement classification and dates are not stated.",
+        "url": "https://colabagency.co.uk/",
+        "visible": "Yes",
+        "city": "Reading",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.4543,
+        "longitude": -0.9781,
+        "programmes": "Graphic Design BA (Hons)",
+        "placement_years_display": "Seven months; 2025 graduate showcase",
+        "relationship_years_display": "Seven months; 2025 graduate showcase",
+        "relationship_scope": "Loughborough design student; Student industry work experience",
+        "verification_source": "https://sdcashow2025.lboro.ac.uk/student/rebecca-harvey/",
+        "location_source": "https://colabagency.co.uk/",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20011,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.061,
+          51.823
+        ]
+      },
+      "properties": {
+        "name": "Pretty Lavish",
+        "group": "Student Placement",
+        "description": "Kora Reay — Graphic Design. Reay documents a nine-month graphic design internship with the British fashion brand during her degree.",
+        "url": "https://prettylavish.co.uk/",
+        "visible": "Yes",
+        "city": "Widford",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.823,
+        "longitude": 0.061,
+        "programmes": "Graphic Design",
+        "placement_years_display": "June 2024–March 2025",
+        "relationship_years_display": "June 2024–March 2025",
+        "relationship_scope": "Loughborough design student; Student graphic design internship",
+        "verification_source": "https://sdcashow2026.lboro.ac.uk/student/kora-reay/",
+        "location_source": "https://prettylavish.co.uk/en-us/pages/terms-and-conditions",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "3 Church Barns, Ware Road, Widford, Ware SG12 8RL"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20012,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.204,
+          30.058
+        ]
+      },
+      "properties": {
+        "name": "El-Shai",
+        "group": "Student Placement",
+        "description": "Sarah Moustafa — Graphic Design. Moustafa lists a graphic design internship with the Egyptian online magazine in August 2021, separately from her subsequent Sony Europe placement year.",
+        "url": "https://www.el-shai.com/",
+        "visible": "Yes",
+        "city": "Giza",
+        "country": "Egypt",
+        "country_name": "Egypt",
+        "latitude": 30.058,
+        "longitude": 31.204,
+        "programmes": "Graphic Design",
+        "placement_years_display": "August 2021",
+        "relationship_years_display": "August 2021",
+        "relationship_scope": "Loughborough design student; Student-listed short internship",
+        "verification_source": "https://sdcashow2024.lboro.ac.uk/student/sarah-moustafa/",
+        "location_source": "https://www.el-shai.com/contact/",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "1 Lebanon Square, Agouza, Giza, Egypt"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20013,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.521,
+          51.611
+        ]
+      },
+      "properties": {
+        "name": "Essex Partnership University NHS Foundation Trust",
+        "group": "Student Placement",
+        "description": "Jess Shaw — Graphic Communication and Illustration (BA Hons). Shaw reports a three-month communications internship followed by university holiday work, producing social media and rebrand materials. The trust headquarters is the reference location, not a confirmed placement office.",
+        "url": "https://www.eput.nhs.uk/",
+        "visible": "Yes",
+        "city": "Wickford",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.611,
+        "longitude": 0.521,
+        "programmes": "Graphic Communication and Illustration (BA Hons)",
+        "placement_years_display": "2021–2022",
+        "relationship_years_display": "2021–2022",
+        "relationship_scope": "Loughborough design student; Student communications internship and subsequent holiday work",
+        "verification_source": "https://sdcashow2024.lboro.ac.uk/student/jess-shaw/",
+        "location_source": "https://www.cqc.org.uk/location/R1LZ8/contact",
+        "coordinate_accuracy": "Approximate locality reference; not a verified placement building",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "address_verified": "The Lodge, Lodge Approach, Wickford, Essex SS11 7XX"
       }
     }
   ]
