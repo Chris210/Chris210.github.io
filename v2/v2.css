@@ -789,8 +789,8 @@ body.v2-exhibition .v2-tour-site-marker{transform-origin:center}
 @media print{body.v2-exhibition #v2-exhibition-info{display:none!important}}
 
 #v2-root .v2-exhibition-entry[hidden],#v2-root .v2-exhibition-story[hidden],body.v2-exhibition #v2-root #v2-tour-desc[hidden],body.v2-exhibition #v2-root #v2-tour-relationship[hidden]{display:none!important}
-body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:#fff;border-radius:5px;padding:6px;box-sizing:content-box}
-@media(prefers-color-scheme:dark){body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:transparent}}
+/* Exhibition always uses the original white artwork on the purple header. */
+body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:transparent;border-radius:0;padding:0;box-sizing:border-box;filter:none!important}
 
 /* Use the same gold five-point star for selected partners and tour stops. */
 body #map .v2-selected-marker,
