@@ -1,0 +1,713 @@
+/* Loughborough Global Creative Network V2 — coordinated system light/dark theme.
+   This file is intentionally loaded AFTER v2.css; V1 has no dependency on it.
+   Institutional colours: purple #2D0153, magenta #F0047F, yellow #FFBD00.
+   AA-safe UI accent #B70062 replaces #F0047F only behind small white text.
+   Visual category colours remain the original purple and pink. */
+:root {
+  color-scheme:light;
+  --v2-theme-canvas:#EDE7F3;
+  --v2-theme-surface:#FFFFFF;
+  --v2-theme-surface-alt:#F5F0F9;
+  --v2-theme-surface-hover:#EDE5F4;
+  --v2-theme-input:#FFFFFF;
+  --v2-theme-ink:#2D0153;
+  --v2-theme-body:#302439;
+  --v2-theme-muted:#55475F;
+  --v2-theme-line:#D3C5DD;
+  --v2-theme-strong-line:#9E87B2;
+  --v2-theme-action:#B70062;
+  --v2-theme-action-hover:#95004F;
+  --v2-theme-link:#990054;
+  --v2-theme-focus:#2D0153;
+  --v2-theme-focus-gap:#FFBD00;
+  --v2-theme-shadow:0 14px 44px rgba(45,1,83,.19);
+  --v2-theme-map-control:#FFFFFF;
+  --v2-theme-map-control-ink:#2D0153;
+  --v2-theme-popup-tip:#FFFFFF;
+  --v2-theme-field-placeholder:#65586D;
+  --v2-theme-selection:#F4D4E5;
+  --v2-theme-status:#7A0044;
+  --v2-purple:#2D0153;
+  --v2-magenta:#B70062;
+  --v2-paper:var(--v2-theme-surface);
+}
+@media (prefers-color-scheme:dark) {
+  :root {
+    color-scheme:dark;
+    --v2-theme-canvas:#110D18;
+    --v2-theme-surface:#21162B;
+    --v2-theme-surface-alt:#30213D;
+    --v2-theme-surface-hover:#412B52;
+    --v2-theme-input:#291C36;
+    --v2-theme-ink:#FAF6FF;
+    --v2-theme-body:#F0E8F6;
+    --v2-theme-muted:#D1C2DC;
+    --v2-theme-line:#665276;
+    --v2-theme-strong-line:#A08CB4;
+    --v2-theme-action:#B70062;
+    --v2-theme-action-hover:#95004F;
+    --v2-theme-link:#FF9ACB;
+    --v2-theme-focus:#FFBD00;
+    --v2-theme-focus-gap:#171020;
+    --v2-theme-shadow:0 18px 50px rgba(0,0,0,.58);
+    --v2-theme-map-control:#24172D;
+    --v2-theme-map-control-ink:#FAF6FF;
+    --v2-theme-popup-tip:#21162B;
+    --v2-theme-field-placeholder:#CEC0D8;
+    --v2-theme-selection:#584263;
+    --v2-theme-status:#FFB2D4;
+    --v2-purple:#FAF6FF;
+    --v2-magenta:#FF9ACB;
+    --v2-paper:var(--v2-theme-surface);
+  }
+}
+::selection {background:var(--v2-theme-selection);color:var(--v2-theme-ink);}
+body {
+  background:radial-gradient(circle at 60% 45%,#FFFFFF 0%,#F0E9F6 58%,#DED0E8 100%)!important;
+  color:var(--v2-theme-ink);
+}
+#map {background:var(--v2-theme-canvas)!important;}
+#v2-root {color:var(--v2-theme-ink)!important;}
+#v2-home,
+#v2-spotlight,
+#v2-directory,
+#v2-tour-card,
+#v2-compact-header,
+#v2-mobile-nav,
+#v2-tour-header {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+  box-shadow:var(--v2-theme-shadow);
+}
+/* Brand artwork switches natively using <picture>: purple in light, white in dark.
+   Never tint the institutional logo with a CSS colour filter. */
+#v2-root .v2-brand-logo,
+#v2-tour-header .v2-brand-logo {
+  filter:none!important;
+}
+#v2-mobile-nav strong,
+#v2-compact-header strong,
+#v2-tour-header strong {
+  color:var(--v2-theme-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-h1,
+#v2-root .v2-heading-row h2,
+#v2-root .v2-dir-title h2,
+#v2-root .v2-dir-row strong,
+#v2-root .v2-rank-panel strong,
+#v2-root .v2-tile strong,
+#v2-root #v2-spotlight h2,
+#v2-root #v2-tour-card h2,
+#v2-root .v2-stat strong,
+#v2-root .v2-tour-meta-value,
+#v2-root .v2-tour-location strong,
+#v2-root .v2-spot-location strong.v2-tour-country,
+#v2-root .v2-ranking-link,
+#v2-root .v2-rank-panel .v2-evidence-value,
+#v2-root .v2-tour-step-line strong {
+  color:var(--v2-theme-ink)!important;
+}
+#v2-root .v2-subtitle,
+#v2-root .v2-tile small,
+#v2-root .v2-data-note,
+#v2-root .v2-accolade small,
+#v2-root .v2-stat,
+#v2-root .v2-spot-location,
+#v2-root .v2-section-label,
+#v2-root .v2-spot-description,
+#v2-root .v2-spot-footer,
+#v2-root .v2-dir-col h3,
+#v2-root .v2-dir-row small,
+#v2-root .v2-dir-note,
+#v2-root .v2-search-result small,
+#v2-root .v2-empty,
+#v2-root #v2-tour-card p,
+#v2-root .v2-tour-step-line,
+#v2-root .v2-tour-actions small,
+#v2-root .v2-tour-relationship,
+#v2-root .v2-tour-location-unavailable,
+#v2-root .v2-rank-panel .v2-evidence-line,
+#v2-root .v2-rank-panel .v2-evidence-source {
+  color:var(--v2-theme-muted)!important;
+}
+#v2-root .v2-spot-type,
+#v2-root .v2-accolade strong,
+#v2-root .v2-tour-site-label strong {color:var(--v2-theme-ink)!important;}
+#v2-root .v2-overline,
+#v2-root .v2-school-link,
+#v2-root .v2-dir-title small,
+#v2-root .v2-link-btn,
+#v2-root #v2-tour-website,
+#v2-root .v2-stat-grid .v2-qs-rank {
+  color:var(--v2-theme-link)!important;
+}
+#v2-root .v2-cta,
+#v2-root .v2-spot-link,
+#v2-root .v2-badge,
+#v2-root .v2-tour-actions button.v2-pause {
+  background:var(--v2-theme-action)!important;
+  color:#FFFFFF!important;
+  border-color:var(--v2-theme-action)!important;
+}
+#v2-root .v2-cta:hover,
+#v2-root .v2-spot-link:hover,
+#v2-root .v2-tour-actions button.v2-pause:hover {
+  background:var(--v2-theme-action-hover)!important;
+}
+#v2-root .v2-play {background:rgba(255,255,255,.20)!important;color:#FFFFFF!important;}
+#v2-root .v2-icon-btn,
+#v2-root #v2-tour-card #v2-exit-tour,
+#v2-root .v2-pdf,
+#v2-root .v2-tabs button[aria-selected="true"],
+#v2-root .v2-search-result,
+#v2-root .v2-tour-actions button:not(.v2-pause) {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-icon-btn:hover,
+#v2-root #v2-tour-card #v2-exit-tour:hover,
+#v2-root .v2-pdf:hover,
+#v2-root .v2-search-result:hover,
+#v2-root .v2-tour-actions button:not(.v2-pause):hover {
+  background:var(--v2-theme-surface-hover)!important;
+}
+#v2-root .v2-tabs,
+#v2-root .v2-stat,
+#v2-root .v2-stat-grid .v2-qs-stat,
+#v2-root .v2-chip,
+#v2-root .v2-rank-panel,
+#v2-root .v2-tour-countdown,
+#v2-root .v2-tour-location,
+#v2-root #v2-home .v2-category-legend {
+  background:var(--v2-theme-surface-alt)!important;
+  color:var(--v2-theme-body)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-tabs button {color:var(--v2-theme-body)!important;}
+#v2-root .v2-tabs button:hover {background:var(--v2-theme-surface-hover)!important;}
+#v2-root .v2-tabs button[aria-selected="true"] {color:var(--v2-theme-ink)!important;}
+#v2-root .v2-tile,
+#v2-root .v2-search-result,
+#v2-root #v2-search-results {
+  background:var(--v2-theme-input)!important;
+  color:var(--v2-theme-body)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-tile:hover {border-color:var(--v2-theme-link)!important;}
+#v2-root .v2-tile::before {background:#B70062!important;}
+#v2-root .v2-search-input {
+  background:var(--v2-theme-input)!important;
+  color:var(--v2-theme-ink)!important;
+  border:1.5px solid var(--v2-theme-strong-line)!important;
+}
+#v2-root .v2-search-input::placeholder {color:var(--v2-theme-field-placeholder)!important;opacity:1;}
+#v2-root .v2-search-icon {color:var(--v2-theme-muted)!important;}
+#v2-root .v2-dir-row,
+#v2-root .v2-spot-footer,
+#v2-root .v2-rank-panel .v2-evidence-lines {
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-spot-location,
+#v2-root .v2-tour-location,
+#v2-root .v2-tour-relationship {color:var(--v2-theme-muted)!important;}
+#v2-root .v2-tour-meta-value,
+#v2-root .v2-tour-location strong {color:var(--v2-theme-ink)!important;}
+#v2-root .v2-tour-location-icon,
+#v2-root .v2-award {color:var(--v2-theme-link)!important;}
+/* Keep the home-page Featured Partners star in Loughborough yellow in both themes. */
+#v2-root #v2-home .v2-heading-row .v2-star {color:#FFBD00!important;}
+#v2-root .v2-countdown-track,
+#v2-root .v2-tour-progress {background:var(--v2-theme-line)!important;}
+#v2-root .v2-countdown-track #v2-countdown-fill,
+#v2-root #v2-tour-progress-active {background:var(--v2-theme-action)!important;}
+#v2-root #v2-tour-countdown-seconds {color:var(--v2-theme-status)!important;}
+#v2-root .v2-tour-site-label {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#v2-root .v2-tour-site-label small,
+#v2-root .v2-tour-site-label .v2-tour-marker-location {color:var(--v2-theme-muted)!important;}
+#v2-root .v2-tour-site-label .v2-tour-marker-location strong {color:var(--v2-theme-ink)!important;}
+#v2-root .v2-spot-type {color:var(--v2-theme-body)!important;}
+#v2-root #v2-overlay-scrim {background:rgba(17,9,25,.36)!important;}
+#v2-root .v2-tour-site-dot {border-color:var(--v2-theme-surface)!important;}
+#v2-root .v2-category-dot {border-color:var(--v2-theme-surface)!important;}
+/* Keep institutional category colours, distinguishable by position and ring as well as hue. */
+#v2-root .v2-category-dot.exchange {background:#2D0153!important;color:#2D0153!important;}
+#v2-root .v2-category-dot.placement {background:#F0047F!important;color:#F0047F!important;}
+#map .v2-selected-marker {border-color:var(--v2-theme-surface)!important;}
+/* Fixed-size language globe, including the iOS native select tap target. */
+#language-picker {
+  background:var(--v2-theme-map-control)!important;
+  color:var(--v2-theme-map-control-ink)!important;
+  border:1px solid var(--v2-theme-line)!important;
+}
+#language-picker .lang-icon,
+#language-select {
+  color:var(--v2-theme-map-control-ink)!important;
+}
+#machine-language-note {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-body)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#machine-language-note a {color:var(--v2-theme-link)!important;}
+#map .mapboxgl-ctrl-group,
+#map .mapboxgl-ctrl-group button {
+  background:var(--v2-theme-map-control)!important;
+  color:var(--v2-theme-map-control-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#map .mapboxgl-ctrl-group button:hover {background:var(--v2-theme-surface-hover)!important;}
+#map .mapboxgl-ctrl-group button:focus-visible {background:var(--v2-theme-surface-hover)!important;}
+#map .mapboxgl-ctrl-group .mapboxgl-ctrl-icon {filter:none!important;}
+#map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-attrib {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-body)!important;
+  border:1px solid var(--v2-theme-line)!important;
+}
+#map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-attrib a {color:inherit!important;}
+/* Existing Mapbox native popups, nearby chooser and search UI are not inside #v2-root. */
+#map .mapboxgl-popup-content,
+#browse-panel,
+#sdca-nearby-dialog {
+  background:var(--v2-theme-surface)!important;
+  color:var(--v2-theme-body)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#map .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+#map .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+#map .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {border-top-color:var(--v2-theme-popup-tip)!important;}
+#map .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+#map .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+#map .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {border-bottom-color:var(--v2-theme-popup-tip)!important;}
+#map .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {border-right-color:var(--v2-theme-popup-tip)!important;}
+#map .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {border-left-color:var(--v2-theme-popup-tip)!important;}
+:is(.popup-title,.popup-eyebrow,#browse-heading,#location-search-label) {color:var(--v2-theme-ink)!important;}
+:is(.popup-description,.popup-line,.nearby-intro,.nearby-more,.browse-hint,#browse-count,.browse-location-text small,.nearby-text small) {color:var(--v2-theme-body)!important;}
+:is(.popup-link,.browse-button) {background:var(--v2-theme-action)!important;color:#FFFFFF!important;border-color:var(--v2-theme-action)!important;}
+:is(.popup-link,.browse-button):hover {background:var(--v2-theme-action-hover)!important;}
+:is(.popup-translate,.quiet-action) {color:var(--v2-theme-link)!important;}
+:is(.browse-location,.nearby-item,#location-search,.quiet-action) {
+  background:var(--v2-theme-input)!important;
+  color:var(--v2-theme-body)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#location-search::placeholder {color:var(--v2-theme-field-placeholder)!important;opacity:1;}
+:is(.browse-location,.nearby-item,.quiet-action):hover {background:var(--v2-theme-surface-hover)!important;}
+:is(.mapboxgl-popup-close-button,.browse-close,#sdca-nearby-dialog .nearby-dialog-close) {
+  background:var(--v2-theme-surface-alt)!important;
+  color:var(--v2-theme-ink)!important;
+  border-color:var(--v2-theme-line)!important;
+}
+#sdca-nearby-dialog .nearby-dialog-footer {background:var(--v2-theme-surface-alt)!important;border-color:var(--v2-theme-line)!important;}
+#v2-root button:focus-visible,
+#v2-root a:focus-visible,
+#v2-root input:focus-visible,
+#language-picker:focus-within,
+#map .mapboxgl-ctrl button:focus-visible,
+#map .mapboxgl-ctrl-attrib a:focus-visible,
+#map .mapboxgl-popup button:focus-visible,
+#map .mapboxgl-popup a:focus-visible,
+#browse-panel :is(button,a,input):focus-visible,
+#sdca-nearby-dialog :is(button,a):focus-visible {
+  outline:3px solid var(--v2-theme-focus)!important;
+  outline-offset:3px!important;
+}
+/* In light mode the deep purple focus ring distinguishes itself from white.
+   In dark mode the Loughborough yellow ring separates from dark surfaces. */
+@media (max-width:680px) {
+  #v2-root #v2-home {background:var(--v2-theme-surface)!important;}
+  #v2-root #v2-mobile-drawer-toggle {
+    background:var(--v2-theme-surface)!important;
+    color:var(--v2-theme-ink)!important;
+  }
+  #v2-root #v2-mobile-drawer-toggle::before {background:var(--v2-theme-strong-line)!important;}
+  #v2-root #v2-mobile-nav {background:var(--v2-theme-surface)!important;}
+}
+@media (prefers-color-scheme:dark) {
+  body {
+    background:radial-gradient(circle at 60% 45%,#382346 0%,#1A1327 60%,#0F0B16 100%)!important;
+  }
+  #v2-root .v2-brand-logo,
+  #v2-tour-header .v2-brand-logo {
+    filter:none!important; /* <picture> supplies original white artwork in dark mode */
+  }
+  #map .mapboxgl-ctrl-group .mapboxgl-ctrl-icon {filter:invert(1)!important;}
+  /* Deep-purple partner pins keep their original hue; a pale ring makes them
+     visible against dark basemap areas without introducing a purple overlay. */
+  #map .v2-selected-marker {box-shadow:0 0 0 3px #E8D9F5,0 0 0 9px rgba(255,189,0,.24),0 4px 18px #0008!important;}
+  /* Subdued hues with both colour and outline weight as category cues. */
+  #v2-root .v2-category-dot.exchange {
+    background:#6FA99E!important;color:#6FA99E!important;
+    border:2px solid #B9CFC9!important;
+    box-shadow:0 0 0 1px #30483F!important;
+  }
+  #v2-root .v2-category-dot.placement {
+    background:#C77795!important;color:#C77795!important;
+    border:1px solid #C59CAD!important;
+    box-shadow:0 0 0 1px #48303B!important;
+  }
+  #v2-root .v2-tile::before {background:#C77795!important;}
+}
+@media (prefers-contrast:more) {
+  #v2-root :is(.v2-tile,.v2-search-input,.v2-pdf),
+  #language-picker,#map .mapboxgl-ctrl-group button {border-width:2px!important;}
+  #v2-root button:focus-visible,
+  #v2-root a:focus-visible,#language-picker:focus-within {outline-width:4px!important;}
+}
+@media (prefers-reduced-transparency:reduce) {
+  #v2-home {backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+}
+@media (forced-colors:active) {
+  :root {color-scheme:normal;}
+  #v2-root :is(#v2-home,#v2-spotlight,#v2-directory,#v2-tour-card,#v2-mobile-nav,#v2-mobile-drawer-toggle,.v2-tile,.v2-stat,.v2-chip,.v2-search-input,.v2-spot-link,.v2-cta,.v2-pdf,.v2-tour-actions button),
+  #language-picker,#map .mapboxgl-ctrl-group button,#map .mapboxgl-popup-content {
+    forced-color-adjust:auto!important;
+    background:Canvas!important;color:CanvasText!important;border-color:CanvasText!important;
+  }
+  #v2-root :is(.v2-cta,.v2-spot-link,.v2-tour-actions button.v2-pause) {background:ButtonFace!important;color:ButtonText!important;}
+  #v2-root :is(button,a,input):focus-visible,#language-picker:focus-within {
+    outline-color:Highlight!important;
+  }
+  #v2-root .v2-brand-logo {filter:none!important;}
+}
+@media print {
+  :root {color-scheme:light!important;}
+  html,body {background:#FFFFFF!important;color:#2D0153!important;}
+  #v2-root #v2-directory,
+  #v2-root .v2-rank-panel,
+  #v2-root .v2-dir-row {background:#FFFFFF!important;color:#2D0153!important;box-shadow:none!important;}
+}
+
+
+/* V2 case-study CTA: Loughborough yellow, distinct from magenta website actions. */
+:root {
+  --gcn-case-yellow:#FFBD00;
+  --gcn-case-yellow-hover:#E3A500;
+  --gcn-case-label:#2D0153;
+}
+
+/* All three types of partner information use the same recognisable primary action. */
+.sdca-popup-body > a.popup-link.gcn-case-action,
+#v2-root #v2-spotlight a.v2-spot-link.gcn-case-action,
+#v2-root #v2-tour-card a.gcn-tour-case-action {
+  background:var(--gcn-case-yellow)!important;
+  color:var(--gcn-case-label)!important;
+  border:2px solid var(--gcn-case-yellow)!important;
+  font-weight:800;
+  box-shadow:0 3px 0 rgba(45,1,83,.12), 0 7px 18px rgba(45,1,83,.14);
+  text-decoration:none!important;
+  transition:background-color .16s ease,box-shadow .16s ease,transform .16s ease;
+}
+.sdca-popup-body > a.popup-link.gcn-case-action:hover,
+#v2-root #v2-spotlight a.v2-spot-link.gcn-case-action:hover,
+#v2-root #v2-tour-card a.gcn-tour-case-action:hover {
+  background:var(--gcn-case-yellow-hover)!important;
+  border-color:var(--gcn-case-yellow-hover)!important;
+  color:var(--gcn-case-label)!important;
+  box-shadow:0 3px 0 rgba(45,1,83,.14), 0 10px 23px rgba(45,1,83,.20);
+  transform:translateY(-1px);
+}
+.sdca-popup-body > a.popup-link.gcn-case-action:focus-visible,
+#v2-root #v2-spotlight a.v2-spot-link.gcn-case-action:focus-visible,
+#v2-root #v2-tour-card a.gcn-tour-case-action:focus-visible {
+  outline:3px solid var(--v2-theme-ink)!important;
+  outline-offset:4px!important;
+}
+@media (prefers-color-scheme:dark) {
+  .sdca-popup-body > a.popup-link.gcn-case-action,
+  #v2-root #v2-spotlight a.v2-spot-link.gcn-case-action,
+  #v2-root #v2-tour-card a.gcn-tour-case-action {
+    box-shadow:0 2px 0 rgba(0,0,0,.25), 0 8px 20px rgba(255,189,0,.12);
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .sdca-popup-body > a.popup-link.gcn-case-action,
+  #v2-root #v2-spotlight a.v2-spot-link.gcn-case-action,
+  #v2-root #v2-tour-card a.gcn-tour-case-action {transition:none!important;transform:none!important;}
+}
+@media (forced-colors:active) {
+  .sdca-popup-body > a.popup-link.gcn-case-action,
+  #v2-root #v2-spotlight a.v2-spot-link.gcn-case-action,
+  #v2-root #v2-tour-card a.gcn-tour-case-action {
+    background:ButtonFace!important;
+    color:ButtonText!important;
+    border:2px solid ButtonText!important;
+    box-shadow:none!important;
+  }
+}
+
+
+/* V2 featured-partner badge: yellow evidence accent with aligned two-line label. */
+/* Matches the verified case-study accent, but remains an informational label. */
+#v2-root #v2-spotlight .v2-badge,
+#v2-root #v2-tour-card .v2-badge {
+  display:inline-grid!important;
+  grid-template-columns:max-content minmax(0,1fr);
+  align-items:start;
+  column-gap:9px;
+  flex:0 0 auto;
+  max-width:100%;
+  min-width:max-content;
+  padding:9px 14px!important;
+  border:1px solid var(--gcn-case-yellow,#FFBD00)!important;
+  border-radius:999px;
+  background:var(--gcn-case-yellow,#FFBD00)!important;
+  color:var(--gcn-case-label,#2D0153)!important;
+  text-align:left!important;
+  line-height:1.35;
+}
+#v2-root .v2-badge .v2-badge-star {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  width:28px;
+  height:28px;
+  flex:none;
+  color:inherit;
+  font-size:27px;
+  font-weight:900;
+  line-height:1;
+  text-align:center;
+}
+#v2-root .v2-badge .v2-badge-text {
+  display:block;
+  min-width:max-content;
+  max-width:150px;
+  color:inherit;
+  text-align:left!important;
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+  line-height:1.35;
+}
+/* English keeps FEATURED and PARTNER on two lines, both aligned after the star. */
+#v2-root:lang(en) .v2-badge .v2-badge-text {min-width:8ch;max-width:92px;}
+@media (forced-colors:active) {
+  #v2-root #v2-spotlight .v2-badge,
+  #v2-root #v2-tour-card .v2-badge {
+    background:Canvas!important;
+    border-color:CanvasText!important;
+    color:CanvasText!important;
+  }
+}
+
+
+
+/* V2 partner case-study choice dialog — 19 Nov 2026 */
+dialog.gcn-case-dialog {
+  position:fixed;
+  inset:0;
+  box-sizing:border-box;
+  width:min(650px,calc(100vw - 32px));
+  max-width:min(650px,calc(100vw - 32px));
+  max-height:min(84dvh,790px);
+  max-height:min(84svh,790px);
+  margin:auto;
+  padding:0;
+  overflow:hidden;
+  border:1px solid var(--v2-theme-strong-line,#9E87B2);
+  border-radius:24px;
+  color:var(--v2-theme-body,#302439);
+  background:var(--v2-theme-surface,#fff);
+  box-shadow:0 28px 100px rgba(17,7,31,.40),0 4px 20px rgba(17,7,31,.13);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Arial,sans-serif;
+}
+dialog.gcn-case-dialog:not([open]) {display:none;}
+dialog.gcn-case-dialog::backdrop {
+  background:rgba(16,9,25,.70);
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+.gcn-case-dialog-shell {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  max-height:min(84dvh,790px);
+  max-height:min(84svh,790px);
+}
+.gcn-case-dialog-header {
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  justify-content:space-between;
+  flex-shrink:0;
+  padding:24px 26px 19px;
+  border-top:6px solid #FFBD00;
+  border-bottom:1px solid var(--v2-theme-line,#D3C5DD);
+  background:var(--v2-theme-surface,#fff);
+}
+.gcn-case-dialog-heading-stack {min-width:0;flex:1;}
+.gcn-case-dialog-eyebrow {
+  display:block;
+  margin-bottom:12px;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  line-height:1.5;
+}
+.gcn-case-dialog h2 {
+  margin:0;
+  color:var(--v2-theme-ink,#2D0153);
+  font-size:clamp(22px,3.2vw,27px);
+  line-height:1.2;
+  font-weight:780;
+  letter-spacing:-.025em;
+}
+.gcn-case-dialog-partner {
+  margin:8px 0 0;
+  font-size:15px;
+  font-weight:680;
+  color:var(--v2-theme-body,#302439);
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+.gcn-case-dialog-close {
+  flex:none;display:grid;place-items:center;
+  width:44px;height:44px;
+  border:1px solid var(--v2-theme-line,#D3C5DD);
+  border-radius:50%;
+  color:var(--v2-theme-ink,#2D0153);
+  background:var(--v2-theme-surface-alt,#F5F0F9);
+  font-size:27px;line-height:1;
+  cursor:pointer;
+}
+.gcn-case-dialog-close:hover {
+  background:var(--v2-theme-surface-hover,#EDE5F4);
+}
+.gcn-case-dialog-content {
+  padding:18px 26px 26px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+.gcn-case-dialog-intro {
+  margin:0 0 18px;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:14px;
+  line-height:1.6;
+}
+.gcn-case-dialog-list {
+  display:grid;
+  gap:12px;
+  padding:0;
+  margin:0;
+  list-style:none;
+}
+.gcn-case-dialog-list-item {margin:0;min-width:0;}
+.gcn-case-choice {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  min-height:103px;
+  padding:18px 18px 18px 17px;
+  background:var(--v2-theme-surface-alt,#F5F0F9);
+  color:var(--v2-theme-body,#302439);
+  border:1.5px solid var(--v2-theme-line,#D3C5DD);
+  border-inline-start:4px solid #FFBD00;
+  border-radius:15px;
+  text-decoration:none;
+  transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+.gcn-case-choice:hover {
+  background:var(--v2-theme-surface-hover,#EDE5F4);
+  border-color:var(--v2-theme-strong-line,#9E87B2);
+  border-inline-start-color:#FFBD00;
+  transform:translateY(-1px);
+}
+.gcn-case-choice-copy {flex:1;min-width:0;}
+.gcn-case-choice-meta {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin:0 0 8px;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:11px;
+  line-height:1.5;
+  font-weight:680;
+}
+.gcn-case-choice-category {
+  padding:2px 9px;
+  background:#FFBD00;
+  border-radius:999px;
+  color:#2D0153;
+  font-weight:800;
+}
+.gcn-case-choice-year {font-variant-numeric:tabular-nums;}
+.gcn-case-choice-title {
+  margin:0;
+  font-weight:760;
+  font-size:16px;
+  letter-spacing:-.01em;
+  line-height:1.35;
+  color:var(--v2-theme-ink,#2D0153);
+  overflow-wrap:anywhere;
+}
+.gcn-case-choice-summary {
+  margin:7px 0 0;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.56;
+  color:var(--v2-theme-body,#302439);
+}
+.gcn-case-choice-arrow {
+  flex:none;
+  display:grid;place-items:center;
+  width:35px;height:35px;
+  border-radius:50%;
+  background:#FFBD00;
+  color:#2D0153;
+  font-size:20px;
+  font-weight:800;
+}
+.gcn-case-dialog-language-note {
+  margin:16px 0 0;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:12px;
+  line-height:1.4;
+}
+dialog.gcn-case-dialog :is(button,a):focus-visible {
+  outline:3px solid var(--v2-theme-focus,#2D0153)!important;
+  outline-offset:3px!important;
+}
+@media (prefers-color-scheme:dark){
+  dialog.gcn-case-dialog :is(button,a):focus-visible {
+    outline-color:#FFBD00!important;
+  }
+}
+@media(max-width:680px){
+  dialog.gcn-case-dialog {
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+    max-height:calc(100dvh - 36px);
+    border-radius:19px;
+  }
+  .gcn-case-dialog-shell {max-height:calc(100dvh - 36px);}
+  .gcn-case-dialog-header {padding:18px 16px 14px;gap:8px;}
+  .gcn-case-dialog-content {padding:14px 15px 20px;}
+  .gcn-case-dialog-eyebrow {font-size:10px;margin-bottom:7px;}
+  .gcn-case-choice {gap:9px;padding:13px 11px 13px 12px;}
+  .gcn-case-choice-title {font-size:14px;}
+  .gcn-case-choice-summary {font-size:12px;}
+  .gcn-case-choice-arrow {width:30px;height:30px;font-size:18px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .gcn-case-choice {transition:none;transform:none!important;}
+}
+@media(forced-colors:active){
+  dialog.gcn-case-dialog {border:2px solid CanvasText;color:CanvasText;background:Canvas;}
+  .gcn-case-dialog-header {border-color:Highlight;}
+  .gcn-case-choice {border:2px solid LinkText;background:Canvas;color:CanvasText;}
+  .gcn-case-choice-category,.gcn-case-choice-arrow {background:ButtonFace;color:ButtonText;border:1px solid ButtonText;}
+}

@@ -1,0 +1,261 @@
+/* Collaboration routes for V2. Keep the action immediately before the records footer. */
+/* Let desktop tiles use the available vertical space while the action stays above the date. */
+#v2-root #v2-home .v2-tiles { flex:1 1 auto; }
+/* Keep the records note visually adjacent to the collaboration action. */
+#v2-root #v2-home .v2-data-note {margin-top:0;}
+#v2-root #v2-home #v2-collaborate-trigger {
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  align-self:stretch;
+  flex:0 0 auto;
+  gap:9px;
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  min-height:46px;
+  margin:0 0 3px;
+  padding:10px 16px;
+  border:1.5px solid var(--v2-theme-strong-line,#9E87B2);
+  border-radius:999px;
+  background:var(--v2-theme-surface,#fff);
+  color:var(--v2-theme-ink,#2D0153);
+  font:760 13px/1.35 var(--font,system-ui,sans-serif);
+  letter-spacing:.005em;
+  box-shadow:0 5px 16px rgba(45,1,83,.10);
+  white-space:normal;
+  text-align:center;
+  transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+#v2-root #v2-home #v2-collaborate-trigger:hover {
+  background:var(--v2-theme-surface-hover,#EDE5F4);
+  border-color:var(--v2-theme-ink,#2D0153);
+  box-shadow:0 7px 20px rgba(45,1,83,.16);
+}
+#v2-root #v2-collaborate-trigger .v2-collaborate-trigger-icon {
+  font-size:23px;
+  font-weight:650;
+  line-height:1;
+  color:var(--v2-theme-link,#990054);
+}
+#v2-root #v2-collaborate-trigger:focus-visible {
+  outline:3px solid var(--v2-theme-focus,#2D0153)!important;
+  outline-offset:3px!important;
+}
+@media(max-width:680px){
+  /* The expanded bottom card keeps the action immediately above the records date. */
+  #v2-root #v2-home .v2-tiles { flex:0 0 auto; }
+  #v2-root #v2-home #v2-collaborate-trigger {
+    margin:12px 0 3px;
+    min-height:44px;
+    padding:9px 12px;
+    font-size:13px;
+  }
+}
+@media print {
+  #v2-root #v2-collaborate-trigger,
+  #v2-collaborate-dialog {display:none!important;}
+}
+
+/* Modal is appended to the body, outside the Mapbox stacking contexts. */
+dialog#v2-collaborate-dialog {
+  position:fixed;
+  inset:0;
+  margin:auto;
+  padding:0;
+  box-sizing:border-box;
+  width:min(580px,calc(100vw - 30px));
+  max-width:min(580px,calc(100vw - 30px));
+  max-height:min(83dvh,730px);
+  max-height:min(83svh,730px);
+  overflow:hidden;
+  border:1px solid var(--v2-theme-strong-line,#9E87B2);
+  border-radius:23px;
+  background:var(--v2-theme-surface,#fff);
+  color:var(--v2-theme-body,#302439);
+  box-shadow:0 28px 90px rgba(17,7,31,.45);
+  font-family:var(--font,system-ui,sans-serif);
+  z-index:1000;
+}
+dialog#v2-collaborate-dialog:not([open]) {display:none;}
+dialog#v2-collaborate-dialog::backdrop {
+  background:rgba(16,9,25,.69);
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+.v2-collaborate-shell {
+  display:flex;
+  flex-direction:column;
+  max-height:min(83dvh,730px);
+  max-height:min(83svh,730px);
+  min-width:0;
+}
+.v2-collaborate-top {
+  display:flex;
+  flex:none;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  padding:24px 25px 20px;
+  border-top:6px solid #FFBD00;
+  border-bottom:1px solid var(--v2-theme-line,#D3C5DD);
+}
+.v2-collaborate-title-group {min-width:0;}
+.v2-collaborate-overline {
+  margin:0 0 12px;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:10px;
+  font-weight:800;
+  line-height:1.4;
+  letter-spacing:.105em;
+  text-transform:uppercase;
+}
+.v2-collaborate-title {
+  margin:0;
+  color:var(--v2-theme-ink,#2D0153);
+  font-size:clamp(21px,3vw,27px);
+  line-height:1.2;
+  font-weight:790;
+  letter-spacing:-.02em;
+}
+.v2-collaborate-intro {
+  margin:10px 0 0;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:14px;
+  line-height:1.55;
+}
+.v2-collaborate-close {
+  flex:none;
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  min-width:44px;
+  border:1px solid var(--v2-theme-line,#D3C5DD);
+  border-radius:50%;
+  background:var(--v2-theme-surface-alt,#F5F0F9);
+  color:var(--v2-theme-ink,#2D0153);
+  font-size:27px;
+  line-height:1;
+  cursor:pointer;
+}
+.v2-collaborate-close:hover {background:var(--v2-theme-surface-hover,#EDE5F4);}
+.v2-collaborate-content {
+  padding:20px 25px 23px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+.v2-collaborate-links {
+  display:grid;
+  gap:11px;
+}
+.v2-collaborate-option {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  box-sizing:border-box;
+  min-height:100px;
+  padding:16px 16px;
+  border:1.5px solid var(--v2-theme-line,#D3C5DD);
+  border-inline-start:4px solid #FFBD00;
+  border-radius:15px;
+  background:var(--v2-theme-surface-alt,#F5F0F9);
+  color:var(--v2-theme-body,#302439);
+  text-decoration:none;
+  transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+.v2-collaborate-option:hover {
+  background:var(--v2-theme-surface-hover,#EDE5F4);
+  border-color:var(--v2-theme-strong-line,#9E87B2);
+  border-inline-start-color:#FFBD00;
+  transform:translateY(-1px);
+}
+.v2-collaborate-option-index {
+  display:grid;
+  flex:0 0 34px;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:#FFBD00;
+  color:#2D0153;
+  font-size:12px;
+  font-weight:850;
+  line-height:1;
+}
+.v2-collaborate-option-copy {
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.v2-collaborate-option-name {
+  color:var(--v2-theme-ink,#2D0153);
+  font-size:15px;
+  font-weight:780;
+  line-height:1.35;
+}
+.v2-collaborate-option-description {
+  color:var(--v2-theme-body,#302439);
+  font-size:13px;
+  font-weight:430;
+  line-height:1.5;
+}
+.v2-collaborate-option-email {
+  margin-top:4px;
+  color:var(--v2-theme-link,#990054);
+  font-size:12px;
+  font-weight:750;
+  line-height:1.3;
+  word-break:break-word;
+  direction:ltr;
+  unicode-bidi:isolate;
+}
+.v2-collaborate-option-arrow {
+  flex:none;
+  color:var(--v2-theme-link,#990054);
+  font-size:20px;
+  font-weight:800;
+}
+.v2-collaborate-note {
+  margin:17px 0 0;
+  color:var(--v2-theme-muted,#55475F);
+  font-size:12px;
+  line-height:1.4;
+}
+dialog#v2-collaborate-dialog :is(button,a):focus-visible {
+  outline:3px solid var(--v2-theme-focus,#2D0153)!important;
+  outline-offset:3px!important;
+}
+@media(prefers-color-scheme:dark){
+  dialog#v2-collaborate-dialog :is(button,a):focus-visible {outline-color:#FFBD00!important;}
+}
+@media(max-width:680px){
+  dialog#v2-collaborate-dialog {
+    max-height:calc(100dvh - 30px);
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+    border-radius:19px;
+  }
+  .v2-collaborate-shell {max-height:calc(100dvh - 30px);}
+  .v2-collaborate-top {padding:16px 15px 14px;gap:8px;}
+  .v2-collaborate-content {padding:14px 15px 18px;}
+  .v2-collaborate-intro {font-size:13px;}
+  .v2-collaborate-option {padding:12px 10px;gap:10px;min-height:92px;}
+  .v2-collaborate-option-index {flex-basis:30px;width:30px;height:30px;font-size:11px;}
+  .v2-collaborate-option-name {font-size:14px;}
+  .v2-collaborate-option-description {font-size:12px;}
+  .v2-collaborate-option-email {font-size:11px;}
+}
+@media(prefers-reduced-motion:reduce){
+  #v2-root #v2-collaborate-trigger,.v2-collaborate-option {transition:none!important;transform:none!important;}
+}
+@media(forced-colors:active){
+  #v2-root #v2-collaborate-trigger {background:ButtonFace!important;color:ButtonText!important;border-color:ButtonText!important;}
+  dialog#v2-collaborate-dialog {background:Canvas!important;color:CanvasText!important;border:2px solid CanvasText!important;}
+  .v2-collaborate-option {background:Canvas!important;color:CanvasText!important;border:2px solid LinkText!important;}
+  .v2-collaborate-option-index {background:ButtonFace!important;color:ButtonText!important;border:1px solid ButtonText!important;}
+}
