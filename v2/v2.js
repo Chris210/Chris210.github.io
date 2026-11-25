@@ -135,7 +135,7 @@ exhibitionPause.addEventListener('click',()=>playing?pauseTour():playTour());
 exhibitionControls.append(exhibitionLanguage,exhibitionPause,exhibitionFullscreen,exhibitionExit);
 exhibitionFooter.append(exhibitionLink,exhibitionControls);exhibitionInfo.append(exhibitionFooter);
 document.getElementById('v2-tour-mode').append(exhibitionInfo);
-if(exhibition){document.body.classList.add('v2-exhibition'); const loading=element('div','v2-exhibition-loading','Preparing the global creative network…');loading.id='v2-exhibition-loading';document.body.append(loading);}
+if(exhibition){const logoPicture=document.querySelector('#v2-tour-header picture');const whiteLogo='https://chris210.github.io/LU-logo-white.png';logoPicture.querySelector('source').media='all';logoPicture.querySelector('img').src=whiteLogo;document.body.classList.add('v2-exhibition'); const loading=element('div','v2-exhibition-loading','Preparing the global creative network…');loading.id='v2-exhibition-loading';document.body.append(loading);}
 
 // Tour and ordinary partner popups share the same vetted case-study destination.
 const tourCaseAction=element('a','gcn-case-link gcn-tour-case-action');
