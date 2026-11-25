@@ -1232,7 +1232,51 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "summary": "Graphic Communication and Illustration (BA Hons). Shaw reports a three-month communications internship followed by university holiday work, producing social media and rebrand materials. The trust headquarters is the reference location, not a confirmed placement office."
         }
       ]
+    },
+    {
+      "name": "Sharpak",
+      "aliases": [
+        "SHARPAK",
+        "Sharpak Aylesham",
+        "Sharpak Aylesham Limited"
+      ],
+      "featureIds": [
+        20014
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-080",
+          "title": "Tara Janes: summer design internship at Sharpak",
+          "url": "https://designshow.lboro.ac.uk/students/tara-janes/",
+          "kind": "placement",
+          "year": "Summer 2017",
+          "priority": "P1",
+          "relationship": "Student design internship",
+          "summary": "Industrial Design and Technology student Tara Janes worked on commercial design briefs and developed collaboration, deadline and multi-project management skills. The exact UK facility was not identified in the student account."
+        }
+      ]
+    },
+    {
+      "name": "Everydesign",
+      "aliases": [
+        "Every Design"
+      ],
+      "featureIds": [
+        20015
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-081",
+          "title": "Rebecca Harvey: graphic design internship at Everydesign",
+          "url": "https://sdcashow2025.lboro.ac.uk/student/rebecca-harvey/",
+          "kind": "placement",
+          "year": "2025 showcase; internship dates unspecified",
+          "priority": "P1",
+          "relationship": "Student design internship",
+          "summary": "Graphic Design BA (Hons) student Rebecca Harvey completed an internship with a subscription-based design service alongside her studies."
+        }
+      ]
     }
   ],
-  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete. Added seven university evidence records citing Loughborough sources, distinguishing SDCA from university-wide collaborations. Added seven newly identified student industry hosts from official degree-show archives; locality reference coordinates, not verified workplace buildings. Prior master directory unchanged."
+  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete. Added seven university evidence records citing Loughborough sources, distinguishing SDCA from university-wide collaborations. Added seven newly identified student industry hosts from official degree-show archives; locality reference coordinates, not verified workplace buildings. Prior master directory unchanged. Follow-up added Sharpak with a sourced reference facility (actual internship site not established) and Everydesign as a searchable unlocated employer; possible Elefant connection not treated as confirmed."
 };
