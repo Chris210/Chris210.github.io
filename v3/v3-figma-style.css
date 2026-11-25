@@ -1,0 +1,126 @@
+/* V3 only — styling from Figma Map app Iteration 1, frame 13:2.
+   Live geography, current data and existing interaction components are retained. */
+:root {
+  --font:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --v3-display:"Barlow","Nunito Sans",system-ui,sans-serif;
+  --v3-panel:rgba(255,255,255,.95);
+  --v3-glass:rgba(255,255,255,.88);
+  --v3-glass-border:rgba(255,255,255,.70);
+  --v3-glass-shadow:0 12px 32px rgba(20,5,46,.22);
+  --v3-control-shadow:0 8px 24px rgba(26,8,51,.16);
+  --v2-theme-canvas:#1A0833;
+  --v2-theme-ink:#361163;
+  --v2-theme-body:#1B1B1B;
+  --v2-theme-muted:#525E66;
+  --v2-theme-link:#B70062;
+  --v2-theme-line:#D1D5D7;
+  --v2-theme-strong-line:#7D8C97;
+  --v2-theme-surface-alt:#F6F7F7;
+  --v2-theme-surface-hover:#ECE8F1;
+}
+body:not(.v2-exhibition) {
+  background:radial-gradient(ellipse at 63% 44%,#361163 0%,#241047 48%,#1A0833 82%)!important;
+  font-family:var(--font);
+}
+body:not(.v2-exhibition) #map {background:transparent!important;}
+#v2-root {font-family:var(--font);}
+#v2-root :is(button,input,select) {font-family:inherit;}
+body:not(.v2-exhibition) #v2-root :is(#v2-home,#v2-spotlight,#v2-directory,#v2-compact-header,#v2-mobile-nav,#v2-tour-card,#v2-tour-header) {
+  background:var(--v3-panel)!important;
+  border:1px solid var(--v3-glass-border)!important;
+  box-shadow:var(--v3-glass-shadow);
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+}
+#v2-root :is(.v2-h1,.v2-dir-title h2,.v2-heading-row h2,.v2-overline,.v2-section-label,.v2-dir-col h3),
+body:not(.v2-exhibition) #v2-root :is(#v2-spotlight,#v2-tour-card) h2,
+.popup-title,#browse-heading {
+  font-family:var(--v3-display);
+  font-weight:600;
+}
+#v2-root .v2-h1 {font-size:32px;line-height:38px;letter-spacing:-.16px;margin:8px 0;}
+#v2-root .v2-overline {font-size:14px;line-height:18px;letter-spacing:1.68px;font-weight:600;margin-top:20px;}
+#v2-root .v2-subtitle {font-size:15px;line-height:24px;}
+#v2-root .v2-search-input {height:56px;min-height:56px;font-size:15px;border-radius:14px;border:1px solid var(--v2-theme-strong-line)!important;}
+#v2-root .v2-search-icon {top:18px;}
+#v2-root .v2-heading-row h2 {font-size:22px;line-height:26px;letter-spacing:0;}
+#v2-root .v2-tile {border-radius:14px;}
+#v2-root .v2-tile strong {font-weight:700;line-height:1.35;}
+#v2-root .v2-tile small {line-height:1.4;}
+#v2-root .v2-icon-btn {width:44px;height:44px;}
+#v2-root #v2-home .v2-category-legend {border-radius:16px;background:var(--v2-theme-surface-alt)!important;}
+#v2-root #v2-spotlight h2 {font-size:38px;line-height:1.16;letter-spacing:-.3px;}
+#v2-root #v2-spotlight .v2-spot-header {background:var(--v2-theme-surface);}
+#v2-root .v2-spot-description {font-size:15px;line-height:24px;}
+#v2-root .v2-spot-location {font-size:15px;line-height:24px;}
+#v2-root .v2-section-label {font-size:14px;letter-spacing:1.68px;line-height:18px;}
+#v2-root .v2-stat {border-radius:14px;}
+#v2-root .v2-spot-link {min-height:48px;font-weight:700;}
+body:not(.v2-exhibition) #map .mapboxgl-ctrl-group,
+body:not(.v2-exhibition) #language-picker {
+  background:var(--v3-glass)!important;
+  border:1px solid var(--v3-glass-border)!important;
+  box-shadow:var(--v3-control-shadow)!important;
+  backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+}
+body:not(.v2-exhibition) #map .mapboxgl-ctrl-group button {background:transparent!important;width:48px!important;height:48px!important;}
+body:not(.v2-exhibition) #map .mapboxgl-ctrl-group button:hover {background:var(--v2-theme-surface-hover)!important;}
+body:not(.v2-exhibition) #map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-attrib {background:var(--v3-glass)!important;border-radius:8px;}
+@media (min-width:951px) {
+  #v2-root #v2-home {width:384px;padding:24px;border-radius:28px;}
+  #v2-root #v2-home .v2-brand-logo {width:144px;}
+}
+@media (min-width:681px) {
+  #v2-root #v2-home .v2-exhibition-entry {margin-top:8px;}
+  body:not(.v2-exhibition) #reset-europe {
+    top:258px!important;bottom:auto!important;right:32px!important;
+    width:50px!important;height:50px!important;padding:0!important;border-radius:14px!important;
+    background:var(--v3-glass)!important;color:var(--v2-theme-map-control-ink)!important;
+    border:1px solid var(--v3-glass-border)!important;box-shadow:var(--v3-control-shadow)!important;
+    backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+  }
+  body:not(.v2-exhibition) #map-move {
+    display:block!important;top:320px!important;bottom:auto!important;right:32px!important;width:50px!important;
+  }
+  body:not(.v2-exhibition) #map-move > summary {
+    width:50px;height:50px;min-height:50px;padding:0;border-radius:14px;
+    background:var(--v3-glass)!important;color:var(--v2-theme-map-control-ink)!important;
+    border:1px solid var(--v3-glass-border)!important;box-shadow:var(--v3-control-shadow)!important;
+  }
+  #map-move > summary:focus-visible,#reset-europe:focus-visible {outline:3px solid #FFBD00!important;outline-offset:3px;}
+  #map-move .move-label,#reset-europe .reset-label {position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap;}
+  #map-move .pan-pad {position:absolute;right:0;top:100%;width:160px;background:var(--v2-theme-surface)!important;border-color:var(--v2-theme-line)!important;}
+  #map-move .pan-pad button {background:var(--v2-theme-surface-alt)!important;color:var(--v2-theme-ink)!important;}
+}
+@media (max-width:680px) {
+  #v2-root #v2-spotlight h2 {font-size:32px;line-height:38px;}
+  #v2-root #v2-home .v2-search-input {height:54px;min-height:54px;}
+}
+@media (prefers-color-scheme:dark) {
+  :root {
+    --v3-panel:rgba(33,22,43,.96);
+    --v3-glass:rgba(36,23,45,.93);
+    --v3-glass-border:rgba(160,140,180,.45);
+    --v3-glass-shadow:0 12px 32px rgba(0,0,0,.48);
+    --v3-control-shadow:0 8px 24px rgba(0,0,0,.32);
+    --v2-theme-canvas:#110D18;
+    --v2-theme-ink:#FAF6FF;
+    --v2-theme-body:#F0E8F6;
+    --v2-theme-muted:#D1C2DC;
+    --v2-theme-link:#FF9ACB;
+    --v2-theme-line:#665276;
+    --v2-theme-strong-line:#A08CB4;
+    --v2-theme-surface-alt:#30213D;
+    --v2-theme-surface-hover:#412B52;
+  }
+  body:not(.v2-exhibition) {background:radial-gradient(ellipse at 63% 44%,#302046 0%,#1A1425 50%,#110D18 82%)!important;}
+}
+@media (forced-colors:active) {
+  body:not(.v2-exhibition) #v2-root :is(#v2-home,#v2-spotlight,#v2-directory,#v2-compact-header,#v2-mobile-nav,#v2-tour-card,#v2-tour-header),
+  body:not(.v2-exhibition) #language-picker,
+  body:not(.v2-exhibition) #reset-europe,
+  body:not(.v2-exhibition) #map-move > summary,
+  body:not(.v2-exhibition) #map .mapboxgl-ctrl-group,
+  body:not(.v2-exhibition) #map .mapboxgl-ctrl-group button {background:Canvas!important;color:CanvasText!important;border-color:CanvasText!important;box-shadow:none;backdrop-filter:none;}
+}
+@media print {#map-move,#reset-europe {display:none!important;}}
