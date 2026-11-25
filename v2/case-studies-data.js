@@ -1059,29 +1059,6 @@ window.SDCA_V2_CASE_STUDY_DATA = {
       ]
     },
     {
-      "name": "Mitsubishi Electric Trane HVAC US (METUS)",
-      "aliases": [
-        "Mitsubishi Electric Trane US",
-        "Mitsubishi Electric Trane HVAC US",
-        "METUS"
-      ],
-      "featureIds": [
-        20006
-      ],
-      "cases": [
-        {
-          "id": "GCN-CS-072",
-          "title": "Emmaline Kim: UX design internship at Mitsubishi Electric Trane US (SCAD)",
-          "url": "https://www.scad.edu/scadtv/video/my-internship-story-emmaline-kim-scad-user-experience-ux-design-student",
-          "kind": "placement",
-          "year": "Date not specified",
-          "priority": "P1",
-          "relationship": "SCAD student internship",
-          "summary": "SCAD UX design student Emmaline Kim researched the company's connected-device ecosystem and pitched an app feature during her internship."
-        }
-      ]
-    },
-    {
       "name": "Bombus Ltd",
       "aliases": [
         "Bombus"
