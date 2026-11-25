@@ -408,6 +408,74 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
         "color": "#F0047F",
         "address_verified": "The Lodge, Lodge Approach, Wickford, Essex SS11 7XX"
       }
+    },
+    {
+      "type": "Feature",
+      "id": 20014,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.194608,
+          51.221003
+        ]
+      },
+      "properties": {
+        "name": "Sharpak",
+        "group": "Student Placement",
+        "visible": "Yes",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "description": "Tara Janes, Industrial Design and Technology, completed a summer 2017 design internship working on company-set briefs at the plastic packaging manufacturer. The mapped Aylesham facility is a reference location; her actual internship site was not specified.",
+        "url": "https://www.groupeguillin.fr/en/sharpak-aylesham/",
+        "city": "Aylesham",
+        "country": "United Kingdom",
+        "country_name": "United Kingdom",
+        "latitude": 51.221003,
+        "longitude": 1.194608,
+        "address_verified": "Aylesham Industrial Estate, Aylesham, Canterbury, Kent CT3 3EF, United Kingdom",
+        "location_source": "https://find-and-update.company-information.service.gov.uk/company/07394042",
+        "coordinate_source": "https://www.getthedata.com/postcode/CT3-3EF",
+        "coordinate_accuracy": "Verified business postcode reference; internship site unconfirmed",
+        "programmes": "Industrial Design and Technology",
+        "placement_years_display": "Summer 2017",
+        "relationship_years_display": "Summer 2017",
+        "relationship_scope": "Loughborough design student; historical summer internship",
+        "verification_source": "https://designshow.lboro.ac.uk/students/tara-janes/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20015,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Everydesign",
+        "group": "Student Placement",
+        "visible": "Yes",
+        "source_class": "Loughborough published student evidence; V2 addition",
+        "color": "#F0047F",
+        "description": "Rebecca Harvey, Graphic Design BA (Hons), reports completing an internship alongside her degree at Everydesign, a subscription-based design service. Documented in the 2025 degree show.",
+        "url": "",
+        "city": "",
+        "country": "",
+        "country_name": "",
+        "latitude": 0,
+        "longitude": 0,
+        "coordinate_accuracy": "Unlocated; (0,0) is a search-only sentinel, not a map point",
+        "programmes": "Graphic Design BA (Hons)",
+        "placement_years_display": "By 2025; exact dates not published",
+        "relationship_years_display": "By 2025; exact dates not published",
+        "relationship_scope": "Loughborough design student; internship alongside degree",
+        "verification_source": "https://sdcashow2025.lboro.ac.uk/student/rebecca-harvey/",
+        "research_note": "Leon Spiecker also reports an Everydesign internship and identifies Andres Urena as mentor. Urena founded Elefant Design, a subscription-based LUSEP tenant, but the corporate identity and workplace of Everydesign are not conclusively established. Do not assign Elefant's address or the unrelated Welsh EveryDesign website without direct evidence.",
+        "supplementary_source": "https://de.linkedin.com/in/leon-spiecker-7bb1b721a",
+        "potential_location_source": "https://www.lusep.co.uk/tenant-directory"
+      }
     }
   ]
 };
