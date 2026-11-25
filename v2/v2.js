@@ -952,7 +952,7 @@ function highlight(){
   map.addLayer({id:'v2-key-halo',type:'circle',source:'v2-key-partners',filter:['!',['has','point_count']],paint:{
     'circle-color':'#ffffff','circle-radius':13,'circle-opacity':.12}},'v2-key-points');
   map.addLayer({id:'v2-key-labels',type:'symbol',source:'v2-key-partners',filter:['!',['has','point_count']],
-    layout:{'text-field':['get','name'],'text-size':11,'text-anchor':'left','text-offset':[1.5,0],'text-max-width':17,'text-optional':true},
+    layout:{'text-field':['get','name'],'text-font':['Open Sans Bold','Arial Unicode MS Bold'],'text-size':11,'text-anchor':'left','text-offset':[1.5,0],'text-max-width':17,'text-optional':true},
     paint:{'text-color':'#34125e','text-halo-color':'#ffffff','text-halo-width':2}});
   map.on('render',updateDiskCoverage);
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{lastCoverageSignature='';map.triggerRepaint();});
