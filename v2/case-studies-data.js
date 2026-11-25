@@ -1,8 +1,8 @@
 /* Curator-reviewed V2 evidence. Original master partner directory and V1 remain unchanged. */
 window.SDCA_V2_CASE_STUDY_DATA = {
   "schema_version": 1,
-  "generated": "2026-11-24",
-  "source": "CHRIS - GE Map curated case studies + 2026-11-20 source-documented V2 academic partner additions; canonical 1515-feature master remains unchanged",
+  "generated": "2026-11-25",
+  "source": "CHRIS - GE Map curated case studies + 2026-11-20 source-documented V2 academic partner additions; canonical 1515-feature master remains unchanged; 2026-11-25 SDCA student placement and internship additions",
   "matching": "Exact normalized names, curated aliases, optional feature IDs; no fuzzy matching",
   "partners": [
     {
@@ -1080,7 +1080,159 @@ window.SDCA_V2_CASE_STUDY_DATA = {
           "summary": "SCAD UX design student Emmaline Kim researched the company's connected-device ecosystem and pitched an app feature during her internship."
         }
       ]
+    },
+    {
+      "name": "Bombus Ltd",
+      "aliases": [
+        "Bombus"
+      ],
+      "featureIds": [
+        20007
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-073",
+          "title": "Tara Janes: manufacturing internship at Bombus Ltd",
+          "url": "https://designshow.lboro.ac.uk/students/tara-janes/",
+          "kind": "placement",
+          "year": "July–August 2019",
+          "priority": "P1",
+          "relationship": "Manufacturing internship",
+          "summary": "Industrial Design and Technology. Manufacturing internship in personalised gift production, following an earlier internship. Janes describes learning to meet real customer deadlines and work collaboratively."
+        }
+      ]
+    },
+    {
+      "name": "Motor Technology Ltd",
+      "aliases": [
+        "Motec",
+        "Motor Technology"
+      ],
+      "featureIds": [
+        20008
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-074",
+          "title": "Naomi Vladuceanu: short student placement at Motor Technology Ltd",
+          "url": "https://sdcashow2026.lboro.ac.uk/student/naomi-vladuceanu/",
+          "kind": "placement",
+          "year": "Second year; 2026 graduate showcase",
+          "priority": "P1",
+          "relationship": "Short student placement",
+          "summary": "Product Design and Technology. Vladuceanu completed a short placement with the engineering-focused motion-control company during her second year."
+        }
+      ]
+    },
+    {
+      "name": "EPLS Design",
+      "aliases": [
+        "E P L S Design Limited",
+        "EPLS"
+      ],
+      "featureIds": [
+        20009
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-075",
+          "title": "Olivia Marsh: student industry placement at EPLS Design",
+          "url": "https://sdcashow2026.lboro.ac.uk/student/olivia-marsh/",
+          "kind": "placement",
+          "year": "2026 graduate showcase; dates not stated",
+          "priority": "P1",
+          "relationship": "Student industry placement",
+          "summary": "Graphic Design. Marsh adapted existing Thirtyone:eight character illustrations for seasonal campaigns during her placement year at EPLS Design."
+        }
+      ]
+    },
+    {
+      "name": "Co:lab Design Agency",
+      "aliases": [
+        "Colab Agency",
+        "Colab Design Agency"
+      ],
+      "featureIds": [
+        20010
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-076",
+          "title": "Rebecca Harvey: student industry work experience at Co:lab Design Agency",
+          "url": "https://sdcashow2025.lboro.ac.uk/student/rebecca-harvey/",
+          "kind": "placement",
+          "year": "Seven months; 2025 graduate showcase",
+          "priority": "P1",
+          "relationship": "Student industry work experience",
+          "summary": "Graphic Design BA (Hons). Harvey reports seven months of graphic design work at the Reading agency alongside an international study exchange and other work experience. Exact placement classification and dates are not stated."
+        }
+      ]
+    },
+    {
+      "name": "Pretty Lavish",
+      "aliases": [
+        "Pretty Lavish Ltd"
+      ],
+      "featureIds": [
+        20011
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-077",
+          "title": "Kora Reay: student graphic design internship at Pretty Lavish",
+          "url": "https://sdcashow2026.lboro.ac.uk/student/kora-reay/",
+          "kind": "placement",
+          "year": "June 2024–March 2025",
+          "priority": "P1",
+          "relationship": "Student graphic design internship",
+          "summary": "Graphic Design. Reay documents a nine-month graphic design internship with the British fashion brand during her degree."
+        }
+      ]
+    },
+    {
+      "name": "El-Shai",
+      "aliases": [
+        "El Shai",
+        "El-Shai Online Magazine"
+      ],
+      "featureIds": [
+        20012
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-078",
+          "title": "Sarah Moustafa: student-listed short internship at El-Shai",
+          "url": "https://sdcashow2024.lboro.ac.uk/student/sarah-moustafa/",
+          "kind": "placement",
+          "year": "August 2021",
+          "priority": "P1",
+          "relationship": "Student-listed short internship",
+          "summary": "Graphic Design. Moustafa lists a graphic design internship with the Egyptian online magazine in August 2021, separately from her subsequent Sony Europe placement year."
+        }
+      ]
+    },
+    {
+      "name": "Essex Partnership University NHS Foundation Trust",
+      "aliases": [
+        "EPUT",
+        "EPUT NHS"
+      ],
+      "featureIds": [
+        20013
+      ],
+      "cases": [
+        {
+          "id": "GCN-CS-079",
+          "title": "Jess Shaw: student communications internship and subsequent holiday work at Essex Partnership University NHS Foundation Trust",
+          "url": "https://sdcashow2024.lboro.ac.uk/student/jess-shaw/",
+          "kind": "placement",
+          "year": "2021–2022",
+          "priority": "P1",
+          "relationship": "Student communications internship and subsequent holiday work",
+          "summary": "Graphic Communication and Illustration (BA Hons). Shaw reports a three-month communications internship followed by university holiday work, producing social media and rebrand materials. The trust headquarters is the reference location, not a confirmed placement office."
+        }
+      ]
     }
   ],
-  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete. Added seven university evidence records citing Loughborough sources, distinguishing SDCA from university-wide collaborations."
+  "review_note": "New cases 038–057 individually verified against primary Loughborough sources; full master partner directory inventory completed; partner-specific external search incomplete. Added seven university evidence records citing Loughborough sources, distinguishing SDCA from university-wide collaborations. Added seven newly identified student industry hosts from official degree-show archives; locality reference coordinates, not verified workplace buildings. Prior master directory unchanged."
 };
