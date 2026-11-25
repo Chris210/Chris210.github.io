@@ -3657,6 +3657,17 @@
       map.addLayer({...shared,id:'sdca-hover-dot',filter:noFeatureFilter,
         paint:{'circle-radius':14,'circle-color':partnerColor,
           'circle-opacity':1,'circle-stroke-color':'#fff','circle-stroke-width':3}});
+      // One transient feature keeps only the actual hovered location labelled,
+      // even when an organisation has several locations or coincident records.
+      const hoverLabelSource='sdca-hover-label-source';
+      const emptyHoverLabel={type:'FeatureCollection',features:[]};
+      map.addSource(hoverLabelSource,{type:'geojson',data:emptyHoverLabel});
+      map.addLayer({id:'sdca-hover-label',type:'symbol',source:hoverLabelSource,
+        layout:{'text-field':['get','name'],'text-font':['Open Sans Bold','Arial Unicode MS Bold'],
+          'text-size':15,'text-anchor':'left','text-offset':[1.5,0],'text-max-width':17,
+          'text-allow-overlap':true,'text-ignore-placement':true,'text-pitch-alignment':'viewport',
+          'text-rotation-alignment':'viewport'},
+        paint:{'text-color':'#362248','text-halo-color':'#FFFFFF','text-halo-width':2}});
       hoverLayerReady=true;
       const labels=mapboxControlLabels[currentLanguage]||mapboxControlLabels.en;
       ['zoom-in','zoom-out','compass'].forEach((name,index)=>{
@@ -3667,18 +3678,30 @@
       mapIsReady=true;
       updateBrowseList();
       function hover(feature){
-        const key=feature?featureKey(feature):null;
+        const key=feature?JSON.stringify([featureKey(feature),feature.geometry.coordinates]):null;
         if(key===hoveredKey)return;
         hoveredKey=key;map.getCanvas().style.cursor=feature?'pointer':'';
         if(hoverLayerReady){const filter=buildFilter(feature?matchFeature(feature):noFeatureFilter);
           map.setFilter('sdca-hover-halo',filter);
-          map.setFilter('sdca-hover-dot',['all',filter,['!=',['get','sdcaFeatured'],true]]);}
+          map.setFilter('sdca-hover-dot',['all',filter,['!=',['get','sdcaFeatured'],true]]);
+          const name=String(feature?.properties?.name||'').trim();
+          const ordinary=feature&&feature.properties?.sdcaFeatured!==true&&name;
+          map.getSource(hoverLabelSource).setData(ordinary?{type:'FeatureCollection',features:[{
+            type:'Feature',geometry:{type:'Point',coordinates:feature.geometry.coordinates},
+            properties:{name}
+          }]}:emptyHoverLabel);
+        }
       }
       map.on('mousemove',event=>{
+        if(map.isMoving()||document.body.classList.contains('v2-exhibition')){hover(null);return;}
+        const overlayLayers=['v2-key-points','v2-key-clusters'].filter(id=>map.getLayer(id));
+        if(overlayLayers.length&&map.queryRenderedFeatures(event.point,{layers:overlayLayers}).length){hover(null);map.getCanvas().style.cursor='pointer';return;}
         const points=map.queryRenderedFeatures(event.point,{layers:[POINT_LAYER]});
-        hover(points.find(f=>f.geometry?.type==='Point')||null);
+        hover(points.find(f=>f.geometry?.type==='Point'&&f.properties?.sdcaFeatured!==true)||null);
+        if(!hoveredKey)map.getCanvas().style.cursor='';
       });
-      map.getCanvas().addEventListener('mouseleave',()=>hover(null));
+      map.on('movestart',()=>hover(null));
+      map.getCanvas().addEventListener('mouseleave',()=>{hover(null);map.getCanvas().style.cursor='';});
       map.on('click',event=>{
         if (window.SDCA_V2?.handleMapClick?.(event)) return;
         const touch=window.matchMedia('(pointer: coarse)').matches;
@@ -3726,7 +3749,7 @@
 <script src="./v2-excellence.js?v=qs-priority-excellence-28"></script>
 <script src="./v2.js?v=larger-partner-labels-20261125"></script>
 <script src="./v2-localise.js?v=hongkong-sar-20261120"></script>
-<script src="./v2-theme.js?v=map-featured-stars-20261124"></script>
+<script src="./v2-theme.js?v=ordinary-partner-hover-20261125"></script>
 <script src="./v2-collaborate.js?v=records-footer-4"></script>
 </body>
 </html>
