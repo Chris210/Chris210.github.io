@@ -1,7 +1,7 @@
 /* V2-only academically evidenced additions; not an amendment to the V1 exchange database. */
 window.SDCA_V2_ADDITIONAL_PARTNERS = {
   "schema_version": 1,
-  "generated": "2026-11-25",
+  "generated": "2026-11-26",
   "review_required_when_relationship_status_changes": true,
   "features": [
     {
@@ -147,35 +147,6 @@ window.SDCA_V2_ADDITIONAL_PARTNERS = {
         "qs_art_design_2026_rank": null,
         "source_class": "Loughborough first-party published evidence; V2 addition",
         "color": "#2D0153"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 20006,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -84.0743103,
-          34.0070496
-        ]
-      },
-      "properties": {
-        "name": "Mitsubishi Electric Trane HVAC US (METUS)",
-        "group": "Prospective employer",
-        "description": "",
-        "url": "https://www.mitsubishicomfort.com/",
-        "visible": "Yes",
-        "city": "Suwanee",
-        "country": "United States",
-        "country_name": "United States",
-        "latitude": 34.0070496,
-        "longitude": -84.0743103,
-        "address_verified": "1340 Satellite Blvd, Suwanee, GA 30024, USA",
-        "verification_source": "https://us.mitsubishielectric.com/en/about/local/locations/us010/",
-        "coordinate_accuracy": "Approximate business address coordinates",
-        "location_source": "https://www.whereorg.com/mitsubishi-electric-22065373",
-        "relationship_scope": "Prospective employer",
-        "color": "#b70062"
       }
     },
     {
