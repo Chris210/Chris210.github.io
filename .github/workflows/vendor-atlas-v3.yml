@@ -1,0 +1,39 @@
+name: Vendor Atlas V3 renderer
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vendor-atlas-v3.yml'
+      - 'v3/vendor/install.mjs'
+permissions:
+  contents: write
+concurrency:
+  group: vendor-atlas-v3
+  cancel-in-progress: false
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Vendor pinned open-source renderer
+        run: node v3/vendor/install.mjs
+      - name: Verify local distribution
+        run: |
+          test "$(wc -c < v3/vendor/maplibre-gl.js)" -gt 100000
+          test "$(wc -c < v3/vendor/maplibre-gl.css)" -gt 10000
+          test -s v3/vendor/LICENSE.txt
+      - name: Commit only V3 vendor assets
+        run: |
+          git add -- v3/vendor/maplibre-gl.js v3/vendor/maplibre-gl.css v3/vendor/LICENSE.txt
+          if git diff --cached --quiet; then exit 0; fi
+          git diff --cached --name-only | grep -v '^v3/vendor/' && exit 1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Self-host pinned MapLibre renderer for Atlas V3'
+          git push origin HEAD:main
