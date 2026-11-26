@@ -118,17 +118,16 @@ function applyTheme(){
   // Featured partners keep the same gold star in both colour themes.
   paint('v2-key-points','icon-emissive-strength',1);
   paint('v2-key-clusters','circle-color',byClusterMajority);
-  paint('v2-key-clusters','circle-stroke-color',dark?'#B9AABE':
-    ['case',
-      ['all',['>', ['get','exchangeCount'],0],
-       ['<',['get','exchangeCount'],['get','point_count']]],
-      ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],
-        '#F0047F','#2D0153'],
-      '#FFFFFF']);
+  paint('v2-key-clusters','circle-stroke-color',dark?'#B9AABE':'#FFFFFF');
   paint('v2-key-clusters','circle-stroke-width',dark?1.5:3);
-  // Suppress luminous white haloes around the dark-mode clusters.
+  // Prototype-inspired tinted halo; mixed clusters retain their secondary hue.
+  const clusterHalo=['case',
+    ['all',['>', ['get','exchangeCount'],0],['<',['get','exchangeCount'],['get','point_count']]],
+    ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],placementColor,exchangeColor],
+    byClusterMajority[1],exchangeColor,placementColor];
   paint('v2-key-halo','circle-opacity',dark?0.035:0.12);
-  paint('v2-key-cluster-halo','circle-opacity',dark?0.035:0.13);
+  paint('v2-key-cluster-halo','circle-color',clusterHalo);
+  paint('v2-key-cluster-halo','circle-opacity',dark?0.26:0.24);
   paint('v2-key-count','text-color',dark?'#21162B':'#FFFFFF');
   paint('v2-key-labels','text-color',p.label);
   paint('v2-key-labels','text-halo-color',p.labelHalo);

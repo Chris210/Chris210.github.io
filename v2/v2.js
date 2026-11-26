@@ -951,15 +951,16 @@ function highlight(){
   map.addLayer({id:'v2-key-clusters',type:'circle',source:'v2-key-disk-coverage',paint:{
     'circle-color':['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#2D0153','#F0047F'],
     'circle-radius':['get','diskRadius'],'circle-pitch-scale':'viewport','circle-pitch-alignment':'viewport',
-    'circle-stroke-color':['case',
-      ['all',['>', ['get','exchangeCount'],0],['<',['get','exchangeCount'],['get','point_count']]],
-      ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#F0047F','#2D0153'],
-      '#ffffff'],
+    'circle-stroke-color':'#ffffff',
     'circle-stroke-width':3}});
   map.addLayer({id:'v2-key-count',type:'symbol',source:'v2-key-disk-coverage',
-    layout:{'text-field':['to-string',['get','point_count']],'text-size':13,'text-allow-overlap':true,'text-ignore-placement':true,'text-pitch-alignment':'viewport','text-rotation-alignment':'viewport'},paint:{'text-color':'#ffffff'}});
+    layout:{'text-field':['number-format',['get','point_count'],{'locale':'en-GB','min-fraction-digits':0,'max-fraction-digits':0}],'text-font':['Open Sans Bold','Arial Unicode MS Bold'],'text-size':['step',['get','diskRadius'],14,21,17,29,19,33,21],'text-allow-overlap':true,'text-ignore-placement':true,'text-pitch-alignment':'viewport','text-rotation-alignment':'viewport'},paint:{'text-color':'#ffffff'}});
   map.addLayer({id:'v2-key-cluster-halo',type:'circle',source:'v2-key-disk-coverage',paint:{
-    'circle-color':'#ffffff','circle-opacity':.13,
+    'circle-color':['case',
+      ['all',['>', ['get','exchangeCount'],0],['<',['get','exchangeCount'],['get','point_count']]],
+      ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#F0047F','#2D0153'],
+      ['case',['>=',['get','exchangeCount'],['/', ['get','point_count'],2]],'#2D0153','#F0047F']],
+    'circle-opacity':.24,
     'circle-radius':['get','haloRadius'],'circle-pitch-scale':'viewport','circle-pitch-alignment':'viewport'
   }},'v2-key-clusters');
   // Draw a crisp five-point star at 2x resolution, independent of basemap fonts.
