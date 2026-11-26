@@ -263,7 +263,7 @@ function directory(){
  }
  const intro=element('p','v2-dir-audience',
   audienceName
-   ?'Featured partners ranked within each category for audiences in '+audienceName+'. Editorial Art & Design relevance, not QS survey results.'
+   ?'Featured partners ranked within each category for audiences in '+audienceName+'.'
    :'Featured partners ranked within each category in the global editorial order. A detected country personalises each list.');
  container.append(intro);
  groups.forEach(group=>{
