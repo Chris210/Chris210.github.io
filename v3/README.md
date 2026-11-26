@@ -1,2 +1,5 @@
 # Loughborough Atlas — V3
 Experimental MapLibre GL JS (BSD-3-Clause) globe with original local Natural Earth cartography. V1/V2 untouched. Shared root partner-directory.json is read-only; other metadata and UI are V3 snapshots. See atlas/NOTICE.txt. No Mapbox map services in the completed port. Natural Earth is global/regional, not street-level; no satellite, routing, buildings or worldwide address service. Renderer initially bootstraps pinned 5.15.0 via CDN; run `node v3/vendor/install.mjs` and commit only v3/vendor/ to self-host. IP-country service remains external. Existing Loughborough branding and partner content are not relicensed. Interactive browser parity not yet verified.
+
+## Geography upgrade
+The active basemap uses Natural Earth 1:50m admin-0 country and territory polygons (242 features, ~99,600 vertices); country labels remain from the original dataset. The 1:110m source is retained for reference. MapLibre geometry simplification tolerance is reduced to 0.1 and source maxzoom raised to 12. All geography remains local; no Mapbox requests.

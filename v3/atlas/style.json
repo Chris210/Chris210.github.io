@@ -7,8 +7,10 @@
   "sources": {
     "atlasCountries": {
       "type": "geojson",
-      "data": "./countries.geojson",
-      "attribution": "<a href=\"https://www.naturalearthdata.com/\">Natural Earth</a> · <a href=\"https://maplibre.org/\">MapLibre</a>"
+      "data": "./countries-50m.geojson",
+      "attribution": "<a href=\"https://www.naturalearthdata.com/\">Natural Earth</a> · <a href=\"https://maplibre.org/\">MapLibre</a>",
+      "tolerance": 0.1,
+      "maxzoom": 12
     },
     "atlasLabels": {
       "type": "geojson",

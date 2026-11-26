@@ -1386,7 +1386,7 @@
     const map = new maplibregl.Map({
       container: 'map',
       style: Atlas.styleURL,
-      transformRequest: (url) => { const file = String(url).split('/').pop(); return {url: ['countries.geojson','labels.geojson','cities.geojson','lakes.geojson','grid.geojson'].includes(file) ? new URL('./atlas/'+file,location.href).href : url}; },
+      transformRequest: (url) => { const file = String(url).split('/').pop(); return {url: ['countries-50m.geojson','countries.geojson','labels.geojson','cities.geojson','lakes.geojson','grid.geojson'].includes(file) ? new URL('./atlas/'+file,location.href).href : url}; },
 
       center: initialCountryView ? initialCountryView.slice(0, 2) : EUROPE_CENTRE,
       zoom: europeZoom,
