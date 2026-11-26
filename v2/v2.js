@@ -46,21 +46,21 @@ const strongestTourQs=record=>{
  return options[0]||null;
 };
 const makeQsRankingCard=(institution,kind,ranking)=>{
+ const rank=ranking?.rank;
+ const rankText=String(rank??'').trim().replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'');
+ if(!/^[1-9]\d*(?:\s*[-–—]\s*[1-9]\d*|\+)?$/.test(rankText))return null;
  const locale=document.getElementById('language-select')?.value||'en';
  const words=qsLabels[locale]||qsLabels.en;
  const qs=kind==='overall'?words.world:words.art;
  const card=element('div','v2-stat v2-qs-stat');
  const year=Number.isInteger(ranking?.edition)?' · '+ranking.edition:'';
  card.append(element('span','',qs+year));
- const rank=ranking?.rank;
- if(rank!==undefined&&rank!==null&&String(rank).trim()){
+ {
   const rankLink=element('a','v2-qs-rank',qsRankingData?.formatRank(rank)||('#'+String(rank).replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'')));
   rankLink.href=ranking.source_url||(kind==='overall'?'https://www.topuniversities.com/world-university-rankings':qsArtUrl);
   rankLink.target='_blank';rankLink.rel='noopener noreferrer';
   rankLink.setAttribute('aria-label',institution+' '+qs+(ranking.edition?' '+ranking.edition:'')+' rank '+String(rank).replace(/^#?\s*=\s*/,'').replace(/^#\s*/,'')+' (opens source in a new tab)');
   card.append(rankLink);
- }else{
-  card.append(element('strong','v2-qs-unavailable',words.missing));
  }
  return card;
 };
@@ -405,13 +405,16 @@ function drawSpotlight(i){
  if(i.group==='academic'){
   grid.classList.add('v2-stat-grid-two','v2-stat-grid-academic');
   const qs=qsRankingData?.lookup(i.name,feature?.id);
-  grid.append(makeQsRankingCard(i.name,'overall',qs?.overall));
-  grid.append(makeQsRankingCard(i.name,'art_design',qs?.art_design));
+  for(const kind of ['overall','art_design']){
+   const tile=makeQsRankingCard(i.name,kind,qs?.[kind]);
+   if(tile)grid.append(tile);
+  }
  }
  const stats=i.group==='academic'?
   [['Category','University'],['Relationship',p.group==='Academic Collaboration'?'Academic collaboration':'Academic exchange']]:
   [['Category',category(i).tab],['Relationship','Student placement']];
  stats.forEach(pair=>{
+  if(pair[1]==null||!String(pair[1]).trim())return;
   const box=element('div','v2-stat');
   box.append(element('span','',pair[0]),element('strong','',pair[1]));
   grid.append(box);
