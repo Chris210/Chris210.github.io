@@ -186,9 +186,7 @@ mobileDrawerToggle.id='v2-mobile-drawer-toggle';
 mobileDrawerToggle.type='button';
 mobileDrawerToggle.setAttribute('aria-controls','v2-home');
 const mobileDrawerLabel=element('span','v2-mobile-drawer-label','Explore partners');
-const mobileDrawerChevron=element('span','v2-mobile-drawer-chevron','⌃');
-mobileDrawerChevron.setAttribute('aria-hidden','true');
-mobileDrawerToggle.append(mobileDrawerLabel,mobileDrawerChevron);
+mobileDrawerToggle.append(mobileDrawerLabel);
 home.prepend(mobileDrawerToggle);
 function setMobileDrawerOpen(isOpen){
  const open=Boolean(isOpen);
