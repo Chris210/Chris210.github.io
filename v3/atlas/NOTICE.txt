@@ -1,0 +1,3 @@
+Natural Earth (public domain): https://www.naturalearthdata.com/about/terms-of-use/
+Source: https://github.com/nvkelso/natural-earth-vector (110m admin 0 countries, 110m populated places simple, selected 50m lakes).
+Boundaries are indicative. MapLibre GL JS: BSD-3-Clause.

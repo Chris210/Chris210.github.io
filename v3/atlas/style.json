@@ -1,0 +1,237 @@
+{
+  "version": 8,
+  "name": "Loughborough Atlas / Porcelain & Amethyst",
+  "projection": {
+    "type": "globe"
+  },
+  "sources": {
+    "atlasCountries": {
+      "type": "geojson",
+      "data": "./countries.geojson",
+      "attribution": "<a href=\"https://www.naturalearthdata.com/\">Natural Earth</a> · <a href=\"https://maplibre.org/\">MapLibre</a>"
+    },
+    "atlasLabels": {
+      "type": "geojson",
+      "data": "./labels.geojson"
+    },
+    "atlasCities": {
+      "type": "geojson",
+      "data": "./cities.geojson"
+    },
+    "atlasLakes": {
+      "type": "geojson",
+      "data": "./lakes.geojson"
+    },
+    "atlasGrid": {
+      "type": "geojson",
+      "data": "./grid.geojson"
+    }
+  },
+  "layers": [
+    {
+      "id": "atlas-ocean",
+      "type": "background",
+      "paint": {
+        "background-color": "#DDD4EB"
+      }
+    },
+    {
+      "id": "atlas-land",
+      "type": "fill",
+      "source": "atlasCountries",
+      "paint": {
+        "fill-color": "#F9F5EF",
+        "fill-antialias": true
+      }
+    },
+    {
+      "id": "atlas-lakes-water",
+      "type": "fill",
+      "source": "atlasLakes",
+      "minzoom": 3,
+      "paint": {
+        "fill-color": "#DDD4EB"
+      }
+    },
+    {
+      "id": "atlas-graticule",
+      "type": "line",
+      "source": "atlasGrid",
+      "maxzoom": 5,
+      "paint": {
+        "line-color": "#AFA0C8",
+        "line-width": 0.55,
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          0.35,
+          4,
+          0.12,
+          5,
+          0
+        ]
+      }
+    },
+    {
+      "id": "atlas-country-boundary",
+      "type": "line",
+      "source": "atlasCountries",
+      "paint": {
+        "line-color": "#C3B6CE",
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          0.55,
+          5,
+          1.05,
+          10,
+          1.4
+        ],
+        "line-opacity": 0.88
+      }
+    },
+    {
+      "id": "atlas-country-label",
+      "type": "symbol",
+      "source": "atlasLabels",
+      "minzoom": 1.8,
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Arial",
+          "Helvetica",
+          "sans-serif"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          2,
+          10,
+          5,
+          13,
+          9,
+          17
+        ],
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.1,
+        "text-max-width": 11,
+        "symbol-sort-key": [
+          "get",
+          "rank"
+        ]
+      },
+      "paint": {
+        "text-color": "#6B567D",
+        "text-halo-color": "#F9F5EF",
+        "text-halo-width": 1.4
+      }
+    },
+    {
+      "id": "atlas-city-dot",
+      "type": "circle",
+      "source": "atlasCities",
+      "minzoom": 4.5,
+      "filter": [
+        "any",
+        [
+          "==",
+          [
+            "get",
+            "capital"
+          ],
+          1
+        ],
+        [
+          ">",
+          [
+            "get",
+            "pop"
+          ],
+          1000000
+        ]
+      ],
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4.5,
+          1.6,
+          8,
+          3
+        ],
+        "circle-color": "#8A729F",
+        "circle-stroke-color": "#FFFFFF",
+        "circle-stroke-width": 0.6
+      }
+    },
+    {
+      "id": "atlas-city-label",
+      "type": "symbol",
+      "source": "atlasCities",
+      "minzoom": 4.5,
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Arial",
+          "Helvetica",
+          "sans-serif"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4.5,
+          10,
+          8,
+          13
+        ],
+        "text-anchor": "top",
+        "text-offset": [
+          0,
+          0.6
+        ],
+        "symbol-sort-key": [
+          "get",
+          "rank"
+        ]
+      },
+      "paint": {
+        "text-color": "#62546F",
+        "text-halo-color": "#F9F5EF",
+        "text-halo-width": 1.2
+      }
+    }
+  ]
+}

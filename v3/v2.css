@@ -1,0 +1,821 @@
+/* SDCA Global Creative Network · Figma Iteration 2 (K1–K4 + KM1)
+   Separate stylesheet for /v2/ and figma-redesign-v2. Original site remains unchanged. */
+:root { --v2-purple:#35125e; --v2-deep:#190729; --v2-magenta:#bc006b; --v2-lilac:#ded5e9; --v2-muted:#5f6b77; --v2-paper:#faf9fc; --v2-border:#d8d5df; }
+body { color:var(--v2-purple); background:radial-gradient(circle at 64% 45%,#52277a 0%,#341255 46%,#170822 100%) !important; }
+#map { background:transparent !important; }
+#sdca-panel, #browse-panel, .v2-metrics, .v2-tour, #map-move { display:none !important; }
+.maplibregl-control-container {z-index:6;position:relative}
+.maplibregl-ctrl-top-right {top:100px!important;right:22px!important}
+.maplibregl-ctrl-top-right .maplibregl-ctrl {margin-bottom:9px!important}
+.maplibregl-ctrl-group {border:0!important;border-radius:14px!important;background:rgba(252,250,255,.94)!important;box-shadow:0 6px 22px #1a07352e!important}
+.maplibregl-ctrl-group button {width:48px!important;height:47px!important}
+.maplibregl-ctrl-attrib {background:#faf8fbdc!important;color:#52505c!important}
+#language-picker {z-index:30!important;right:24px!important;top:24px!important;min-height:48px!important;padding:0 10px!important;color:var(--v2-purple)!important;background:#faf9fd!important;border:0!important;box-shadow:0 5px 24px #1907292d!important}
+#language-picker .lang-icon {color:var(--v2-purple)!important}
+#language-select {min-width:94px!important;max-width:140px!important;color:var(--v2-purple)!important;font-size:13px!important}
+/* Desktop: use the same compact globe-only picker as mobile. The transparent
+   native select fills the globe, preserving mouse, touch and keyboard access. */
+@media (min-width:681px) {
+  #language-picker {
+    box-sizing:border-box!important;
+    width:48px!important;min-width:48px!important;max-width:48px!important;
+    height:48px!important;min-height:48px!important;max-height:48px!important;
+    padding:0!important;gap:0!important;justify-content:center!important;
+    border-radius:50%!important;overflow:visible!important;
+  }
+  #language-picker:focus-within {
+    width:48px!important;border-radius:50%!important;
+    outline:none!important;
+  }
+  #language-picker:has(#language-select:focus-visible) {
+    outline:3px solid var(--focus)!important;outline-offset:2px;
+  }
+  #language-picker .lang-icon {
+    width:23px!important;height:23px!important;flex:0 0 23px!important;
+    pointer-events:none;
+  }
+  #language-select,
+  #language-picker:focus-within #language-select {
+    position:absolute!important;inset:0!important;
+    z-index:2!important;box-sizing:border-box!important;
+    width:100%!important;height:100%!important;
+    min-width:0!important;max-width:none!important;min-height:0!important;
+    margin:0!important;padding:0!important;border:0!important;
+    opacity:.01!important;cursor:pointer!important;
+    appearance:none!important;-webkit-appearance:none!important;
+    pointer-events:auto!important;
+  }
+}
+#v2-root {position:fixed;inset:0;z-index:7;pointer-events:none;color:var(--v2-purple);font-family:var(--font,system-ui,sans-serif)}
+#v2-root button,#v2-root input,#v2-root a {pointer-events:auto}
+#v2-root button {cursor:pointer}
+#v2-root [hidden] {display:none!important}
+#v2-home {pointer-events:auto;position:absolute;left:24px;top:24px;bottom:24px;width:400px;max-height:calc(100dvh - 48px);display:flex;flex-direction:column;gap:0;padding:23px 25px 18px;background:#faf9fcf5;border:1px solid #ffffffd9;border-radius:28px;box-shadow:0 22px 60px #1b053c50;overflow:hidden;backdrop-filter:blur(18px)}
+.v2-logo-line {display:flex;justify-content:space-between;align-items:center;gap:14px}
+.v2-brand-logo {display:block;width:145px;height:auto;filter:none}
+.v2-icon-btn {display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border:0;border-radius:50%;background:#f4f2f7;color:var(--v2-purple);font-size:21px;line-height:1}
+.v2-icon-btn:hover {background:#e8e3f0}
+.v2-overline {margin-top:22px;color:#b60069;font-size:11px;font-weight:780;letter-spacing:.15em;text-transform:uppercase}
+.v2-h1 {font-size:31px;letter-spacing:-.038em;line-height:1.15;margin:11px 0 6px;color:var(--v2-purple);font-weight:790}
+.v2-subtitle {margin:0;color:#5f6976;font-size:14px;line-height:1.65}
+.v2-accolade {display:flex;align-items:center;gap:11px;margin:28px 0 18px;font-size:13px}
+.v2-accolade .v2-award {font-size:25px;color:var(--v2-magenta)}
+.v2-accolade strong {display:block;color:var(--v2-purple);font-size:14px}
+.v2-accolade small {display:block;color:#6b7280;font-size:11px;line-height:1.5}
+.v2-search-wrap {position:relative;flex-shrink:0}
+.v2-search-input {width:100%;height:52px;border:1px solid #91a0ac;border-radius:14px;padding:0 17px 0 44px;color:#253046;background:#fff;font-size:13px;outline-offset:2px}
+.v2-search-input:focus {border-color:var(--v2-magenta);outline:2px solid #bc006b35}
+.v2-search-icon {pointer-events:none;position:absolute;left:17px;top:16px;font-size:20px;color:#65727d}
+.v2-heading-row {display:flex;align-items:center;justify-content:space-between;margin:19px 0 13px;gap:10px}
+.v2-heading-row h2 {margin:0;font-size:20px;letter-spacing:-.018em;font-weight:780}
+.v2-star {color:var(--v2-magenta);margin-right:6px}
+.v2-link-btn {border:0;background:transparent;color:var(--v2-magenta);font-size:13px;font-weight:730;padding:4px 0}
+.v2-link-btn:hover {text-decoration:underline}
+.v2-tabs {display:flex;flex-shrink:0;gap:4px;background:#f5f4f7;border-radius:12px;padding:4px;margin-bottom:15px}
+.v2-tabs button {border:0;border-radius:10px;flex:1;background:transparent;color:#52606e;font-size:13px;padding:11px 4px;white-space:nowrap}
+.v2-tabs button[aria-selected="true"] {background:white;color:#3e176d;font-weight:760;box-shadow:0 2px 6px #20103c10}
+.v2-tiles {flex:1;min-height:0;overflow:auto;display:grid;align-content:start;align-items:stretch;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-rows:max-content;gap:8px;padding-top:6px;padding-bottom:3px;scrollbar-width:thin}
+.v2-tile {box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;min-width:0;min-height:65px;height:auto;position:relative;text-align:left;background:#fff;border:1px solid #d9d7de;border-radius:14px;padding:13px 10px 14px 32px;transition:transform .12s ease,border-color .12s ease}
+.v2-tile:hover {border-color:#b7006b;transform:translateY(-1px)}
+.v2-tile::before {content:"";position:absolute;top:17px;left:14px;border-radius:50%;background:#bf006e;width:9px;height:9px}
+.v2-tile strong {display:block;font-size:13px;font-weight:700;line-height:1.3;color:#23202a;overflow-wrap:anywhere}
+.v2-tile small {display:block;margin-top:3px;color:#667381;font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+.v2-data-note {display:flex;align-items:start;gap:9px;padding-top:13px;margin-top:auto;color:#67727c;font-size:11px;line-height:1.45;flex-shrink:0}
+#v2-root .v2-metrics {position:absolute;top:24px;left:calc(50% + 63px);transform:translateX(-50%);display:flex;align-items:center;gap:0;padding:0 19px;height:58px;background:#fbfafdeF;color:#39205e;box-shadow:0 8px 28px #15082e29;border:0;border-radius:21px;white-space:nowrap}
+#v2-root .v2-metrics span {display:flex;align-items:baseline;gap:7px;font-size:12px;padding:0 20px;color:#63707b}
+#v2-root .v2-metrics span+span {border-left:1px solid #e4dfe8}
+#v2-root .v2-metrics b {font-size:20px;color:#361460;letter-spacing:-.04em}
+#v2-root .v2-cta {position:absolute;left:calc(50% + 88px);bottom:65px;transform:translateX(-50%);border:0;background:var(--v2-magenta);color:#fff;border-radius:999px;padding:18px 23px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:750;box-shadow:0 10px 30px #31002a43;white-space:nowrap}
+#v2-root .v2-cta:hover {background:#970051}
+.v2-play {display:grid;place-items:center;background:#e53697;border-radius:50%;width:25px;height:25px}
+#v2-spotlight {pointer-events:auto;position:absolute;right:88px;top:100px;width:min(490px,calc(100vw - 112px));max-height:calc(100dvh - 130px);overflow-y:auto;overflow-x:hidden;padding:24px;border-radius:26px;background:#fdfcfe;box-shadow:0 18px 65px #220b4245;color:#301054}
+.v2-spot-header {display:flex;align-items:center;justify-content:space-between;gap:8px}
+.v2-badge {padding:7px 11px;background:#b8006c;border-radius:999px;color:white;text-transform:uppercase;font-size:11px;font-weight:760;letter-spacing:.13em}
+.v2-spot-type {margin-right:auto;color:#5b6570;font-size:11px;font-weight:790;text-transform:uppercase;letter-spacing:.14em}
+#v2-spotlight h2 {margin:20px 0 4px;font-size:46px;line-height:1.04;letter-spacing:-.045em;overflow-wrap:anywhere}
+.v2-spot-location {color:#65717e;font-size:14px;line-height:1.5;margin:8px 0 22px}
+.v2-stat-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 21px}
+.v2-stat {background:#f4f1f7;border-radius:12px;padding:11px 9px;color:#5f6975;font-size:11px;min-height:69px}
+.v2-stat strong {display:block;color:#351360;margin-top:5px;font-size:13px;line-height:1.35}
+.v2-section-label {font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#65717d;font-weight:750;margin:17px 0 12px}
+.v2-chip-list {display:flex;flex-wrap:wrap;gap:7px}
+.v2-chip {background:#f3f0f7;border-radius:999px;padding:9px 12px;color:#35303d;font-size:12px;line-height:1.2}
+.v2-spot-description {color:#606d79;font-size:13px;line-height:1.55}
+.v2-spot-link {display:flex;align-items:center;justify-content:center;background:var(--v2-magenta);color:white!important;border-radius:999px;text-decoration:none;min-height:48px;padding:13px;font-size:13px;font-weight:780;margin-top:18px}
+.v2-spot-link:hover {background:#91005b}
+.v2-spot-footer {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;border-top:1px solid #ded9e4;margin-top:14px;padding-top:14px;color:#65717d;font-size:11px}
+.v2-spot-footer > span {flex:0 1 auto;min-width:0}
+.v2-spot-footer > .v2-link-btn {display:block;flex:0 1 auto;max-width:100%;margin-left:auto;text-align:right;white-space:normal}
+#v2-compact-header {pointer-events:auto;position:absolute;top:24px;left:24px;display:flex;align-items:center;gap:15px;background:#faf9fc;border-radius:24px;padding:13px 19px;box-shadow:0 12px 38px #1b053a32;max-width:calc(100vw - 260px)}
+#v2-compact-header .v2-brand-logo {width:113px}
+#v2-compact-header strong {border-left:1px solid #dad3e2;padding-left:15px;font-size:17px;white-space:nowrap}
+#v2-compact-header button {margin-left:0}
+#v2-directory {pointer-events:auto;position:absolute;left:24px;top:24px;bottom:24px;max-width:1060px;width:calc(100vw - 375px);background:#fcfbfe;border-radius:28px;padding:26px 33px;overflow:auto;box-shadow:0 24px 70px #17052852}
+.v2-dir-header {display:flex;align-items:center;gap:18px}
+.v2-dir-title {flex:1}
+.v2-dir-title small {color:var(--v2-magenta);font-weight:800;text-transform:uppercase;letter-spacing:.15em;font-size:11px}
+.v2-dir-title h2 {font-size:29px;letter-spacing:-.026em;margin:3px 0 0}
+.v2-pdf {border:1.5px solid #4b1b72;border-radius:999px;background:white;color:#381663;padding:13px 21px;font-size:13px;font-weight:760}
+.v2-dir-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:27px}
+/* One column per established category; each is independently ranked for
+   the visitor's country. Mobile stacks the three columns in category order. */
+.v2-dir-audience {grid-column:1/-1;margin:0;color:#5c4f69;font-size:12px;line-height:1.5}
+.v2-dir-position {flex:0 0 22px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:#5d2a7b;align-self:flex-start;padding-top:1px}
+.v2-dir-partner {display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:3px;text-align:left}
+.v2-dir-row .v2-dir-category {font-size:10px;font-weight:600;color:#746781;text-align:left;line-height:1.25;flex:none}
+.v2-dir-row .v2-dir-location {flex:0 1 33%;text-align:right;overflow-wrap:anywhere}
+.v2-dir-evidence {grid-column:1/-1;margin-top:6px}
+
+.v2-dir-col h3 {display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:#4a245f;margin:0 0 14px}
+.v2-dir-count {font-size:11px;font-weight:750;letter-spacing:0;color:#6d567b;background:#ece6f2;border-radius:999px;padding:3px 8px;font-variant-numeric:tabular-nums}
+.v2-dir-row {width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:transparent;border:0;border-bottom:1px solid #d8d4dc;padding:8px 0;color:#27232a;font-size:12px;min-height:34px}
+.v2-dir-row:hover strong {color:var(--v2-magenta)}
+.v2-dir-row strong {font-size:12px;font-weight:700;flex:1;line-height:1.25}
+.v2-dir-row small {font-size:11px;color:#66717b;text-align:right;flex:0 1 48%}
+.v2-rank-panel {background:#f6f2fa;padding:17px;border-radius:15px;margin-top:23px;font-size:12px;line-height:1.6}
+.v2-rank-panel strong {color:#3a1463}
+.v2-dir-note {font-size:11px;color:#66717b;margin-top:18px}
+#v2-overlay-scrim {pointer-events:auto;position:absolute;inset:0;background:#17082968}
+#v2-search-results {position:absolute;left:0;right:0;top:calc(100% + 7px);max-height:275px;overflow:auto;background:white;border:1px solid #ddd5e4;border-radius:13px;z-index:14;box-shadow:0 15px 33px #1e0a3733}
+.v2-search-result {width:100%;padding:12px 14px;text-align:left;background:white;border:0;border-bottom:1px solid #eee9f2;display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.v2-search-result:hover {background:#f9f2fc}
+.v2-search-result small {color:#717985}
+.v2-search-result[disabled] {opacity:.55}
+.v2-empty {padding:14px;color:#687583;font-size:12px}
+#v2-tour-mode {pointer-events:none;position:absolute;inset:0}
+#v2-tour-header {position:absolute;top:30px;left:30px;display:flex;align-items:center;gap:14px;background:#2d1547eb;border-radius:16px;color:white;padding:13px 19px;box-shadow:0 6px 30px #1e043b3d}
+#v2-tour-header .v2-brand-logo {width:117px}
+#v2-tour-header strong {border-left:1px solid #ffffff77;padding-left:14px;font-size:16px}
+#v2-exit-tour {pointer-events:auto;position:absolute;top:32px;right:34px;background:#2411399c;border:1px solid #ffffff87;color:white;border-radius:999px;padding:12px 20px;font-size:13px}
+#v2-tour-card {pointer-events:auto;position:absolute;bottom:32px;left:32px;width:min(560px,calc(100vw - 64px));border-radius:27px;background:#fcfbfe;padding:27px 32px;box-shadow:0 15px 45px #16042c3d}
+#v2-tour-card h2 {font-size:42px;letter-spacing:-.038em;line-height:1.1;margin:20px 0}
+#v2-tour-card p {color:#60707a;font-size:15px;line-height:1.65}
+#v2-tour-card .v2-tour-progress {height:5px;overflow:hidden;background:#d6d7da;border-radius:999px;margin:15px 0 8px}
+#v2-tour-progress-active {height:100%;background:var(--v2-magenta);width:2%}
+.v2-tour-step-line {display:flex;justify-content:space-between;color:#596773;font-size:12px}
+.v2-tour-actions {display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
+.v2-tour-actions button {background:transparent;color:#3b126a;border:0;padding:8px;font-size:20px}
+.v2-tour-actions button.v2-pause {background:var(--v2-magenta);color:white;border-radius:50%;width:52px;height:52px;font-size:19px}
+.v2-tour-actions small {color:#71808a;font-size:11px;margin-left:8px}
+#v2-mobile-nav,#v2-mobile-accolade {display:none}
+@media (max-width:1190px) {
+  #v2-root .v2-metrics {left:auto;right:174px;transform:none;top:24px}
+  #v2-root .v2-metrics span {padding:0 12px}
+  #v2-root .v2-cta {left:calc(50% + 115px)}
+  #v2-directory {width:calc(100vw - 175px)}
+  #v2-spotlight {right:78px;width:min(460px,calc(100vw - 102px))}
+}
+@media (max-width:950px) {
+  #v2-root .v2-metrics {display:none}
+  #v2-home {width:350px;padding:20px}
+  .v2-h1 {font-size:27px}
+  #v2-spotlight {right:70px;width:min(430px,calc(100vw - 94px))}
+  #v2-compact-header strong {font-size:14px}
+  #v2-directory {width:calc(100vw - 48px)}
+}
+@media (max-width:680px) {
+  /* A native, full-area mobile language picker. Never expand across the logo.
+     The select covers the globe so tapping anywhere opens the iOS/Android picker. */
+  #language-picker {
+    top:54px!important;right:11px!important;
+    box-sizing:border-box!important;
+    width:48px!important;min-width:48px!important;max-width:48px!important;
+    height:48px!important;min-height:48px!important;max-height:48px!important;
+    padding:0!important;gap:0!important;justify-content:center!important;
+    border-radius:50%!important;overflow:visible!important;
+  }
+  #language-picker:focus-within {
+    width:48px!important;border-radius:50%!important;
+    outline:none!important;
+  }
+  #language-picker:has(#language-select:focus-visible) {
+    outline:3px solid var(--focus)!important;outline-offset:2px;
+  }
+  #language-picker .lang-icon {
+    width:23px!important;height:23px!important;flex:0 0 23px!important;
+    pointer-events:none;
+  }
+  #language-select,
+  #language-picker:focus-within #language-select {
+    position:absolute!important;inset:0!important;
+    left:0!important;top:0!important;z-index:2!important;
+    box-sizing:border-box!important;
+    width:100%!important;height:100%!important;
+    min-width:0!important;max-width:none!important;min-height:0!important;
+    margin:0!important;padding:0!important;border:0!important;
+    opacity:.01!important;cursor:pointer!important;
+    appearance:none!important;-webkit-appearance:none!important;
+    pointer-events:auto!important;
+  }
+  #v2-root #v2-home {left:0;right:0;bottom:0;top:auto;width:100%;max-height:43dvh;border-radius:24px 24px 0 0;padding:12px 20px 18px;gap:0;background:#fcfbff;box-shadow:0 -12px 32px #19053232}
+  #v2-home:before {content:"";width:40px;height:5px;border-radius:999px;background:#ccd0d2;align-self:center;margin-bottom:11px;flex-shrink:0}
+  #v2-home .v2-logo-line,#v2-home .v2-overline,#v2-home .v2-h1,#v2-home .v2-subtitle,#v2-home .v2-accolade,#v2-home .v2-data-note {display:none}
+  #v2-home .v2-heading-row {margin:15px 0 12px}
+  #v2-home .v2-tabs {margin-bottom:12px}
+  #v2-home .v2-tile {min-height:60px}
+  .v2-tiles {display:flex;overflow-x:auto;overflow-y:hidden;gap:8px;min-height:65px;flex:0 0 68px;scroll-snap-type:x mandatory}
+  .v2-tile {flex:0 0 43%;scroll-snap-align:start;min-width:155px}
+  #v2-mobile-nav {pointer-events:auto;position:absolute;display:flex;gap:10px;align-items:center;top:54px;left:12px;right:72px;border-radius:20px;padding:11px 14px;background:#faf9fc;box-shadow:0 10px 32px #1b093a39}
+  #v2-mobile-nav img {width:93px}
+  #v2-mobile-nav strong {border-left:1px solid #d8d0e2;padding-left:11px;font-size:13px;line-height:1.15}
+  #v2-mobile-accolade {display:block;position:absolute;top:128px;left:12px;right:25px;padding:11px 14px;background:#230e3cde;color:white;border-radius:999px;text-align:center;font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #v2-root .v2-cta {position:absolute;left:20px;right:20px;bottom:calc(43dvh + 6px);transform:none;justify-content:center;min-height:50px;padding:12px 16px;font-size:13px}
+  .maplibregl-ctrl-top-right {top:119px!important;right:10px!important}
+  #v2-spotlight {top:auto;bottom:0;right:0;left:0;width:100%;max-height:73dvh;border-radius:26px 26px 0 0;padding:23px}
+  #v2-spotlight h2 {font-size:35px}
+  #v2-compact-header {top:16px;left:12px;right:70px;padding:10px;max-width:none;gap:8px}
+  #v2-compact-header strong {font-size:12px;white-space:normal}
+  #v2-compact-header .v2-brand-logo {width:90px}
+  #v2-directory {left:0;right:0;top:0;bottom:0;width:100%;border-radius:0;padding:24px 18px}
+  .v2-dir-title h2 {font-size:21px}
+  .v2-dir-grid {grid-template-columns:1fr;gap:22px}
+  .v2-pdf {padding:10px;font-size:11px}
+  #v2-tour-header {top:16px;left:10px;padding:11px}
+  #v2-tour-header strong {font-size:12px}
+  #v2-exit-tour {top:86px;right:12px}
+  #v2-tour-card {left:12px;bottom:12px;width:calc(100vw - 24px);padding:20px}
+  #v2-tour-card h2 {font-size:28px}
+  #v2-tour-card p {font-size:12px}
+}
+
+
+/* Print the entire curated directory, not the map background. */
+#language-picker[hidden] { display:none!important; }
+@media print {
+ html,body {height:auto!important;overflow:visible!important;background:white!important;color:#301052!important}
+ #map,.maplibregl-control-container,#language-picker,#sdca-panel,#browse-panel,
+ #v2-home,#v2-compact-header,#v2-mobile-nav,#v2-mobile-accolade,#v2-start-tour,
+ #v2-metrics,#v2-spotlight,#v2-overlay-scrim,#v2-tour-mode,
+ #reset-europe {display:none!important}
+ #v2-root {position:static!important;height:auto!important;overflow:visible!important;display:block!important}
+ #v2-directory {position:static!important;display:block!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;overflow:visible!important;border:0!important;box-shadow:none!important;break-inside:auto!important}
+ .v2-dir-grid {grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+ .v2-dir-row {break-inside:avoid;padding:5px 0!important}
+ #v2-directory-back,#v2-directory-print {display:none!important}
+}
+
+/* Vector icon refinements: rosette ribbon and understated Apple-style magnifier. */
+.v2-accolade .v2-award { display:flex; flex:0 0 34px; width:34px; align-items:center; justify-content:center; line-height:0; color:var(--v2-magenta); }
+.v2-accolade .v2-award svg { display:block; width:32px; height:42px; overflow:visible; }
+.v2-search-icon { display:grid; place-items:center; width:22px; height:22px; top:15px; left:15px; color:#65727d; font-size:inherit; }
+.v2-search-icon svg { display:block; width:20px; height:20px; }
+#v2-compact-search svg { display:block; width:21px; height:21px; }
+#v2-mobile-accolade svg { display:inline-block; width:18px; height:24px; vertical-align:middle; margin-right:5px; color:#f7bcd9; }
+
+/* Compact, simplified QS ranking rosette — visually aligned to the two-line text block. */
+.v2-accolade .v2-award { flex:0 0 28px; width:28px; align-self:center; }
+.v2-accolade .v2-award svg { width:26px; height:30px; overflow:visible; }
+#v2-mobile-accolade svg { width:16px; height:19px; margin-right:4px; }
+
+/* Tour presentation: live pause-aware countdown and a clear exit control. */
+#v2-exit-tour {
+ z-index:24;
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;
+ min-height:48px;
+ padding:12px 17px;
+ background:#29103ed9;border:1px solid #ffffffb3;
+ box-shadow:0 8px 26px #13052240;
+ font-size:13px;font-weight:750;
+ transition:background .18s ease,transform .18s ease;
+}
+#v2-exit-tour:hover,#v2-exit-tour:focus-visible {background:#4e1c70;transform:translateY(-1px)}
+#v2-exit-tour svg {width:19px;height:19px;flex-shrink:0;stroke-width:2.5}
+.v2-tour-countdown {
+ display:flex;align-items:center;gap:12px;
+ margin-top:16px;padding:11px 13px;
+ border-radius:12px;background:#f5f0f9;
+ color:#4d326b;font-size:12px;font-weight:650;
+}
+.v2-countdown-track {flex:1;min-width:18px;height:6px;overflow:hidden;border-radius:99px;background:#dfd4e8}
+#v2-countdown-fill {height:100%;width:100%;background:#bb006c;border-radius:99px;transition:width .1s linear}
+#v2-tour-countdown-seconds {min-width:2.5ch;text-align:right;color:#a50065;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+@media (max-width:680px) {
+ #v2-tour-header {max-width:calc(100vw - 82px);gap:8px;overflow:hidden}
+ #v2-tour-header strong {display:none}
+ #v2-exit-tour {top:16px;right:12px;width:48px;height:48px;min-width:48px;min-height:48px;padding:0;border-radius:50%}
+ #v2-exit-tour span {display:none}
+ .v2-tour-countdown {gap:8px;margin-top:12px;padding:9px 11px}
+}
+@media (prefers-reduced-motion:reduce) {
+ #v2-exit-tour,#v2-countdown-fill {transition:none}
+}
+
+/* Iteration: on-site tour — clearly marked partner, separate flight and viewing time. */
+#v2-tour-card {overflow:visible;}
+#v2-tour-card .v2-spot-header {padding-right:43px;min-height:35px;}
+#v2-tour-card #v2-exit-tour {
+ position:absolute;z-index:3;top:20px;right:20px;
+ width:38px;height:38px;min-width:38px;min-height:38px;
+ display:grid;place-items:center;
+ padding:0;gap:0;border:1px solid #e6dfec;border-radius:50%;
+ color:#35125e;background:#f5f1f9;box-shadow:none;
+ transition:background .18s ease,transform .18s ease;
+}
+#v2-tour-card #v2-exit-tour span {display:none;}
+#v2-tour-card #v2-exit-tour:hover {background:#e9dfef;}
+#v2-tour-card #v2-exit-tour svg {width:17px;height:17px;}
+.v2-tour-location {
+ display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+ margin:0 0 16px;padding:10px 12px;
+ border-radius:11px;background:#f3eff8;
+ color:#655676;font-size:12px;line-height:1.35;
+ overflow-wrap:anywhere;
+}
+.v2-tour-location strong {color:#3b175f;font-weight:700;}
+.v2-tour-location-icon {font-size:18px;color:#bd006b;line-height:1;}
+.v2-tour-site-marker {
+ position:relative;display:block;width:64px;height:64px;
+ pointer-events:none;
+}
+.v2-tour-site-dot {
+ position:absolute;left:0;top:0;display:block;box-sizing:border-box;
+ width:64px;height:64px;
+ border:8px solid #fff;border-radius:50%;background:#FFBD00;
+ box-shadow:0 0 0 7px rgba(255,189,0,.34),0 0 0 16px rgba(255,189,0,.13),0 5px 18px #2a063b4d;
+}
+.v2-tour-site-label {
+ position:absolute;left:80px;top:-10px;
+ display:flex;flex-direction:column;gap:3px;
+ min-width:140px;max-width:min(245px,42vw);
+ padding:10px 13px;
+ border-radius:13px;background:#fff;color:#341354;
+ border:1px solid #e9e3ed;box-shadow:0 8px 25px #220a3d45;
+ font-size:12px;white-space:normal;
+}
+.v2-tour-site-label strong {font-weight:800;line-height:1.3;overflow-wrap:anywhere;}
+.v2-tour-site-label small {font-size:11px;color:#667380;line-height:1.3;overflow-wrap:anywhere;}
+@media(max-width:680px){
+ #v2-tour-card #v2-exit-tour {top:14px;right:14px;width:38px;height:38px;min-width:38px;min-height:38px;}
+ #v2-tour-card .v2-spot-header {padding-right:42px;}
+ .v2-tour-location {font-size:11px;padding:8px 10px;}
+ .v2-tour-site-label {max-width:min(170px,45vw);left:72px;top:-6px;font-size:11px;padding:8px 10px;}
+}
+
+/* Official institutional links: keep the Figma visual hierarchy unchanged. */
+#v2-root .v2-logo-link {display:inline-flex;align-items:center;flex:0 0 auto;max-width:100%;color:inherit;text-decoration:none;border-radius:6px;line-height:0;cursor:pointer;pointer-events:auto}
+#v2-root .v2-logo-link img {display:block;}
+#v2-root .v2-logo-link:hover img {opacity:.85}
+#v2-root .v2-school-link {display:block;width:fit-content;max-width:100%;text-decoration:none;color:#b60069;cursor:pointer;pointer-events:auto}
+#v2-root .v2-school-link:hover {text-decoration:underline;text-underline-offset:3px}
+#v2-root .v2-school-link:focus-visible,#v2-root .v2-logo-link:focus-visible {outline:3px solid #b60069;outline-offset:4px}
+
+/* V2 category key: original map semantics, placed immediately before Featured Partners. */
+#v2-home .v2-category-legend {
+  display:flex; align-items:center; justify-content:flex-start; gap:15px;
+  flex-wrap:wrap; flex-shrink:0;
+  margin:15px 0 1px; padding:10px 12px;
+  border-radius:12px; border:1px solid #e6dfeb;
+  background:#f6f2f9; color:#4b3a62;
+  font-size:11.5px; font-weight:650; line-height:1.35;
+}
+#v2-home .v2-category-legend > span {display:inline-flex; align-items:center; gap:7px;}
+#v2-home .v2-category-dot {
+  width:11px; height:11px; flex:0 0 11px;
+  display:inline-block; border-radius:999px;
+  border:2px solid #fff; box-shadow:0 0 0 1px currentColor;
+}
+#v2-home .v2-category-dot.exchange {background:#2D0153;color:#2D0153;}
+#v2-home .v2-category-dot.placement {background:#F0047F;color:#F0047F;}
+/* Exactly match the reset map button's 45px bottom offset on desktop. */
+@media (min-width:681px) {
+  #v2-root .v2-cta {bottom:45px;}
+}
+@media (max-width:680px) {
+  #v2-home .v2-category-legend {gap:11px;margin:10px 0 0;padding:6px 8px;font-size:10.5px;}
+  #v2-home .v2-heading-row {margin-top:10px;}
+  #v2-root .v2-cta {bottom:calc(43dvh + 6px);}
+}
+
+/* Tour partner metadata: geographic place name, relationship years and official website. */
+#v2-tour-card .v2-tour-location {margin-bottom:9px;}
+#v2-tour-card .v2-tour-place {display:inline;min-width:0;line-height:1.35;}
+#v2-tour-card .v2-tour-country {font-weight:800;color:#39165f;}
+#v2-tour-card .v2-tour-location-unavailable {color:#726b7c;font-size:12px;}
+#v2-tour-card .v2-tour-relationship {
+ display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 10px;
+ padding:0 2px;margin:9px 0;
+ color:#637080;font-size:12px;line-height:1.4;
+}
+#v2-tour-card .v2-tour-meta-label {font-weight:600;white-space:nowrap;}
+#v2-tour-card .v2-tour-meta-value {color:#37145e;font-weight:750;overflow-wrap:anywhere;}
+#v2-root #v2-tour-website {
+ display:inline-flex;align-items:center;max-width:100%;
+ color:#b50068;text-decoration:none;font-size:12px;
+ font-weight:760;line-height:1.4;
+ padding:5px 2px;margin:0 0 9px;
+ overflow-wrap:anywhere;
+}
+#v2-root #v2-tour-website:hover {text-decoration:underline;text-underline-offset:3px;}
+#v2-root #v2-tour-website:focus-visible {outline:2px solid #b50068;outline-offset:2px;border-radius:4px;}
+.v2-tour-site-label .v2-tour-marker-location {display:block;font-size:11px;color:#606b7a;line-height:1.4;}
+.v2-tour-site-label .v2-tour-marker-location strong {font-weight:800;color:#341454;}
+@media(max-width:680px){
+ #v2-tour-card .v2-tour-relationship {font-size:11px;margin:6px 0;gap:3px 7px;}
+ #v2-root #v2-tour-website {font-size:11px;margin-bottom:5px;}
+ #v2-tour-card .v2-tour-location {margin-bottom:5px;}
+}
+
+/* Featured spotlight: clear, sourced QS 2027 rankings and text-only placement years. */
+.v2-stat-grid.v2-stat-grid-two {grid-template-columns:repeat(2,minmax(0,1fr));}
+.v2-stat-grid .v2-qs-stat {background:#f2edf8;}
+.v2-stat-grid .v2-qs-rank {
+ display:block;margin-top:7px;color:#a70068;
+ font-size:21px;font-weight:850;line-height:1.2;
+ text-decoration:none;overflow-wrap:anywhere;
+}
+.v2-stat-grid .v2-qs-rank:hover {text-decoration:underline;text-underline-offset:3px;}
+.v2-stat-grid .v2-qs-rank:focus-visible {outline:2px solid #bb006b;outline-offset:3px;}
+.v2-stat-grid .v2-qs-unavailable {font-size:11px;font-weight:700;color:#756e81;}
+.v2-spot-years {margin:8px 0 15px;line-height:1.55;}
+@media (max-width:680px) {
+ .v2-stat-grid .v2-qs-rank {font-size:18px;}
+}
+
+/* QS: two separately dated ranking-series cards. Scores are only displayed when sourced. */
+.v2-stat-grid.v2-stat-grid-academic {grid-template-columns:repeat(2,minmax(0,1fr));}
+.v2-stat-grid-academic .v2-qs-stat {min-width:0;padding:11px 12px;}
+.v2-stat-grid .v2-qs-score {display:block;margin-top:7px;font-size:11px;line-height:1.45;color:#524a62;overflow-wrap:anywhere;}
+.v2-stat-grid-academic .v2-qs-stat > span:first-child {display:block;font-size:11px;line-height:1.4;color:#53495f;}
+.sdca-popup-rankings {border-top:1px solid var(--stroke);margin-top:10px;padding-top:6px;}
+.sdca-popup-rankings .popup-description {font-size:12px;line-height:1.55;}
+@media (max-width:390px) { .v2-stat-grid-academic .v2-qs-stat {padding:10px 8px;} }
+
+/* V2 featured-spotlight location: emphasise the country. */
+.v2-spot-location strong.v2-tour-country {font-weight:800;color:#301054;}
+
+/* V2 selected featured partner: bold Loughborough yellow over the ordinary pink pins. */
+#map .v2-selected-marker {
+ width:34px;
+ height:34px;
+ box-sizing:border-box;
+ border:4px solid #fff;
+ border-radius:50%;
+ background:#FFBD00;
+ box-shadow:0 0 0 3px #2D0153,0 0 0 9px rgba(255,189,0,.28),0 4px 16px rgba(45,1,83,.35);
+ pointer-events:none;
+ z-index:10;
+}
+
+/* Refined transitions between featured partners — V2 only. */
+@keyframes v2-partner-reveal {
+ from { opacity:0; transform:translateY(8px); }
+ to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+ #v2-spotlight > h2,
+ #v2-spotlight > .v2-spot-location,
+ #v2-spotlight > .v2-stat-grid,
+ #v2-spotlight > .v2-spot-footer,
+ #v2-tour-card.v2-partner-arrival > h2,
+ #v2-tour-card.v2-partner-arrival > p,
+ #v2-tour-card.v2-partner-arrival > .v2-tour-location {
+   animation:v2-partner-reveal 720ms cubic-bezier(.22,1,.36,1) both;
+ }
+ #v2-spotlight > .v2-spot-location,
+ #v2-tour-card.v2-partner-arrival > p {animation-delay:80ms;}
+ #v2-spotlight > .v2-stat-grid,
+ #v2-tour-card.v2-partner-arrival > .v2-tour-location {animation-delay:140ms;}
+ #v2-spotlight > .v2-spot-footer {animation-delay:180ms;}
+}
+@media (prefers-reduced-motion:reduce) {
+ #v2-spotlight > *,
+ #v2-tour-card.v2-partner-arrival > * {animation:none!important;}
+}
+
+/* V2 QS Art & Design ranking links: retain current typographic hierarchy. */
+#v2-root .v2-ranking-link {color:inherit;text-decoration:none;text-underline-offset:3px;cursor:pointer;}
+#v2-root .v2-ranking-link:hover {text-decoration:underline;}
+#v2-root .v2-ranking-link:focus-visible {outline:3px solid #b60069;outline-offset:4px;border-radius:2px;}
+#v2-mobile-accolade .v2-ranking-link {color:inherit;}
+/* Extra evidence belongs inside the existing QS summary box, not over the map. */
+#v2-root .v2-rank-panel .v2-evidence-lines{
+ display:grid;gap:10px;margin-top:13px;padding-top:12px;
+ border-top:1px solid #ded4e9;
+}
+#v2-root .v2-rank-panel .v2-evidence-line{
+ margin:0;color:#4c3664;font-size:12px;line-height:1.42;
+ overflow-wrap:anywhere;
+}
+#v2-root .v2-rank-panel .v2-evidence-value{
+ font-weight:800;color:#35145e;
+}
+#v2-root .v2-rank-panel .v2-evidence-source{
+ color:#807489;font-size:10.5px;line-height:1.3;
+}
+
+
+/* Keep existing, fully linked Mapbox / OSM / map-feedback / designer
+   attribution visible at the bottom of the viewport in every V2 view.
+   Move the existing control visually rather than duplicating or removing it. */
+@media screen {
+  #map .maplibregl-ctrl-bottom-right {
+    position:fixed!important;
+    top:auto!important;
+    left:auto!important;
+    right:max(10px,env(safe-area-inset-right))!important;
+    bottom:max(5px,env(safe-area-inset-bottom))!important;
+    z-index:35!important;
+    pointer-events:auto;
+  }
+  #map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib {
+    display:block!important;
+    float:none!important;
+    clear:both;
+    margin:0!important;
+    padding:4px 8px!important;
+    background:rgba(255,255,255,.92)!important;
+    border-radius:7px;
+    box-shadow:0 1px 8px rgba(32,18,50,.14);
+    color:#4b4255!important;
+    text-align:right;
+    font-size:11px;
+    line-height:1.35;
+  }
+  #map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib a {
+    color:inherit!important;
+    text-decoration:none;
+  }
+  #map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib a:hover,
+  #map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib a:focus-visible {
+    text-decoration:underline;
+  }
+}
+@media screen and (max-width:680px) {
+  #map .maplibregl-ctrl-bottom-right {
+    right:max(5px,env(safe-area-inset-right))!important;
+    bottom:max(4px,env(safe-area-inset-bottom))!important;
+  }
+  #map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib {
+    max-width:calc(100vw - 10px);
+    padding:3px 5px!important;
+    font-size:9px;
+  }
+}
+
+
+/* Mobile navigation and collapsible partner drawer — November 2026.
+   These overrides intentionally do not affect desktop or the V1 site. */
+#v2-mobile-drawer-toggle { display:none; }
+@media screen and (max-width:680px) {
+  :root { --v2-mobile-drawer-peek:72px; }
+  /* Put the university identity and language selection at the top. */
+  #v2-mobile-nav { top:max(12px,env(safe-area-inset-top)); }
+  #language-picker { top:max(12px,env(safe-area-inset-top))!important; }
+  /* Hide the standalone QS banner on small screens only. */
+  #v2-mobile-accolade { display:none!important; }
+  /* Leave room for the masthead: map zoom buttons never cover it. */
+  .maplibregl-ctrl-top-right { top:90px!important; }
+  /* The original tall sheet is replaced with a closed-by-default drawer. */
+  #v2-root #v2-home {
+    /* Follow the actual contents rather than reserving 74% of the viewport. */
+    height:auto;
+    max-height:min(74dvh,650px);
+    padding:9px 20px max(12px,env(safe-area-inset-bottom));
+    transition:max-height .28s cubic-bezier(.22,1,.36,1);
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  #v2-root #v2-home::-webkit-scrollbar {display:none;}
+  /* Match the label-to-search gap to the 10px gap below the search box. */
+  #v2-home .v2-school-link {
+    margin-bottom:10px;
+    font-size:12px;
+    line-height:1.4;
+    letter-spacing:.12em;
+  }
+  #v2-home .v2-tiles {
+    /* Allow the horizontal strip to grow to its tallest partner card. */
+    flex:0 0 auto;
+    min-height:110px;
+    align-items:stretch;
+  }
+  #v2-home .v2-tile {
+    min-height:110px;
+    height:auto;
+  }
+  #v2-root #v2-home.v2-mobile-collapsed {
+    height:var(--v2-mobile-drawer-peek);
+    max-height:var(--v2-mobile-drawer-peek);
+    padding:9px 18px 6px;
+    overflow:hidden;
+  }
+  #v2-home::before { display:none; }
+  #v2-mobile-drawer-toggle {
+    display:flex;flex:0 0 47px;align-items:center;justify-content:center;
+    position:sticky;top:0;z-index:2;width:100%;min-height:47px;
+    background:#fcfbff;
+    border:0;color:var(--v2-purple);
+    font-size:13px;font-weight:750;letter-spacing:.01em;
+    border-radius:12px;touch-action:manipulation;
+  }
+  #v2-mobile-drawer-toggle::before {
+    content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:42px;height:5px;border-radius:999px;background:#c9cbd0;
+  }
+  #v2-mobile-drawer-toggle:focus-visible {outline:3px solid var(--v2-magenta);outline-offset:1px;}
+  #v2-mobile-drawer-toggle .v2-mobile-drawer-chevron {
+    position:absolute;right:9px;top:17px;font-size:19px;line-height:1;
+    transition:transform .22s ease;
+  }
+  #v2-root.v2-mobile-drawer-open .v2-mobile-drawer-chevron { transform:rotate(180deg); }
+  #v2-home.v2-mobile-collapsed > :not(#v2-mobile-drawer-toggle) {
+    visibility:hidden!important;pointer-events:none!important;
+  }
+  #v2-root .v2-cta {
+    bottom:calc(var(--v2-mobile-drawer-peek) + 14px);
+  }
+  #v2-root.v2-mobile-drawer-open .v2-cta {display:none!important;}
+}
+@media screen and (max-width:680px) and (prefers-reduced-motion:reduce) {
+  #v2-root #v2-home,#v2-mobile-drawer-toggle .v2-mobile-drawer-chevron {
+    transition:none;
+  }
+}
+
+
+/* Compact mobile tour card: remove redundant description, location and timer. */
+@media screen and (max-width:680px) {
+  /* The map retains the destination marker and labels; the card needs less detail. */
+  #v2-tour-card #v2-tour-desc,
+  #v2-tour-card #v2-tour-location,
+  #v2-tour-card .v2-tour-countdown { display:none!important; }
+
+  #v2-tour-card {
+    padding:15px 18px 17px;
+    max-height:calc(100dvh - 112px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  #v2-tour-card .v2-spot-header { min-height:31px; }
+  #v2-tour-card h2 {
+    font-size:26px;
+    line-height:1.12;
+    margin:11px 0 10px;
+  }
+  #v2-tour-card .v2-tour-relationship {
+    margin:6px 0;
+    gap:4px 8px;
+    line-height:1.35;
+  }
+  #v2-root #v2-tour-website { margin:2px 0 7px;padding:2px 0; }
+  #v2-tour-card .v2-tour-progress { margin:9px 0 6px; }
+  #v2-tour-card .v2-tour-step-line { font-size:11px; }
+  #v2-tour-card .v2-tour-actions { margin-top:10px;gap:8px; }
+  #v2-tour-card .v2-tour-actions button.v2-pause { width:45px;height:45px; }
+  /* Keyboard hint is desktop-specific; controls remain fully accessible. */
+  #v2-tour-card .v2-tour-actions small { display:none; }
+}
+
+/* During the guided tour, leave the map unobstructed; normal navigation returns on exit. */
+body.v2-guided-tour-active #map .maplibregl-ctrl-top-right .maplibregl-ctrl-group { display:none!important; }
+
+/* V2 mobile tour shares the exact same white masthead as the home view. */
+@media screen and (max-width:680px) {
+  #v2-tour-header { display:none!important; }
+}
+
+
+/* Case-study evidence actions (V2 only): consistent across map, spotlight and tour.
+   Maintain readable button contrast in both automatic light and dark themes. */
+.sdca-popup-body > .gcn-case-action {
+ display:flex;width:100%;min-height:46px;align-items:center;justify-content:center;
+ margin-top:11px;padding-inline:13px;line-height:1.35;text-align:center;
+}
+#v2-root #v2-spotlight .gcn-case-action {
+ margin-top:14px;min-height:48px;text-align:center;
+}
+#v2-root #v2-spotlight .gcn-secondary-website {
+ background:transparent!important;
+ color:var(--v2-theme-link,#562583)!important;
+ border:1.5px solid var(--v2-theme-line,#b8aac8)!important;
+ margin-top:8px;
+ min-height:43px;
+}
+#v2-root #v2-spotlight .gcn-secondary-website:hover {
+ background:var(--v2-theme-surface-hover,#f3edf7)!important;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action {
+ display:flex;align-items:center;justify-content:center;min-height:43px;
+ max-width:100%;padding:9px 14px;margin:7px 0 9px;
+ border-radius:11px;background:var(--v2-theme-action,#85004b)!important;
+ color:#fff!important;text-decoration:none;text-align:center;
+ font-size:13px;font-weight:760;line-height:1.35;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action:hover {
+ background:var(--v2-theme-action-hover,#6d0041)!important;
+}
+#v2-root #v2-tour-card .gcn-tour-case-action[hidden] {display:none!important}
+:is(.sdca-popup-body,#v2-root) .gcn-case-link:focus-visible {
+ outline:3px solid var(--focus,#FFBD00)!important;outline-offset:3px!important;
+}
+@media(max-width:680px){
+ #v2-root #v2-tour-card .gcn-tour-case-action {
+  min-height:40px;padding:8px 12px;margin:5px 0 6px;font-size:12px;
+ }
+}
+
+/* Featured university QS rank in the guided-tour card. */
+#v2-root #v2-tour-card .v2-tour-qs {
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+ gap:5px 12px;margin:8px 0 10px;padding:10px 13px;
+ border:1px solid #e6d9ef;border-radius:11px;
+ background:#f5f0fa;color:#352052;
+}
+#v2-root #v2-tour-card .v2-tour-qs[hidden] {display:none!important;}
+#v2-root #v2-tour-card .v2-tour-qs-label {
+ font-size:12px;line-height:1.4;font-weight:680;color:#514061;
+}
+#v2-root #v2-tour-card .v2-tour-qs-rank {
+ color:#41136e;font-size:18px;line-height:1.15;font-weight:850;
+ text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+}
+#v2-root #v2-tour-card .v2-tour-qs-rank:hover {color:#a40062;}
+#v2-root #v2-tour-card .v2-tour-qs-rank:focus-visible {
+ outline:3px solid #a40062;outline-offset:3px;border-radius:3px;
+}
+@media (max-width:680px) {
+ #v2-root #v2-tour-card .v2-tour-qs {padding:7px 10px;margin:6px 0;gap:4px 8px;}
+ #v2-root #v2-tour-card .v2-tour-qs-label {font-size:11px;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank {font-size:16px;}
+}
+@media (prefers-color-scheme:dark) {
+ #v2-root #v2-tour-card .v2-tour-qs {
+  background:#392943;border-color:#6d5777;color:#f8edf8;
+ }
+ #v2-root #v2-tour-card .v2-tour-qs-label {color:#f0e6f3;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank {color:#f9d5fb;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank:hover {color:#ffffff;}
+ #v2-root #v2-tour-card .v2-tour-qs-rank:focus-visible {outline-color:#ffb5e0;}
+}
+
+/* Exhibition mode: scoped to explicit ?mode=tv, never inferred from screen size. */
+#v2-root .v2-exhibition-entry{display:block;text-align:center;color:var(--v2-theme-ink,#35125e);font-size:13px;text-decoration:underline;margin-top:10px;pointer-events:auto}
+#v2-exhibition-info,.v2-exhibition-story{display:none}
+body.v2-exhibition #v2-exhibition-info{display:block;position:absolute;right:3vw;bottom:3vh;pointer-events:auto}
+body.v2-exhibition #v2-home,body.v2-exhibition #v2-mobile-nav,body.v2-exhibition #v2-mobile-accolade,body.v2-exhibition #v2-start-tour,body.v2-exhibition #language-picker,body.v2-exhibition #reset-europe,body.v2-exhibition .maplibregl-ctrl-top-right,body.v2-exhibition .maplibregl-ctrl-top-left{display:none!important}
+body.v2-exhibition #v2-root #v2-tour-card{left:3vw;bottom:5vh;top:auto;width:41vw;max-width:none;max-height:77dvh;overflow:auto;padding:clamp(20px,2vw,46px);border-radius:clamp(16px,1.8vw,36px);box-sizing:border-box;background:#21162bee!important;color:#fff!important;border:1px solid #ffffff40;box-shadow:0 20px 80px #0006}
+body.v2-exhibition #v2-root #v2-tour-card h2{font-size:clamp(28px,3.15vw,76px);line-height:1.07;margin:.35em 0;color:#fff!important}
+body.v2-exhibition #v2-root #v2-tour-card p{font-size:clamp(16px,1.48vw,34px);line-height:1.42;color:#f0e8f5!important;margin:.5em 0}
+body.v2-exhibition #v2-root #v2-tour-card .v2-exhibition-story:not([hidden]){display:block;border-left:4px solid #ffbd00;padding-left:.7em;margin:.8em 0}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-location{font-size:clamp(15px,1.35vw,30px);background:transparent!important;padding:0;color:#fff!important;margin:.5em 0}
+body.v2-exhibition #v2-root #v2-tour-card :is(.v2-tour-country,.v2-tour-meta-value,.v2-tour-step-line strong){color:#fff!important}
+body.v2-exhibition #v2-root #v2-tour-card :is(.v2-tour-relationship,.v2-tour-step-line,.v2-spot-type,.v2-tour-qs-label){font-size:clamp(12px,1.1vw,26px);color:#e3d7ec!important}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-qs-rank{font-size:clamp(28px,3.4vw,80px);color:#ffbd00!important}
+body.v2-exhibition #v2-root #v2-tour-card .v2-tour-qs{background:transparent!important;border-color:#ffffff40}
+body.v2-exhibition #v2-root #v2-tour-card :is(#v2-tour-website,#v2-tour-case-study,.v2-tour-countdown,.v2-tour-actions,#v2-exit-tour){display:none!important}
+body.v2-exhibition #v2-root #v2-tour-header{display:flex!important;left:3vw;top:3vh;padding:1.1vw 1.6vw;background:#21162bee!important;color:#fff!important;max-width:90vw}
+body.v2-exhibition #v2-root #v2-tour-header picture img{width:clamp(100px,10vw,240px)}
+body.v2-exhibition #v2-root #v2-tour-header strong{display:block;font-size:clamp(14px,1.5vw,32px);color:#fff!important}
+body.v2-exhibition .v2-tour-site-label{display:none}
+body.v2-exhibition .v2-tour-site-marker{transform-origin:center}
+.v2-exhibition-footer{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.v2-exhibition-link{display:flex;align-items:center;gap:12px;background:#21162bee;border:1px solid #ffffff40;border-radius:16px;color:white;text-decoration:none;padding:12px;max-width:25vw}
+.v2-exhibition-qr{width:clamp(70px,6vw,144px);height:auto;background:white}
+.v2-exhibition-invite{font-size:clamp(12px,1.1vw,24px);font-weight:650;max-width:12ch}
+.v2-exhibition-controls{display:flex;gap:8px;align-items:center;opacity:.75}
+.v2-exhibition-controls :is(button,a,select){background:#21162bee;color:#fff;border:1px solid #ffffff60;border-radius:8px;padding:8px;font:inherit;font-size:12px;text-decoration:none}
+.v2-exhibition-controls:hover,.v2-exhibition-controls:focus-within{opacity:1}
+.v2-exhibition-loading{position:fixed;inset:0;z-index:10000;background:#21162b;color:white;display:grid;place-items:center;text-align:center;padding:24px;font-size:clamp(18px,2vw,42px)}
+@media(max-width:680px){
+ body.v2-exhibition #v2-root #v2-tour-card{left:3vw;bottom:15vh;width:94vw;max-height:64dvh;padding:18px}
+ body.v2-exhibition #v2-root #v2-tour-card #v2-tour-desc{display:block!important}
+ body.v2-exhibition #v2-exhibition-info{bottom:2vh;right:3vw}
+ body.v2-exhibition .v2-exhibition-link{display:none}
+ body.v2-exhibition #v2-root #v2-tour-header strong{font-size:12px}
+}
+@media print{body.v2-exhibition #v2-exhibition-info{display:none!important}}
+
+#v2-root .v2-exhibition-entry[hidden],#v2-root .v2-exhibition-story[hidden],body.v2-exhibition #v2-root #v2-tour-desc[hidden],body.v2-exhibition #v2-root #v2-tour-relationship[hidden]{display:none!important}
+/* Exhibition always uses the original white artwork on the purple header. */
+body.v2-exhibition #v2-root #v2-tour-header .v2-brand-logo{background:transparent;border-radius:0;padding:0;box-sizing:border-box;filter:none!important}
+
+/* Use the same gold five-point star for selected partners and tour stops. */
+body #map .v2-selected-marker,
+body .v2-tour-site-marker .v2-tour-site-dot {
+ background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4 40 23 61 25 45 39 50 60 32 49 14 60 19 39 3 25 24 23Z' fill='%23FFBD00' stroke='%23FFFFFF' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M32 4 40 23 61 25 45 39 50 60 32 49 14 60 19 39 3 25 24 23Z' fill='none' stroke='%232D0153' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ filter:drop-shadow(0 0 5px rgba(255,189,0,.65)) drop-shadow(0 3px 5px rgba(45,1,83,.35));
+}
+
+/* Partner spotlight: reserve the full close-button hit area independently of
+   the badge and translated relationship label. Keep the original tour layout. */
+#v2-root #v2-spotlight {box-sizing:border-box;overflow-x:hidden;overflow-y:auto;overflow-wrap:anywhere;}
+#v2-root #v2-spotlight .v2-spot-header {
+  position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;justify-content:flex-start;
+  align-items:center;gap:8px;min-height:44px;padding-inline-end:56px;
+  background:var(--v2-theme-surface,#fdfcfe);
+}
+#v2-root #v2-spotlight .v2-spot-header .v2-spot-type {flex:1 1 105px;min-width:0;margin:0;overflow-wrap:anywhere;}
+#v2-root #v2-spotlight .v2-spot-header .v2-icon-btn {
+  position:absolute;inset-inline-end:0;top:0;width:44px;height:44px;min-width:44px;min-height:44px;
+  flex:none;z-index:1;display:grid;place-items:center;line-height:1;
+}
+#v2-root #v2-spotlight > :not(.v2-spot-header) {min-width:0;max-width:100%;}
+#v2-root #v2-spotlight .v2-stat {min-width:0;overflow-wrap:anywhere;}
+@media (max-width:680px) {
+  #v2-root #v2-spotlight {width:100%;max-width:100%;}
+  #v2-root #v2-spotlight .v2-spot-header .v2-spot-type {flex-basis:100%;}
+}
