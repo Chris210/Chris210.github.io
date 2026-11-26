@@ -982,6 +982,53 @@
 <link rel="stylesheet" href="./v2-theme.css?v=v3-map-palette-20261125">
 <link rel="stylesheet" href="./v2-collaborate.css?v=records-footer-4">
 <link rel="stylesheet" href="./v2-themes.css?v=featured-country-theme-20261123">
+<style id="v2-map-control-alignment">
+  /* Match all floating map controls to the existing language button. */
+  :root { --v2-map-controls-right: 24px; --v2-map-control-size: 48px; }
+  @media (max-width: 680px) {
+    :root { --v2-map-controls-right: 11px; }
+  }
+  #language-picker, #reset-europe, #map-move, .mapboxgl-ctrl-top-right {
+    right: var(--v2-map-controls-right) !important;
+    left: auto;
+  }
+  .mapboxgl-ctrl-top-right > .mapboxgl-ctrl {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+  #reset-europe {
+    box-sizing: border-box;
+    width: var(--v2-map-control-size);
+    min-width: var(--v2-map-control-size);
+    max-width: var(--v2-map-control-size);
+    height: var(--v2-map-control-size);
+    min-height: var(--v2-map-control-size);
+    max-height: var(--v2-map-control-size);
+    padding: 0;
+    gap: 0;
+    border-radius: 50%;
+  }
+  #reset-europe .reset-icon {
+    width: 23px; height: 23px; flex: 0 0 23px;
+  }
+  #reset-europe .reset-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  @media (forced-colors: none) {
+    #reset-europe:not(:active) {
+      background: var(--v2-theme-map-control, #faf9fd) !important;
+      color: var(--v2-theme-map-control-ink, #35125e) !important;
+      border: 1px solid var(--v2-theme-line, #eee5f4) !important;
+    }
+  }
+</style>
 </head>
 <body>
   <div class="v2-metrics" aria-label="Featured partners showcase"><span><b>50</b> featured partners</span><span>Global creative network</span></div>
